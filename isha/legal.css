@@ -1,0 +1,141 @@
+/* דפי התודה של אשה ללא מאמץ - שלושה מסלולים, CSS אחד משותף. נבנה 7.10.2026.
+   toda-magnetet.html · toda-masa-shalem.html · toda-yodaat.html
+   הטוקנים, הפונט והכפתורים מועתקים מדף המכירה (index.html), כדי שהרגע
+   שאחרי התשלום ירגיש כמו אותו מקום. פונט אחד בלבד: Assistant, מוטמע מ-fonts/.
+   קאראוון ואלמוני הם רישיון דסקטופ ולא מופיעים כאן בשום צורה. */
+
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* הצהרת נגישות ותקנון - דפי מסמך. אותם צבעים ופונט כמו דפי התודה. 7.10.2026 */
+:root{
+  --cream:#F2EEE3; --purple:#A62F7D; --pink-text:#C9155D;
+  --orange:#F36E21; --ink:#0D122C;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:"Assistant",sans-serif;
+  font-size:18px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;height:auto;}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px;}
+a{color:var(--purple);text-underline-offset:2px;}
+a:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:3px;}
+.skip{position:absolute;right:12px;top:-60px;background:var(--ink);color:var(--cream);
+  padding:10px 16px;border-radius:10px;z-index:10;text-decoration:none;}
+.skip:focus{top:12px;}
+
+.top{text-align:center;padding-top:clamp(28px,5vw,52px);padding-bottom:clamp(20px,4vw,32px);}
+.logo{width:min(38%,180px);margin:0 auto clamp(18px,3vw,26px);}
+.top h1{margin:0;font-size:clamp(30px,6vw,42px);line-height:1.25;font-weight:700;}
+.top h1::after{content:"";display:block;width:64px;height:4px;background:var(--orange);
+  border-radius:2px;margin:16px auto 0;}
+.subtitle{margin:14px 0 0;font-size:17px;font-weight:600;color:var(--purple);line-height:1.5;}
+.org{margin:16px 0 0;font-size:16px;line-height:1.7;opacity:.85;}
+.dl{margin:14px 0 0;font-size:16px;font-weight:600;}
+
+main{padding-bottom:12px;}
+.toc{background:#fff;border-radius:16px;padding:18px 24px;margin:0 0 8px;}
+.toc h2{margin:0 0 6px;font-size:19px;font-weight:700;}
+.toc ol{margin:0;padding-right:22px;}
+.toc li{margin:.2em 0;}
+
+/* חלקי התקנון */
+.part{margin:clamp(40px,7vw,60px) 0 0;padding:16px 22px;background:#fff;border-radius:14px;
+  font-size:clamp(24px,4.6vw,30px);line-height:1.3;font-weight:700;}
+.meta{margin:12px 0 0;font-size:15.5px;font-weight:600;color:var(--purple);}
+h3{margin:clamp(32px,5vw,44px) 0 12px;padding-bottom:8px;border-bottom:3px solid var(--orange);
+  font-size:clamp(21px,3.8vw,24px);line-height:1.35;font-weight:700;}
+h4{margin:24px 0 8px;font-size:19.5px;line-height:1.4;font-weight:700;color:var(--purple);}
+main p{margin:0 0 .8em;}
+main ul,main ol.num{margin:0 0 1em;padding-right:26px;}
+main li{margin:0 0 .55em;}
+main ul li::marker{color:var(--orange);}
+main ol.num li::marker{font-weight:700;color:var(--purple);}
+.closing{margin-top:1.4em;font-weight:700;font-size:20px;}
+strong{font-weight:700;}
+
+footer{padding:clamp(40px,7vw,60px) 0 clamp(44px,7vw,64px);text-align:center;font-size:15px;opacity:.65;}
+@media(max-width:520px){
+  body{font-size:17px;line-height:1.7;}
+  .toc{padding:16px 18px;}
+  .part{padding:14px 16px;}
+  main ul,main ol.num{padding-right:22px;}
+}
