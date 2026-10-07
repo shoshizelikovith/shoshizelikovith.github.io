@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1007-1637';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1007-1643';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // שקלים להודעה
 
@@ -48,7 +48,7 @@ function diag_() {
   try { o.instructions = stableText_().length; } catch (e) { o.instructions = 'שגיאה'; }
   try { o.key = props_().getProperty('ANTHROPIC_API_KEY') ? true : false; } catch (e) { o.key = 'שגיאה'; }
   try { var t = new Date().getTime();
-        var r = retrieve_('מה זה לחיות חיים של עונג', null, 3, 'magnetit');
+        var r = retrieve_('איך אני מפסיקה להתאמץ', null, 3, 'magnetit');
         o.retrieve = r.length; o.retrieve_ms = new Date().getTime() - t;
         o.sources = r.map(function (c) { return c.src; }); } catch (e) {
         o.retrieve = 'שגיאה'; o.retrieve_err = String(e).slice(0, 200); }
