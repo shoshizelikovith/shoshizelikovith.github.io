@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1007-2025';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1007-2033';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // שקלים להודעה
 
@@ -109,11 +109,17 @@ function fetchConfig_() {
     if (res.getResponseCode() !== 200) return {};
     var txt = res.getContentText();
     var obj = JSON.parse(txt);          // נזרק אם לא תקין, ואז נשארים עם הצרוב
-    var c = CacheService.getScriptCache(), parts = [], i;
-    for (i = 0; i < txt.length; i += 90000) parts.push(txt.slice(i, i + 90000));
-    var map = {cfg_n: String(parts.length)};
-    for (i = 0; i < parts.length; i++) map['cfg_' + i] = parts[i];
-    c.putAll(map, 1800);
+    // המטמון של גוגל מוגבל ל-100KB לכל מפתח, ועברית היא שני בתים לתו.
+    // 30,000 תווים הם כ-43KB, מרחק בטוח מהתקרה.
+    try {
+      var c = CacheService.getScriptCache(), parts = [], i;
+      for (i = 0; i < txt.length; i += 30000) parts.push(txt.slice(i, i + 30000));
+      var map = {cfg_n: String(parts.length)};
+      for (i = 0; i < parts.length; i++) map['cfg_' + i] = parts[i];
+      c.putAll(map, 1800);
+    } catch (eCache) {
+      // המטמון נכשל, ההגדרות עדיין טובות. פשוט נמשוך שוב בפעם הבאה.
+    }
     return obj;
   } catch (e) {
     return {};
