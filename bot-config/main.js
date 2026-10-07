@@ -8,6 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
+var CODE_BUILD = 'CODE-1007-1637';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // שקלים להודעה
 
@@ -17,6 +18,10 @@ function doGet(e) {
   try { ensureTrigger_(); } catch (e2) { /* הדף נפתח גם בלי הטריגר */ }
   if (e && e.parameter && e.parameter.refresh) {
     try { CacheService.getScriptCache().remove('cfg_n'); CFG_ = null; fetchConfig_(); } catch (e3) {}
+  }
+  if (e && e.parameter && e.parameter.diag) {
+    return ContentService.createTextOutput(JSON.stringify(diag_()))
+        .setMimeType(ContentService.MimeType.JSON);
   }
   var cfg = config_(), out;
   if (cfg && cfg.page && String(cfg.page).indexOf('<!DOCTYPE') === 0) {
@@ -28,6 +33,28 @@ function doGet(e) {
     .setTitle('המאמנת האישית שלך')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+/**
+ * תמונת מצב של הבוט החי, בלי להיכנס לעורך של גוגל.
+ * נקראת מ-`bot check`. לא מחזירה שום מידע על תלמידות ולא את המפתח.
+ */
+function diag_() {
+  var o = {code: CODE_BUILD, time: Utilities.formatDate(
+      new Date(), 'Asia/Jerusalem', 'yyyy-MM-dd HH:mm')};
+  try { var cfg = config_();
+        o.config = cfg && cfg['גרסה'] ? cfg['גרסה'] : 'אין';
+        o.system = cfg && cfg.system ? cfg.system.length : 0; } catch (e) { o.config = 'שגיאה'; }
+  try { o.instructions = stableText_().length; } catch (e) { o.instructions = 'שגיאה'; }
+  try { o.key = props_().getProperty('ANTHROPIC_API_KEY') ? true : false; } catch (e) { o.key = 'שגיאה'; }
+  try { var t = new Date().getTime();
+        var r = retrieve_('מה זה לחיות חיים של עונג', null, 3, 'magnetit');
+        o.retrieve = r.length; o.retrieve_ms = new Date().getTime() - t;
+        o.sources = r.map(function (c) { return c.src; }); } catch (e) {
+        o.retrieve = 'שגיאה'; o.retrieve_err = String(e).slice(0, 200); }
+  try { o.sheet = props_().getProperty('SHEET_ID') ? true : false; } catch (e) { o.sheet = 'שגיאה'; }
+  o.last_error = props_().getProperty('LAST_ERROR') || 'אין';
+  return o;
 }
 
 // ---------- ההגדרות החיות, מגיטהאב ----------
@@ -818,6 +845,16 @@ function ask(req) {
     if (!rec['private']) logTurn_(mail, rec, question, answer);
 
     return {a: answer, lesson: lesson};
+  } catch (err) {
+    // שגיאה לא נעלמת. היא נרשמת, כדי שאפשר יהיה לראות אותה מבחוץ
+    // דרך ?diag=1 בלי להיכנס לעורך של גוגל.
+    try {
+      props_().setProperty('LAST_ERROR', Utilities.formatDate(
+          new Date(), 'Asia/Jerusalem', 'yyyy-MM-dd HH:mm') + ' | ' +
+          String(err && err.message ? err.message : err).slice(0, 300) + ' | ' +
+          String(err && err.stack ? err.stack : '').slice(0, 400));
+    } catch (e2) { /* גם רישום שגיאה לא מפיל תשובה */ }
+    return {a: 'משהו נתקע רגע. נסי שוב.', lesson: null};
   } finally {
     try { lock.releaseLock(); } catch (e) { /* כבר שוחרר */ }
   }
