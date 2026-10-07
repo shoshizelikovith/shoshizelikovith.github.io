@@ -174,7 +174,7 @@ p{margin:0;}
 .cta-ghost:hover{background:var(--purple);color:var(--cream);}
 
 footer{padding:clamp(40px,7vw,60px) 0 clamp(44px,7vw,64px);text-align:center;font-size:15px;opacity:.65;line-height:1.8;}
-footer a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:8px 4px}
+footer a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:9px 4px}
 
 /* בטלפון השורות מתקרבות קצת, כמו בדף המכירה */
 @media(max-width:520px){
