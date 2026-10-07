@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1007-1841';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1007-2025';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // שקלים להודעה
 
@@ -55,6 +55,28 @@ function diag_() {
   try { o.sheet = props_().getProperty('SHEET_ID') ? true : false; } catch (e) { o.sheet = 'שגיאה'; }
   o.last_error = props_().getProperty('LAST_ERROR') || 'אין';
   return o;
+}
+
+/**
+ * אותה תשובה בדיוק, רק מכתובת אחרת.
+ * הדף שיושב על shoshizelikovith.com פונה לכאן ישירות, ולא דרך iframe של גוגל.
+ * כך גוגל לא מפנה את התלמידה לנתיב של חשבון מסוים והדף לא נשבר לה.
+ */
+function doPost(e) {
+  var out;
+  try {
+    var req = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    out = ask(req);
+  } catch (err) {
+    out = {a: 'משהו נתקע רגע. נסי שוב.', lesson: null};
+    try {
+      props_().setProperty('LAST_ERROR', Utilities.formatDate(
+          new Date(), 'Asia/Jerusalem', 'yyyy-MM-dd HH:mm') + ' | doPost | ' +
+          String(err && err.message ? err.message : err).slice(0, 300));
+    } catch (e2) { /* לא מפיל תשובה */ }
+  }
+  return ContentService.createTextOutput(JSON.stringify(out))
+      .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ---------- ההגדרות החיות, מגיטהאב ----------
