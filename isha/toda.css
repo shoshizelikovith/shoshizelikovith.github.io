@@ -1,0 +1,186 @@
+/* דפי התודה של אשה ללא מאמץ - שלושה מסלולים, CSS אחד משותף. נבנה 7.10.2026.
+   toda-magnetet.html · toda-masa-shalem.html · toda-yodaat.html
+   הטוקנים, הפונט והכפתורים מועתקים מדף המכירה (index.html), כדי שהרגע
+   שאחרי התשלום ירגיש כמו אותו מקום. פונט אחד בלבד: Assistant, מוטמע מ-fonts/.
+   קאראוון ואלמוני הם רישיון דסקטופ ולא מופיעים כאן בשום צורה. */
+
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* חמשת צבעי המותג בלבד. #C9155D רק לטקסט ורוד קטן, בשביל ניגודיות. */
+:root{
+  --cream:#F2EEE3; --purple:#A62F7D; --pink:#DF1767; --pink-text:#C9155D;
+  --orange:#F36E21; --ink:#0D122C;
+  --lift:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);
+  font-family:"Assistant",sans-serif;
+  font-size:19px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;height:auto;}
+p{margin:0;}
+.wrap{max-width:680px;margin:0 auto;padding:0 22px;}
+.air{height:clamp(44px,7vw,76px);}
+.air-s{height:clamp(28px,4.5vw,44px);}
+
+/* ===== ראש הדף: הלוגו, שם המסלול, והקאבר של מה שהיא קנתה ===== */
+.top{text-align:center;padding-top:clamp(28px,5vw,52px);}
+.logo{width:min(38%,200px);margin:0 auto;}
+.track{margin:clamp(22px,4vw,34px) 0 14px;font-size:15px;font-weight:700;
+  letter-spacing:.04em;color:var(--purple);line-height:1.5;}
+.covers{display:grid;gap:12px;grid-template-columns:1fr;justify-items:center;}
+.cover{width:100%;max-width:520px;border-radius:14px;box-shadow:var(--lift);}
+/* המסע השלם: שני קאברים זה לצד זה, גם בטלפון.
+   בבדיקה של 7.10 הם נערמו בטלפון לגובה 388 פיקסל ודחפו את תיבת הפעולה
+   אל מתחת למסך הראשון. זה לצד זה היא מתחילה בגובה 400 בערך. */
+.covers.two{grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;}
+.covers.two .cover{max-width:none;border-radius:10px;}
+.plus{font-size:22px;font-weight:700;line-height:1;color:var(--purple);opacity:.8;}
+@media(min-width:600px){
+  .covers.two{gap:14px;}
+  .covers.two .cover{border-radius:14px;}
+  .plus{font-size:26px;}
+}
+
+/* ===== הטקסט של הדף הישן - מילה במילה, גדול וברור ===== */
+.hello{text-align:center;}
+.hello h1{margin:0 0 .2em;font-size:clamp(30px,6.2vw,46px);line-height:1.25;font-weight:700;}
+.hello .h2{font-size:clamp(22px,4.4vw,30px);line-height:1.35;font-weight:600;color:var(--purple);}
+
+/* תיבת הפעולה - הדבר הכי חשוב בדף. כחול לילה מול קרם, הניגודיות של המותג.
+   ״אישור״ היא ההדגשה היחידה, כמו בדף הישן (שם 48 מול 42). */
+.act{background:var(--ink);color:var(--cream);border-radius:22px;text-align:center;
+  padding:clamp(24px,4.6vw,36px) clamp(18px,4vw,34px) clamp(26px,4.8vw,38px);
+  margin:clamp(22px,4vw,32px) 0 0;box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.7);}
+.act::before{content:"";display:block;width:46px;height:4px;background:var(--orange);
+  border-radius:2px;margin:0 auto 18px;}
+.act p{font-size:clamp(20px,3.5vw,26px);line-height:1.5;font-weight:600;}
+.act p span{display:block;text-wrap:balance;}
+.act p span+span{margin-top:.2em;}
+.act .ok{font-size:1.3em;font-weight:700;color:var(--orange);line-height:1;}
+.find{max-width:470px;margin:16px auto 0;text-align:center;font-size:16.5px;line-height:1.6;opacity:.85;text-wrap:balance;}
+.find b{font-weight:700;}
+
+/* ===== מה הצטרפת אליו - מועתק מסעיף ההצעה בדף המכירה ===== */
+.sec{text-align:center;margin:0 0 .65em;font-size:clamp(24px,4.6vw,32px);line-height:1.3;font-weight:700;}
+.pack{background:var(--cream);border-radius:20px;box-shadow:var(--lift);
+  padding:clamp(20px,4vw,28px) clamp(20px,4vw,30px);max-width:560px;margin:0 auto;}
+.pmeta{margin:0 0 12px;padding-bottom:10px;border-bottom:2px solid var(--purple);
+  font-size:15.5px;font-weight:700;color:var(--purple);}
+.plist{list-style:none;margin:0;padding:0;}
+.plist li{position:relative;padding-right:24px;margin:0 0 .55em;font-size:17.5px;line-height:1.55;text-wrap:pretty;}
+.plist li:last-child{margin-bottom:0;}
+.plist li::before{content:"";position:absolute;right:0;top:.55em;width:9px;height:9px;
+  border-radius:50%;background:var(--pink);}
+.nm{color:var(--purple);font-weight:700;}
+/* שם קורס לא נשבר באמצע שורה */
+.nw{white-space:nowrap;}
+
+/* ===== מילה אישית משושי ===== */
+.letter{text-align:center;max-width:540px;margin:0 auto;}
+.me{width:clamp(104px,20vw,128px);height:auto;border-radius:50%;margin:0 auto 18px;box-shadow:var(--lift);}
+.letter .words{font-size:clamp(18px,3.2vw,21px);line-height:1.7;margin:0 0 .9em;text-wrap:balance;}
+.sign{font-size:clamp(20px,3.6vw,24px);line-height:1.4;font-weight:700;}
+.sign span{display:block;}
+.sign .name{color:var(--pink-text);}
+
+/* ===== צריכה עזרה? - אותם שני כפתורים כמו בדף המכירה ===== */
+.help{text-align:center;margin:0 0 .8em;font-size:clamp(19px,3.4vw,25px);line-height:1.45;
+  font-weight:700;color:var(--purple);}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;max-width:560px;margin:0 auto;}
+.cta-ghost{flex:1 1 220px;text-align:center;text-decoration:none;
+  border:1.5px solid var(--purple);color:var(--purple);padding:13px 16px;
+  border-radius:12px;font-weight:600;font-size:16px;line-height:1.4;}
+.cta-ghost:hover{background:var(--purple);color:var(--cream);}
+
+footer{padding:clamp(40px,7vw,60px) 0 clamp(44px,7vw,64px);text-align:center;font-size:15px;opacity:.65;line-height:1.8;}
+
+/* בטלפון השורות מתקרבות קצת, כמו בדף המכירה */
+@media(max-width:520px){
+  body{font-size:18px;line-height:1.7;}
+  .pack{padding:18px 18px 20px;}
+  .plist li{font-size:17px;padding-right:22px;}
+}
+/* קורסי הבונוס: תיאור במקום רשימה. 7.10.2026 */
+.pdesc{margin:0;font-size:17.5px;line-height:1.7;text-wrap:pretty;}
+@media(max-width:600px){.pdesc{font-size:17px;}}
