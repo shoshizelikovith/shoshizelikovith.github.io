@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1007-2033';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1008-1515';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // שקלים להודעה
 
@@ -388,9 +388,13 @@ function askModel_(system, messages, mode) {
             cache_control: {type: 'ephemeral'}},
            {type: 'text', text: system.dyn}];
   }
+  // המודל חושב לפני שהוא עונה, והחשיבה נספרת בתוך max_tokens.
+  // תקרה נמוכה מדי חותכת את התשובה באמצע מילה, ולפעמים מוחקת אותה לגמרי.
+  // effort נמוך שומר על החשיבה קצרה, וזה גם מהיר וגם זול יותר.
   var body = {
     model: 'claude-sonnet-5',
-    max_tokens: mode === 'light' ? 900 : 1400,
+    max_tokens: mode === 'light' ? 4000 : 8000,
+    output_config: {effort: mode === 'deep' ? 'medium' : 'low'},
     system: sys,
     messages: messages
   };
@@ -406,7 +410,16 @@ function askModel_(system, messages, mode) {
   }
   var r = JSON.parse(res.getContentText()), out = '';
   for (var i = 0; i < (r.content || []).length; i++) {
-    out += r.content[i].text || '';
+    if (r.content[i].type === 'text') out += r.content[i].text || '';
+  }
+  // תשובה שנחתכה בגלל התקרה לא תיעלם בשקט יותר.
+  if (r.stop_reason === 'max_tokens') {
+    try {
+      props_().setProperty('LAST_ERROR', Utilities.formatDate(
+          new Date(), 'Asia/Jerusalem', 'yyyy-MM-dd HH:mm') +
+          ' | התשובה נחתכה בתקרת האורך | מצב ' + mode +
+          ' | יצא ' + ((r.usage && r.usage.output_tokens) || '?') + ' טוקנים');
+    } catch (e) { /* לא מפיל תשובה */ }
   }
   return out;
 }
