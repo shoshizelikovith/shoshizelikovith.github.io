@@ -3,25 +3,2195 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>אשה ללא מאמץ | שושי זליקוביץ׳</title>
-<meta name="theme-color" content="#F2EEE3">
+<title>אשה ללא מאמץ · אימון נשי לזוגיות ממגנטת</title>
 <style>
-  :root{ --cream:#F2EEE3; --ink:#0D122C; --purple:#A62F7D; }
-  *{ box-sizing:border-box }
-  body{
-    margin:0; min-height:100vh; background:var(--cream); color:var(--ink);
-    font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-weight:300;
-    display:flex; align-items:center; justify-content:center;
-    padding:24px 16px; text-align:center; line-height:1.8;
-  }
-  h1{ font-size:27px; font-weight:700; color:var(--purple); margin:0 0 10px }
-  p{ margin:0; opacity:.7; font-size:16px }
+/* Assistant - מתארח מקומית ב-fonts/. רישיון OFL, מותר להטמיע.
+   בלעדיו הדף נפל לפונט מערכת שונה בכל מחשב, וזה מה שיצר את חוסר האחידות. */
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* hebrew */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Assistant';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root{
+  --cream:#F2EEE3; --cream-deep:#F2EEE3; --cream-soft:#F2EEE3;
+  --purple:#A62F7D; --pink:#DF1767; --pink-text:#C9155D; --orange:#F36E21; --ink:#0D122C;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);
+  font-family:"Assistant","Heebo","Arial Hebrew","Rubik",system-ui,sans-serif;
+  font-size:19px;line-height:1.9;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:700px;margin:0 auto;padding:0 22px;}
+.wide{max-width:1080px;margin:0 auto;padding:0 22px;}
+h1,h2,h3,h4{line-height:1.32;margin:0 0 .45em;font-weight:700;}
+p{margin:0 0 1.3em;}
+.brand{  font-size:clamp(42px,8.5vw,72px);margin-bottom:.08em;}
+/* פתיחה - הלוגו ושם התוכנית מרונדרים לתמונה, כי קראוון ואלמוני
+   הם ברישיון דסקטופ ואסור להטמיע אותם כפונט באתר */
+.hero{text-align:center;margin:clamp(14px,3vw,30px) 0 clamp(30px,5vw,48px);}
+.hero img{display:block;margin:0 auto;height:auto;}
+.hero-logo{width:min(78%,360px);}
+.hero-title{width:min(92%,470px);margin-top:clamp(26px,4.5vw,40px) !important;}
+/* שורת הפרטים - יושבת מתחת לכפתור, לא מעל הפתיח */
+.under-cta{display:block;margin:16px auto 0;height:auto;width:min(84%,340px);opacity:.9;}
+.sub{font-size:clamp(17px,3.4vw,22px);font-weight:500;color:var(--purple);margin:0 0 1.5em;}
+h2.sec{font-size:clamp(25px,4.8vw,36px);margin:0 0 .7em;}
+h3.mini{font-size:clamp(20px,3.6vw,25px);color:var(--purple);margin:2em 0 .6em;}
+.lead{font-size:1.06em;}
+.air{height:clamp(50px,8vw,92px);}
+.air-s{height:clamp(26px,4.5vw,44px);}
+.kicker{font-size:14px;font-weight:700;letter-spacing:.12em;color:var(--purple);
+  text-align:center;margin:0 0 .3em;}
+.part{text-align:center;margin:clamp(50px,8vw,90px) 0 clamp(26px,4vw,44px);}
+.part h2{font-size:clamp(28px,5.5vw,42px);margin:0;}
+/* שורת ההשהיה לפני הקאבר. הקאבר עצמו הוא כרטיס הכותרת, והוא חושף את השם. */
+.reveal{font-size:clamp(19px,3.4vw,24px);font-weight:600;color:var(--purple);
+  text-align:center;margin:0 0 clamp(16px,3vw,26px);}
+
+.sep{display:block;width:100%;max-width:740px;margin:clamp(36px,6vw,70px) auto;height:auto;}
+
+.cta{display:block;width:100%;text-align:center;background:var(--orange);color:var(--ink);
+  font-size:clamp(17px,3.3vw,20px);font-weight:700;padding:19px 24px;border-radius:14px;
+  text-decoration:none;box-shadow:0 10px 22px -12px rgba(13,18,44,.55);}
+.cta.purple{background:var(--purple);color:#F2EEE3;box-shadow:0 10px 22px -12px rgba(13,18,44,.55);}
+.cta+.cta{margin-top:12px;}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;}
+.cta-ghost{flex:1 1 220px;text-align:center;text-decoration:none;
+  border:1.5px solid var(--purple);color:var(--purple);padding:13px 16px;
+  border-radius:12px;font-weight:600;font-size:16px;}
+
+.cards{display:grid;gap:16px;grid-template-columns:1fr;}
+@media(min-width:740px){.cards{grid-template-columns:1fr 1fr;gap:20px;}}
+.card{background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);border-radius:18px;padding:24px 24px 20px;
+  box-shadow:0 2px 10px rgba(13,18,44,.05);}
+.card h4{font-size:19px;color:var(--purple);margin-bottom:.3em;}
+.card p{font-size:16.5px;line-height:1.78;margin:0;}
+/* ארבעת סוגי הכאב - נקראים כקולות ולא כרשימת פיצ׳רים.
+   רצועת נייר סגולה דקה בקצה הימני במקום בועת דיבור, שאסורה בכללים. */
+.cards.voices .card{position:relative;padding-right:30px;}
+.cards.voices .card::before{
+  content:"";position:absolute;top:24px;bottom:24px;right:14px;width:3px;
+  border-radius:3px;background:var(--purple);}
+.cards.voices h4{font-weight:700;}
+/* אייקוני הסטודיו - נייר חתוך תלת ממדי. קטנים, שווים בגודל, ולא צועקים. */
+.cards.icons .card{padding-top:22px;}
+.cards.icons img{display:block;width:clamp(52px,11vw,62px);height:auto;margin:0 0 12px;}
+.cards.small .card{padding:20px 20px 17px;}
+/* אייקון שפותח סעיף - אותו אייקון של אותו רעיון, לא מיחזור לרעיון אחר */
+.sec-icon{display:block;width:clamp(56px,12vw,68px);height:auto;margin:0 0 14px;}
+/* שלושת פריטי המאמנת */
+.perks{list-style:none;margin:1.3em 0 1.5em;padding:0;}
+.perks li{position:relative;padding-right:26px;margin-bottom:.6em;font-size:17px;}
+.perks li::before{content:"";position:absolute;right:0;top:.62em;width:9px;height:9px;
+  border-radius:50%;background:var(--pink);}
+.cards.small h4{font-size:17.5px;}
+.cards.small p{font-size:16px;}
+
+.lessons{font-size:15.5px;line-height:1.75;margin:1em 0 0;}
+.lessons b{color:var(--pink-text);font-weight:700;display:block;margin-bottom:.2em;}
+
+details{background:var(--cream);box-shadow:0 2px 0 rgba(13,18,44,.05),0 10px 22px -14px rgba(13,18,44,.45);border-radius:16px;padding:0;margin-bottom:11px;overflow:hidden;}
+details summary{list-style:none;cursor:pointer;padding:20px 22px;font-weight:700;font-size:17.5px;}
+details summary::-webkit-details-marker{display:none;}
+details summary:focus-visible{outline:3px solid var(--purple);outline-offset:-4px;border-radius:16px;}
+details summary::after{content:"+";float:left;color:var(--purple);font-size:22px;line-height:1;}
+details[open] summary::after{content:"−";}
+details summary .hk{display:block;font-weight:600;font-size:15.5px;color:var(--purple);margin-top:.3em;}
+details .body{padding:0 22px 20px;font-size:16.5px;line-height:1.8;}
+/* שבועות ההטמעה - שניים מתוך 16, בלי חומר חדש. זו נקודת מכירה
+   שעונה מראש על "לא אעמוד בקצב", ולכן הם לא נראים כמו כל השאר. */
+details.soak{background:var(--cream);box-shadow:0 2px 0 rgba(13,18,44,.05),0 10px 22px -14px rgba(13,18,44,.45);}
+.soaktag{display:block;font-size:12.5px;font-weight:700;letter-spacing:.04em;
+  color:var(--purple);margin-bottom:.45em;}
+details .body p{margin:0 0 .8em;max-width:31em;}
+
+.price{background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);border-radius:20px;padding:30px 26px;margin-bottom:22px;}
+.price.best{background:var(--cream);box-shadow:0 0 0 2.5px var(--orange) inset,0 16px 30px -20px rgba(13,18,44,.5);}
+.tag{display:inline-block;font-size:13.5px;font-weight:700;letter-spacing:.05em;
+  color:var(--purple);margin-bottom:.8em;}
+.tag.o{color:var(--orange);}
+.price h3{font-size:clamp(28px,5.5vw,40px);margin-bottom:.1em;}
+.price .meta{font-size:15.5px;font-weight:600;color:var(--purple);margin-bottom:1.1em;}
+.price ul{margin:0 0 1.3em;padding:0 20px 0 0;}
+.price li{margin-bottom:.45em;font-size:16.5px;}
+.price li::marker{color:var(--pink);}
+.amount{font-size:clamp(27px,5.5vw,36px);font-weight:700;margin:0 0 1.2em;}
+.amount span{display:block;font-size:15.5px;font-weight:600;color:var(--purple);margin-top:.15em;}
+
+table{width:100%;border-collapse:collapse;font-size:16.5px;margin:0 0 1.2em;}
+td{padding:10px 4px;border-bottom:1px solid rgba(13,18,44,.10);}
+td:last-child{text-align:left;font-weight:600;}
+tr.total td{font-weight:700;}
+tr.hl td{color:var(--orange);font-weight:700;border-bottom:none;}
+
+figure{margin:0;}
+.illus{display:block;width:100%;height:auto;border-radius:18px;}
+.pull{border-right:3px solid var(--pink);padding:2px 20px 2px 0;margin:0 0 1.4em;font-size:1.06em;}
+/* שני השלבים - הרמז לממגנטת וליודעת. זה הדבר היחיד בסעיף 10 שנראה כמו עיצוב. */
+.stages{display:grid;gap:16px;grid-template-columns:1fr;margin:1.6em 0 1.8em;}
+@media(min-width:800px){.stages{grid-template-columns:1fr 1fr;gap:20px;}}
+
+
+
+
+
+/* מקצב - שורות קצרות שנקראות כרצף אחד, בלי רווח פסקה ביניהן */
+.beats{margin:0 0 1.35em;line-height:1.75;}
+.beats span{display:block;}
+.beats span+span{margin-top:.15em;}
+/* סגירה גדולה - המשפטים האחרונים של סעיף 10, הרמז להמשך */
+.beats.big-end{font-size:clamp(20px,3.6vw,26px);line-height:1.5;margin-top:.4em;}
+.beats.big-end span+span{margin-top:.25em;}
+/* נחיתה - המשפט האחד שהסעיף נבנה אליו. לכל היותר אחת או שתיים בסעיף. */
+.land{background:var(--cream);border-right:5px solid var(--pink);border-radius:0 16px 16px 0;box-shadow:0 2px 0 rgba(13,18,44,.05),0 10px 22px -14px rgba(13,18,44,.45);padding:18px 22px 18px 18px;
+  margin:1.6em 0 1.5em;font-size:clamp(21px,3.8vw,27px);font-weight:700;line-height:1.45;}
+/* ״ובדיוק בשביל זה יצרתי לך את התהליך״ - בכחול לילה, לבקשת שושי 8.10 (״חיוור מידי והוא סופר חשוב״) */
+.land.deep{background:var(--ink);color:var(--cream);border-right-color:var(--pink)}
+.scene{background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);border-radius:20px;padding:clamp(22px,4.5vw,36px);}
+.scene h4{color:var(--purple);font-size:18.5px;margin-top:1.2em;}
+.fine{font-size:14.5px;line-height:1.7;opacity:.62;border-right:2px solid var(--purple);
+  padding-right:14px;max-width:33em;}
+
+/* fit / not fit */
+/* למי מתאים ולמי לא.
+   הערת הבנייה בקופי ביקשה "ירוק עדין מול אפור עדין" - שני הצבעים אסורים
+   בחלק 5 של מסמך הכללים. במקומם: סגול המותג מול כחול הלילה המרוכך.
+   העמודה החיובית מקבלת משקל גדול יותר, כי דף לא אמור להשקיע אותה אנרגיה
+   בלדחוף אנשים החוצה כמו בלמשוך אותם פנימה. */
+.fit{border-radius:18px;padding:28px 26px;}
+.fit.yes{background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);}
+.fit.no{background:transparent;border:1px solid rgba(13,18,44,.14);}
+.fit h3{font-size:clamp(20px,3.6vw,24px);margin-bottom:.9em;
+  padding-bottom:.5em;border-bottom:1px solid rgba(13,18,44,.10);}
+.fit.yes h3{color:var(--purple);}
+.fit.no h3{color:var(--ink);opacity:.62;}
+.fit .item{margin-bottom:1.15em;}
+.fit .item b{display:block;margin-bottom:.1em;font-size:17.5px;}
+.fit.yes .item b{color:var(--ink);}
+.fit .item p{font-size:16px;line-height:1.7;margin:0;}
+.fit.yes .item p{opacity:.92;}
+.fit.no .item b{opacity:.82;font-weight:600;}
+.fit.no .item p{opacity:.72;font-size:15.5px;}
+.two{display:grid;gap:18px;grid-template-columns:1fr;}
+@media(min-width:820px){.two{grid-template-columns:1fr 1fr;gap:22px;}}
+
+/* ===== עדויות =====
+   כל עדות יושבת בכרטיס בגודל אחיד. צילומי המסך הם ביחסים שונים לגמרי
+   (0.78 עד 2.22 גובה/רוחב), ולכן הכרטיס חותך את העודף ומוסיף דעיכה רכה,
+   ולחיצה פותחת את העדות המלאה. ככה אין עדות ענקית שבולעת את הדף. */
+.tcard{position:relative;display:block;padding:0;border:0;cursor:zoom-in;
+  width:100%;overflow:hidden;border-radius:16px;background:var(--cream);
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);}
+.tcard img{display:block;width:100%;height:auto;}
+/* בקיר הנגלל בלבד - גובה אחיד ודהייה בתחתית */
+.trail .tcard{height:340px;}
+.trail .tcard::after{content:"";position:absolute;inset:auto 0 0 0;height:74px;pointer-events:none;
+  background:linear-gradient(to bottom,rgba(242,238,227,0),rgba(242,238,227,.98));}
+
+.tgrid{display:grid;gap:18px;grid-template-columns:1fr;align-items:start;max-width:460px;margin-inline:auto;}
+@media(min-width:760px){.tgrid.two{grid-template-columns:1fr 1fr;max-width:656px}}
+
+/* קרוסלה - נגררת באצבע, ועם חצים בדסקטופ */
+.twall{position:relative;}
+.trail{display:flex;gap:14px;overflow-x:auto;padding:4px 22px 20px;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;}
+.trail::-webkit-scrollbar{height:6px;}
+.trail::-webkit-scrollbar-thumb{background:var(--purple);border-radius:6px;}
+.trail .tcard{flex:0 0 clamp(228px,66vw,262px);scroll-snap-align:center;}
+.tnav{font-family:inherit;position:absolute;top:calc(50% - 26px);width:46px;height:46px;border-radius:50%;
+  border:1.5px solid var(--purple);background:var(--cream);color:var(--purple);
+  font-size:22px;line-height:1;cursor:pointer;display:none;z-index:2;
+  box-shadow:0 3px 12px rgba(13,18,44,.12);}
+.tnav:hover{background:var(--purple);color:var(--cream);}
+.tnav.prev{right:6px;} .tnav.next{left:6px;}
+@media(min-width:880px){.tnav{display:block;}}
+
+/* עדות מלאה בלחיצה */
+.tbox{position:fixed;inset:0;background:rgba(13,18,44,.82);z-index:99;
+  display:none;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto;}
+.tbox.on{display:flex;}
+.tbox img{max-width:min(560px,100%);width:100%;height:auto;border-radius:14px;
+  background:var(--cream);}
+.tbox .x{position:fixed;top:14px;left:16px;width:44px;height:44px;border-radius:50%;
+  border:0;background:var(--cream);color:var(--ink);font-family:inherit;font-size:22px;cursor:pointer;}
+
+/* about */
+.about{display:grid;gap:26px;grid-template-columns:1fr;align-items:start;}
+@media(min-width:780px){.about{grid-template-columns:300px 1fr;gap:34px;}}
+@media(min-width:780px){.about>div:first-child{position:sticky;top:24px}} /* התמונה צפה לאורך ״מי אני״, כמו בשאלות ותשובות. 8.10.2026 */
+.about img{width:100%;height:auto;border-radius:18px;display:block;}
+
+.guarantee{display:grid;gap:24px;align-items:center;grid-template-columns:1fr;}
+@media(min-width:720px){.guarantee{grid-template-columns:220px 1fr;}}
+
+/* placeholders */
+.ph{border:2px dashed var(--purple);border-radius:18px;background:var(--cream);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:26px 20px;color:var(--purple);}
+.ph b{font-size:16.5px;display:block;margin-bottom:.3em;}
+.ph span{font-size:14.5px;color:var(--ink);opacity:.72;line-height:1.6;max-width:46ch;}
+.ph.r169{aspect-ratio:16/9;} .ph.r32{aspect-ratio:3/2;}
+.ph.sq{aspect-ratio:1/1;max-width:215px;margin:0 auto;border-radius:50%;}
+.ph.port{aspect-ratio:4/5;}
+.note{font-size:12.5px;letter-spacing:.02em;color:var(--purple);
+  background:var(--cream);box-shadow:0 0 0 1.5px var(--purple) inset;border-radius:999px;padding:5px 13px;
+  display:inline-block;margin:0 0 11px;font-weight:600;}
+footer{padding:54px 0 70px;text-align:center;font-size:15px;opacity:.65;line-height:1.8;}
+footer a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:9px 4px}
+/* בטלפון השורות מתקרבות קצת - 1.9 יוצר פסקאות מרחפות במסך צר */
+@media(max-width:520px){
+  body{font-size:18px;line-height:1.75;}
+  p{margin-bottom:1.15em;}
+  .card p,.fit .item p{line-height:1.68;}
+}
+
+/* ===== תוספות 22.9.2026 ===== */
+.turn{background:var(--ink);color:var(--cream);border-radius:20px;padding:28px 28px 30px;margin:1.9em 0 1.8em;box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.turn::before{content:"";display:block;width:46px;height:4px;background:var(--orange);border-radius:2px;margin-bottom:16px}
+.turn p{margin:0}
+.turn .t1{font-size:clamp(26px,5.2vw,38px);font-weight:700;line-height:1.25}
+.turn .t1 b{color:#fff}
+.turn .t2{font-size:clamp(20px,3.6vw,26px);font-weight:700;margin:.15em 0 .55em;opacity:.9}
+.turn .t3{font-size:clamp(18px,3.1vw,22px);line-height:1.6}
+.turn .t3 b{color:#fff}
+
+.twoways{max-width:660px;margin:0 auto 2.2em}
+.twoways p{margin:0 0 .85em}
+.twoways .w1{font-size:clamp(21px,3.8vw,27px);font-weight:700;margin-bottom:.7em}
+
+.teaches{background:var(--purple);color:var(--cream);border-radius:20px;padding:24px 26px 26px;margin:1.5em 0;box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.teaches .tt{font-size:clamp(19px,3.3vw,24px);font-weight:700;line-height:1.45;margin:0 0 .6em}
+.teaches .tl{font-size:clamp(17px,2.8vw,20px);font-weight:700;color:var(--cream);margin:0 0 .5em}
+.teaches ul{margin:0;padding-right:20px}
+.teaches li{margin:0 0 .45em;font-weight:700;line-height:1.5}
+
+.faqlead{font-size:clamp(18px,3vw,22px);opacity:.8;margin:-.4em 0 1.6em;line-height:1.45}
+.reachout{font-size:clamp(19px,3.4vw,25px);font-weight:700;color:var(--purple);
+  text-align:center;max-width:620px;margin:0 auto 1em;line-height:1.45}
+
+.blead{text-align:center;max-width:640px;margin:0 auto 2.2em;opacity:.85}
+.bgrid{display:grid;gap:26px;grid-template-columns:1fr}
+@media(min-width:900px){.bgrid{grid-template-columns:repeat(3,1fr)}}
+.bcard{background:var(--cream);border-radius:18px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);display:flex;flex-direction:column}
+.bcard>img{width:100%;display:block}
+.bbody{padding:18px 20px 20px;display:flex;flex-direction:column;gap:.75em;flex:1}
+.btop{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.btop h3{margin:0;font-size:clamp(20px,3.4vw,24px)}
+.bval{display:inline-block;background:var(--purple);color:var(--cream);border-radius:999px;
+  padding:7px 18px;font-size:16px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
+.bcard p{margin:0;font-size:16.5px;line-height:1.6}
+.bben{font-weight:700}
+.bwhy{border-right:3px solid var(--pink);padding-right:12px;font-style:normal;opacity:.9}
+.btracks{margin-top:auto;padding-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.tr{font-size:13.5px;font-weight:700;padding:3px 11px;border-radius:20px;
+  border:1px solid rgba(13,18,44,.2);opacity:.4}
+.tr.on{opacity:1;border-color:var(--pink);color:var(--pink)}
+@media(max-width:520px){.turn{padding:18px 18px 20px}.teaches{padding:16px 18px}}
+
+.band{display:block;width:100%;max-height:340px;object-fit:cover;object-position:center 38%;margin:0 0 2em}
+.closing{display:block;width:100%;max-width:420px;margin:0 auto 1.6em;border-radius:20px}
+@media(max-width:520px){.band{max-height:210px;margin-bottom:1.5em}}
+
+.avira{display:block;width:100%;border-radius:18px;margin:0}
+.botit{display:block;width:100%;max-width:440px;margin:0 auto 10px;border-radius:18px}
+.stamp{display:block;width:100%;max-width:260px;margin:0 auto}
+@media(max-width:520px){.stamp{max-width:200px}}
+
+.botchat{display:block;width:100%;max-width:560px;margin:0 auto 8px;border-radius:16px;box-shadow:0 3px 16px rgba(13,18,44,.10)}
+
+.bpack{margin:0 0 34px}
+.bpack.full{background:var(--cream);box-shadow:0 0 0 2px var(--purple) inset,0 16px 30px -20px rgba(13,18,44,.5);
+  border-radius:20px;padding:22px 20px 24px}
+.phead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  flex-wrap:wrap;margin:0 0 14px;padding-bottom:12px;border-bottom:2px solid var(--purple)}
+.phead h3{margin:0;font-size:clamp(21px,3.8vw,27px);font-weight:700}
+.phead h3 b{color:var(--purple)}
+.psum{background:var(--pink);color:#fff;border-radius:22px;padding:5px 15px;
+  font-size:15px;font-weight:700;white-space:nowrap}
+.pnote{margin:0 0 16px;font-size:16.5px;line-height:1.6}
+.bgrid.one{grid-template-columns:1fr;max-width:420px}
+@media(min-width:900px){.bgrid.one{grid-template-columns:1fr}}
+
+.mockup{display:block;width:100%;border-radius:18px}
+
+.bnote{background:var(--cream);border-right:4px solid var(--pink);border-radius:0 10px 10px 0;padding:10px 13px;font-size:16px;line-height:1.55}
+
+.quotes{display:grid;gap:18px;grid-template-columns:1fr;margin:1.8em 0}
+@media(min-width:760px){.quotes{grid-template-columns:1fr 1fr}}
+.quotes blockquote{margin:0;background:var(--cream);border-radius:16px;
+  padding:26px 26px 24px;position:relative;box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.quotes blockquote::before{content:"\201D";position:absolute;top:-6px;right:18px;
+  font-size:74px;line-height:1;color:var(--pink);opacity:.30}
+.quotes blockquote p{margin:0;font-size:clamp(18px,3.1vw,21px);line-height:1.6;
+  font-weight:700;padding-top:6px}
+.quotes blockquote::after{content:"";display:block;width:38px;height:3px;
+  background:var(--purple);border-radius:2px;margin:16px 0 0;opacity:.55}
+
+.quotes blockquote cite{display:block;margin-top:12px;font-style:normal;
+  font-size:14.5px;font-weight:700;color:var(--purple);letter-spacing:.2px}
+.quotes blockquote::after{margin:14px 0 0}
+/* עדות אחת בתוך תשובה בשאלות - ברוחב מלא, וטקסט קצת קטן מעדויות הגוף */
+.quotes.one{grid-template-columns:1fr;margin:1.3em 0 .3em}
+details .quotes.one blockquote p{font-size:clamp(17px,2.9vw,19px)}
+
+.subsec{font-size:clamp(20px,3.6vw,26px);font-weight:700;color:var(--purple);
+  margin:1.7em 0 .8em;padding-right:14px;border-right:4px solid var(--pink)}
+
+.engine{margin:-.4em 0 1.1em;opacity:.8}
+
+.pivot{text-align:center;margin:2.4em auto 2em;max-width:640px;padding:30px 24px 32px;
+  background:var(--ink);color:var(--cream);border-radius:24px;position:relative;box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.pivot .pnum{display:inline-block;width:40px;height:40px;line-height:40px;border-radius:50%;
+  background:var(--cream);color:var(--ink);font-weight:700;font-size:20px;vertical-align:middle}
+.pivot .pdot{display:inline-block;width:52px;height:3px;background:var(--orange);
+  border-radius:2px;margin:0 10px;vertical-align:middle}
+.pivot .p1{margin:.75em 0 .1em;font-size:clamp(23px,4.4vw,32px);font-weight:700;line-height:1.35}
+.pivot .p1 b{color:#fff}
+.pivot .p2{margin:0;font-size:clamp(21px,4vw,29px);font-weight:700;color:var(--cream);opacity:.88;line-height:1.35}
+
+
+
+
+
+@media(max-width:520px){.pivot{padding:24px 18px 26px;margin:2em auto 1.7em}}
+
+.turn.thesis{text-align:center;padding:34px 26px 36px}
+.turn.thesis::before{margin-right:auto;margin-left:auto}
+.turn.thesis .t1{font-size:clamp(27px,5.4vw,40px);line-height:1.3}
+.mech{background:var(--purple);color:var(--cream);border-radius:20px;
+  padding:26px 26px 28px;margin:1.7em 0;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.mech::before{content:"";display:block;width:46px;height:4px;background:var(--cream);
+  opacity:.7;border-radius:2px;margin-bottom:15px}
+.mech .m1{margin:0 0 .35em;font-size:clamp(21px,4vw,29px);font-weight:700;line-height:1.38}
+.mech .m1 b{color:#fff}
+.mech .m2{margin:0;font-size:clamp(17px,3vw,21px);opacity:.88}
+
+.stages{display:grid;gap:18px;grid-template-columns:1fr;margin:1.8em 0 2em;align-items:stretch}
+@media(min-width:760px){.stages{grid-template-columns:1fr 1fr;gap:22px}}
+.stage{background:var(--cream);border-radius:20px;padding:26px 26px 28px;
+  display:flex;flex-direction:column;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.stage.two{gap:0;box-shadow:0 0 0 2px var(--pink) inset,0 14px 26px -18px rgba(13,18,44,.55)}
+.shead{display:flex;align-items:center;gap:12px;margin:0 0 16px}
+.stage .num{width:46px;height:46px;flex:none;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--purple);color:var(--cream);font-size:24px;font-weight:700;line-height:1}
+.stage.two .num{background:var(--pink)}
+.stage .kick{font-size:13.5px;font-weight:700;letter-spacing:.1em;color:var(--purple)}
+.stage.two .kick{color:var(--pink-text)}
+.stage h4{margin:0 0 .6em;font-size:clamp(19px,3.3vw,23px);line-height:1.4}
+.stage p{margin:0;font-size:16.5px;line-height:1.65;opacity:.85}
+
+.paths{display:grid;gap:14px;grid-template-columns:1fr;align-items:stretch;margin:1.6em 0 1.8em}
+@media(min-width:820px){.paths{grid-template-columns:1fr auto 1fr}}
+.path{background:var(--cream);border-radius:20px;padding:22px 22px 24px;display:flex;flex-direction:column;gap:14px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.path.full{box-shadow:0 0 0 2.5px var(--pink) inset,0 14px 26px -18px rgba(13,18,44,.55)}
+.phd{display:flex;align-items:center;gap:11px}
+.pn{width:54px;height:54px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--purple);color:var(--cream);font-weight:700;font-size:27px}
+.path.full .pn{background:var(--pink)}
+.phd h3{margin:0;font-size:clamp(22px,4vw,28px);line-height:1.25}
+.path img{width:100%;height:auto;display:block;border-radius:12px}
+.pstack{display:grid;gap:8px}
+.path p{margin:auto 0 0;font-size:16px;line-height:1.6;opacity:.85}
+.parrow{display:flex;align-items:center;justify-content:center}
+.parrow span{background:var(--ink);color:var(--cream);border-radius:999px;
+  padding:7px 16px;font-weight:700;font-size:15px}
+.mech.whyfull{margin-top:0}
+.qhead{margin:2.3em 0 1.2em;text-align:center}
+.qhead h2{display:inline-block;margin:0;font-size:clamp(22px,4.2vw,31px);line-height:1.35;
+  color:var(--purple);background:none;padding:0 0 12px;border-bottom:4px solid var(--purple);border-radius:0}
+.qhead.pink h2{color:var(--pink);border-bottom-color:var(--pink)}
+.qhead h2 .nm{color:var(--pink)}
+.qhead.pink h2 .nm{color:var(--purple)}
+
+
+.pblead{text-align:center;font-weight:700;margin:0 0 .9em;opacity:.8}
+
+/* סעיף 21 - האחריות שלי כלפייך. נמחק בטעות בסבב חלק ד׳, הוחזר ועוצב מחדש 23.9 */
+/* הפונט כאן הוא פונט הגוף בלבד. קאראוון לא מוטמע כוובפונט ולכן נופל לפונט מערכת אחר - */
+/* זה מה שיצר את חוסר האחידות בגופנים. לא להחזיר font-family לגוש הזה. */
+.promise{background:var(--cream);border-radius:24px;padding:30px 28px;
+  display:grid;gap:24px;grid-template-columns:1fr;align-items:center;text-align:center;
+  box-shadow:0 0 0 2.5px var(--purple) inset,0 18px 34px -20px rgba(13,18,44,.55)}
+@media(min-width:760px){.promise{grid-template-columns:1fr 190px;gap:30px;
+  padding:36px 38px;text-align:right}}
+.pseal img{display:block;width:100%;height:auto;border-radius:18px}
+@media(max-width:759px){.pseal{width:100%;max-width:190px;margin-inline:auto;order:-1}}
+
+/* כותרת בתוך תמונת האווירה - שוברת את רצף הטקסט. רעיון של שושי 23.9 */
+/* עובד רק על שלוש תמונות האווירה הרחבות. הקאברים כבר מכילים טקסט מרונדר */
+/* ואסור להניח עליהם כותרת, וההדמיה היא צילום מוצר. */
+.picband{position:relative;max-width:1080px;margin:clamp(36px,6vw,70px) auto;padding:0 22px}
+.picband>img{width:100%;height:auto;display:block;border-radius:20px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.55)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);
+  white-space:nowrap;border:0;padding:0;margin:-1px}
+/* רצועת איור עם כותרת. הכותרת מוטמעת בתוך קובץ התמונה עצמו, באלמוני, */
+/* כי אלמוני הוא רישיון דסקטופ ואסור להטמיע אותו כ-webfont. */
+/* האיור מתוכנן סביב הכותרת - שדה קרם פנוי בימין - ולא הכותרת מודבקת עליו. */
+/* המרכיב: .bake-titles.py . גרסת הטלפון היא 4:3 עם כותרת גדולה יותר יחסית, */
+/* אחרת הכותרת מתכווצת יחד עם התמונה ולא נקראת. */
+.picband{max-width:1080px;margin:clamp(36px,6vw,70px) auto;padding:0 22px}
+.picband img{display:block;width:100%;height:auto;border-radius:20px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.55)}
+
+/* שורת הפורמט - שהיא תדע מיד שזה קורס דיגיטלי ושהוא נפתח מיד. 23.9 */
+.format{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 0;
+  margin:14px auto 0;max-width:640px;padding:0;list-style:none;
+  font-size:14.5px;font-weight:600;color:var(--purple);letter-spacing:.01em}
+.format li{padding:0 12px;position:relative}
+.format li+li::before{content:"";position:absolute;right:0;top:50%;
+  width:4px;height:4px;margin-top:-2px;border-radius:50%;background:var(--orange)}
+.joinfmt{margin:0 0 1.1em;text-align:center;font-size:15.5px;font-weight:600;
+  color:var(--purple);line-height:1.6}
+.promise .pk{display:block;font-size:13px;letter-spacing:.09em;font-weight:700;
+  color:var(--purple);margin-bottom:10px}
+.promise h3{margin:0 0 .75em;font-size:clamp(23px,3.9vw,30px);line-height:1.3;
+  font-weight:700;color:var(--purple)}
+.promise p{margin:0 0 .9em;font-size:clamp(16px,2.5vw,17.5px);line-height:1.75}
+.promise p:last-child{margin-bottom:0}
+.promise .pend{font-weight:700;color:var(--pink-text);font-size:clamp(17px,2.8vw,19px);line-height:1.55}
+
+/* סעיף 14 - המאמנת האישית. הבוט עבר מ-ChatGPT לשרת של שושי, עודכן 23.9 */
+.botgrid{display:grid;gap:26px;grid-template-columns:1fr;align-items:center;margin:1.8em 0 1.6em}
+@media(min-width:820px){.botgrid{grid-template-columns:1fr 300px;gap:32px}}
+.botart img{width:100%;height:auto;display:block;border-radius:20px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.55)}
+@media(max-width:819px){.botart{width:100%;max-width:340px;margin-inline:auto}}
+.botgrid .perks{margin:0}
+
+.botway{background:var(--cream);border-radius:18px;padding:22px 24px;margin:0 0 1.6em;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.botway b{display:block;color:var(--purple);font-size:clamp(17.5px,2.9vw,20px);margin-bottom:.45em}
+.botway p{margin:0;font-size:16.5px;line-height:1.75}
+
+.xchange{max-width:620px;margin:0 auto}
+.xchange .turn{border-radius:18px;padding:18px 22px 17px;margin-bottom:12px}
+.xchange .who{display:block;font-size:12.5px;letter-spacing:.06em;font-weight:700;
+  margin-bottom:7px}
+.xchange .turn p{margin:0;font-size:16.5px;line-height:1.7}
+.xchange .her{background:var(--cream);color:var(--ink);box-shadow:0 0 0 2px var(--purple) inset}
+.xchange .her .who{color:var(--purple)}
+.xchange .coach{background:var(--ink);color:var(--cream)}
+.xchange .coach .who{color:var(--orange)}
+.pricebar{display:flex;align-items:stretch;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.pbi{background:var(--cream);border-radius:16px;padding:14px 20px;min-width:118px;text-align:center;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 12px 22px -16px rgba(13,18,44,.55)}
+.pbi.sum{box-shadow:0 0 0 2px var(--purple) inset,0 12px 22px -16px rgba(13,18,44,.55)}
+.pbn{display:block;font-size:14px;font-weight:700;color:var(--purple);margin-bottom:3px}
+.pbv{display:block;font-size:clamp(22px,4vw,28px);font-weight:700;line-height:1}
+.pbi.sum .pbv{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6}
+.pbop{display:flex;align-items:center;font-size:24px;font-weight:700;color:var(--purple);opacity:.6}
+.pbdeal{background:var(--ink);color:var(--cream);border-radius:20px;text-align:center;
+  padding:22px 22px 24px;margin:0 0 26px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.pbdeal .d1{margin:0 0 .25em;font-size:clamp(20px,3.8vw,27px);font-weight:700;line-height:1.35}
+.pbdeal .d1 b{color:#fff}
+.pbdeal .d2{margin:0;font-size:clamp(17px,3vw,21px);font-weight:700;color:var(--cream);opacity:.85}
+@media(max-width:520px){.pbi{min-width:96px;padding:12px 14px}.pbop{font-size:20px}}
+
+.sumlead{text-align:center;font-size:clamp(18px,3.2vw,22px);font-weight:700;margin:0 0 1.3em}
+.twocols{display:grid;gap:16px;grid-template-columns:1fr;margin:0 0 16px;align-items:stretch}
+@media(min-width:760px){.twocols{grid-template-columns:1fr 1fr;gap:20px}}
+.tcol{background:var(--cream);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.tcol>img{width:100%;height:auto;display:block}
+.tcb{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+.tmeta{margin:0 0 12px;font-size:14.5px;font-weight:700;color:var(--purple)}
+.tcb ul{margin:0 0 16px;padding-right:20px}
+.tcb li{margin:0 0 .4em;font-size:16px;line-height:1.55}
+.tinv{margin-top:auto;padding-top:14px;border-top:2px solid var(--purple);
+  display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.tinv span{font-size:14.5px;font-weight:700;color:var(--purple)}
+.tinv b{font-size:clamp(21px,3.6vw,26px)}
+.sumbox{background:var(--cream);border-radius:16px;padding:16px 22px;margin:0 auto;max-width:460px;
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  box-shadow:0 0 0 2px var(--purple) inset,0 12px 22px -16px rgba(13,18,44,.55)}
+.sumbox span{font-size:15.5px;font-weight:700;color:var(--purple)}
+/* קפיצה מכרטיסי ״שתי דרכים״ ישר לקופסת המחיר של כל דרך. 8.10.2026 */
+.pathjumps{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:640px;margin:24px auto 0}
+.pj{flex:1 1 240px;text-align:center;text-decoration:none;font-weight:700;font-size:16.5px;line-height:1.4;padding:12px 18px;border-radius:14px;box-shadow:0 8px 18px -12px rgba(13,18,44,.5)}
+.pj.full{background:var(--orange);color:var(--ink)}
+.pj.mag{background:var(--purple);color:var(--cream)}
+#fulljourney,#memagnetet-offer{scroll-margin-top:22px}
+@media(min-width:700px){.pathjumps{flex-direction:row-reverse}} /* במחשב כל כפתור מתחת לכרטיס שלו */
+.sumnext{text-align:center;margin:18px auto 0;max-width:560px;font-weight:700;font-size:17.5px;line-height:1.5;color:var(--purple)}
+/* ===== המחשת המאמנת האישית: צילום מסך של הבוט בתוך טלפון. 7.10.2026 =====
+   מעתיק את גרסת הטלפון של הבוט האמיתי (בוט-ענן/index.html): רצועת הבאנר,
+   הכותרת בסגול, ההודעות שלה בסגול מימין, תשובות הבוט בקרם בהיר משמאל
+   עם התמונה העגולה, ושורת כתיבה עם כפתור ורוד. */
+.chatshot{max-width:340px;margin:1.8em auto 1em}
+.cs-phone{position:relative;background:var(--cream);border:10px solid var(--ink);border-radius:42px;overflow:hidden;
+  box-shadow:0 26px 50px -26px rgba(13,18,44,.6),0 2px 0 rgba(13,18,44,.08)}
+.cs-phone::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:92px;height:20px;
+  background:var(--ink);border-radius:0 0 13px 13px;z-index:2}
+.cs-status{direction:ltr;display:flex;justify-content:space-between;align-items:center;height:26px;padding:0 20px;
+  font-size:12px;font-weight:700;color:var(--ink);background:var(--cream)}
+.cs-bars{display:flex;align-items:center;gap:5px}
+.cs-bars i{display:block;width:3px;background:var(--ink);border-radius:1px}
+.cs-bars i:nth-child(1){height:4px}.cs-bars i:nth-child(2){height:6px}.cs-bars i:nth-child(3){height:8px;margin-right:4px}
+.cs-bars b{display:block;width:20px;height:9px;border:1.5px solid var(--ink);border-radius:3px;position:relative}
+.cs-bars b::after{content:"";position:absolute;inset:1px 4px 1px 1px;background:var(--ink);border-radius:1px}
+.cs-band{display:block;width:100%;height:88px;object-fit:cover;object-position:left 38%;border-bottom:1px solid rgba(13,18,44,.09)}
+.cs-head{padding:9px 14px 9px;border-bottom:1px solid rgba(13,18,44,.09);text-align:right}
+.cs-title{display:block;font-size:17px;font-weight:700;color:var(--purple);line-height:1.25}
+.cs-sub{display:block;font-size:12px;font-weight:300;opacity:.75;margin-top:2px}
+.cs-chat{display:flex;flex-direction:column;gap:9px;padding:12px 10px 12px}
+.chatshot p.cs-hello{margin:0 auto 2px;text-align:center;text-wrap:balance;font-size:12px;font-weight:300;line-height:1.6;opacity:.75;max-width:92%}
+.cs-row{display:flex;align-items:flex-end;gap:6px;max-width:94%;align-self:flex-end}
+.chatshot p.cs-msg{margin:0;padding:8px 11px;border-radius:15px;font-size:13px;line-height:1.6;
+  box-shadow:0 1px 2px rgba(13,18,44,.05),0 4px 12px rgba(13,18,44,.06)}
+.chatshot p.cs-me{align-self:flex-start;max-width:86%;background:var(--purple);color:var(--cream);border-bottom-right-radius:5px}
+.cs-row p.cs-msg{background:#F8F5EE;color:var(--ink);border:1px solid rgba(13,18,44,.09);border-bottom-left-radius:5px}
+.cs-row p.cs-msg strong{color:var(--purple);font-weight:600}
+.cs-av{width:24px;height:24px;border-radius:50%;flex:none;margin-bottom:2px;box-shadow:0 1px 3px rgba(13,18,44,.15)}
+.cs-foot{padding:8px 10px 6px;background:#F8F5EE;border-top:1px solid rgba(13,18,44,.09)}
+.cs-form{display:flex;gap:6px;align-items:center}
+.cs-field{flex:1;padding:7px 12px;background:#fff;border:1px solid rgba(13,18,44,.09);border-radius:16px;font-size:12.5px;color:rgba(13,18,44,.45)}
+.cs-send{width:30px;height:30px;flex:none;border-radius:50%;background:var(--pink);color:var(--cream);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.cs-sign{display:block;text-align:center;font-size:10px;font-weight:300;opacity:.5;margin-top:5px}
+.chatshot p.cs-cap{text-align:center;font-size:14px;color:var(--purple);font-weight:600;margin:14px 0 0}
+@media(max-width:520px){.chatshot{max-width:300px}}
+/* הטלפון יושב על איור בועות הנייר - המחשה אחת ולא שתיים. 7.10.2026, לבקשת שושי (״לשלב את האיור, הוא יפה בעין״) */
+.chatshot.stage{max-width:620px;padding:46px 0 22px;border-radius:28px;
+  background:var(--cream) url(img/bot-art-v2.jpg) center/cover no-repeat;
+  box-shadow:0 1px 2px rgba(13,18,44,.05),0 14px 34px -14px rgba(13,18,44,.3)}
+.chatshot.stage .cs-phone{max-width:340px;margin:0 auto}
+.chatshot.stage p.cs-msg,.chatshot.stage p.cs-cap{opacity:1}
+.chatshot.stage p.cs-cap{display:table;margin:18px auto 0;padding:5px 16px;border-radius:999px;background:var(--cream)}
+@media(max-width:520px){
+  .chatshot.stage{max-width:none;padding:150px 12px 16px;border-radius:22px;
+    background:linear-gradient(180deg,rgba(242,238,227,0) 50%,var(--cream) 96%) top center/100% calc(100vw - 44px) no-repeat,url(img/bot-art-v2.jpg) top center/100% auto no-repeat,var(--cream)}
+  .chatshot.stage .cs-phone{max-width:300px}
+}
+
+/* הערת הסדר: יודעת רק אחרי ממגנטת. נוספה 6.10.2026 לבקשת שושי */
+.seqnote{max-width:560px;margin:1.6em auto 1.2em;padding:14px 20px;border-radius:14px;background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);text-align:center;font-size:16.5px;line-height:1.65}
+.seqnote strong{color:var(--purple)}
+.sumbox b{font-size:clamp(22px,4vw,28px)}
+.offlead{text-align:center;max-width:580px;margin:0 auto 1.4em;font-size:clamp(17px,3vw,20px)}
+.offer{background:var(--ink);color:var(--cream);border-radius:24px;padding:26px 24px 28px;
+  text-align:center;margin:0 0 26px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.7)}
+.ostack{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.ostack img{width:clamp(130px,30vw,200px);height:auto;border-radius:10px;display:block}
+@media(max-width:520px){.ostack{flex-wrap:nowrap}.ostack img{width:42%}}
+.oplus{font-size:26px;font-weight:700;opacity:.8}
+.oname{margin:0 0 14px;font-size:clamp(18px,3.2vw,22px);font-weight:700;opacity:.85}
+.oprice{display:flex;align-items:baseline;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.owas{font-size:clamp(22px,4vw,28px);font-weight:700;opacity:.55;text-decoration:line-through;text-decoration-thickness:2px}
+.oarrow{font-size:22px;opacity:.6}
+.onow{font-size:clamp(34px,7vw,52px);font-weight:700;line-height:1;color:#fff}
+.osave{margin:0 0 4px;font-size:clamp(18px,3.4vw,23px);font-weight:700}
+.osave b{color:var(--cream)}
+.opay{margin:0 0 20px;font-size:16px;opacity:.75}
+.offer .cta{display:inline-block;margin:0}
+
+.owhy{max-width:520px;margin:0 auto 20px;font-size:16.5px;line-height:1.6;opacity:.9;
+  border-top:1px solid rgba(242,238,227,.28);padding-top:16px}
+.owhy b{color:#fff}
+
+.pway{margin:0 0 10px;font-size:16px;line-height:1.55;opacity:.85}
+.pnum2{margin:auto 0 0;font-size:clamp(21px,3.8vw,26px);font-weight:700;color:var(--purple)}
+.pnum2.deal{color:var(--pink)}
+.pnum2 .was{font-size:.62em;opacity:.5;text-decoration:line-through;text-decoration-thickness:2px;
+  margin-left:8px;color:var(--ink)}
+.olist{text-align:right;max-width:430px;margin:0 auto 20px;padding-right:22px}
+.olist li{margin:0 0 .45em;font-size:16.5px;line-height:1.55;opacity:.92}
+.offer .oname{margin:0 0 16px;font-size:clamp(19px,3.4vw,24px);font-weight:700;opacity:1}
+
+.subframe{text-align:center;margin:0 auto 1.6em;max-width:540px}
+.subframe p{margin:0;background:var(--cream);border-radius:18px;padding:16px 22px;
+  font-size:clamp(18px,3.3vw,23px);font-weight:700;line-height:1.4;
+  box-shadow:0 0 0 2px var(--pink) inset,0 12px 22px -16px rgba(13,18,44,.55)}
+.twowhy{display:grid;gap:14px;grid-template-columns:1fr;margin:0 0 1.8em}
+@media(min-width:760px){.twowhy{grid-template-columns:1fr 1fr;gap:18px}}
+.why{background:var(--cream);border-radius:18px;padding:20px 22px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.wtag{display:inline-block;background:var(--purple);color:var(--cream);border-radius:999px;
+  padding:4px 15px;font-weight:700;font-size:15px;margin-bottom:10px}
+.wtag.pink{background:var(--pink-text)}
+.why p{margin:0;font-size:16.5px;line-height:1.65}
+.ohead{margin:22px 0 4px;font-size:clamp(18px,3.2vw,22px);font-weight:700;opacity:.9}
+.oinv{margin:0 0 6px;font-size:clamp(16px,2.9vw,19px)}
+.oinv b{color:#fff}
+.owas{font-size:clamp(24px,4.4vw,32px)}
+.pbanner{width:100%;height:auto;display:block;border-radius:14px;margin:0 0 16px}
+.joinlead{text-align:center;font-weight:700;margin:0 0 1.1em}
+.joinbtns{display:grid;gap:12px;max-width:460px;margin:0 auto 1.2em}
+.joinbtns .cta{margin:0}
+.joinalt{text-align:center;max-width:520px;margin:0 auto .8em;font-size:16.5px;line-height:1.6}
+.reachout.small{font-size:clamp(17px,3vw,21px);margin-top:.8em}
+.propo{max-width:560px;margin:0 auto;text-align:center;font-size:16.5px;line-height:1.7;opacity:.85}
+.nm{color:var(--purple);font-weight:700}
+.offer .nm{color:#fff}
+.mech .nm,.teaches .nm{color:#fff}
+
+.sec .nm{color:var(--pink)}
+
+.blead{text-align:center;max-width:620px;margin:0 auto 1.8em;line-height:1.65}
+.bgrid{display:grid;gap:18px;grid-template-columns:1fr;margin:0 0 1.6em}
+@media(min-width:900px){.bgrid{grid-template-columns:repeat(3,1fr)}}
+.bcard{background:var(--cream);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.bcard>img{width:100%;height:auto;display:block}
+.bbody{padding:16px 18px 18px;display:flex;flex-direction:column;gap:.6em;flex:1}
+.btop{display:flex;align-items:baseline;justify-content:space-between;gap:9px;flex-wrap:wrap}
+.btop h3{margin:0;font-size:clamp(17px,3vw,20px);line-height:1.3}
+.bval{display:inline-block;background:var(--purple);color:var(--cream);border-radius:999px;
+  padding:7px 18px;font-size:16px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
+.bcard p{margin:0;font-size:15.5px;line-height:1.55}
+.bben{font-weight:700}
+.stack{max-width:440px;margin:0 auto 1.8em;background:var(--cream);border-radius:18px;padding:8px 20px 12px;
+  box-shadow:0 0 0 2px var(--purple) inset,0 14px 26px -18px rgba(13,18,44,.55)}
+.srow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:11px 0;border-bottom:1px solid rgba(13,18,44,.12)}
+.srow:last-child{border-bottom:0}
+.srow span{font-size:16px;font-weight:700;color:var(--purple)}
+.srow b{font-size:clamp(19px,3.4vw,23px)}
+.srow.tot span{color:var(--ink)}
+.srow.tot b{font-size:clamp(24px,4.4vw,30px);color:var(--pink)}
+
+.onebonus{display:grid;gap:14px;grid-template-columns:1fr;align-items:center;
+  background:var(--cream);border-radius:16px;padding:16px;margin:0 0 18px;
+  box-shadow:0 0 0 2px var(--purple) inset}
+@media(min-width:620px){.onebonus{grid-template-columns:200px 1fr}}
+.onebonus img{width:100%;height:auto;display:block;border-radius:10px}
+.obtag{display:inline-block;background:var(--purple);color:var(--cream);border-radius:999px;
+  padding:3px 13px;font-size:13px;font-weight:700;margin-bottom:8px}
+.onebonus h4{margin:0 0 6px;font-size:clamp(18px,3.2vw,21px)}
+.onebonus p{margin:0 0 10px;font-size:15.5px;line-height:1.55}
+.stack.small{max-width:none;margin:0 0 18px}
+
+.blead.mid{margin-top:1.8em;font-weight:700;font-size:clamp(18px,3.2vw,22px);opacity:1}
+.onebonus.wide{grid-template-columns:1fr}
+@media(min-width:760px){.onebonus.wide{grid-template-columns:280px 1fr}}
+.bgrid.two{grid-template-columns:1fr}
+@media(min-width:760px){.bgrid.two{grid-template-columns:1fr 1fr}}
+.bonrow{display:grid;gap:7px;grid-template-columns:1fr;margin:0 0 4px}
+.bonrow.three{grid-template-columns:repeat(3,1fr)}
+.bonrow img{width:100%;height:auto;display:block;border-radius:8px;opacity:.95}
+.obhead{margin:20px 0 12px;font-size:clamp(17px,3vw,21px);font-weight:700;color:#fff}
+.obmini{display:grid;gap:12px;grid-template-columns:1fr;margin:0 0 6px}
+@media(min-width:620px){.obmini{grid-template-columns:repeat(3,1fr)}}
+.obmini>div{text-align:center}
+.obmini img{width:100%;height:auto;display:block;border-radius:9px;margin-bottom:7px}
+.obmini span{display:block;font-size:14.5px;font-weight:700;line-height:1.35}
+.obmini em{display:block;font-style:normal;font-size:13px;opacity:.72;margin-top:2px}
+.obreak{max-width:380px;margin:0 auto 18px;text-align:right}
+.brow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:9px 0;border-bottom:1px solid rgba(242,238,227,.22)}
+.brow:last-child{border-bottom:0}
+.brow span{font-size:16px;opacity:.9}
+.brow b{font-size:18px}
+.offer .brow .nm{color:#fff}
+.oinstead{margin:0 0 2px;font-size:clamp(16px,2.9vw,19px);opacity:.75}
+.owas2{margin:0 0 16px;font-size:clamp(28px,5.4vw,40px);font-weight:700;opacity:.55;
+  text-decoration:line-through;text-decoration-thickness:3px;line-height:1}
+.onow2{margin:0 0 6px;font-size:clamp(38px,8vw,58px);font-weight:700;line-height:1;color:#fff}
+
+.upsell{background:var(--cream);border-radius:16px;padding:18px 20px;margin:18px 0 0;
+  box-shadow:0 0 0 2px var(--pink) inset}
+.upsell .u1{margin:0 0 6px;font-size:14px;font-weight:700;letter-spacing:.09em;color:var(--pink)}
+.upsell .u2{margin:0 0 8px;font-size:16.5px;line-height:1.6}
+.upsell .u2 b{color:var(--pink)}
+.upsell .u3{margin:0;font-size:15.5px;line-height:1.55;opacity:.78}
+
+.curious{text-align:center;max-width:640px;margin:0 auto 1.5em}
+.curious p{margin:0 0 .35em;line-height:1.4}
+.curious .c1{font-size:clamp(21px,4vw,29px);font-weight:700}
+.curious .c2{font-size:clamp(19px,3.6vw,26px);font-weight:700;color:var(--purple)}
+.curious .c3{font-size:clamp(19px,3.6vw,26px);font-weight:700;color:var(--pink)}
+.oname.big{font-size:clamp(23px,4.4vw,32px);margin-bottom:4px;line-height:1.3}
+.osub{margin:0 0 16px;font-size:clamp(17px,3vw,20px);opacity:.8}
+.brow.sum{border-top:2px solid rgba(242,238,227,.4);border-bottom:0;margin-top:4px;padding-top:12px}
+.brow.sum span,.brow.sum b{font-weight:700}
+.brow.sum b{font-size:22px}
+.ctalead{max-width:460px;margin:0 auto 14px;font-size:16.5px;line-height:1.55;opacity:.9}
+
+.offer.light{background:var(--cream);color:var(--ink);
+  box-shadow:0 0 0 2.5px var(--purple) inset,0 18px 34px -20px rgba(13,18,44,.55)}
+.offer.light .oname,.offer.light .onow2{color:var(--purple)}
+.offer.light .obhead,.offer.light .ohead{color:var(--ink)}
+.offer.light .olist li,.offer.light .brow span{opacity:.9}
+.offer.light .brow{border-bottom-color:rgba(13,18,44,.14)}
+.offer.light .brow.sum{border-top-color:rgba(13,18,44,.3)}
+.offer.light .owas2{color:var(--ink)}
+.offer.light .osave b,.offer.light .oinv b{color:var(--pink-text)}
+.offer.light .obmini em{opacity:.65}
+.offer.light .nm{color:var(--purple)}
+.obmini.one{grid-template-columns:1fr;max-width:280px;margin-inline:auto}
+.backlead{text-align:center;font-weight:700;font-size:clamp(17px,3vw,20px);margin:0 0 .7em;opacity:.8}
+.cta-ghost.back{display:block;max-width:420px;margin:0 auto;text-align:center}
+
+.pstack{display:grid;gap:10px}
+.pstack>img{width:100%;height:auto;display:block;border-radius:12px}
+.pplus{display:block;text-align:center;font-size:26px;font-weight:700;
+  color:var(--purple);line-height:1;margin:2px 0}
+.path.full .pplus{color:var(--pink)}
+.bwrap{position:relative;overflow:hidden;border-radius:12px}
+.bwrap img{width:100%;height:auto;display:block}
+.bribbon{position:absolute;top:13px;left:-40px;transform:rotate(-45deg);
+  background:var(--purple);color:var(--cream);font-size:12.5px;font-weight:700;
+  letter-spacing:.06em;padding:5px 46px;box-shadow:0 2px 8px rgba(13,18,44,.3)}
+.pway{margin:14px 0 0;font-size:16.5px;line-height:1.6}
+.path .pway{opacity:1;margin-top:14px} .path:not(.full){align-self:start}
+.pway span{display:block;margin-bottom:.25em}
+.pway .hi{margin-top:.6em;font-weight:700;color:var(--purple);font-size:17px}
+.pway .hi.pink{color:var(--pink-text)}
+.bonrow{display:none}
+
+.bvline{margin:12px 0 0 !important}
+.btop{align-items:center}
+.miniv{display:inline-block;font-style:normal;margin-top:5px;background:var(--cream);
+  color:var(--ink);border-radius:999px;padding:3px 11px;font-size:12.5px;font-weight:700}
+.offer.light .miniv{background:var(--purple);color:var(--cream)}
+
+.fit h3 .mk{font-size:30px;line-height:1;display:inline-block;margin-bottom:6px}
+.hello{margin:0 0 .5em !important;font-size:clamp(20px,3.6vw,26px);line-height:1.35}
+.hello strong{color:var(--purple)}
+.sec .nm{color:var(--pink)}
+
+.faqwrap{padding-top:0}
+.faqgrid{display:grid;gap:26px;grid-template-columns:1fr;align-items:start}
+@media(min-width:900px){.faqgrid{grid-template-columns:300px 1fr;gap:36px}}
+.faqpic img{width:100%;height:auto;display:block;border-radius:20px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.55)}
+@media(min-width:900px){.faqpic{position:sticky;top:24px}}
+@media(max-width:899px){.faqpic{width:100%;max-width:280px;margin-inline:auto}}
+
+/* סעיף הסגירה - תמונה צפה בצד שמאל, הטקסט מימין */
+.closegrid{display:grid;gap:26px;grid-template-columns:1fr;align-items:start}
+@media(min-width:900px){.closegrid{grid-template-columns:minmax(0,700px) 320px;justify-content:space-between;gap:40px}}
+.closepic img{width:100%;height:auto;display:block;border-radius:20px;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.55)}
+@media(min-width:900px){.closepic{position:sticky;top:24px}}
+@media(max-width:899px){.closepic{order:-1;width:100%;max-width:280px;margin-inline:auto}}
+
+.claim{border-inline-start:4px solid var(--pink);background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);
+  border-radius:14px 0 0 14px;padding:20px 22px;margin:1.7em 0;}
+.claim p{margin:0;font-size:clamp(18px,3.2vw,21px);line-height:1.55;}
+@media(max-width:520px){.claim{padding:16px 17px;border-radius:12px 0 0 12px;}}
+
+.cta-jump{display:block;width:100%;max-width:470px;margin:0 auto;text-align:center;
+  text-decoration:none;background:var(--purple);color:#F2EEE3;
+  padding:16px 22px 17px;border-radius:14px;font-weight:700;
+  box-shadow:0 10px 22px -12px rgba(13,18,44,.55);}
+.cta-jump .j1{display:block;font-size:clamp(17px,3.2vw,20px);line-height:1.3;}
+.cta-jump .j2{display:block;font-size:clamp(14px,2.6vw,15.5px);font-weight:600;
+  opacity:.92;margin-top:5px;line-height:1.35;}
+.jumpwrap{margin:2.2em 0 .4em;padding:0 22px}
+.jumpwrap.faqjump{padding:0;margin-top:1.6em}
+.wrap .jumpwrap{padding:0}
+.ctawrap{max-width:520px;margin:0 auto}
+.ctawrap .cta{margin:0}
+/* כפתורי קפיצה - גלילה רכה כדי שיהיה ברור לאן זזנו, ואוויר מעל הכותרת שנוחתים עליה (8.10) */
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+#tochniot,#hatzaa,#fulljourney,#ech-mitztarfim{scroll-margin-top:22px}
+
+/* גוש הנתונים בסעיף ״מי אני״ - נמחק בטעות בסבב ניקוי הצבעים, נבנה מחדש 23.9 */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 1.6em;
+  background:var(--cream);border-radius:18px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.stats>div{text-align:center;padding:18px 10px 16px;border-left:1px solid rgba(13,18,44,.12)}
+.stats>div:last-child{border-left:0}
+.stats b{display:block;font-size:clamp(20px,3.6vw,27px);line-height:1.1;color:var(--purple)}
+.stats span{display:block;margin-top:5px;font-size:14px;line-height:1.35;opacity:.75}
+@media(max-width:520px){.stats>div{padding:14px 6px 12px}.stats span{font-size:12.5px}}
+
+/* ===== סבב עיצוב 7.10.2026 - ההחלטות של שושי מהבדיקה ===== */
+/* 20 - גדלים שנקבעו בעורך בפיקסלים קבועים לא קטנו בטלפון, ועקפו שם את כותרות הסעיפים.
+   מ-750px ומעלה כל גודל נשאר בדיוק כפי שנקבע. מתחת לזה הוא יורד באותו יחס כמו הכותרות. */
+[style*="font-size: 23px"]{font-size:clamp(20px,3.07vw,23px)!important}
+[style*="font-size: 24px"]{font-size:clamp(20px,3.2vw,24px)!important}
+[style*="font-size: 24.1px"]{font-size:clamp(20px,3.21vw,24.1px)!important}
+[style*="font-size: 25px"]{font-size:clamp(20.5px,3.33vw,25px)!important}
+[style*="font-size: 26.1px"]{font-size:clamp(21px,3.48vw,26.1px)!important}
+[style*="font-size: 27px"]{font-size:clamp(21.5px,3.6vw,27px)!important}
+[style*="font-size: 28px"]{font-size:clamp(22px,3.73vw,28px)!important}
+[style*="font-size: 30px"]{font-size:clamp(22px,4vw,30px)!important}
+[style*="font-size: 34px"]{font-size:clamp(24px,4.53vw,34px)!important}
+[style*="font-size: 40px"]{font-size:clamp(26.5px,5.33vw,40px)!important}
+[style*="font-size: 42px"]{font-size:clamp(27.5px,5.6vw,42px)!important}
+[style*="font-size: 44px"]{font-size:clamp(28.5px,5.87vw,44px)!important}
+[style*="font-size: 46px"]{font-size:clamp(29px,6.13vw,46px)!important}
+/* 21 - טקסט שהוגדל בעורך: מרווח שורות צפוף יותר, כדי שלא ייראה כמו שורות נפרדות.
+   ואורך שורה נוח במחשב בסעיף ״מי אני״. בטלפון השורות קצרות ממילא ולא משתנות. */
+p [style*="font-size"]{line-height:1.4}
+.blead.mid>[style*="font-size: 30px"]{line-height:1}
+.about p{max-width:32em}
+/* 24 - קיר העדויות: הצילום נצמד לראש הכרטיס. בלי זה כפתור ממרכז את התוכן אנכית
+   ועדות קצרה צפה באמצע הכרטיס, וארוכה נחתכת גם מלמעלה. */
+.trail .tcard{display:flex;align-items:flex-start}
+/* 23 - המסך הראשון בטלפון: הלוגו קטן בשליש, ושורת ״קורס דיגיטלי״ עולה אל מתחת לכותרת.
+   סדר תצוגה בלבד, בטלפון בלבד. במחשב הכל נשאר במקומו. */
+@media(max-width:520px){
+  .hero-logo{width:min(52%,240px)}
+  .herosec{display:flex;flex-direction:column}
+  .herosec>.hero{order:-2;margin-bottom:0}
+  .herosec>.format{order:-1;margin:12px auto 26px;display:grid;grid-template-columns:repeat(2,auto);
+    justify-content:center;row-gap:2px;line-height:1.55}
+  /* שני טורים עם הנקודה הכתומה כציר באמצע - בלי נקודה יתומה בתחילת שורה */
+  .herosec>.format li:nth-child(odd){text-align:left}
+  .herosec>.format li:nth-child(even){text-align:right}
+  .herosec>.format li:nth-child(odd)::before{display:none}
+  .herosec>p:last-child{margin-bottom:0}
+}
+/* 28 - ״מה בדיוק את מקבלת״: שני טורים בטלפון במקום עמודה אחת ארוכה */
+@media(max-width:739px){.cards.small.icons{grid-template-columns:1fr 1fr;gap:12px}}
+@media(max-width:520px){
+  .cards.small.icons .card{padding:16px 14px 15px}
+  .cards.small.icons img{width:44px;margin-bottom:8px}
+  .cards.small.icons h4{font-size:16px;line-height:1.3;margin-bottom:.35em}
+  .cards.small.icons p{font-size:15px;line-height:1.55}
+}
+
+/* ״מה קורה לך בחיים״ בשתי מערכות: בפנים (כחול לילה) ובחוץ (רצועות צבע). 8.10.2026, באישור שושי */
+.claim.act-in-head{background:var(--ink);color:var(--cream);border:0;border-radius:24px 24px 0 0;margin:1.6em 0 0;padding:26px 26px 6px;box-shadow:none;text-align:center}
+.claim.act-in-head p{font-size:clamp(21px,3.6vw,27px);font-weight:700;line-height:1.35}
+.claim.act-in-head strong{color:var(--orange)}
+.cards.small.act-in{background:var(--ink);border-radius:0 0 24px 24px;padding:22px 22px 28px;margin:0 0 1.8em;counter-reset:inn;gap:14px;box-shadow:0 18px 34px -20px rgba(13,18,44,.7)}
+.cards.small.act-in .card{background:rgba(242,238,227,.06);box-shadow:none;border:1px solid rgba(242,238,227,.16);position:relative;padding:20px 52px 18px 20px;text-align:right}
+.cards.small.act-in .card::before{content:"";position:absolute;right:20px;top:25px;width:19px;height:17px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23DF1767' d='M12 21s-6.7-4.35-9.3-8.04C.5 9.9 2.06 5.5 6.2 5.03 8.4 4.78 10.2 5.9 12 8c1.8-2.1 3.6-3.22 5.8-2.97 4.14.47 5.7 4.87 3.5 7.93C18.7 16.65 12 21 12 21z'/%3E%3C/svg%3E") center/contain no-repeat} /* לב עדין במקום מספר, לבקשת שושי 8.10 */
+.cards.small.act-in .card h4,.cards.small.act-in .card h4 span{color:var(--cream)!important;font-size:19.5px!important;line-height:1.35}
+.cards.small.act-in .card p{color:var(--cream);opacity:.82;font-size:15.5px}
+.subsec.act-out-head{font-size:clamp(22px,3.8vw,28px);line-height:1.35;border:0;padding:0;text-align:center;margin:1.6em auto .9em}
+.cards.small.act-out{gap:14px}
+.cards.small.act-out .card{border-top:9px solid var(--pink);border-radius:16px;padding-top:18px;text-align:right}
+.cards.small.act-out .card:nth-child(3n+2){border-top-color:var(--purple)}
+.cards.small.act-out .card:nth-child(3n){border-top-color:var(--orange)}
+.cards.small.act-out .card h4,.cards.small.act-out .card h4 span{color:var(--ink)!important;font-size:19.5px!important;line-height:1.35}
+.cards.small.act-out .card p{font-size:15.5px}
+
+/* ״שני הדברים״ בשני כרטיסים עם כותרות צבע, בלי ״ראשון / שני״ (כדי שלא יתבלבלו עם ״שלב ראשון / שני״). 8.10.2026, באישור שושי */
+.twothings{display:grid;grid-template-columns:1fr;gap:18px;margin:1.6em 0 1.8em}
+@media(min-width:820px){.twothings{grid-template-columns:1fr 1fr;align-items:stretch}}
+.thing{background:var(--cream);border-radius:22px;overflow:hidden;box-shadow:0 1px 2px rgba(13,18,44,.05),0 16px 30px -18px rgba(13,18,44,.5)}
+.thead{padding:18px 22px 16px;color:var(--cream);text-align:right;line-height:1.15}
+.thead span{display:block;font-size:17px;font-weight:600;opacity:.9}
+.thead b{display:block;font-size:clamp(27px,4.4vw,34px);font-weight:800}
+.thing.live .thead{background:var(--pink)}
+.thing.infl .thead{background:var(--purple)}
+.tbody{padding:18px 22px 20px}
+.tbody p{font-size:16.5px;line-height:1.7;margin:0 0 .8em}
+.tbody p.beats{margin:0 0 .8em}
+.tbody p.beats span[style*="font-size"]{font-size:19px!important}
+.thing.infl .tbody p.beats:last-child{border-top:2px solid rgba(166,47,125,.25);padding-top:12px;margin-top:4px;color:var(--purple)}
+
+/* ״הדרך הזו של אשה ללא מאמץ...״ - יצא מהעמודה שליד התמונה, ממורכז, עדין ונקי. 8.10.2026, באישור שושי */
+.teaches.soft{max-width:620px;margin:2.2em auto .6em;background:var(--cream);color:var(--ink);text-align:center;
+  border-radius:26px;padding:32px 30px 28px;border:1.5px solid rgba(166,47,125,.3);
+  box-shadow:0 1px 2px rgba(13,18,44,.05),0 16px 30px -20px rgba(13,18,44,.45)}
+.teaches.soft .tt{font-size:clamp(19px,3vw,23px);font-weight:700;line-height:1.5;margin:0 0 18px}
+.teaches.soft .tt span{color:var(--ink)!important}
+.teaches.soft .tt b{color:var(--purple)}
+.teaches.soft .tl{font-weight:700;color:var(--purple);margin:0 0 6px;font-size:17.5px}
+.teaches.soft ul{list-style:none;margin:0 auto;padding:0;max-width:520px}
+.teaches.soft li{padding:11px 0;margin:0;border-bottom:1px solid rgba(166,47,125,.22);font-size:18px;font-weight:600;color:var(--ink)}
+.teaches.soft li::before{display:none}
+.teaches.soft li:last-child{border-bottom:0;padding-top:16px;font-weight:700;color:var(--purple);line-height:1.55;text-wrap:balance}
+
+/* פתיחת סעיף המאמנת כ״דמות״, כמו ״מי אני״. 8.10.2026, באישור שושי (״זה מהמם״) */
+.coachhero{display:grid;grid-template-columns:1fr;gap:22px;align-items:center;margin:0 0 1.4em}
+@media(min-width:780px){.coachhero{grid-template-columns:280px 1fr;gap:34px}}
+.chimg img{width:100%;max-width:280px;height:auto;display:block;margin:0 auto;border-radius:26px;box-shadow:0 1px 2px rgba(13,18,44,.05),0 18px 34px -20px rgba(13,18,44,.55)}
+/* הדמות נמתחת בדיוק לגובה הטקסט שלידה (8.10, ״מפריע לי בעין״) */
+@media(min-width:780px){.coachhero{align-items:stretch}.chimg{position:relative}.chimg img{position:absolute;inset:0;height:100%;max-width:none;object-fit:cover;object-position:50% 35%}}
+@media(max-width:779px){.chimg img{aspect-ratio:4/5;object-fit:cover;object-position:50% 30%}}
+.coachhero .chstats{margin-bottom:0}
+.stats p.sb{margin:0;font-weight:700;font-size:clamp(18px,3vw,22px);line-height:1.1;color:var(--purple)}
+.stats p.ss{margin:5px 0 0;font-size:14px;line-height:1.35;opacity:.75}
+@media(max-width:520px){.stats p.ss{font-size:12.5px}}
+.blead.chlead{text-align:right;margin:0 0 6px}
+.blead.chlead span[style*="font-size"]{font-size:clamp(17px,2.6vw,20px)!important}
+.sec.chname{font-size:clamp(34px,6vw,52px)!important;color:var(--purple);margin:0 0 18px;line-height:1.1}
+.stats.chstats b{font-size:clamp(18px,3vw,22px)}
+@media(max-width:779px){.blead.chlead,.sec.chname{text-align:center}}
+/* הבאנרים של ממגנטת ויודעת על במת נייר בכחול לילה, כרטיס צף (8.10) */
+.coverstage{position:relative;margin:.4em 0 0;padding:clamp(34px,7vw,96px) 16px clamp(44px,8vw,110px);background:var(--ink) center/cover no-repeat;perspective:1600px;overflow:hidden}
+.cs-mem{background-image:url(img/stage-memagnetet.jpg)}
+.cs-yod{background-image:url(img/stage-yodaat.jpg)}
+.floatcard{position:relative;max-width:780px;margin:0 auto;transform:rotateX(4deg) rotateY(-5deg);animation:cfloat 7s ease-in-out infinite}
+.floatcard::before{content:"";position:absolute;inset:0;border-radius:18px;transform:translate(-14px,14px) rotate(-1.8deg);background:var(--purple);box-shadow:0 26px 50px -22px rgba(4,6,16,.75)}
+.cs-yod .floatcard::before{background:var(--pink)}
+.floatcard .illus{position:relative;border-radius:18px;box-shadow:0 1px 0 #E4DDCC,0 3px 0 #D8D0BD,0 34px 60px -24px rgba(4,6,16,.8),0 70px 110px -50px rgba(4,6,16,.7)}
+@keyframes cfloat{0%,100%{transform:rotateX(4deg) rotateY(-5deg) translateY(0)}50%{transform:rotateX(4deg) rotateY(-5deg) translateY(-10px)}}
+@media(max-width:600px){.floatcard{transform:rotateX(3deg) rotateY(-3deg);animation-name:cfloat-s}.floatcard::before{transform:translate(-8px,9px) rotate(-1.8deg)}}
+@keyframes cfloat-s{0%,100%{transform:rotateX(3deg) rotateY(-3deg) translateY(0)}50%{transform:rotateX(3deg) rotateY(-3deg) translateY(-6px)}}
+@media(prefers-reduced-motion:reduce){.floatcard{animation:none}}
 </style>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/favicon-180.png">
+<meta property="og:title" content="אשה ללא מאמץ · אימון נשי לזוגיות ממגנטת">
+<meta property="og:description" content="עשרים שבועות. שני שלבים. דרך אחת שמחזירה לך את עצמך.">
+<meta property="og:image" content="https://shoshizelikovith.com/isha/img/og.jpg">
+<meta property="og:url" content="https://shoshizelikovith.com/isha/">
+<meta name="description" content="עשרים שבועות. שני שלבים. דרך אחת שמחזירה לך את עצמך.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
-  <div>
-    <h1>אשה ללא מאמץ</h1>
-    <p>הדף בדרך.</p>
+
+<!-- ======== חלק א׳ ======== -->
+<div class="air-s"></div>
+<section class="wrap herosec">
+  <div class="hero">
+    <img class="hero-logo" src="img/logo-720.png" alt="להיות אשה ללא מאמץ · שושי זליקוביץ׳" width="720" height="515">
+    <h1 style="margin:0"><img class="hero-title" src="img/title-masa.png" alt="המסע הנשי לזוגיות ממגנטת" width="2317" height="146"></h1>
   </div>
+  <p class="lead">יש נשים שקיבלו בדיוק אותו סוג של בעל, את אותה תקופה ואת אותה התנהגות.<br>
+  והן שקטות. בטוחות. נחשקות. ומקבלות בזוגיות הרבה יותר ממך.</p>
+  <p>הן לא מלאכיות, ולא נולדו ככה.<br><strong>הן פשוט יודעות משהו על משיכה שאף אחת לא לימדה אותך.</strong></p>
+  <p>כי יש חוקים לקשר בין אשה לאיש.<br>
+ חוקים אמיתיים, כמו חוקי הטבע.<br>
+ וברגע שאשה יודעת אותם, היא מפסיקה לעבוד קשה ומתחילה <strong><span data-ed="1" style="font-size: 21px; color: rgb(223, 23, 103);">למגנט</span></strong>.</p>
+  <p>בעולם עמוס, מבלבל, תחרותי ומציף -<br>
+  <strong>המשימה שלך - היא כבר לא להתאמץ יותר.</strong><br>
+  זה כבר לא אפשרי, אין יותר איפה להוסיף ״עוד״ ביממה שלך.</p>
+  <p class="pull"><strong>המשימה הקדושה שלך היא עכשיו -<br>
+  <span data-ed="1" style="font-size: 24.1px;">רק להעיר את האשה הממגנטת שכבר קיימת בך.</span></strong></p>
+  <a class="cta" href="#hatzaa">אני רוצה להתחיל להיות ממגנטת בזוגיות&nbsp;שלי</a>
+  <img class="under-cta" src="img/title-sub.png" alt="23 חוקי משיכה · שני שלבים · ממגנטת ויודעת" width="2547" height="131">
+  <ul class="format">
+    <li>קורס דיגיטלי</li><li>וידאו ואודיו</li><li>נפתח מיד עם ההצטרפות</li><li>מהטלפון או מהמחשב</li>
+  </ul>
+  <div class="air-s"></div>
+  <p>אם את רוצה רגע לנשום איתי, להבין מה עובר עלייך, ולראות אם הדרך הזו מדויקת לך -<br>
+  תמשיכי איתי עוד קצת.</p>
+</section>
+
+<div class="picband">
+  <picture>
+    <source media="(max-width:759px)" srcset="img/band-baaya-v2-m.jpg" width="1200" height="900">
+    <img src="img/band-baaya-v2-w.jpg" alt="מה הכאב הנשי האישי שלך?" width="1600" height="900" loading="lazy">
+  </picture>
+  <h2 class="sec vh">מה הכאב הנשי האישי שלך?</h2>
+</div>
+
+<section class="wrap">
+  <p>נכון שלפעמים זו חוויה זוגית שכואבת ממש,<br>
+  ריחוק, כעס, מריבות שחוזרות, ערבים שלמים של שתיקה.</p>
+  <p><b>אבל לפעמים זה לא נראה בדיוק כך.</b></p>
+  <p>זה בית שמתפקד יפה, ילדים, שגרה, והרבה מאוד הכרת הטוב. אין דרמה, אין צעקות,
+  ואם מישהי תשאל אותך איך הזוגיות, את תעני "ברוך השם, בסך הכל טוב".</p>
+  <p><strong>ובכל זאת יש בך משהו שלא נח, שכאוב, שמתוח, שעצוב.</strong></p>
+  <p><strong>יש הרבה סוגים של כאב נשי בזוגיות.</strong><br>
+  אין אחד שהוא הנכון, ואין אחד שהוא מספיק גדול כדי להיחשב.</p>
+  <p>הנה כמה שאני חווה הכי הרבה עם הנשים שפוגשת,<br>
+  תראי אם משהו מהם מצלצל לך מוכר.</p>
+  <div class="air-s"></div>
+  <div class="cards voices">
+    <div class="card"><h4>אולי הכל בסדר, ובכל זאת חסר לך עומק</h4><p>יש בית, יש שגרה, יש המון מה להעריך.<br>
+  ועמוק בפנים את יודעת שזוגיות יכולה להיות הרבה יותר מתפקוד, אחריות ושגרה.<br>
+  את רוצה חיבור.<br>
+  את רוצה חיות.<br><span style="font-weight: bold;">
+  את רוצה להרגיש שאת לא רק מסתדרת בתוך הקשר, אלא חיה בו.</span></p></div>
+    <div class="card"><h4>אולי את אשה שמצליחה בחוץ, ומרגישה שטוחה בבית</h4><p>בחוץ את חכמה, מוערכת, אהובה.<br>
+  יודעת לעשות, יודעת להוביל, יודעת להצליח.<br><span style="font-weight: bold;">
+  ודווקא במקום הכי קרוב את מתפקדת כמו ׳שטוח׳, מנומס ובינוני.<br></span>
+  ולאט לאט את מוצאת את עצמך מעדיפה להשקיע את הזמן שלך במקומות שמספקים אותך יותר.<br>
+  וזה כואב, כי זה מרגיש לא מדויק.</p></div>
+    <div class="card"><h4>אולי הזוגיות שורפת לך את הכוחות</h4><p>במקום שהזוגיות תהיה מקור האנרגיה שלך, היא זוללת לך אותה. <span style="font-weight: bold;">את יוצאת מהבית מתוחה מהויכוחים, מרגישה שצריכה להתנצל על ההצלחות שלך, </span>חסרת ביטחון, עם גוף שלא נרגע. וזה נכנס לעבודה, לילדים, למצב הרוח, לפרנסה, לכל מקום שאת אמורה להצליח בו.</p></div>
+    <div class="card"><h4>ואולי את ביחד, ומרגישה לבד</h4><p>אין נושאי שיחה משותפים כמו שחלמת שיהיו.<br>
+  יש נושאים שאת כבר לא מעלה.<br><span style="font-weight: bold;">את קצת מיואשת מלנסות להסביר לו את עומק חוויות החיים שלך, </span>את הצרכים העמוקים שלך וזה גורם לך להסתגר, להתרחק...<br><br>
+  את לא מזמינה אורחים ולא מתארחת איתו ביחד, כי רואים מיד שאין ביניכם חיבור.<br>
+  ואת מתביישת בזה.</p></div>
+  </div>
+
+  <div class="air-s"></div>
+  <p>עכשיו,</p>
+  <p><strong>אולי</strong> את מוצאת את עצמך בכמה מהם?<br>
+  <strong>ואולי</strong> אף אחד מהם הוא לא בדיוק שלך?<br>
+  <strong>ואולי</strong> החוויה שלך היא משהו שאין לו עדיין שם, ושמעולם לא אמרת אותו בקול.</p>
+  <p>זה בסדר גמור.</p>
+  <p class="pull"><strong>לכל אשה יש את הכאב שלה,<br>
+  והוא לא צריך להיראות כמו של אף אחת אחרת.</strong></p>
+
+  <p>אבל שימי לב לדבר אחד, כי הוא כל הסיפור:<br>
+  <span data-ed="1" style="font-size: 25px;">הכאב הזה, איך שהוא לא נראה אצלך, תמיד מצביע בדיוק על אותו מקום:</span></p>
+  <div class="turn thesis">
+    <p class="t1">על פער בין מה שאת <b>רוצה</b><br>לבין מה <b>שיש</b>.</p>
+  </div>
+  <p class="pull"><strong>בכל פעם שיש פער בין החלומות שלך למציאות -<br>
+  זה כאב מטורף.<br>
+  ולא משנה מה הפער, ולא משנה מה גודל הפער.</strong></p>
+  <p><span style="font-weight: bold;"><span data-ed="1" style="color: rgb(223, 23, 103); font-size: 23px;">כי לא מודדים חוסר בכמויות. חוסר זו <span data-ed="1" style="color: rgb(13, 18, 44);">חוויה</span>.</span></span></p>
+  <p class="land">אז אני רוצה להרשות לך שני דברים, כאן, לפני הכל.</p>
+  <p><strong>1 אני מרשה לך להתלונן בתוכך.</strong><br>
+  כן, מותר שיכאב לך על כל דבר שחסר לך בקשר.
+  גם אם הוא נראה קטן, וקטנוני, ואפסי לעומת כל מה שיש לך.</p>
+  <p><span style="font-weight: bold;">2</span> <strong>אני מרשה לך לרצות בקול.</strong><br>
+  גם את הדברים שכבר הפסקת להעז לרצות. גם את אלה שמעולם לא אמרת לאף אחת.<br>
+  ואת לא צריכה שהזוגיות שלך תהיה במשבר כדי לרצות לחיות אותה אחרת.</p>
+<div class="jumpwrap"><a class="cta-jump" href="#tochniot"><span class="j1">כבר יודעת שאת רוצה לחיות אחרת?</span><span class="j2">לחצי כאן לראות את כל מה שמחכה לך</span></a></div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <h2 class="sec">הדברים שאת לא מספרת לאף אחת</h2>
+  <p>את רואה סביבך זוגות שנראים כמו זוג פרפרים.<br>
+  את לא רוצה לקנא, את באמת לא אשה כזו.<br>
+  אבל משהו בלב שלך נשרף כשאת מסתכלת.</p>
+  <p>כי נדמה לך שזה רק אצלכם...<br>
+  <strong>זו בדיוק הנקודה. אף אחת לא מדברת על זה.</strong></p>
+
+  <div class="air-s"></div>
+  <p>עכשיו, חשוב לי שתביני -</p>
+  <h2 class="sec">כאב בזוגיות?<br>זה ממש לא סימן שמשהו אצלך מקולקל!</h2>
+  <p><strong>בכל זוגיות, גם בטובה שבהן, נפתחים פערים.</strong>
+  זה טבעי, וזה קורה לכולן.</p>
+
+
+  <div class="turn thesis">
+    <p class="t2"><span data-ed="1" style="font-size: 34px; color: rgb(243, 110, 33);">אבל מה <b>משמעותי</b>, ומה אנחנו רוצות לשנות?</span></p>
+    <p class="t1"><span data-ed="1" style="color: rgb(242, 238, 227);"><span data-ed="1" style="font-size: 30px; color: rgb(242, 238, 227);">את <b>היכולת שלך </b><span data-ed="1" style="color: rgb(242, 238, 227);"><b>לטפל בפערים</b>,</span> ו -<br></span>
+    גם  - <b><span data-ed="1" style="color: rgb(243, 110, 33);">לרפא</span></b> את מה שאת חווה מולם,<br>
+    וגם - <b><span data-ed="1" style="color: rgb(242, 238, 227);">לצמצם</span></b> אותם <span data-ed="1" style="color: rgb(243, 110, 33);">ולהשפיע</span> על המצב.</span></p>
+  </div>
+
+  <p>ואם עד היום את לא מרגישה שאת מצליחה לעשות את זה -<br>
+  זה לא בגלל שאת דפוקה,<br>
+  ולא בגלל שנפלת על האיש הלא מדויק לך.</p>
+  <p class="pull"><span style="font-weight: bold;">זה רק כי אף אחד לא לימד אותך </span><br><span data-ed="1" style="font-size: 26.1px; font-weight: bold;">מה זו <span data-ed="1" style="color: rgb(223, 23, 103);">השפעה</span>,
+  ואיך משנים מציאות בשקט.</span></p>
+  <p class="land"><span style="font-weight: normal;"></span><span data-ed="1" style="font-size: 19px;"><span style="font-weight: normal;">ובגלל זה,<br></span></span>שם בדיוק שוב ושוב מתעורר <span data-ed="1" style="color: rgb(223, 23, 103);"><span data-ed="1" style="color: rgb(166, 47, 125);">המאמץ</span> <span data-ed="1" style="color: rgb(166, 47, 125);">הנשי</span> </span>הכואב שלך:</p>
+
+  <p class="beats">
+    את מנסה לדבר. להסביר. לדייק.
+    את חושבת איך להיות טובה יותר. רגועה יותר. מכילה יותר. <strong>נכונה</strong> יותר.
+    את בודקת את מצב הרוח שלו לפני שאת פותחת את הפה.
+    את מוותרת כדי לא לריב.
+    את מנהלת את הערב כדי שייצא טוב.....<br><span style="font-weight: bold;"><span data-ed="1" style="font-size: 23px;">כמה מאמץ!</span></span></p>
+  <p>ואם זה לא עובד, את מסיקה שצריך <span style="font-weight: bold;">להתאמץ</span> <span style="font-weight: bold;">יותר</span>.</p>
+  <p><strong></strong><span data-ed="1" style="font-size: 25px;"><strong>זו ממש לא אשמתך.</strong> <br>ככה לימדו אותנו.<br></span>
+  לנהל. לדחוף. להוכיח. להחזיק. להתחרות. לקחת אחריות.<br><br>גם אני הייתי שם.<br>
+  חשבתי שזה יעבוד.<br>
+  אבל זה לא.</p>
+
+  <p>ולכל המאמץ הזה - <br>יש מחיר, ואת משלמת אותו כל יום, בבית:</p>
+  <p><span data-ed="1" style="font-size: 21px;"></span><span data-ed="1" style="font-size: 21px;"><span data-ed="1" style="font-size: 21px;"><span style="font-weight: bold;"></span></span></span><span data-ed="1" style="font-size: 23px;"><span data-ed="1" style="font-size: 21px;"><span data-ed="1" style="font-size: 21px;"><span style="font-weight: bold;"><span data-ed="1" style="font-size: 23px;">גם - את לא אוהבת את מי שיוצאת ממך שם.<br></span></span></span></span></span>בחוץ - את לפעמים אשה אחרת, מביאה את כל הטוב שיש בך.<br>
+  ובבית - לפעמים את כבר לא מזהה את עצמך, מרגישה קצת גבר, מרגישה כמו אמא למתבגר, מרגישה כל כך לא שווה ולא ראויה אולי....</p>
+  <p><span style="font-weight: 700;"><span data-ed="1" style="font-size: 23px;">וגם  - הקשר בינכם מתרחק מהחלום שלך.<br></span></span>זו לא המשיכה שהיתה פעם.<br>
+  לא החיבור.<br>
+  ולא הזוגיות שהיית בטוחה שתפגשי.</p>
+
+  <p>למה?<br>
+  <span data-ed="1" style="font-size: 27px; font-weight: bold;">כי כל המאמץ הזה - <br>תמיד יושב על פחד.<br> ופחד הוא לא ממגנט<span data-ed="1" style="color: rgb(243, 110, 33);">.</span> <br>הוא דוחה<span data-ed="1" style="color: rgb(243, 110, 33);">.</span></span></p>
+  <div class="turn thesis">
+    <p class="t1">ולכן מאמץ ומשיכה?<br>לא יכולים לגור באותו חדר.</p>
+  </div>
+</section>
+
+<section class="wrap">
+
+  <div class="air-s"></div>
+  <div class="quotes"><blockquote><p>גיליתי שקברתי המון ממי שאני באמת.<br>
+  שוויתרתי על המון דברים שחשובים לי בחיים כדי לרצות את בעלי.<br>
+  שהייתי מנוהלת מפחד.<br>
+  ושאני יכולה אחרת.</p><cite>בוגרת הקורס יודעת</cite></blockquote><blockquote><p>למדתי שאני לא חייבת לרצות כדי להיות אהובה.<br>
+  שאני שווה וראויה בפני עצמי, בלי תלות בתגובות של אף אחד.<br>
+  וזה שינה לי את כל הדרך.</p><cite>בוגרת הקורס יודעת</cite></blockquote></div>
+</section>
+
+<div class="picband">
+  <picture>
+    <source media="(max-width:759px)" srcset="img/band-hukim-m.jpg" width="1200" height="900">
+    <img src="img/band-hukim-w.jpg" alt="למערכות יחסים יש חוקי טבע שמניעים אותן מבפנים" width="1600" height="900" loading="lazy">
+  </picture>
+  <h2 class="sec vh">למערכות יחסים יש חוקי טבע שמניעים אותן מבפנים</h2>
+</div>
+
+<section class="wrap">
+  <h2 class="sec">יש חוקים. פשוט לא לימדו אותך אותם</h2>
+  <p><span data-ed="1" style="font-size: 21px;"></span><span style="font-weight: bold;"></span><span data-ed="1" style="font-size: 23px;"><span style="font-weight: bold;">חוקי מערכות היחסים הם כמו חוקי הטבע.
+<br></span></span>במבט ראשון הם נראים מוזרים למי שלא למד אותם,<br>
+  שונים מכל מה שהתרגלת לחשוב, ולפעמים אפילו לא הוגנים.</p>
+  <p><strong>אבל כשמבינים אותם לעומק מגלים שהם דווקא מדויקים, ישרים ומוסריים.</strong><br>
+  <strong>והכי משמעותי שהם תמיד עובדים:</strong></p>
+  <p><span style="font-weight: bold;">הם קובעים</span> למה אותה בקשה בדיוק, באותן מילים, פעם פותחת לו את הלב ופעם סוגרת אותו.<br><span style="font-weight: bold;">
+  הם קובעים </span>למה ככל שאת רודפת אחרי חיבור, כך הוא מתרחק.<br><span style="font-weight: bold;">
+  הם קובעים</span> מה מכבה משיכה ומה מדליק אותה, בלי שאף אחד מכם אמר מילה.</p>
+  <p><span style="font-weight: bold;"><span data-ed="1" style="font-size: 25px; color: rgb(223, 23, 103);"><br>האם את מכירה את חוקי הטבע של מערכות היחסים?<br><br></span> יש סיכוי גדול שהראש שלך מלא בידע על זוגיות שפשוט לא עובד.<br></span>
+  מה ׳נכון׳ להגיד.<br>
+  איך ׳צריך׳ לתקשר.<br>
+  מה ה׳חובות׳ שלך.<br>
+  איך להיות אשה ׳טובה׳.</p>
+  <p><span style="font-weight: bold;"><span data-ed="1" style="font-size: 21px;">אבל למה רוב הידע הזה לא מזיז כלום ולא משנה את המצב בינכם ובלב שלך?<br></span></span>כי הוא לא עוסק בחוקים <span data-ed="1" style="color: rgb(201, 21, 93); font-weight: bold;">הפנימיים</span> האמיתיים,<br>
+  אלו שמניעים באמת את מערכות ההפעלה של הקשר.</p>
+  <p><span data-ed="1" style="font-size: 25px;"><span style="font-weight: bold;">כי בין אשה לאיש יש מערכת הפעלה </span><span data-ed="1" style="font-weight: bold; color: rgb(223, 23, 103);">פנימית</span><span style="font-weight: bold;">.</span><br><br><span data-ed="1" style="font-size: 19px;">עולם מלא ומרתק שקיים מאחורי הקלעים של הקשר שלכם<br><span style="font-weight: bold;">שכל אשה שרוצה להיות מאושרת - צריכה להכיר :)</span></span></span></p>
+
+  <p class="land deep"><span style="font-weight: normal;"></span><span data-ed="1" style="font-size: 23px;"><span style="font-weight: normal;">ובדיוק בשביל זה יצרתי לך את&nbsp;התהליך&nbsp;-<br></span></span><span data-ed="1" style="font-size: 31px;"><span data-ed="1" style="color: rgb(223, 23, 103);">׳אשה ללא מאמץ׳</span> <br></span>שם אנחנו לומדות ביחד<br>את חוקי המשיכה הפנימיים, הנסתרים, אחד אחד,<br>
+  וכל חוק פותח לך עולמות חדשים <br>של הבנה, חיבור והשפעה מרגשת!</p>
+  <p><span style="font-weight: bold;">החוקים</span> האלה שמחכים שתכירי אותם - יפתיעו אותך.<br>
+  הם יראו לך על מה בדיוק <span style="font-weight: bold;">את עובדת קשה לשווא.</span><br>
+  הם יסבירו לך למה דווקא הדברים שנראים לך קטנים הם אלה שמזיזים את הכל.<br><span style="font-weight: bold;">
+  <span data-ed="1" style="font-size: 21px;">והם יגלו לך איפה בדיוק נמצא כוח ההשפעה שלך <br>ואיך להפעיל אותו ללא מאמץ.</span></span><br></p>
+  <p class="pull"><strong><span data-ed="1" style="font-size: 26.1px;">לא מרדף - השפעה.<br>לא מאמץ - מיגנוט.</span></strong></p>
+<div class="jumpwrap"><a class="cta-jump" href="#tochniot"><span class="j1">רוצה לראות איך לומדים את החוקים&nbsp;האלה?</span><span class="j2">לחצי כאן לראות איך זה נראה מבפנים</span></a></div>
+
+  <div class="air-s"></div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t13.jpg"><img src="img/t/t13.jpg" alt="בקשת סליחה שעבדה מיד" loading="lazy" width="760" height="273"></button><button class="tcard" data-full="img/t/t76.jpg"><img src="img/t/t76.jpg" alt="תוך כמה דקות זה קרה" loading="lazy" width="760" height="356"></button></div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wide">
+  <h2 class="sec" id="mi-ani">מי אני</h2>
+  <div class="about">
+    <div>
+      <img src="img/shoshi-portrait.jpg" alt="שושי זליקוביץ׳" width="1000" height="1333" loading="lazy">
+      <div style="height:14px"></div>
+      
+    </div>
+    <div>
+      <div class="stats">
+        <div><b>15 שנה</b><span>מלווה נשים</span></div>
+        <div><b>אלפי</b><span>תלמידות בדרך הזו</span></div>
+        <div><b>עשרות אלפי</b><span>נשים בקהילה</span></div>
+      </div>
+      <p class="hello">נעים מאוד,<br><strong>אני שושי זליקוביץ׳</strong></p>
+      <p>נשואה 25 שנה, ואמא לשמונה ילדים.</p>
+      <p>מאמנת מנטלית, מטפלת בפסיכותרפיה הוליסטית, מייסדת שיטת <strong>אשה ללא מאמץ</strong>
+      ומייסדת <strong>בית הספר שלם</strong> להכשרת מאמנות מנטליות לשינוי ריפוי והשפעה ובמערכות יחסים.</p>
+      <p><strong>חמש עשרה שנה אני עושה דבר אחד:</strong><br>
+      מלמדת נשים איך ליצור בעצמן את השינויים שהן חולמות להשיג, לחוות ריפוי ולגלות את כח ההשפעה שלהן על עצמן ועל מערכות היחסים שלהן - בזוגיות, בהורות, בכל מקום ובתוך עצמן.</p>
+      <p>אני גם מרצה, ומובילה את הפודקאסט <strong>אשה ללא מאמץ</strong>.</p>
+      <p>הדרך הזו <strong>שזכיתי לפתח, תודה להשם</strong>, נולדה מתוך חיבור עמוק בין עולם האמונה, הנפש, הנשיות, מערכות היחסים וההשפעה המנטלית.</p>
+
+
+      <p>יצרתי את הקורסים של <span data-ed="1" style="color: rgb(166, 47, 125);"><span style="font-weight: bold;">אשה ללא מאמץ</span></span><span style="font-weight: bold;"></span>  - <br> כדי שכל אשה תוכל ללמוד את הדרך הזו בצורה נגישה, פשוטה, עמוקה ומעשית.</p>
+      <p><strong>לא כעוד ידע על זוגיות, אלא כדרך חיים שמחזירה לה את עצמה  <br>ואת כוח ההשפעה הנשי המדהים שתמיד היה בה ומחכה לצאת לאור.</strong></p>
+    </div>
+  </div>
+  <div class="teaches soft">
+        <p class="tt"><span data-ed="1" style="color: rgb(242, 238, 227);"><span style="font-weight: normal;"></span><span data-ed="1" style="font-size: 17px;"><span style="font-weight: normal;">ואם שאלת את עצמך - <br></span></span>הדרך הזו של <b>אשה ללא מאמץ</b> לא מלמדת נשים להתאמץ יותר, לרצות אחרים עוד יותר, להסביר יותר או להילחם על מקומן.</span></p>
+        <p class="tl">להפך.<br>
+  היא מלמדת אותן:</p>
+        <ul>
+          <li>לחזור פנימה</li>
+          <li>לרפא לחץ ותלות</li>
+          <li>להתחבר לערך העצמי</li>
+          <li>לפגוש כאב בשלווה ושקט</li>
+          <li>ולהיות אשה שיש לה נוכחות פנימית ממגנטת<br>כנה, יציבה, מחוברת לבורא, ללב שלה ולכוח ההשפעה הטבעי שלה</li>
+        </ul>
+      </div>
+  <div class="jumpwrap"><a class="cta-jump" href="#tochniot"><span class="j1">רוצה לראות את הקורסים?</span><span class="j2">לחצי כאן לראות את ממגנטת ויודעת מבפנים</span></a></div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <h2 class="sec">מה קורה <span data-ed="1" style="font-size: 44px;"><span data-ed="1" style="color: rgb(166, 47, 125);">לך</span></span><span data-ed="1" style="color: rgb(166, 47, 125);"></span> בחיים <br>כשאת מתחילה להיות <span data-ed="1" style="color: rgb(166, 47, 125);">אשה ללא מאמץ</span>?</h2>
+  <p><strong>הזוגיות שלך מתחילה להיראות אחרת. וגם הבית, וגם החיים.</strong><br>אבל זה לא בגלל שלמדת לדחוף דברים בעוד מאמץ או כי נהיית חזקה יותר לבד. <br><span style="font-weight: bold;">אלא <br>כי את לומדת <span data-ed="1" style="color: rgb(166, 47, 125);">מה להביא אחרת לקשר</span>,<br>איך להזיז את המאמץ <br>ואיך לחשוף את <span data-ed="1" style="color: rgb(166, 47, 125);">כוח המשיכה </span>הנשי המדהים שלך.<br></span><br>
+  <strong><span data-ed="1" style="font-size: 21px;">וברגע שאת עושה את זה - משתנה גם מה שחוזר אלייך.</span></strong></p>
+  <div class="mech">
+    <p class="m1"><span data-ed="1" style="font-size: 33px;">כי את <b>ממגנטת</b>.</span></p>
+  </div>
+
+  <h3 class="subsec">אז, <br>חוקי המשיכה הם קודם כל מתנה מדהימה בשבילך</h3>
+  <p>כי כשאת מתחילה לגלות את חוקי המשיכה ומתאמנת איתם להיות אשה ללא מאמץ -</p>
+  <div class="claim act-in-head">
+    <p>את כבר לא אותה אשה, את מתפקדת אחרת <strong>מבפנים</strong></p>
+  </div>
+<div class="cards small act-in">
+    <div class="card"><h4><span data-ed="1" style="font-size: 19.5px;">את נשארת שלמה ורגועה יותר גם כשכואב</span></h4><p>הכאב עדיין מקבל מקום, אבל את חוזרת לעצמך מהר. הוא כבר לא זורק אותך לבהלה ולא מחזיר אותך אוטומטית למאבק.</p></div>
+    <div class="card"><h4><span data-ed="1" style="font-size: 19.5px;">את מרגישה שווה ומלאת ערך בלי קשר למה שאת מקבלת</span></h4><p>מחמאה, מבט, תשובה או מתנה הם מתנה נעימה, ולא המדד לכמה את שווה, אהובה או נבחרת. וזה שקט שלא הכרת.</p></div>
+    <div class="card"><h4><span data-ed="1" style="font-size: 19.5px;">את יודעת להחזיק רצון בשלווה בלי להפוך את הרצון לדרישה</span></h4><p>את לא מוחקת את הרצונות שלך.<br>
+  את לומדת לבטא אותם ממקום נקי, חי ושלם.<br>
+  בלי לחץ ובלי מלחמה.</p></div>
+    <div class="card"><h4><span data-ed="1" style="font-size: 19.5px;">את חוזרת להיות אשה מלאת חיים</span></h4><p>את פחות עסוקה בלהחזיק, לתקן ולשרוד. ויותר פוגשת את הלב, הנשיות, הרצון, השמחה והאור שלך.</p></div>
+  </div>
+
+
+  <div class="air-s"></div>
+  <div class="quotes"><blockquote><p>כל הזוגיות שלי השתנתה ברגע שהחלטתי לקחת פיקוד על החיים שלי ולא על שלו. אני חיה את החיים. מרגישה אהובה, מרגישה חיבור אמיתי בינינו.</p><cite>בוגרת הקורס יודעת</cite></blockquote><blockquote><p>שמה לב שיש בי יותר רוגע, וזה משפיע על עוד מערכות יחסים. ויש שינוי גם בסביבה שאני תוהה לעצמי איך הוא קרה. הרי עדיין לא עשיתי כלום.</p><cite>בוגרת הקורס ממגנטת</cite></blockquote></div>
+
+  <h3 class="subsec act-out-head"><span data-ed="1" style="color: rgb(13, 18, 44);">ואז, כשאת מעירה את הנשיות הממגנטת שלך - <br><span data-ed="1" style="font-size: 30px;"></span><span data-ed="1" style="font-size: 30px;"><span data-ed="1" style="font-size: 30px;">המציאות בינכם משתנה, <br></span></span>הוא והסביבה מגיבים<br> וזה מרגש!</span></h3>
+  <div class="cards small act-out">
+    <div class="card"><h4><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 19.5px;">דברים שניסית לגרום להם לקרות במאמץ מתחילים להגיע מעצמם</span></h4><p>מה שפעם דרש הסבר, בקשה חוזרת ושכנוע, פתאום קורה בלי שביקשת. זה הסימן הראשון שהחוקים עובדים.</p></div>
+    <div class="card"><h4><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 19.5px;">היחס אלייך משתנה</span></h4><p>יותר הקשבה, יותר תשומת לב, יותר כבוד. לא כי דרשת אותם, אלא כי עמדת הנפש שלך מולו השתנתה.</p></div>
+    <div class="card"><h4><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 19.5px;">הוא נפתח, מתפתח, יוזם ומשתנה כלפייך ובכלל</span></h4><p>מחוות קטנות שלא ביקשת.<br>
+  רצון להיות איתך.<br>
+  ולפעמים דווקא הדבר שהתייאשת מלבקש.</p></div>
+    <div class="card"><h4><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 19.5px;">כל אוירת שיתוף הפעולה בבית עולה</span></h4><p>פחות ויכוחים על מי צודק, ויותר החלטות שנלקחות ביחד. גם מולו, וגם מול הילדים. יותר רצון טוב, יותר מוטיבציה, רצון שבא בפנים...</p></div>
+    <div class="card"><h4><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 19.5px;">האווירה בבית מתרככת ונעימה</span></h4><p>הבית מפסיק להיות מקום שצריך לנהל.<br>
+  הערב נגמר אחרת, והבוקר מתחיל אחרת.</p></div>
+    <div class="card"><h4><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 19.5px;">וזה מדבק החוצה - דברים עובדים יותר</span></h4><p>אותה עמדת נפש עובדת גם בעבודה, מול המשפחה המורחבת ומול חברות. כי חוקי המשיכה הם חוקים של קשר, לא של זוגיות בלבד, ואת שמה לב איך יחד עם הנינוחות ושלמות הלב שנפתחת לך - את מקבלת בחזרה משהו אחר וטוב מהסביבה.</p></div>
+  </div>
+
+
+
+  <div class="air-s"></div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t39.jpg"><img src="img/t/t39.jpg" alt="זר פרחים אחרי שש שנים" loading="lazy" width="760" height="249"></button><button class="tcard" data-full="img/t/t32.jpg"><img src="img/t/t32.jpg" alt="הפסקתי להגיד לו מה לעשות" loading="lazy" width="760" height="341"></button></div>
+
+  <div class="air-s"></div>
+<div class="jumpwrap"><a class="cta-jump" href="#tochniot"><span class="j1">רוצה כבר לראות מה יש בתוכניות?</span><span class="j2">לחצי כאן לראות את כל מה שמחכה לך</span></a></div>
+</section>
+
+<div class="picband">
+  <picture>
+    <source media="(max-width:759px)" srcset="img/band-shnayim-m.jpg" width="1200" height="900">
+    <img src="img/band-shnayim-w.jpg" alt="שני הדברים שאת מקבלת, וצריך את שניהם" width="1600" height="900" loading="lazy">
+  </picture>
+  <h2 class="sec vh">שני הדברים שאת מקבלת, וצריך את שניהם</h2>
+</div>
+
+<section class="wrap">
+  <p><strong><span data-ed="1" style="font-size: 27px;">אני רוצה שתדעי בדיוק על מה את לוקחת אחריות.<br>
+  כי אלו <span data-ed="1" style="color: rgb(223, 23, 103);">שני</span> דברים שונים, לא אחד.</span></strong></p>
+
+  <div class="twothings">
+  <div class="thing live"><div class="thead"><span>לחיות טוב</span><b>כבר עכשיו</b></div><div class="tbody"><p class="beats">
+    <span><span style="font-weight: bold;"></span></span><span data-ed="1" style="font-size: 21px;"><span><span style="font-weight: bold;"><span data-ed="1" style="font-size: 19px;">כל עוד את נשואה, את פה כדי לחיות ולשמוח.<br></span><br></span></span>
+    <span></span></span><span>לא כדי לחכות. לא כדי להחזיק את הנשימה עד שהוא ישתנה.</span>
+  </p>
+  <p>את לומדת לפגוש חוסר בלי להיבהל, ולהפסיק לתת לרגע אחד לא טוב לגזול לך את היום,
+  את מצב הרוח ואת הכוחות. <strong>וזה כוח אדיר. והוא שלך ביום שתלמדי אותו.</strong></p></div></div>
+  <div class="thing infl"><div class="thead"><span>לדעת להשפיע</span><b>ללא מאמץ</b></div><div class="tbody"><p><strong>ריפוי הלב שלך הוא בעצמו פעולה של השפעה.</strong></p>
+  <p>זו לא אמירה יפה, וזו לא אמונה. זה מה שאני רואה קורה, אצל אלפי תלמידות, כבר חמש עשרה שנה.</p>
+  <p>ככל שהמתח שלך יורד, וככל שהרצון שלך מפסיק להגיע אליו כמו דרישה,
+<br>כך נפתח מרחב שבו הרצון הטבעי שלו לראות אותך ולתת לך יכול סוף סוף להתעורר.</p>
+  <p class="beats">
+    <span><strong></strong></span><span data-ed="1" style="font-size: 23px;"><span><strong>את לא מנהלת אותו.</strong></span>
+    <span><strong>את משנה את מה שהוא פוגש.</strong></span></span><span><strong></strong></span>
+  </p></div></div>
+</div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t20.jpg"><img src="img/t/t20.jpg" alt="הבעל נפתח ומביע רגשות" loading="lazy" width="760" height="274"></button><button class="tcard" data-full="img/t/t08.jpg"><img src="img/t/t08.jpg" alt="בעלי הרגיש שינוי בלי שסיפרתי" loading="lazy" width="760" height="324"></button></div>
+
+  <div class="air-s"></div>
+  <div class="pivot">
+    <span class="pnum">1</span><span class="pdot"></span><span class="pnum">2</span>
+    <p class="p1">יצרתי לך מסע נשי שכולל בדיוק את שני אלו.<br>שני חלקים. שני שלבים.</p>
+    <p class="p2">והם ממש לא אותו דבר.</p>
+  </div>
+
+  <div class="stages">
+    <div class="stage">
+      <div class="shead"><span class="num">1</span><span class="kick">שלב ראשון</span></div>
+      <h4><span data-ed="1" style="font-size: 25px;">להתאמן להיות במהות שלך <br>אשה <span data-ed="1" style="color: rgb(166, 47, 125);">ממגנטת</span> - <br>להעיר את כוח המשיכה שכבר קיים בך.</span></h4>
+      <p>השלב שבו את מבינה למה הדברים קרו כמו שקרו, ומרגישה את השינוי הראשון בתוכך.</p>
+    </div>
+    <div class="stage two">
+      <div class="shead"><span class="num">2</span><span class="kick">שלב שני</span></div>
+      <h4><span data-ed="1" style="font-size: 25px;">ללמד להיות ביום יום <br>אשה ש<span data-ed="1" style="color: rgb(223, 23, 103);">יודעת</span>  - <br>להפוך את זה למיומנות שלך, בתוך החיים שביניכם.</span></h4>
+      <p>השלב שבו זה מפסיק להיות ידע ונעשה הדרך שבה את חיה.</p>
+    </div>
+  </div>
+
+  <p class="beats big-end">
+    <span><strong>ובדיוק לפי זה בנוי המסע שהכנתי לך.</strong></span>
+    <span><strong><span data-ed="1" style="color: rgb(166, 47, 125);">שני <strong style="font-size: clamp(20px, 3.6vw, 26px); color: rgb(13, 18, 44);">שלבים,</strong></span></strong></span>
+    <span>ואת עומדת להכיר את שניהם.</span>
+  </p>
+
+  <div class="air-s"></div>
+  <div class="quotes"><blockquote><p>הבנתי שכל החיים האשמתי את בעלי, ובעצם זו אני שלא ביקשתי בצורה נכונה וציפיתי שהוא יבין לבד. היום אין עליו חיצים, והוא מאוד משתדל שיהיה לי טוב.</p><cite>בוגרת הקורס יודעת</cite></blockquote><blockquote><p>ברגע שאני ממוקדת בעצמי ולא חושבת על מה שהוא צריך לעשות, הוא מגיע בעצמו. ואני פתאום מגלה שהוא יודע מצוין למה אני מצפה.</p><cite>בוגרת הקורס יודעת</cite></blockquote></div>
+</section>
+
+<div class="jumpwrap"><a class="cta-jump" href="#tochniot"><span class="j1">אני רוצה עכשיו לראות את כל מה שמחכה לי&nbsp;בפנים</span></a></div>
+
+<!-- ======== חלק ב׳ ======== -->
+<div class="part" id="tochniot"><h2>השלב הראשון</h2></div>
+
+<section class="wrap" id="sec11">
+  <p class="reveal">אז בואי נתחיל בחלק הראשון במסע הנשי שלך:</p>
+</section>
+
+<section class="coverstage cs-mem">
+  <figure class="floatcard"><img class="illus" src="img/cover-memagnetet-q82.jpg" alt="ממגנטת · להעיר את כוח המשיכה שכבר קיים בך · חוויית אימון נשית · 4 שבועות · שיעור יומי" width="1920" height="1080" loading="lazy"></figure>
+</section>
+
+<section class="wrap">
+  <div class="air-s"></div>
+  
+  <p>זה לא קורס של "תראי שיעורים ותסמני וי".<br>
+  זה מסע תהליכי.<br>
+  כל יום בונה את היום שאחריו.<br>
+  כל שיעור פותח עוד שכבה.<br>
+  וכל משימה מחברת אותך לסיטואציות האמיתיות שלך בבית ובחיים.</p>
+  <p><strong>ובסוף ארבעת השבועות את בע״ה יוצאת אשה אחרת: <br>רגועה יותר, חיה יותר.<br><span data-ed="1" style="font-size: 23px; color: rgb(223, 23, 103);">ממגנטת.</span></strong></p>
+  <div class="air-s"></div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t73-v2.jpg"><img src="img/t/t73-v2.jpg" alt="שינוי מהקצה אל הקצה" loading="lazy" width="760" height="224"></button><button class="tcard" data-full="img/t/t28.jpg"><img src="img/t/t28.jpg" alt="החיים מתחלקים ללפני ולאחרי" loading="lazy" width="760" height="338"></button></div>
+  <div class="air-s"></div>
+</section>
+
+<section class="wrap">
+  <div class="air-s"></div>
+  <h2 class="sec">מה יש בארבעת השבועות של <span class="nm">ממגנטת<br></span><span class="nm"><span style="caret-color: rgb(13, 18, 44); color: rgb(13, 18, 44); font-size: 18px; font-weight: 400;">תלחצי על התיבות כדי לראות את הסילבוס בהרחבה:)</span></span></h2>
+
+  <details open><summary>שבוע 1 · לחזור לעצמך: להפסיק להוכיח שאת ראויה לאהבה<span class="hk">את מרגישה ראויה לאהבה בלי להוכיח כלום, וזה הדבר הראשון שהוא קולט אצלך.</span></summary>
+  <div class="body">
+    <p>בשבוע הזה את מפרקת את אחד השורשים הכי עמוקים של המאמץ: האמונה שאם רק תהיי מספיק טובה, מספיק נעימה, מספיק מתפקדת ומספיק <strong>נכונה</strong> - אז תקבלי את האהבה שאת רוצה. את מתחילה לזהות איפה הלב שלך עובד קשה מדי, ואיפה את חיה מתוך פחד לאבד אהבה.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>מה הסיפור הזוגי שלך באמת? · למה אהבה מרגישה לפעמים כמו פרויקט מתיש? · למה רדיפה אחרי אהבה לא באמת מביאה אהבה? · מה בך כבר ממגנט, גם לפני שתשתני? · איך קבלה עצמית משנה את מה שאת מושכת מהעולם? · איך למלא אנרגיה בלי לחכות שמישהו אחר ימלא אותך?</p>
+  </div></details>
+
+  <details><summary>שבוע 2 · רגעי החוסר: מה לעשות כשהוא לא נותן לך את מה שאת צריכה ממנו<span class="hk">את פוגשת את הרגע שהכי מטלטל אותך ונשארת בשקט שלך, ומשם נפתחת משיכה חדשה.</span></summary>
+  <div class="body">
+    <p>לא תיאוריה ולא רעיונות יפים, אלא בדיוק המקומות שבהם רוב הנשים נופלות. את בוחרת רצון אחד שלא מתממש בזוגיות, ולומדת מה קורה לך כשאת לא מקבלת אותו: המתח שעולה, הפחד שמנהל, והמחיר שזה גובה מהלב שלך ומהקשר. ואז את לומדת מה לעשות אחרת.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>לבחור את רגע החוסר שבו את רוצה להתחיל שינוי · למה ההתעסקות בו גוזלת ממך את כוח ההשפעה שלך? · למה לא מספיק לשנות התנהגות חיצונית? · איך מתח פנימי משפיע על המשיכה והקרבה ביניכם? · תכנית פעולה לרגע שבו החוסר מטלטל אותך · למה את לא צריכה לפחד מחוסר?</p>
+  </div></details>
+
+  <details><summary>שבוע 3 · ביטוי עצמי ממגנט: איך לומר את מה שחשוב לך בלי להילחם על תוצאה<span class="hk">את אומרת את האמת שלך, ורואה איך הלב שלו נפתח בדיוק שם.</span></summary>
+  <div class="body">
+    <p>אשה ללא מאמץ לא שותקת.<br>
+  היא לא מוחקת את עצמה, ולא מעמידה פנים שלא כואב לה.<br>
+  היא פשוט לומדת לבטא את עצמה אחרת: לא מתוך פחד, ולא מתוך דרישה סמויה שעכשיו הוא ימלא אותה.<br>
+  כאן את מגלה שעצם הביטוי הוא בעצמו מילוי.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>למה להתמקד בעצמך זו נתינה עמוקה לבית · מה באמת היית רוצה שהוא ידע ממך? · מה קורה כשאת שותקת מפחד לאבד אהבה? · מה קורה כשאת מדברת כדי להשיג ממנו תגובה? · איך נשמע ביטוי של אשה שלמה?</p>
+  </div></details>
+
+  <details><summary>שבוע 4 · רצון, חיות וקבלה: לחיות כאשה שמסכימה להיות כלי למילוי<span class="hk">את רוצה בקול, והרצון שלך מושך אלייך מילוי - וזו הרגשה משכרת.</span></summary>
+  <div class="body">
+    <p>הרבה נשים מפחדות לרצות. כי רצון שלא מתממש כואב, וכי אולי זה הופך אותן לתובעניות. כאן את מגלה שרצון נשי נקי הוא לא לקיחה - הוא חיות, הוא נתינה, והוא הכלי שפותח שפע, אהבה וקרבה.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>מה את באמת רוצה? · למה לבטא רצון זו נתינה נשית עמוקה? · איך לבקש בלי להפוך את הבקשה למאבק? · האומץ לאתגר אותו · חיים מלאים מעבר לזוגיות · לחיות כאשה ללא מאמץ</p>
+  </div></details>
+
+  <div class="air-s"></div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t43.jpg"><img src="img/t/t43.jpg" alt="יצאנו יחד כמו שלימדת" loading="lazy" width="760" height="232"></button><button class="tcard" data-full="img/t/t11.jpg"><img src="img/t/t11.jpg" alt="בעלי רואה את העבודה שעשיתי" loading="lazy" width="760" height="340"></button></div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <h2 class="sec">מה בדיוק את מקבלת ב<b class="nm">ממגנטת</b></h2>
+  <div class="cards small icons">
+    <div class="card"><img src="img/ic-130/video.png" alt="" width="130" height="132" loading="lazy"><h4>23 שיעורי וידאו</h4><p>מבוא שנפתח מיד עם ההרשמה, ואחריו שיעור לכל יום.<br>
+  קצר, ברור וממוקד.<br>
+  לא הרצאות של שעה.</p></div>
+    <div class="card"><img src="img/ic-130/practice.png" alt="" width="130" height="131" loading="lazy"><h4>משימת תרגול לכל שיעור</h4><p>לא שיעורי בית. שאלה אחת חזקה, או תרגיל התבוננות קטן, שלוקח את השיעור מהראש ומכניס אותו לחיים שלך.</p></div>
+    <div class="card"><img src="img/ic-130/cards.png" alt="" width="130" height="129" loading="lazy"><h4>23 כרטיסי חוקי המשיכה</h4><p>חוק אחד בכל פעם, מעוצב, לשמירה ולהדפסה.<br>
+  במקום שאת רואה כל יום.</p></div>
+    <div class="card"><img src="img/ic-130/worksheets.png" alt="" width="130" height="128" loading="lazy"><h4>דפי עבודה מסודרים</h4><p>לכתיבה, להתבוננות ולתרגול.<br>
+  אפשר להדפיס.</p></div>
+    <div class="card"><img src="img/ic-130/download.png" alt="" width="130" height="142" loading="lazy"><h4>וידאו, אודיו והורדה</h4><p>לצפות, להאזין בנסיעה, או להוריד ולשמור אצלך.<br>
+  מאתר הקורסים וגם מהדרייב.</p></div>
+    <div class="card"><img src="img/ic-130/coach.png" alt="" width="130" height="130" loading="lazy"><h4>המאמנת האישית שלך</h4><p>מאמנת דיגיטלית שמכירה את כל הקורס, זמינה לך בכל שעה. עוד על זה בהמשך.</p></div>
+    <div class="card"><img src="img/ic-130/access.png" alt="" width="130" height="137" loading="lazy"><h4>שנה שלמה באתר</h4><p>הגישה שלך פתוחה לשנה. ובדרייב את יכולה להוריד את כל השיעורים ולשמור אותם אצלך לתמיד, בלי תאריך תפוגה.</p></div>
+    <div class="card"><img src="img/ic-130/pace.png" alt="" width="130" height="136" loading="lazy"><h4>בקצב שלך</h4><p>אין שידורים חיים שצריך להספיק, ואין מה לפספס. את נכנסת מתי שנוח לך, ואפשר לחזור לשיעור בכל שלב בחיים.</p></div>
+  </div>
+  <div class="air-s"></div>
+  <p><strong>וכמה זמן זה לוקח לך ביום?</strong><br>
+  בין עשר דקות לארבעים דקות, תלוי בשיעור ובכמה את בוחרת להעמיק בתרגול.
+  ואם פספסת יום - הוא מחכה לך. באמת.</p>
+  <div class="air-s"></div>
+  <div class="quotes"><blockquote><p>מדהים כמה את גאונית, והפשטות שבה את מציגה את הדברים כל כך ממגנטת. אני בולעת בשקיקה את החומר ומיישמת אותו.</p><cite>בוגרת הקורס ממגנטת</cite></blockquote><blockquote><p>הבעתי את רצוני שביום שישי הוא יארגן את המטבח והסלון ואני אלך לנוח. הלכתי בלי לדעת למה אקום - וקמתי לסלון ומטבח מבריקים. ולא רק זה, גם לבעל מרוצה ו״עף על עצמו״.</p><cite>בוגרת הקורס ממגנטת</cite></blockquote></div>
+</section>
+
+
+
+
+<!-- ======== חלק ג׳ ======== -->
+<div class="part"><h2>השלב השני</h2></div>
+
+<section class="wrap">
+  <h2 class="sec">ואחרי ארבעה שבועות?</h2>
+  <p>ארבעה שבועות זה מספיק כדי שתדעי את החוקים, ושתרגישי את השינוי הראשון.<br>
+  אבל אני רוצה להיות איתך כנה לגמרי.</p>
+
+  <p class="pull"><strong><span data-ed="1" style="font-size: 26.1px;">להעיר את כוח המשיכה שבך זה לא אותו דבר כמו לחיות אותו.</span></strong></p>
+
+  <p>בארבעה שבועות את מטמיעה את חוקי המשיכה <strong>בתוכך</strong>.</p>
+  <p class="beats">
+    <span>ואז החיים ממשיכים.</span>
+    <span>מגיע ערב אחד קשה. מגיעה תקופה לחוצה.</span>
+    <span>מגיע רגע שבו הוא עושה בדיוק את הדבר שהכי כואב לך.</span>
+  </p>
+  <p>ושם - את רוצה לדעת <span style="font-weight: bold;">מה לעשות</span> עם זה <strong>ברגע עצמו</strong>.</p>
+  <div class="turn">
+    <p class="t1"><span data-ed="1" style="color: rgb(243, 110, 33);">כאן נכנס <span data-ed="1" style="color: rgb(242, 238, 227);"><b><span data-ed="1" style="color: rgb(242, 238, 227);">החלק</span> <span data-ed="1" style="color: rgb(242, 238, 227);">השני</span></b></span><b></b>.</span></p>
+    <p class="t2">והוא חלק אחר לגמרי.</p>
+    <p class="t3">הוא <span data-ed="1" style="color: rgb(243, 110, 33);">מטמיע</span> את החוקים <span data-ed="1" style="color: rgb(243, 110, 33);"><b>בתוך החיים שביניכם</b>.</span><br>שבוע אחרי שבוע, במשך <b>ארבעה חודשים</b>.</p>
+  </div>
+  <p>בסופו קורה הדבר שבשבילו כל זה נבנה.</p>
+  <p class="beats">
+    <span style="font-weight: bold;">בפעם הבאה שמשהו ישתבש, כששוב תפגשי פער מכווץ:</span> את כבר לא תצטרכי לשאול אף אחד מה לעשות.
+    <br>לא אותי. <br>לא חברה. <br>ולא יועץ.
+  </p>
+
+  <p class="land"><span style="font-weight: normal;">את תהיי יותר ויותר </span>היועצת הזוגית של עצמך.</p>
+</section>
+
+<section class="wrap" id="sec17">
+  <p class="reveal">אז הנה החלק השני במסע הנשי שלך:</p>
+</section>
+
+<section class="coverstage cs-yod">
+  <figure class="floatcard"><img class="illus" src="img/cover-yodaat-q82.jpg" alt="יודעת · להיות היועצת הזוגית של עצמך · מסע יישום מעמיק · 16 שבועות · שיעור שבועי" width="1920" height="1080" loading="lazy"></figure>
+</section>
+
+<section class="wrap">
+  <div class="air-s"></div>
+  <p>כאן הקצב משתנה לגמרי.<br><span style="font-weight: bold;">
+  שבוע שלם לכל שיעור, <br></span>כדי שלשינוי יהיה מספיק זמן להיכנס פנימה ולהישאר.</p>
+</section>
+
+<section class="wrap">
+  <div class="air-s"></div>
+  <h2 class="sec">ששה עשר השבועות של <span class="nm">יודעת<br></span><span class="nm"><span data-ed="1" style="color: rgb(13, 18, 44); font-weight: normal; font-size: 18px;">תלחצי על התיבות כדי לראות את הסילבוס בהרחבה:)</span></span></h2>
+
+  <details open><summary>שבוע 1 · איך לחיות עכשיו כמו האשה העתידית שאת<span class="hk">את מתעוררת בבוקר לתוך האשה שרצית להיות, לא לתוך רשימת המשימות.</span></summary>
+  <div class="body"><p>מציירות תמונת מציאות מדויקת - מי את כשאת בטובה שלך. עובדים על לנהל את האנרגיה שלך ולהתמקד בה, וזה מה שמזיז את האנרגיה שלו תוך שניות. ותרגול יומי קצר שמחזיק את זה גם בשבוע עמוס.</p></div></details>
+
+  <details><summary>שבוע 2 · מחסרה לשלמה<span class="hk">הרוגע שחיכית שהוא ייתן לך - מגיע ממך, ואז פתאום מגיע גם ממנו.</span></summary>
+  <div class="body"><p>אימון מודעות "סוף יום" שלוקח שבע דקות. דף תרגול לרגעי אמת, לשימוש בזמן אמת ולא אחר כך. ומה שנפתח בבית כשאת לא ממתינה לאישור שלו כדי להיות בשמחה.</p></div></details>
+
+  <details><summary>שבוע 3 · לחיות חיים של עונג<span class="hk">רגע שהיה מפיל אותך הופך לרגע של עונג, ואת מרגישה את זה בגוף.</span></summary>
+  <div class="body"><p>איך נגמרת ההתמכרות למילוי חוסר מבחוץ.<br>
+  הפיכת רגע של חוסר לחוויית עונג - שיטה, לא הלך רוח.<br>
+  וחוסן שנשאר איתך גם כשמשהו נלקח.</p></div></details>
+
+  <details class="soak"><summary><span class="soaktag">שיעור הטמעה</span>שבוע 4 · הטמעה: ריפוי בהלת החוסר<span class="hk">במקום הבהלה שקמה בך כשהוא מתרחק - יש ביטחון שקט שהקשר מחזיק.</span></summary>
+  <div class="body"><p>שני שיעורי הטמעה על כל מה שנפתח בשלושת השבועות הראשונים. עובדים על קבלה עצמית וראויות - להרגיש שווה בלי להוכיח. והשקט הזה מדבק, הוא נרגע יחד איתך.</p></div></details>
+
+  <details><summary>שבוע 5 · מיומנות הקסם הנשית<span class="hk">את מזיזה מצב שלם בלי לומר עליו מילה, ונהנית מזה.</span></summary>
+  <div class="body"><p>מיומנות הקסם: להשפיע על האנרגיה בחדר לפני שנפתח דיון. משחק האחריות - איפה הכוח שלך מתחיל, ואיפה את משוחררת. ותרגול לרגעים שבהם את מאבדת שליטה, כי הם יבואו.</p></div></details>
+
+  <details><summary>שבוע 6 · אשה בביטוי עצמי מקסימלי<span class="hk">את אומרת את מה שיש לך לומר, והוא מתקרב - וזו התחושה הכי טובה שיש.</span></summary>
+  <div class="body"><p>נפרדות והתקרבות: למה דווקא כשאת שלמה עם עצמך הוא רוצה אותך יותר. הרשות לבטא רצון, גבול, ציפייה וכאב - ארבעה דברים שרוב הנשים מחזיקות בפנים. ואיך אומרים אותם כך שהאוויר בחדר מתרכך ולא מתקשה.</p></div></details>
+
+  <details><summary>שבוע 7 · אשה עם רצונות<span class="hk">הרצון שלך נשמע כמו הזמנה, והוא רוצה להיות זה שנותן.</span></summary>
+  <div class="body"><p>הרצון כאוצר - מה נפתח בך כשאת מפסיקה להתנצל עליו. ביטוי רצון ממגנט: אותה בקשה בדיוק, בניסוח שמעורר בו רצון. ואיך מבקשים שוב אחרי "לא", בלי להיסגר ובלי להתחנן.</p></div></details>
+
+  <details><summary>שבוע 8 · על גבולות בזוגיות שלך<span class="hk">את מציבה גבול בלי פחד, ומגלה שהקרבה גדלה בדיוק שם.</span></summary>
+  <div class="body"><p>למה גבול מרגיש מסוכן, ומה קורה ברגע שהוא נאמר בלי איום. איך מציבים אותו כך שהוא לא נשמע כמו סירוב אלא כמו עצמיות. ומה זה מעיר בו - דווקא כאן נפתח אצלו הרצון לשמור עלייך.</p></div></details>
+
+  <details><summary>שבוע 9 · אשה שיוצרת מציאות<span class="hk">את מצפה לטוב, והוא מתחיל להגיע - זו ההרגשה הכי משכרת בתהליך.</span></summary>
+  <div class="body"><p>הציפייה כמנוע: למה מה שאת מחזיקה בפנים קובע מה יקרה בחוץ. איך מחזיקים ציפייה לטוב גם כשהמציאות עוד לא השתנתה. והרגע שבו את מזהה שמשהו קרה בגללך, בלי שעשית כלום.</p></div></details>
+
+  <details class="soak"><summary><span class="soaktag">שיעור הטמעה</span>שבוע 10 · הטמעה: ביטוי עצמי נשי בזוגיות<span class="hk">לא הספקת ליישם הכל? זה בדיוק השבוע שנועד לך.</span></summary>
+  <div class="body"><p>מפת הביטוי העצמי - כל מה שנפתח בשבועות 6 עד 9, במקום אחד.<br>
+  מתי לבטא רצון, מתי גבול, מתי ציפייה ומתי כאב.<br>
+  זה לא אותו דבר.<br>
+  ומה קורה בבית כשאת כבר לא מתלבטת.</p></div></details>
+
+  <details><summary>שבוע 11 · איך להפוך רגעי כאב לרגעים שיוצרים קרבה<span class="hk">את משתפת אותו בכאב, והוא מתקרב - במקום להתגונן או להיעלם.</span></summary>
+  <div class="body"><p>ההבדל בין להאשים לבין לבטא.<br>
+  שתי גרסאות של אותו משפט בדיוק.<br>
+  הרגע שבלעת ולא אמרת - כאן את לומדת מה לעשות איתו במקום זה.<br>
+  ואיך הרצון לפייס עולה ממנו, מעצמו, בלי שביקשת.</p></div></details>
+
+  <details><summary>שבוע 12 · הקשבה רומנטית<span class="hk">הוא לא מדבר, או שאף אחת עוד לא באמת שמעה אותו.</span></summary>
+  <div class="body"><p>הקשבה למסר הלב: מה נמצא מתחת למשפט שהרגיז אותך. למה דווקא המשפטים הצורמים הם אלה שמחביאים את הרצון בך. ומה נפתח אצלו כשהוא מרגיש מובן פעם אחת באמת.</p></div></details>
+
+  <details><summary>שבוע 13 · על קבלה שמעוררת שפע<span class="hk">את מקבלת בחן, והוא רוצה לתת לך עוד - וזה עונג צרוף.</span></summary>
+  <div class="body"><p>למה כל כך קשה לקבל, ומה נחסם בקשר כשלא מקבלים. "מברשת הקסם" - כלי קצר שהופך נתינה קטנה שלו לרצון לתת עוד. והשמחה שנכנסת לבית כשהוא מרגיש שהנתינה שלו נראית.</p></div></details>
+
+  <details><summary>שבוע 14 · סביבת השראה נשית מנצחת<span class="hk">את מוקפת בנשים שמחזיקות אותך, ולא צריכה להסביר לאף אחת.</span></summary>
+  <div class="body"><p>הפתרון לבדידות בזוגיות - בדידות שקיימת גם בקשר טוב, וכמעט אף אחת לא מדברת עליה. מה באמת עוזר, ומה רק מחזיר אותך לתלונה. ואיך בונים סביבה שממשיכה להחזיק אותך גם אחרי שהמסע נגמר.</p></div></details>
+
+  <details><summary>שבוע 15 · להיות היועצת הזוגית של עצמך<span class="hk">כל רגע מהחיים - את מפרקת אותו לבד ויודעת מה לעשות איתו.</span></summary>
+  <div class="body"><p>שלושה שלבים לדייק רגע אמיתי מהחיים שלך, בלי לשאול אף אחת. הדגמה חיה על רגעים של נשים מהמסע - את רואה את זה קורה מול העיניים. וזה הרגע שכבר לא צריך אותי, כי את שומעת את עצמך.</p></div></details>
+
+  <details><summary>שבוע 16 · איזה זיווג מושלם!<span class="hk">את מסתכלת אחורה ולא מזהה את האשה שהתחילה - וזה מרגש.</span></summary>
+  <div class="body"><p>זוגיות רוחנית: מה הקשר הזה בא ללמד דווקא את שניכם. משימת סיום שמסמנת בכתב מה השתנה, בשבילך. ומשפט אחד שמסכם: החיבור, השמחה והביטחון שלא היו שם בהתחלה.</p></div></details>
+
+
+  <div class="air-s"></div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t62.jpg"><img src="img/t/t62.jpg" alt="קיבלתי בעל חדש וילדים חדשים" loading="lazy" width="760" height="421"></button><button class="tcard" data-full="img/t/t64-v2.jpg"><img src="img/t/t64-v2.jpg" alt="רק בשיטת להיות אשה" loading="lazy" width="760" height="397"></button></div>
+</section>
+
+<div class="jumpwrap"><a class="cta-jump" href="#hatzaa"><span class="j1">לחצי כדי לראות את שתי הדרכים להצטרף למסע</span></a></div>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <h2 class="sec">מה בדיוק את מקבלת ב<b class="nm">יודעת</b></h2>
+  <div class="cards small icons">
+    <div class="card"><img src="img/ic-130/chapters.png" alt="" width="130" height="143" loading="lazy"><h4>שיעור שבועי, מחולק לפרקים</h4><p>כדי שיהיה לך נח ללמוד - כל שיעור בנוי מפרקים נפרדים - פרק א׳, פרק ב׳, וכן הלאה. לפעמים שניים, לפעמים חמישה, לפי השיעור.</p></div>
+    <div class="card"><img src="img/ic-130/clock.png" alt="" width="130" height="133" loading="lazy"><h4>כשעה וחצי עד שעתיים לשיעור</h4><p>ויש לך שבוע שלם. את מחלקת אותו איך שנוח לך - פרק ביום, שניים בערב אחד, או הכל ברצף.</p></div>
+    <div class="card"><img src="img/ic-130/worksheets.png" alt="" width="130" height="128" loading="lazy"><h4>דפי סיכום לכל שיעור</h4><p>מסודרים ומעוצבים, להדפסה.<br>
+  כדי שתוכלי לצאת עם הרעיונות מהמסך אל היום שלך.</p></div>
+    <div class="card"><img src="img/ic-130/audio.png" alt="" width="130" height="137" loading="lazy"><h4>גם באודיו</h4><p>לכל פרק יש גם קובץ שמע, להאזנה בנסיעה, בהליכה או תוך כדי עבודות הבית.</p></div>
+    <div class="card"><img src="img/ic-130/coach.png" alt="" width="130" height="130" loading="lazy"><h4>המאמנת האישית שלך</h4><p>מלווה אותך גם כאן, בזמן אמת, בדיוק כשעולה סיטואציה שאת לא בטוחה מה לעשות איתה.</p></div>
+    <div class="card"><img src="img/ic-130/download.png" alt="" width="130" height="142" loading="lazy"><h4>גישה לדרייב והורדה</h4><p>אפשר להוריד את כל השיעורים ודפי הסיכום ולשמור אותם אצלך לתמיד, בלי תאריך תפוגה.</p></div>
+    <div class="card"><img src="img/ic-130/access.png" alt="" width="130" height="137" loading="lazy"><h4>שנה שלמה באתר</h4><p>הגישה שלך פתוחה לשנה, ואפשר לחזור לשיעור בכל שלב בחיים.</p></div>
+    <div class="card"><img src="img/ic-130/pace.png" alt="" width="130" height="136" loading="lazy"><h4>בקצב שלך</h4><p>אין שידורים חיים שצריך להספיק, ואין מה לפספס. פשוט לומדת בקצב שלך.<br></p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="air-s"></div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t38.jpg"><img src="img/t/t38.jpg" alt="התחתנתי מחדש אחרי שש עשרה שנים" loading="lazy" width="760" height="208"></button><button class="tcard" data-full="img/t/t47.jpg"><img src="img/t/t47.jpg" alt="כמעט כל מה שאני מבקשת אני מקבלת" loading="lazy" width="760" height="276"></button></div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <div class="coachhero">
+    <div class="chimg"><img src="img/coach-bot-2.jpg" alt="המאמנת האישית - הדמות של הבוט" width="600" height="900" loading="lazy"></div>
+    <div class="chtext">
+      <p class="blead chlead"><span data-ed="1" style="font-size: 27px;">בואי נדבר שניה על חווית הלימוד החדשנית שיצרנו לך,<br>
+  עם </span></p>
+      <h2 class="sec chname" id="sec14"><span data-ed="1" style="font-size: 50px; color: rgb(166, 47, 125);">המאמנת <br>האישית הדיגיטלית <br>שלך</span></h2>
+      <div class="stats chstats"><div><p class="sb"><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 18px;">24/7</span></p><p class="ss">זמינה לך בכל שעה ומקום</p></div><div><p class="sb"><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 18px;">בשלב שלך</span></p><p class="ss">יודעת איפה את בלימוד הקורס</p></div><div><p class="sb"><span data-ed="1" style="color: rgb(201, 21, 93); font-size: 18px;">בשפה שלנו</span></p><p class="ss">מאומנת לדבר את הדרך שלנו</p></div></div>
+    </div>
+  </div>
+  <p><strong>אשה ללא מאמץ היא לא רק קורס. זו מיומנות נרכשת.</strong><br>ומיומנות לומדים בתוך החיים, לא בתוך שיעור.</p>
+  <p><span data-ed="1" style="font-size: 27px;">ובדיוק בשביל זה נוצרה <strong>המאמנת האישית שלך</strong> - <br></span>מאמנת דיגיטלית שנבנתה במיוחד לפי שפת הקורס, שלבי התהליך, המשימות וחוקי המשיכה.</p>
+  <p>היא <strong>מלווה אותך לאורך כל התהליך, וגם תקופה אחריו</strong>, כדי שתוכלי להיכנס אליה בזמן אמת. זמינה לך לכל שיתוף ושאלה בדיוק כשעולה סיטואציה, מתח, ריצוי, ניהול, כאב או בלבול. ולהתייעץ.</p>
+  <p>והכי חשוב - היא מאמנת, לא יועצת:)<br>היא לא רק זורקת תשובה ושולחת אותך להתמודד,<br><span style="font-weight: bold;">היא מאמנת אותך:</span><br>שואלת אותך שאלות מדויקות, מחזירה אותך לשלב שבו את נמצאת בקורס,
+  ועוזרת לך להבין מה קורה בתוכך.</p>
+
+  <ul class="perks">
+      <li>מענה אישי בכל שעה, גם באחת בלילה</li>
+      <li>היא יודעת באיזה שלב את נמצאת בקורס</li>
+      <li>מאומנת לשוחח איתך ולעזור לך בשפה של הקורס ובשפה של שושי</li>
+      <li>הדרך לחוות ידע ותרגול בזמן אמת בתוך סיטואציות מהחיים</li>
+      <li>את בוחרת אם השיחה נשמרת אצלי או דיסקרטית לגמרי</li>
+    </ul>
+
+  <div class="botway">
+    <b>ואיך נכנסים אליה?</b>
+    <p>בלחיצה על קישור אחד שמחכה לך בתוך הקורס.<br>
+    בלי להוריד אפליקציה, בלי להתקין כלום, ובלי לפתוח חשבון בשום מקום.<br>
+    מהטלפון או מהמחשב, מתי שבא לך.</p>
+  </div>
+
+  <p class="land">ככה יש לך מישהי לדבר איתה בדיוק ברגע שזה קורה, ולא שבוע אחרי.</p>
+
+  <figure class="chatshot stage" aria-label="תשובות אמיתיות של המאמנת האישית">
+    <div class="cs-phone">
+      <div class="cs-status" aria-hidden="true"><span>9:41</span><span class="cs-bars"><i></i><i></i><i></i><b></b></span></div>
+      <img class="cs-band" src="img/bot-banner.jpg" alt="" width="1280" height="507" loading="lazy">
+      <div class="cs-head"><span class="cs-title">המאמנת האישית שלך</span><span class="cs-sub">אשה ללא מאמץ · ממגנטת ויודעת</span></div>
+      <div class="cs-chat">
+        <p class="cs-hello">ספרי לי מה עולה בך.<br>אם תגידי באיזה שבוע את בתהליך, אוכל ללוות אותך מדויק יותר.</p>
+        <p class="cs-msg cs-me">אני בשבוע 2. הוא חזר מהעבודה, אמר שלום והלך ישר לטלפון. כל הערב חיכיתי שישאל איך היה לי. בסוף התפוצצתי עליו על משהו קטן לגמרי, ואני אפילו לא יודעת למה.</p>
+        <div class="cs-row"><img class="cs-av" src="img/bot-avatar.jpg" alt="" width="144" height="144" loading="lazy"><p class="cs-msg">אני שומעת כמה חיכית לרגע קטן של תשומת לב, וכמה זה כאב כשהוא לא בא. וזה לא מפתיע שזה יצא בסוף על משהו אחר לגמרי - המתח לא נעלם כשלא מדברים עליו, הוא רק מחפש לאן לצאת.<br><br>בואי נעצור רגע על הרגע האמיתי, לפני הפיצוץ. <strong>כשהוא הלך לטלפון - מה בדיוק כאב לך שם?</strong></p></div>
+        <p class="cs-msg cs-me">שאני חשובה לו. שגם אחרי יום שלם שבו אני מחזיקה את כל הבית, מישהו שם לב אליי.</p>
+        <div class="cs-row"><img class="cs-av" src="img/bot-avatar.jpg" alt="" width="144" height="144" loading="lazy"><p class="cs-msg">זה רצון כל כך פשוט וכל כך אנושי - שמישהו יראה אותך אחרי יום שלם שבו את נותנת לכולם.<br><br>ושימי לב לרגע למשהו: מהרגע שהוא הלך לטלפון ועד שהתפוצצת, עבר זמן שבו המתח רק גדל בפנים, בלי מילה. <strong>מה קרה בך באותו רגע עצמו, כשראית אותו הולך לטלפון - מה עלה לך בגוף או במחשבה?</strong></p></div>
+      </div>
+      <div class="cs-foot" aria-hidden="true"><div class="cs-form"><span class="cs-field">כתבי כאן</span><span class="cs-send">↑</span></div><span class="cs-sign">שושי זליקוביץ׳</span></div>
+    </div>
+    <p class="cs-cap">תשובות אמיתיות של המאמנת האישית</p>
+  </figure>
+
+  <div class="air-s"></div>
+  <p class="fine">* המאמנת האישית היא מאמנת דיגיטלית מבוססת בינה מלאכותית, שנבנתה ואומנה על ידי שושי לפי תכני הקורס. היא אינה מחליפה מאמנת אנושית, טיפול או ייעוץ מקצועי, ותשובותיה אינן מהוות המלצה רפואית או טיפולית. הכניסה אליה היא בקישור, מהדפדפן בטלפון או במחשב - בלי אפליקציה, בלי התקנה ובלי חשבון. בכניסה את בוחרת אם השיחה נשמרת - כדי שהיא תזכור אותך בפעם הבאה, ואז גם אני יכולה לראות אותה - או מתנהלת באופן דיסקרטי לגמרי, ואז היא לא נשמרת ואף אחת לא רואה אותה. </p>
+</section>
+
+<!-- ======== חלק ד׳ ======== -->
+<div class="part" id="hatzaa"><h2>המסע שהכנתי לך<span data-ed="1" style="color: rgb(223, 23, 103);">.</span></h2></div>
+
+<section class="wrap">
+  <div class="qhead"><h2><span data-ed="1" style="color: rgb(13, 18, 44);">הנה סיכום כל מה שאת מקבלת,<br><span style="font-weight: normal;"><span data-ed="1" style="font-size: 21px;">וגם מה ההשקעה שלך בעצמך בכל אחד משניהם:)</span></span></span></h2></div>
+
+  <div class="twocols">
+    <div class="tcol">
+      <img src="img/path/p-mag.jpg" alt="ממגנטת" width="760" height="428" loading="lazy">
+      <div class="tcb">
+        <p class="tmeta">4 שבועות · שיעור יומי</p>
+        <ul>
+          <li>23 שיעורי וידאו, שיעור לכל יום</li>
+          <li>23 כרטיסי חוקי המשיכה</li>
+          <li>דפי עבודה ומשימות לכל שיעור</li>
+          <li>המאמנת האישית הדיגיטלית למשך 3 חודשים</li>
+          <li>שנה באתר, והורדה לשמירה אצלך לתמיד</li>
+        </ul>
+        <div class="tinv"><span>ההשקעה שלך</span><b>2,200 ש״ח</b></div>
+      </div>
+    </div>
+    <div class="tcol">
+      <img src="img/path/p-yod.jpg" alt="יודעת" width="760" height="428" loading="lazy">
+      <div class="tcb">
+        <p class="tmeta">16 שבועות · שיעור שבועי</p>
+        <ul>
+          <li>16 שיעורים, שיעור לכל שבוע</li>
+          <li>דפי סיכום שמלווים אותך גם אחרי הצפיה</li>
+          <li>המאמנת האישית הדיגיטלית למשך 4 חודשים</li>
+          <li>שנה באתר, והורדה לשמירה אצלך לתמיד</li>
+        </ul>
+        <div class="tinv"><span>ההשקעה שלך</span><b>2,700 ש״ח</b></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="seqnote"><strong>חשוב לדעת:<br></strong> <span style="font-weight: bold;">יודעת</span> היא השלב השני של המסע, <br>והיא נבנית על מה שלומדים <span style="font-weight: bold;">בממגנטת</span>.<br><span style="font-weight: bold;">
+  לכן אפשר להצטרף ליודעת <br>רק אחרי שלמדת בממגנטת.</span></p>
+  <div class="sumbox"><span>שני התהליכים ביחד</span><b>4,900 ש״ח</b></div>
+  <p class="sumnext">אבל חכי, הכנתי לך משהו שווה<br>אם את לוקחת את שני התהליכים.</p>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <div class="qhead"><h2>רגע, יש פינוקים שמחכים לך:)</h2></div>
+  <p class="blead">כל מי שנכנסת מקבלת ממני מתנה.<br><span style="font-weight: bold;"><span data-ed="1" style="font-size: 25px;">סדרות שלמות במתנה, <br>שהן קורסים בפני עצמם שיצרתי לבוגרות.</span></span><br>וכל אחת פותחת נושאים ואימונים נוספים מעבר לתכני התהליכים.</p>
+
+  <div class="onebonus wide">
+    <img src="img/bonus/b-write.jpg" alt="לכתוב את עצמי לדעת" width="900" height="506" loading="lazy">
+    <div>
+      <span class="obtag">המתנה לכל מי שנכנסת</span>
+      <h4>לכתוב את עצמי לדעת</h4>
+      <p><strong>30 שיעורים על איך להפוך את הכתיבה שלך לכלי ריפוי.</strong> דף, עט, ושלוש דקות - וברגע שמשהו מטלטל והלב נסגר, את כבר לא צריכה לחכות שמישהו יפתח לך אותו. את מוציאה את המועקה בעצמך, ומגלה תשובה שלך בדרך כל כך מרפאה שלא היתה עולה בשום דרך אחרת.</p>
+      <p class="bvline"><span class="bval">שווי הקורס · 1,000 ש״ח</span></p>
+    </div>
+  </div>
+
+  <p class="blead mid"><span data-ed="1" style="font-size: 30px;">ו - <br><span style="font-size: clamp(18px, 3.2vw, 22px);">מי שלומדת איתי גם ב<span data-ed="1" style="color: rgb(166, 47, 125);">ממגנטת</span> וגם ב<span data-ed="1" style="color: rgb(166, 47, 125);">יודעת<br>מקבלת כבונוס במתנה גם את שני הקורסים האלו:</span></span></span><span style="font-size: clamp(18px, 3.2vw, 22px);"><span data-ed="1" style="color: rgb(166, 47, 125);"></span></span></p>
+
+  <div class="bgrid two">
+    <article class="bcard">
+      <img src="img/bonus/b-parents.jpg" alt="הורות, זוגיות, ומה שביניהן" width="900" height="506" loading="lazy">
+      <div class="bbody">
+        <div class="btop"><h3>הורות, זוגיות, ומה שביניהן</h3><span class="bval">שווי · 1,000 ש״ח</span></div>
+        <p class="bben">יש רגעים שבהם את רואה אותו עם הילדים ומשהו בך נסגר, ופתאום את כבר לא מצליחה להעריך את האיש שאת אוהבת.</p>
+        <p>שבעה שיעורים על המשולש - את, הוא, והילדים. הרגעים הבלתי נסבלים, הביקורת ההדדית, הפחד והבדידות שנשים כמעט לא מדברות עליהם בחוויה ההורית הזו. והכי חשוב - איך להחזיר את ההרמוניה, את הסמכות שלו, את הביטחון שלו בעצמו, את הביטחון שלך בו ובקשר שלו עם הילדים, ואת שיתוף הפעולה של הילדים עם שניכם - מתוך חיבור ואהבה, בלי לקחת על עצמך את כל האחריות.</p>
+      </div>
+    </article>
+    <article class="bcard">
+      <img src="img/bonus/b-money.jpg" alt="אשה פרנסה שפע" width="900" height="506" loading="lazy">
+      <div class="bbody">
+        <div class="btop"><h3>אשה. פרנסה. שפע.</h3><span class="bval">שווי · 1,000 ש״ח</span></div>
+        <p class="bben">הכסף בבית מפסיק להיות הדבר שאת נושאת על הגב, ואת מפסיקה לפחד על הקיום.</p>
+        <p>15 שיעורים שנותנים לך מבט חדש לגמרי על מהי תנועת פרנסה של אשה. איפה נגמרת האחריות שלך ואיפה מתחילה שלו, איך פועלים עם כסף ללא מאמץ, ואיך נראית התנהלות כלכלית שמגיעה מחיבור נשי מדויק ובריא במקום מפחד ומדחיפה.</p>
+      </div>
+    </article>
+  </div>
+
+  <div class="sumbox"><span>שווי שלשת קורסי הבונוס</span><b>3,000 ש״ח</b></div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <div class="curious">
+    <p class="c1">ועכשיו, הנה בשבילך - איך אפשר ללמוד את כל הטוב הזה?</p>
+    <p class="c2"><span data-ed="1" style="color: rgb(13, 18, 44); font-size: 30px;">מאיפה מתחילים?</span></p>
+    <p class="c3">ומה ההצעה הכי מפנקת שיש לי בשבילך?</p>
+  </div>
+  <div class="subframe"><p><span data-ed="1" style="color: rgb(201, 21, 93);">שתי</span> דרכים לעשות את המסע שלך.<br>את תבחרי מה מדויק לך.</p></div>
+
+  <div class="paths">
+    <div class="path">
+      <div class="phd"><span class="pn">א</span><h3>המסע הראשון</h3></div>
+      <div class="pstack">
+        <img src="img/path/p-mag.jpg" alt="ממגנטת" width="760" height="428" loading="lazy">
+        <span class="pplus">+</span>
+        <div class="bwrap"><img src="img/bonus/b-write.jpg" alt="לכתוב את עצמי לדעת" width="900" height="506" loading="lazy"><span class="bribbon">קורס בונוס</span></div>
+      </div>
+      <p class="pway">
+        <span></span><span data-ed="1" style="font-size: 20px;"><span>להתחיל בבסיס הדרך <span data-ed="1" style="color: rgb(201, 21, 93);"><span style="font-weight: bold;">בממגנטת.</span></span></span>
+        <span>ולהחליט בהמשך אם להמשיך.</span>
+        <span class="hi"><span data-ed="1" style="font-size: 21px;">ובונוס אחד במתנה</span></span></span><span class="hi"></span>
+      </p>
+    </div>
+
+    <div class="parrow"><span>או</span></div>
+
+    <div class="path full">
+      <div class="phd"><span class="pn">ב</span><h3>המסע השלם</h3></div>
+      <div class="pstack">
+        <img src="img/path/p-mag.jpg" alt="ממגנטת" width="760" height="428" loading="lazy">
+        <span class="pplus">+</span>
+        <img src="img/path/p-yod.jpg" alt="יודעת" width="760" height="428" loading="lazy">
+        <span class="pplus">+</span>
+        <div class="bwrap"><img src="img/bonus/b-write.jpg" alt="לכתוב את עצמי לדעת" width="900" height="506" loading="lazy"><span class="bribbon">קורס בונוס</span></div>
+        <div class="bwrap"><img src="img/bonus/b-parents.jpg" alt="הורות, זוגיות, ומה שביניהן" width="900" height="506" loading="lazy"><span class="bribbon">קורס בונוס</span></div>
+        <div class="bwrap"><img src="img/bonus/b-money.jpg" alt="אשה פרנסה שפע" width="900" height="506" loading="lazy"><span class="bribbon">קורס בונוס</span></div>
+      </div>
+      <p class="pway">
+        <span><strong></strong></span><span data-ed="1" style="font-size: 20px;"><span><strong><span data-ed="1" style="font-size: 18px;"></span></strong></span><span data-ed="1" style="font-size: 24px;"><span><strong><span data-ed="1" style="font-size: 20px;">כולל את <span style="color: rgb(223, 23, 103); display: inline !important;">ממגנטת </span>במלואו.</span></strong></span>
+        <span></span></span><span>ואחריו <b class="nm">יודעת.<br></b>עשרים שבועות ברצף אחד.</span>
+        <span class="hi pink"><span data-ed="1" style="font-size: 21px;">ושלשת קורסי הבונוס במתנה</span></span></span><span class="hi pink"></span>
+      </p>
+    </div>
+  </div>
+
+  <div class="pathjumps">
+    <a class="pj full" href="#fulljourney">לכל הפרטים על המסע השלם ↓</a>
+    <a class="pj mag" href="#memagnetet-offer">לכל הפרטים על ממגנטת ↓</a>
+  </div>
+
+  <div class="qhead"><h2>ולמה שווה לך במיוחד<br>לבחור עכשיו דווקא במסע השלם?</h2></div>
+
+  <div class="twowhy">
+    <div class="why">
+      <span class="wtag">גם</span>
+      <p><span style="font-weight: bold;"><span data-ed="1" style="font-size: 18.5px;">את נכנסת לרצף אחד ועמוק, בלי תחנת התלבטות באמצע.</span></span> <br>כי הרגע שבו עוצרים כדי להחליט מה הלאה הוא בדיוק הרגע שבו החיים נכנסים, והתנופה הולכת לאיבוד.</p>
+    </div>
+    <div class="why">
+      <span class="wtag pink">וגם</span>
+      <p><strong></strong><span data-ed="1" style="font-size: 18.5px;"><strong>כי זה משתלם לך יותר.</strong> </span><br>את מרוויחה שני קורסים בהשקעה יותר משתלמת, שני התהליכים ושלשת קורסי הבונוס, והכל ברצף אחד - בהשקעה שקטנה בהרבה מסכום החלקים.<br>כי אם תתחילי בממגנטת ותרצי להמשיך אחר כך, יודעת בנפרד היא 2,700 ש״ח. במסע השלם היא יוצאת לך 1,200.</p>
+    </div>
+  </div>
+
+  <div class="offer" id="fulljourney">
+    <p class="oname big">אם את מעניקה לעצמך את המסע השלם</p>
+    <p class="osub"><span data-ed="1" style="font-size: 28px;">את מקבלת כך:</span></p>
+    <div class="ostack">
+      <img src="img/path/p-mag.jpg" alt="ממגנטת" width="760" height="428" loading="lazy">
+      <span class="oplus">+</span>
+      <img src="img/path/p-yod.jpg" alt="יודעת" width="760" height="428" loading="lazy">
+    </div>
+    <ul class="olist">
+      <li><b>39 שיעורים</b> · 23 יומיים ב<b class="nm">ממגנטת</b> ועוד 16 שבועיים ב<b class="nm">יודעת</b></li>
+      <li>23 כרטיסי חוקי המשיכה, ודפי עבודה לכל שיעור</li>
+      <li>המאמנת האישית שמלווה אותך במשך 6 חודשים בתהליך</li>
+      <li>שנה שלמה באתר, והורדה לשמירה אצלך</li>
+      <li><b>שלשת קורסי הבונוס</b> · שווי 3,000 ש״ח</li>
+    </ul>
+
+    <p class="obhead">ושלשת קורסי הבונוס במתנה</p>
+    <div class="obmini">
+      <div><img src="img/bonus/b-write.jpg" alt="" width="900" height="506" loading="lazy"><span>לכתוב את עצמי לדעת</span><em>30 שיעורים</em><i class="miniv">שווי 1,000 ש״ח</i></div>
+      <div><img src="img/bonus/b-parents.jpg" alt="" width="900" height="506" loading="lazy"><span>הורות, זוגיות, ומה שביניהן</span><em>7 שיעורים</em><i class="miniv">שווי 1,000 ש״ח</i></div>
+      <div><img src="img/bonus/b-money.jpg" alt="" width="900" height="506" loading="lazy"><span>אשה. פרנסה. שפע.</span><em>15 שיעורים</em><i class="miniv">שווי 1,000 ש״ח</i></div>
+    </div>
+
+    <p class="ohead">והנה למה זו בחירה משתלמת</p>
+    <div class="obreak">
+      <div class="brow"><span><b class="nm">ממגנטת</b></span><b>2,200 ש״ח</b></div>
+      <div class="brow"><span><b class="nm">יודעת</b></span><b>2,700 ש״ח</b></div>
+      <div class="brow"><span>שלשת קורסי הבונוס</span><b>3,000 ש״ח</b></div>
+    </div>
+    <div class="brow sum"><span>סך הכל</span><b>7,900 ש״ח</b></div>
+    <p class="oinstead">במקום להשקיע</p>
+    <p class="owas2">7,900 ש״ח</p>
+    <p class="oinv">את משקיעה <b>רק</b></p>
+    <p class="onow2">3,400 ש״ח</p>
+    <p class="opay">או 10 תשלומים של 340 ש״ח<br><br><span data-ed="1" style="font-size: 18px;">את למעשה נכנסת <span style="font-weight: bold;">לממגנטת</span> ומקבלת את <span style="font-weight: bold;">יודעת</span> בפחות מ<span style="font-weight: bold;">חצי מחיר </span><br>(ב-1,200 במקום ב-2,700)<br>וגם מקבלת 3 קורסי בונוס במתנה</span><br><br><span data-ed="1" style="font-size: 18px;">אז - </span></p>
+    <p class="osave">את חוסכת <b>4,500 ש״ח</b></p>
+    <p class="ctalead">לחצי על הכפתור כדי להצטרף ולהתחיל מיד <br>את המסע הנשי שלך לנשיות ממגנטת</p>
+    <a class="cta" href="https://secure.cardcom.solutions/EA/EA5/VvZTYa029UCqUVFvoUDVuA">אני בוחרת במסע השלם ·&nbsp;ממגנטת&nbsp;+&nbsp;יודעת</a>
+  </div>
+
+  <div class="air-s"></div>
+  <div class="qhead"><h2>ויש לך כמובן גם אפשרות<br>להתחיל עם <b class="nm">ממגנטת</b> בלבד</h2></div>
+  <p class="sumlead">הנה מה שאת מקבלת ומה ההשקעה שלך:</p>
+
+  <div class="offer light" id="memagnetet-offer">
+    <img class="pbanner" src="img/path/p-mag.jpg" alt="ממגנטת" width="760" height="428" loading="lazy">
+    <p class="oname big">המסע הראשון</p>
+    <p class="osub">4 שבועות · חוויית אימון נשית · שיעור יומי</p>
+    <ul class="olist">
+      <li><b>23 שיעורי וידאו</b>, שיעור לכל יום</li>
+      <li>23 כרטיסי חוקי המשיכה, ודפי עבודה לכל שיעור</li>
+      <li>המאמנת האישית הדיגיטלית למשך 3 חודשים</li>
+      <li>שנה שלמה באתר, והורדה לשמירה אצלך</li>
+      <li><b>קורס בונוס אחד</b> · שווי 1,000 ש״ח</li>
+    </ul>
+
+    <p class="obhead">והבונוס שלך במתנה</p>
+    <div class="obmini one">
+      <div><img src="img/bonus/b-write.jpg" alt="" width="900" height="506" loading="lazy"><span>לכתוב את עצמי לדעת</span><em>30 שיעורים</em><i class="miniv">שווי 1,000 ש״ח</i></div>
+    </div>
+
+    <p class="ohead">והנה החשבון</p>
+    <div class="obreak">
+      <div class="brow"><span><b class="nm">ממגנטת</b></span><b>2,200 ש״ח</b></div>
+      <div class="brow"><span>קורס הבונוס</span><b>1,000 ש״ח</b></div>
+      <div class="brow sum"><span>סך הכל</span><b>3,200 ש״ח</b></div>
+    </div>
+    <p class="oinstead">את מקבלת את קורס הבונוס במתנה <br>אז במקום להשקיע</p>
+    <p class="owas2">3,200 ש״ח</p>
+    <p class="oinv">את משקיעה <b>רק</b></p>
+    <p class="onow2">2,200 ש״ח</p>
+    <p class="opay">או 10 תשלומים של 220 ש״ח</p>
+    <p class="osave">וקורס הבונוס <b>במתנה</b></p>
+
+    <p class="ctalead">לחצי על הכפתור כדי להצטרף <br>ולהתחיל מיד את המסע הנשי שלך לנשיות ממגנטת</p>
+    <a class="cta purple" href="https://secure.cardcom.solutions/EA/EA5/F2ByMpW70PproDh7Hhg">אני מתחילה במסע הראשון ·&nbsp;ממגנטת</a>
+    <p class="ctalead" style="margin:14px auto 0">וגם זו בחירה מצוינת.<br>הדלת ל<b class="nm">יודעת</b> פתוחה לך תמיד, בכל שלב.</p>
+  </div>
+
+  <div class="air-s"></div>
+  <p class="backlead">רגע, את מתלבטת? לחצי על הכפתור כדי לראות כל מה שמחכה לך:</p>
+  <a class="cta-ghost back" href="#fulljourney">תזכירי לי שוב מה מחכה לי במסע השלם ·&nbsp;ממגנטת&nbsp;+&nbsp;יודעת</a>
+
+  <div class="air-s"></div>
+  <div class="qhead"><h2 id="ech-mitztarfim">איך מצטרפים?</h2></div>
+  <p class="joinfmt">התהליך הוא דיגיטלי ונפתח לך מיד עם ההצטרפות.<br>
+  שיעורי וידאו שאפשר גם להאזין להם בנסיעה, מהטלפון או מהמחשב, בקצב שלך.</p>
+  <p class="joinlead">הצטרפות הכי מהירה - בכרטיס אשראי, עד 10 תשלומים.</p>
+  <div class="joinbtns">
+    <a class="cta" href="https://secure.cardcom.solutions/EA/EA5/VvZTYa029UCqUVFvoUDVuA">לחצי להצטרפות למסע השלם ·&nbsp;ממגנטת&nbsp;+&nbsp;יודעת</a>
+    <a class="cta purple" href="https://secure.cardcom.solutions/EA/EA5/F2ByMpW70PproDh7Hhg">לחצי להתחיל במסע הראשון ·&nbsp;ממגנטת</a>
+  </div>
+  <p class="joinalt">ואם נוח לך יותר - אפשר להצטרף גם בתשלום אחד, בהעברה בנקאית או בביט.<br>
+  כתבי לנו ונשלח לך את הפרטים.</p>
+
+  <div class="air-s"></div>
+  <p class="reachout">לא בטוחה מה מדויק לך משתי הדרכים?<br>בואי נדבר, ונבחר ביחד.</p>
+  <p class="reachout small">צריכה עזרה טכנית בהצטרפות?<br><span data-ed="1" style="color: rgb(13, 18, 44); text-decoration: underline; text-decoration-color: rgb(243, 110, 33); text-decoration-thickness: 3px; text-underline-offset: 7px;">בואי נדבר, ונעשה את זה ביחד.</span></p>
+  <div class="cta-row">
+    <a class="cta-ghost" href="https://wa.me/972504244200?text=%D7%94%D7%99%20%D7%A9%D7%95%D7%A9%D7%99%2C%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%90%D7%A9%D7%94%20%D7%9C%D7%9C%D7%90%20%D7%9E%D7%90%D7%9E%D7%A5" target="_blank" rel="noopener">שיחה בווטסאפ עם שושי<span class="vh"> (נפתח בחלון חדש)</span></a>
+    <a class="cta-ghost" href="mailto:shoshi@shoshizelikovith.com?subject=%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%90%D7%A9%D7%94%20%D7%9C%D7%9C%D7%90%20%D7%9E%D7%90%D7%9E%D7%A5">שליחת הודעה במייל</a>
+  </div>
+
+  <div class="air-s"></div>
+  <p class="propo"><strong>ורגע אחד של פרופורציה:</strong><br>המסע השלם הוא <strong>340 ש״ח בחודש</strong>. פחות ממה שעולה פגישה אחת אצל יועץ זוגי.
+<br> רק שכאן, בסוף, את לא צריכה לקבוע את הפגישה הבאה. <strong>את היועצת:)</strong></p>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wrap">
+  <h2 class="sec" id="sec21">האחריות שלי כלפייך</h2>
+  <div class="promise">
+    <div class="ptext">
+      <span class="pk">בלי סיכון מצידך</span>
+      <h3>שלושה שיעורים לבדוק.<br>שבוע להחליט.</h3>
+      <p>תיכנסי, תצפי בשלושת השיעורים הראשונים ב<span style="font-weight: bold;">ממגנטת</span>, אפילו גם תעשי את המשימות.<br>
+      ואם תרגישי שזו לא הדרך שלך - כתבי לנו תוך 7 ימים מיום ההצטרפות, ותקבלי בחזרה את כל מה ששילמת, גם במסע השלם.</p>
+      <p>בלי לתרץ ובלי להסביר.<br>בלי טפסים, ובלי שתצטרכי להוכיח לי כלום.</p>
+      <p class="pend">כי אני באמת לא רוצה שתעשי תהליך שלא מתאים או לא מתחבר או לא משמח אותך.</p>
+    </div>
+    <div class="pseal"><img src="img/guarantee.jpg" alt="" width="700" height="700" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- ======== חלק ה׳ ======== -->
+<div class="part"><h2>לפני שאת מחליטה</h2></div>
+
+<section class="wide">
+  <div class="qhead"><h2>בואי נבדוק ביחד<br>האם הדרך הזו מדויקת לך</h2></div>
+  <p style="text-align:center;max-width:640px;margin:0 auto 2em">הדרך הזו לא נועדה לכל אחת, וזה בסדר גמור.<br>
+  היא נועדה לאשה שיש בה עומק, רצון, אחריות <br>וסקרנות לגלות דרך אחרת לחיות קשר, השפעה ואהבה.</p>
+  <div class="two">
+    <div class="fit yes">
+      <h3><span class="mk" aria-hidden="true">✓</span><br>זו את, אם</h3>
+      <div class="item"><b>את רוצה שזוגיות תהיה יותר מתפקוד</b><p>יש לך הערכה לבית שלך ולמה שיש. ועמוק בפנים את יודעת שזוגיות יכולה להיות הרבה יותר משגרה ואחריות.</p></div>
+      <div class="item"><b>את מבינה ששינוי אמיתי מתחיל מבפנים</b><p>את לא מחפשת עוד משפט שיגרום לו להבין אותך.<br>
+  את מבינה שיש משהו עמוק יותר - באנרגיה שלך, בתודעה שלך, באופן שבו את פוגשת חוסר, כאב ואכזבה.</p></div>
+      <div class="item"><b>את לוקחת אחריות בלי אשמה</b><p>את לא חושבת שהכל תלוי בך, אבל את כן מאמינה שיש לך כוח השפעה עצום.</p></div>
+      <div class="item"><b>את סקרנית, לומדת וחוקרת</b><p>את לא מסתפקת בתשובות שטחיות. אם יש בעולם ידע עמוק יותר על אהבה, קשר, השפעה ומשיכה - את רוצה לדעת אותו.</p></div>
+      <div class="item"><b>את רואה בזוגיות מרחב רוחני</b><p>בית הוא לא רק מקום שמתפקד. יש כאן ברית, יש כאן שכינה, יש כאן עבודת מידות וחיבור לבורא.</p></div>
+      <div class="item" style="margin:0"><b>את מוכנה לעלות קומה</b><p>לא כי את במשבר בהכרח. אלא כי את מרגישה שיש גרסה גבוהה יותר שלך שמחכה לצאת.</p></div>
+    </div>
+    <div class="fit no">
+      <h3><span class="mk" aria-hidden="true">✗</span><br><span data-ed="1" style="color: rgb(13, 18, 44);">זו <span data-ed="1" style="color: rgb(13, 18, 44);">כנראה</span> לא את, אם</span></h3>
+      <div class="item"><b>את מחפשת לגרום לו להשתנות</b><p>הדרך הזו לא מלמדת מניפולציות. לא "איך לגרום לו", ולא "מה להגיד כדי שהוא יעשה".</p></div>
+      <div class="item"><b>את מאמינה שהכל תלוי רק בו</b><p>אם מבחינתך כל שינוי חייב להתחיל ממנו - זה כנראה לא הזמן הנכון.</p></div>
+      <div class="item"><b>את רוצה ידע נחמד בלי לתרגל</b><p>זה לא קורס השראה. הערך נמצא בהטמעה: שיעור, משימה, התבוננות, יישום בחיים.</p></div>
+      <div class="item"><b>את מעדיפה להיות צודקת מאשר משוחררת</b><p>לפעמים הכאב שלנו כל כך צודק שאנחנו נאחזות בו.<br>
+  הדרך הזו מיועדת לאשה שמוכנה לשאול אחרת.</p></div>
+      <div class="item"><b>את לא מאמינה שיש קשר בין פנים לחוץ</b><p>הכל כאן מבוסס על ההבנה שהתודעה, הלב, הכוונה, המתח והרצון שלך משפיעים על מערכות היחסים שלך.</p></div>
+      <div class="item" style="margin:0"><b>את במצב שמצריך ליווי אישי צמוד</b><p>זה לא מחליף טיפול אישי, ייעוץ מקצועי או התערבות במצבי קצה. אם את נמצאת במקום מסוכן או לא יציב - חשוב שתקבלי עזרה מתאימה.</p></div>
+    </div>
+  </div>
+  <div class="air-s"></div>
+  <p class="pull"><strong>ואם מצאת את עצמך ב״זו את, אם״ -<br>
+  זה לא סימן שיש לך בעיה בזוגיות.<br>
+  זה סימן שמחכה בך אשה שמוכנה לעלות קומה.</strong></p>
+  <div class="air-s"></div>
+  <p>ועוד משהו אני רוצה להגיד לך עלייך.</p>
+  <p><span style="font-weight: bold;"></span><span data-ed="1" style="font-size: 21px;"><span style="font-weight: bold;">יש כאן אשה אמיצה.<br></span>
+  </span>אמיצה מספיק כדי <span style="font-weight: bold;">להסתכל פנימה </span>במקום להמשיך להאשים.<br>
+  אמיצה מספיק <span style="font-weight: bold;">לקחת אחריות</span> על החלק שלה, גם כשברור לה לגמרי שיש גם חלק שלו.<br><span style="font-weight: bold;">
+  וזה לא מובן מאליו.<br><br></span>
+  אני רואה את זה, ואני מעריכה את זה.</p>
+
+  <div class="air-s"></div>
+  <div class="tgrid two"><button class="tcard" data-full="img/t/t63.jpg"><img src="img/t/t63.jpg" alt="קרש קפיצה בזוגיות אחרי השיעור" loading="lazy" width="760" height="142"></button><button class="tcard" data-full="img/t/t66.jpg"><img src="img/t/t66.jpg" alt="שבוע של יישום והוא שם לב לשלווה" loading="lazy" width="760" height="327"></button></div>
+  <div class="air-s"></div>
+  <div class="ctawrap"><a class="cta" href="#ech-mitztarfim">אני רוצה להתחיל להתאמן<br>על נשיות ממגנטת ללא מאמץ</a></div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section class="wide faqwrap">
+  <div class="faqgrid">
+  <div class="faqpic"><img src="img/shoshi-notebook.jpg" alt="שושי זליקוביץ׳" width="800" height="1067" loading="lazy"></div>
+  <div class="faqcol">
+  <h2 class="sec">אולי גם את רצית לשאול?</h2>
+  <p class="faqlead">אז הנה.<br>
+  אני פה לכל מה שעולה לך.</p>
+  <h3 class="mini">שאלות שאולי עולות לך על התהליך ועל התוכן</h3>
+  <details><summary>למה זה עובד אחרת מכל מה שכבר ניסיתי?</summary><div class="body"><p>כי בשונה מהרבה דיבורים על השפעה בזוגיות, פה זה לא מתחיל ממנו.<br>
+  לא ממה שהוא צריך להבין, ולא מאיך לגרום לו סוף סוף לראות אותך.<br>
+  זה מתחיל ממך וממיקוד בך ובמה שבשליטתך באמת.<br>
+  אבל לא ממך במובן המאשים של "הבעיה היא את".<br>
+  אלא ממך כמקום של עוצמת השפעה שקטה שלא ידעת שיש בך שפועלת בלי שתתאמצי בכלל,  כשאת מנסה לשנות אותו, את הרבה פעמים מאבדת את המגנט הנשי שלך. וכשאת חוזרת אלייך באמת, את מתחילה לגלות שיש לך דרך אינסופית להשפיע.<br>בנוסף, בהרבה תהליכים יתמקדו אותך על שינויים חיצוניים כמו שינוי דיבור או התנהגות ופה אנחנו מתרגלות שינוי אמיתי שהוא היחיד שמשפיע - שינוי בחוויה הפנימית שלך בלבד (רגשות, מחשבות, גישה וחוויה) שהיא זו שיוצרת את המציאות בינכם.</p></div></details>
+  <details><summary>אבל אם הבעיה היא גם בו, למה שאני אעשה קורס לבד?</summary><div class="body"><p>כי כל עוד את בוחרת להיות בקשר הזה מגיע לך לקבל דרך לעזור לעצמך להתמודד בלב שקט, רגוע ובטוח עם מה שקשה לך בהתנהגות שלו.<br>אני רוצה לתת לך משהו הרבה יותר גדול: את היכולת לא להיות תלויה לגמרי במה שהוא עושה או לא עושה כדי להרגיש שקט, יציבות, ערך וחיבור. ברגע שאת יודעת לפגוש כאב בלי להיבהל, בלי לרדוף ובלי להילחם - את כבר לא אותה אשה, לא מולו ולא בחיים. זה כח מדהים שהוא מתנה ענקית עבורך.<br>
+  וברור שכשאת הופכת לאשה כזו - את מקבלת מתנת השפעה ללא מאמץ, המגנט הפנימי הנשי שלך מתחיל להשפיע עליו, לא תרצי לקבל כזה מגנט שפועל כמו קסם? :)</p></div></details>
+  <details><summary>ומה אם הוא בכלל לא משתף פעולה?</summary><div class="body"><p>את לא צריכה שהוא ישתף פעולה כדי להתחיל. כל מה שנעשה כאן עובר דרכך. ומה שאני רואה שוב ושוב: כשמשהו אמיתי משתנה אצלך, משהו זז גם סביבך.<br>טכנית, את משוחררת מלנסות להניע אותו במאמץ לעשות שינוי, ללכת לתהליך, ללמוד או להתקדם, קיבלת פטור כיפי, תהני מזה, אין כיף כזה של להתמקד במשהו שאת יכולה לשלוט בו במקום לדפוק את הראש בקיר שוב ושוב בתסכול ובנסיונות להאבק במה שלא בשליטתך:)<br></p><div class="quotes one"><blockquote><p>בעלי בכלל לא תמך ולא רצה שאעשה את הקורס. אתמול אמרתי לו שאני מרגישה שהשתניתי לטובה, והוא אמר לי: וואו, תראי איך השתנית בגלל הקורס.</p><cite>בוגרת הקורס ממגנטת</cite></blockquote></div></div></details>
+  <details><summary>בעלי צריך לדעת או להשתתף?</summary><div class="body"><p>לא.<br>כל מה שנעשה כאן עובר דרכך. זה לא מתחיל ממנו, ולא ממה שהוא צריך להבין - זה מתחיל ממך, וממה שבשליטתך באמת.<br>הוא לא צריך ללמוד איתך, להסכים או לשתף פעולה כדי שתתחילי.<br>ואם לספר לו? זו בחירה שלך:) אחת הבוגרות כתבה לי שבעלה הרגיש שינוי עוד לפני שסיפרה לו מה היא לומדת, וביקש שתמשיך בשיעורים.</p></div></details>
+  <details><summary>אבל אני רוצה שהוא ישתנה, לא רק שאני ארגיש יותר טוב</summary><div class="body"><p>ברור שאת רוצה ואני הכי מבינה אותך בעולם! הדרך הזו לא מבטלת את הרצון הזה,<br>
+  היא פשוט מלמדת אותך דרך אחרת לגמרי לפגוש אותו ולנוע איתו בינכם.<br>
+  כי הרבה פעמים כשאשה רוצה שינוי ממנו, היא פועלת מתוך לחץ: מסבירה שוב, מבקשת שוב, מתאכזבת שוב, נסגרת שוב.<br>
+  ואז הוא רק מתרחק או מתגונן.<br>
+  לא כי הרצון לא בסדר.<br>
+  אלא כי את עדיין לא מכירה את חוקי המשיכה ואיך משתמשים ברצון כדי להשפיע טוב.<br>אז כרגע הרצון הזה מכאיב לך, את תלמדי לרפא את הכאב, להשאר עם רצון נשי ומדויק ולאפשר לרצון ליצור מציאות חדשה.</p><div class="quotes one"><blockquote><p>אני רואה שדברים שהייתי עושה במאמץ, בלחץ ובשכנוע - פתאום באים ממנו מעצמו.<br>זה פשוט קסם.<br>ואני עדיין באמצע התהליך.</p><cite>בוגרת הקורס ממגנטת</cite></blockquote></div></div></details>
+  <details><summary>האם ייעוץ זוגי לא יפתור את זה יותר טוב?</summary><div class="body"><p>ייעוץ זוגי יכול להיות חשוב ויפה במצבים מסוימים, אבל אני חושבת שיעוץ זוגי משותף הוא למתקדמים:) למה? <br>כי ראשית - תהליך לא יעבוד אם מישהו לא בוחר בו מעצמו ומרצונו האמיתי ואם הוא בא בשביל לרצות אותך אז אין סיכוי שהוא יהיה מגויס לעשות תהליך שינוי עמוק ואמיתי.<br>שנית, כדי שדברים יעבדו כשאתם עובדים ביחד - צריך קודם להביא אנרגיה מאד נקיה ומשוחררת למרחב הזה. (מיקוד בעצמך בלבד, אפס שיפוטיות עליו, ביטוי עצמי מלא שאין בו תלות באחר ועוד...) כל עוד את לא יודעת לעשות את זה (ורוב הנשים לא יודעות), גם היועץ הכי טוב וגם הגבר שהכי מגויס לעשות שינוי  - יתקלו בחומה שמייצרת שוב ושוב חזרה לתקיעות.<br>הרבה נשים רצות לייעוץ עם בן הזוג לפני שהן מודעות בכלל מה קורה בתוכן ורוב היועצים לא מדברים על הענין הזה בכלל. ואז, גם אם הן מקבלות הנחיות טובות, הן מגיעות לאותה שיחה עם אותו לחץ ואותה תלות, ואז שום טכניקה או הסברים או תרגילים לא מחזיקים מעמד.<br>
+  הדרך הזו של התהליך בקורס - <br>גם מאמנת אותך להיות אשה שמעוררת רצון ומגייסת אותו מבפנים לעשות שינוי בשבילך (ובכלל)<br>גם מביאה אותך לשיח איתו עם אנרגיה שמשאירה מקום לאחר להיות פנוי לקחת אחריות על עצמו<br>וגם הופכת אותך לאשה שיודעת לפתור בעיות לעצמה וגם בזוגיות - בלי תלות בדיבורים אינסופיים עם יועצים או איתו.</p></div></details>
+  <details><summary>ומה אם אני כבר ממש כועסת עליו או רחוקה ממנו?</summary><div class="body"><p>אז זו בדיוק הסיבה למה החוויה הזו יכולה להיות מדויקת לך מאוד. <br>את בטח לא רוצה להמשיך לסחוב את הכעס הזה, הוא שוחק, מתיש, מכאיב ועושה אותך חולה, עיפה וחלשה.<br>כעס וריחוק - הרבה פעמים הם יושבים על רצון שלא קיבל מקום, כאב שלא קיבל הקשבה, אכזבה שחזרה שוב ושוב ומשהו בתוכך שמתחנן שתכירי בו ותלמדי איך לרפא אותו. זה מלמד אותך לעבוד עם הכאב, במקום שהכאב יעבוד עלייך ואז את הופכת לאשה שיודעת ליצור מה שהיא רוצה לחוות ולקבל בחיים, מגיע לך את הטוב הזה!</p></div></details>
+  <details><summary>אני מפחדת שאם אהיה יותר עצמאית רגשית, זה ירחיק בינינו</summary><div class="body"><p>את צודקת, הרבה נשים היום חוות את החוויה הזו, הן כביכול מפסיקות את התלות בבן הזוג ואז מוצאות את עצמן מנותקות, רחוקות ומאבדות תשוקה ורצון. אבל האמת  - הפוכה: <br>ריפוי אמיתי לא נראה כך, התוצאה של עצמאות רגשית בריאה שבאה ממקום נקי, נשי ויהודי - היא תמיד חיבור.<br>כשאת חזקה מבפנים את לא פחות אוהבת - את אוהבת יותר, פנויה להתחבר בצורה בוגרת והרבה פחות מוגבלת.<br>
+  עצמאות רגשית לא סוגרת את הלב חלילה,<br>
+  היא פותחת אותו, משחררת אותו להיות מלא תשוקה, מלא חיבור, מלא רצון מתוק שרק מחבר בינכם. <br>נשים חזקות באמת הן נשים שמרפאות את התלות שלהן בחיים בצורה מדויקת, הן נשים שהריפוי מביא אותן לחיבור אמיתי עם תשוקה שלא נגמרת לעולם.</p><div class="quotes one"><blockquote><p>קיבלתי את בעלי הרבה יותר בעוצמה, והרבה יותר כנות בקשר. כתוצאה מכך גם הוא נפתח הרבה יותר, ודברים שהיו רחוקים ממני פתאום נכנסו לקשר בזרימה ובכיף.</p><cite>בוגרת הקורס יודעת</cite></blockquote></div></div></details>
+  <details><summary>האם זה מתאים גם אם הזוגיות שלי טובה בסך הכל?</summary><div class="body"><p>ברור! נשים כמוך חוות בעוצמה את השינויים המבורכים שהתהליך מביא, ככל שהתשתית בינכם שקטה ובטוחה יותר, כך את פנויה לאמץ יותר לעומק את חוקי המשיכה ולחוות את ההשפעה החדשה והמרגשת שלהם על החיים שלך ושל שניכם!<br>וגם - לפעמים דווקא בזוגיות טובה יש פערים קטנים שנראים מבחוץ לא משמעותיים, אבל בפנים הם אוכלים את הלב.<br>
+  וכאב שלא מקבל מענה לא נעלם.<br>
+  גם אם הוא קטן, הוא עולה לך.<br>
+  ופער קטן שמקבל ריפוי בזמן יכול למנוע שנים של ריחוק.</p><div class="quotes one"><blockquote><p>אני לקראת גיל 50, ויש כאן מלא חידוש.<br>דברים שלא העזתי אפילו לחשוב בקול.</p><cite>בוגרת הקורס ממגנטת</cite></blockquote></div></div></details>
+  <details><summary>האם זה מתאים לי אם אני אשה מאמינה?</summary><div class="body"><p>מאוד.<br>
+  כי זה לא מסתכל על זוגיות רק כעל תקשורת, רגשות או דינמיקה.<br>
+  כל התהליך הזה מסתכל איתך על הזוגיות כעל מרחב רוחני, יהודי, קדוש!<br>
+  יש כאן דרך להתחבר להשם דרך הפערים והכאב.<br>יש כאן הבנה מה זו שכינה בבית.<br>
+  יש כאן עבודת מידות מדויקת ויהודית.<br>
+  ויש כאן דרך שבה אשה לומדת מה המשמעות האמיתית של החיבור הזוגי</p><div class="quotes one"><blockquote><p>מאישה מרצה גמורה לאישה נשית, בטוחה ויציבה. ביטחון בשפיות שלי, הרבה יותר קרבה לבורא, הרבה יותר אומרת ועושה, ושקט נפשי.</p><cite>בוגרת הקורס יודעת</cite></blockquote></div></div></details>
+  <details><summary>המחיר גבוה לי. איך אדע שזה שווה?</summary><div class="body"><p>זו השקעה, ואני לא מתייחסת לזה בקלות.<br>
+  אבל רגע לפני שאת שואלת כמה זה עולה, תשאלי בעדינות שאלה אחרת: כמה עולה לי להמשיך לחיות עם הכאב הזה? מה המחיר שאני משלמת על כל יום שעובר כשאין לי את מה שרציתי לחוות בקשר? מה הכעס והמתח יוצרים לי בחיים? מה הם מונעים ממני? מה הייתי יכולה לקדם וליצור בחיים בכל מערכות היחסים אם הייתי שמחה יותר, אוהבת יותר, רכה יותר ומרגישה שווה, אהובה ובטוחה בעצמי?<br>כמה עולה ויעלה לך הנזק של כל הריחוק, האנרגיה הנמוכה, הכעסים?<br>מה תעשי אחרת בחיים אם תהיי אישה שמרוויחה את כל השינוי הזה בתוכך ובבית?<br>מבינה?<br>
+  וכאב לא פתור הוא דבר יקר מאוד, תמיד, אצל כל אשה,  גם כשהוא קטן.</p><p>ואם זה עוזר:<br>אפשר להתחיל רק בממגנטת, ולהחליט על יודעת אחר כך.<br>אפשר לפרוס עד 10 תשלומים.<br>ויש לך שבוע לבדוק - ואם זה לא בשבילך, החזר מלא.</p><div class="quotes one"><blockquote><p>אני הרבה יותר בהקשבה לעצמי, וממילא בהרבה יותר רוגע ושמחה, וזה משפיע על כל המשפחה. מעולם לא עברתי ערב פסח, ועוד עם מלחמה, כל כך נעים וזורם ורגוע ושמח.</p><cite>בוגרת הקורס ממגנטת</cite></blockquote></div></div></details>
+  <details><summary>ומה אם אעבור את זה והוא לא ישתנה?</summary><div class="body"><p>אני לא מבטיחה לך שהוא יהפוך בדיוק למה שדמיינת.<br>
+  אבל את מקבלת משהו הרבה יותר חשוב: את כבר לא נשארת תלויה בשינוי שלו כדי להתחיל לחיות אחרת, אם תתמסרי לחוות את התהליך והמשימות - את לא נשארת אותה אישה, הביטחון שלך בחיים הוא לא אותו ביטחון, וזה לבד - שווה את כל ההשקעה והעבודה שלך!<br>
+  ומתוך זה, כן - הרבה פעמים גם המציאות משתנה.<br>
+  ואפילו לפני שהוא משתנה - את כבר הרווחת את עצמך.</p></div></details>
+  <details><summary>ומה אם זה לא בשבילי?</summary><div class="body"><p>אז את לא צריכה להישאר. בשביל זה בדיוק יש את האחריות שלי כלפייך:<br>תיכנסי, תצפי בשלושת השיעורים הראשונים בממגנטת, ואפילו תעשי את המשימות.<br>ואם תרגישי שזו לא הדרך שלך - כתבי לנו תוך 7 ימים מיום ההצטרפות, ותקבלי בחזרה את כל מה ששילמת, גם במסע השלם.<br>בלי לתרץ ובלי להסביר. כי אני באמת לא רוצה שתעשי תהליך שלא מתאים לך.</p></div></details>
+
+  <h3 class="mini">שאלות שאולי עולות לך על כל העניין הטכני</h3>
+  <details><summary>מתי זה מתחיל?</summary><div class="body"><p>שיעור המבוא של ממגנטת נפתח מיד עם ההרשמה, ואת יכולה להתחיל ממש בעוד כמה דקות לאחר ההרשמה שלך.</p></div></details>
+  <details><summary>כמה זמן זה לוקח לי ביום?</summary><div class="body"><p>ב<b class="nm">ממגנטת</b>: בין עשר לארבעים דקות ביום, תלוי בשיעור ובכמה את בוחרת להעמיק בתרגול. ב<b class="nm">יודעת</b>: שיעור אחד בשבוע, ושבוע שלם ליישם אותו. כל שיעור ביודעת הוא באורך של כשעה וחצי עד שעתיים והוא מחולק לפרקים לנוחותך.</p></div></details>
+  <details><summary>יש שידורים חיים שאני צריכה להספיק?</summary><div class="body"><p>לא.<br>
+  הכל מוקלט, מצולם  וזמין לך להורדה שישאר לך לתמיד.<br>
+  אין מה לפספס ואין מה להספיק.</p></div></details>
+  <details><summary>ומה אם אני לא עומדת בקצב?</summary><div class="body"><p>מבחינת הצפיה בשיעורים והתרגול שלך עם דפי העבודה והסיכום - אין שום קצב שצריך לעמוד בו. השיעורים מחכים לך, ואת יכולה לעצור, לחזור, להעמיק ולהתחיל מחדש. ורוב הנשים עוברות את זה שוב אחרי תקופה, וכל פעם מגלות עוד רובד.<br>המלצה שלי היא כמובן כן ליצור לך קצב כלשהו שנח לך כדי שתחווי תהליך רצוף והשפעה, אבל תבחרי את הקצב שמתאים לעומס החיים שלך.</p></div></details>
+  <details><summary>לכמה זמן יש לי גישה?</summary><div class="body"><p>באתר הקורסים - שנה שלמה.<br>
+  ובמקביל, מהדרייב את יכולה להוריד את כל השיעורים ודפי העבודה ולשמור אותם אצלך בלי תאריך תפוגה.<br>
+  כלומר גם אחרי השנה, החומר נשאר בידיים שלך.</p></div></details>
+  <details><summary>איפה אני צופה?</summary><div class="body"><p>באתר הקורסים וגם בדרייב.<br>את יכולה לצפות בהם מהטלפון, מהמחשב, וידאו או אודיו בלבד.</p></div></details>
+  <details><summary>אני לא מתחברת לבינה מלאכותית. זה חובה?</summary><div class="body"><p>לא.<br>השיעורים, כרטיסי חוקי המשיכה ודפי העבודה הם התהליך עצמו, והם שלמים גם בלי המאמנת.<br>המאמנת האישית היא תוספת: מישהי לדבר איתה ולקבל ממנה שאלות מכוונות ותזכורת למה שעוזר לך בדיוק ברגע שזה קורה, בשפה של הקורס. את נכנסת אליה רק אם ומתי שאת רוצה.<br>ואם תרצי לנסות - זה בלחיצה על קישור, בלי אפליקציה ובלי לפתוח חשבון, ואת בוחרת אם השיחה נשמרת או דיסקרטית לגמרי.</p></div></details>
+  <details><summary>יש לי קשר אישי איתך במהלך הקורס?</summary><div class="body"><p>התהליך הזה לא כולל ליווי אישי איתי או עם הצוות.<br>בשביל זה יצרנו את המאמנת הדיגיטלית, שמאפשרת לך מרחב אימון אישי בשפה שלנו, כאילו אנחנו מלוות אותך ועונות לך על כל שאלה, בזמינות מלאה ובהמון סבלנות.<br>ואם חשוב לך לחוות ליווי אישי אנושי בתהליך - דברי איתנו, ונציע לך חבילה משודרגת (ליווי נוסף כרוך בעלויות נוספות).</p></div></details>
+  <details><summary>איך מצטרפים?</summary><div class="body"><p>בכרטיס אשראי, עד 10 תשלומים.</p><p>אם נוח לך יותר - אפשר גם בתשלום אחד בהעברה בנקאית או בביט. כתבי לי ואשלח לך את הפרטים להעברה.</p></div></details>
+
+  <div class="air-s"></div>
+  <p class="reachout">יש לך עוד שאלות?<br>רוצה לדבר איתי לפני שאת יוצאת לדרך, <br>או צריכה עזרה בהצטרפות? <br><span data-ed="1" style="color: rgb(13, 18, 44);">זמינה לך כאן:</span></p>
+  <div class="cta-row">
+    <a class="cta-ghost" href="https://wa.me/972504244200?text=%D7%94%D7%99%20%D7%A9%D7%95%D7%A9%D7%99%2C%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%90%D7%A9%D7%94%20%D7%9C%D7%9C%D7%90%20%D7%9E%D7%90%D7%9E%D7%A5" target="_blank" rel="noopener">שיחה בווטסאפ עם שושי<span class="vh"> (נפתח בחלון חדש)</span></a>
+    <a class="cta-ghost" href="mailto:shoshi@shoshizelikovith.com?subject=%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%90%D7%A9%D7%94%20%D7%9C%D7%9C%D7%90%20%D7%9E%D7%90%D7%9E%D7%A5">שליחת הודעה במייל</a>
+  </div>
+  <div class="jumpwrap faqjump"><a class="cta-jump" href="#ech-mitztarfim"><span class="j1">מוכנה להתחיל?</span><span class="j2">לחצי כאן לבחור את הדרך שלך ולהצטרף</span></a></div>
+  </div>
+  </div>
+</section>
+
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+
+<section>
+  <div class="wide"><h2 class="sec" style="text-align:center">ב-15 השנים האחרונות אני זוכה ללמד<br>אלפי נשים את הדרך של <b class="nm">אשה ללא מאמץ</b></h2>
+  <p style="text-align:center;max-width:620px;margin:0 auto 1.6em"><span data-ed="1" style="font-size: 25px;">הנה טעימה קטנה מהשיתופים שלהן בדרך.</span></p></div>
+  <div class="twall">
+    <button class="tnav prev" aria-label="הקודם">›</button>
+    <div class="trail" id="wall">
+      <button class="tcard" data-full="img/t/t77.jpg"><img src="img/t/t77.jpg" alt="שיעור 2 ופחד שלא דיברו עליו" loading="lazy" width="687" height="1144"></button>
+      <button class="tcard" data-full="img/t/t78.jpg"><img src="img/t/t78.jpg" alt="מתמוגגת ועדיין בהקדמות" loading="lazy" width="760" height="408"></button>
+      <button class="tcard" data-full="img/t/t80.jpg"><img src="img/t/t80.jpg" alt="סיימתי שבוע ראשון" loading="lazy" width="598" height="359"></button>
+      <button class="tcard" data-full="img/t/t86.jpg"><img src="img/t/t86.jpg" alt="ממגנטת שפע וחיבור בזוגיות" loading="lazy" width="760" height="505"></button>
+      <button class="tcard" data-full="img/t/t68.jpg"><img src="img/t/t68.jpg" alt="שבועיים של ביטוי פגיעות ושיחה פתוחה" loading="lazy" width="760" height="1238"></button>
+      <button class="tcard" data-full="img/t/t54.jpg"><img src="img/t/t54.jpg" alt="משהו בך רגוע אמר בעלי" loading="lazy" width="760" height="956"></button>
+      <button class="tcard" data-full="img/t/t67.jpg"><img src="img/t/t67.jpg" alt="שבוע של רוגע זוגי מאז הוובינר" loading="lazy" width="720" height="690"></button>
+      <button class="tcard" data-full="img/t/t31.jpg"><img src="img/t/t31.jpg" alt="הפסקתי להאשים אותו בכעס על הילד" loading="lazy" width="760" height="522"></button>
+      <button class="tcard" data-full="img/t/t44.jpg"><img src="img/t/t44.jpg" alt="כל הדינמיקה בבית השתנתה חלק א" loading="lazy" width="760" height="1050"></button>
+      <button class="tcard" data-full="img/t/t12.jpg"><img src="img/t/t12.jpg" alt="בערב הוא התנצל על הכעס" loading="lazy" width="760" height="1063"></button>
+      <button class="tcard" data-full="img/t/t27.jpg"><img src="img/t/t27.jpg" alt="החזרתי לבעלי את האמון אחרי ההפסד" loading="lazy" width="760" height="556"></button>
+      <button class="tcard" data-full="img/t/t65.jpg"><img src="img/t/t65.jpg" alt="רשימת התודות אחרי שיעור שלוש" loading="lazy" width="760" height="892"></button>
+      <button class="tcard" data-full="img/t/t23.jpg"><img src="img/t/t23.jpg" alt="ההתנצלויות מגיעות בזמן" loading="lazy" width="760" height="968"></button>
+      <button class="tcard" data-full="img/t/t37.jpg"><img src="img/t/t37.jpg" alt="הרפיתי מהשליטה והמריבות נגמרו" loading="lazy" width="760" height="966"></button>
+      <button class="tcard" data-full="img/t/t17.jpg"><img src="img/t/t17.jpg" alt="דינמיקה חדשה מתחילת הקורס" loading="lazy" width="760" height="873"></button>
+      <button class="tcard" data-full="img/t/t71.jpg"><img src="img/t/t71.jpg" alt="שחררתי שליטה והלכתי לנוח" loading="lazy" width="760" height="650"></button>
+      <button class="tcard" data-full="img/t/t18.jpg"><img src="img/t/t18.jpg" alt="האווירה בבית נעשתה רגועה" loading="lazy" width="760" height="585"></button>
+      <button class="tcard" data-full="img/t/t14.jpg"><img src="img/t/t14.jpg" alt="בקשתי סליחה בפעם הראשונה" loading="lazy" width="760" height="1087"></button>
+      <button class="tcard" data-full="img/t/t09.jpg"><img src="img/t/t09.jpg" alt="בעלי מדווח על אשה רגועה" loading="lazy" width="760" height="514"></button>
+      <button class="tcard" data-full="img/t/t36.jpg"><img src="img/t/t36.jpg" alt="הרבה דברים טובים קרו מאז הקורס" loading="lazy" width="760" height="227"></button>
+      <button class="tcard" data-full="img/t/t33.jpg"><img src="img/t/t33.jpg" alt="הפסקתי לנסות לשנות אותו" loading="lazy" width="760" height="1063"></button>
+      <button class="tcard" data-full="img/t/t49.jpg"><img src="img/t/t49.jpg" alt="לא התלוננתי והוא תיקן מיד" loading="lazy" width="760" height="503"></button>
+      <button class="tcard" data-full="img/t/t46.jpg"><img src="img/t/t46.jpg" alt="כמו שאמרת שזה ממגנט, פתאום בעלי עשה דברים ששנים לא עשה" loading="lazy" width="760" height="1210"></button>
+      <button class="tcard" data-full="img/t/t19.jpg"><img src="img/t/t19.jpg" alt="הביקורת נגמרה באותו ערב הזלזול נעלם" loading="lazy" width="760" height="1071"></button>
+      <button class="tcard" data-full="img/t/t15.jpg"><img src="img/t/t15.jpg" alt="גם כשקשה אני בוחרת להתקרב" loading="lazy" width="760" height="464"></button>
+      <button class="tcard" data-full="img/t/t59.jpg"><img src="img/t/t59.jpg" alt="פעם ראשונה אכפת לו שנפגעתי" loading="lazy" width="760" height="1044"></button>
+      <button class="tcard" data-full="img/t/t53.jpg"><img src="img/t/t53.jpg" alt="מרגיש שאני בזוגיות ולא שותפות בעסק" loading="lazy" width="760" height="1153"></button>
+      <button class="tcard" data-full="img/t/t21.jpg"><img src="img/t/t21.jpg" alt="הגענו למצב שהוא היוזם והמחזר" loading="lazy" width="760" height="1003"></button>
+      <button class="tcard" data-full="img/t/t30.jpg"><img src="img/t/t30.jpg" alt="הפסקנו להתווכח והוא חוזר אלי" loading="lazy" width="760" height="966"></button>
+      <button class="tcard" data-full="img/t/t02.jpg"><img src="img/t/t02.jpg" alt="אומנות ההקשבה והודעה מהעבודה" loading="lazy" width="760" height="603"></button>
+      <button class="tcard" data-full="img/t/t55.jpg"><img src="img/t/t55.jpg" alt="מתנה נדירה אחרי ההקלטה" loading="lazy" width="760" height="464"></button>
+      <button class="tcard" data-full="img/t/t16.jpg"><img src="img/t/t16.jpg" alt="דיברתי עם בעלי בצורה רגועה ונינוחה וזה עבד להפליא" loading="lazy" width="760" height="617"></button>
+      <button class="tcard" data-full="img/t/t69.jpg"><img src="img/t/t69.jpg" alt="שבעה דברים שהתהפכו לטובה" loading="lazy" width="760" height="1074"></button>
+      <button class="tcard" data-full="img/t/t56.jpg"><img src="img/t/t56.jpg" alt="מתנה שלא ביקשתי" loading="lazy" width="760" height="397"></button>
+      <button class="tcard" data-full="img/t/t04.jpg"><img src="img/t/t04.jpg" alt="אפס ויכוחים בבית" loading="lazy" width="760" height="815"></button>
+      <button class="tcard" data-full="img/t/t05.jpg"><img src="img/t/t05.jpg" alt="בזכותי יש לנו שפע כלכלי" loading="lazy" width="760" height="603"></button>
+      <button class="tcard" data-full="img/t/t34.jpg"><img src="img/t/t34.jpg" alt="הצלת לי את הנשמה ואת המשפחה" loading="lazy" width="760" height="77"></button>
+      <button class="tcard" data-full="img/t/t01.jpg"><img src="img/t/t01.jpg" alt="אולי במקרה היא אצל זליקוביץ התשובה הייתה" loading="lazy" width="760" height="319"></button>
+      <button class="tcard" data-full="img/t/t74.jpg"><img src="img/t/t74.jpg" alt="שינויים עצומים בזוגיות משני הצדדים" loading="lazy" width="760" height="802"></button>
+      <button class="tcard" data-full="img/t/t40.jpg"><img src="img/t/t40.jpg" alt="חודש אחרי הוובינר האושר מטורף" loading="lazy" width="760" height="544"></button>
+      <button class="tcard" data-full="img/t/t48.jpg"><img src="img/t/t48.jpg" alt="לא הספקתי לסיים והוא אמר גם אני רוצה" loading="lazy" width="760" height="752"></button>
+      <button class="tcard" data-full="img/t/t42.jpg"><img src="img/t/t42.jpg" alt="חיים חדשים עם עצמי הילדים ובעלי" loading="lazy" width="760" height="522"></button>
+      <button class="tcard" data-full="img/t/t29.jpg"><img src="img/t/t29.jpg" alt="הנישואים שלי בעלייה רצינית" loading="lazy" width="760" height="928"></button>
+      <button class="tcard" data-full="img/t/t26.jpg"><img src="img/t/t26.jpg" alt="החזרת לי את עצמי" loading="lazy" width="760" height="1102"></button>
+      <button class="tcard" data-full="img/t/t03.jpg"><img src="img/t/t03.jpg" alt="אמרתי לו את כל מה שמפריע לי" loading="lazy" width="760" height="601"></button>
+      <button class="tcard" data-full="img/t/t45.jpg"><img src="img/t/t45.jpg" alt="כל הדינמיקה בבית השתנתה חלק ב" loading="lazy" width="760" height="1040"></button>
+      <button class="tcard" data-full="img/t/t57.jpg"><img src="img/t/t57.jpg" alt="נולד לי מחדש בעל חלומותי" loading="lazy" width="760" height="483"></button>
+      <button class="tcard" data-full="img/t/t52.jpg"><img src="img/t/t52.jpg" alt="ממלאת לו את הדלי והאווירה בשמיים" loading="lazy" width="760" height="475"></button>
+      <button class="tcard" data-full="img/t/t35.jpg"><img src="img/t/t35.jpg" alt="הקורס של להיות אשה אחד המתנות לדור שלנו" loading="lazy" width="760" height="241"></button>
+      <button class="tcard" data-full="img/t/t06.jpg"><img src="img/t/t06.jpg" alt="בעלי ביקש שאלמד אותו מה שאני לומדת" loading="lazy" width="760" height="528"></button>
+      <button class="tcard" data-full="img/t/t70.jpg"><img src="img/t/t70.jpg" alt="שחררתי את התסריט והשבת היתה מושלמת" loading="lazy" width="760" height="1056"></button>
+      <button class="tcard" data-full="img/t/t61.jpg"><img src="img/t/t61.jpg" alt="קיבלתי אותו כמו שהוא והוא נפתח" loading="lazy" width="760" height="208"></button>
+      <button class="tcard" data-full="img/t/t75.jpg"><img src="img/t/t75.jpg" alt="שיפור עצום תוך שבוע מהשיעור" loading="lazy" width="760" height="820"></button>
+      <button class="tcard" data-full="img/t/t24.jpg"><img src="img/t/t24.jpg" alt="הוא חזר הביתה בשיעור שלוש" loading="lazy" width="760" height="954"></button>
+      <button class="tcard" data-full="img/t/t25.jpg"><img src="img/t/t25.jpg" alt="הזוגיות נהפכה למשהו זורם" loading="lazy" width="760" height="915"></button>
+      <button class="tcard" data-full="img/t/t60.jpg"><img src="img/t/t60.jpg" alt="קיבלתי אותו והוא עשה את ההפך" loading="lazy" width="760" height="744"></button>
+      <button class="tcard" data-full="img/t/t72.jpg"><img src="img/t/t72.jpg" alt="שיטה רכה שמחזירה את הטבע לזוגיות" loading="lazy" width="760" height="776"></button>
+      <button class="tcard" data-full="img/t/t58.jpg"><img src="img/t/t58.jpg" alt="נזכרתי בחוקים והוא אמר בסדר" loading="lazy" width="760" height="454"></button>
+    </div>
+    <button class="tnav next" aria-label="הבא">‹</button>
+  </div>
+</section>
+
+<div class="picband">
+  <picture>
+    <source media="(max-width:759px)" srcset="img/band-machlita-m.jpg" width="1200" height="900">
+    <img src="img/band-machlita-w.jpg" alt="רגע לפני שאת מחליטה" width="1600" height="900" loading="lazy">
+  </picture>
+  <h2 class="sec vh">רגע לפני שאת מחליטה</h2>
+</div>
+
+<section class="wide">
+  <div class="closegrid">
+  <div>
+  <p>אם הגעת עד לכאן, כנראה שאת כבר מרגישה שיש כאן משהו בשבילך.</p>
+  <p>לא עוד טיפ לזוגיות.<br>
+  לא עוד עצה מה לומר לו.<br>
+  ולא עוד ניסיון לתקן אותו.</p>
+  <p><strong><span data-ed="1" style="font-size: 23px;">אלא דרך חיים.</span></strong></p>
+  <p>דרך של אשה <span style="font-weight: bold;">שיודעת</span> לפגוש כאב בלי להיבהל.<br>
+  דרך של אשה <span style="font-weight: bold;">שמרפאת</span> תלות ולחץ.<br>
+  דרך של אשה <span style="font-weight: bold;">שמחוברת</span> לבורא, לנשמה שלה וללב שלה.<br>
+  דרך של אשה <span style="font-weight: bold;">שמשפיעה</span> בלי להילחם.<br>
+  דרך של אשה שהנוכחות שלה <span style="font-weight: bold;">ממגנטת</span> טוב, אהבה, שיתוף פעולה ושפע.</p>
+  <p>ואת לא חייבת כלום.<br>
+  באמת.<br>
+  אפשר להמשיך באותן בחירות, ואנחנו נאהב אותך, והכל בסדר:)</p>
+  <p>זו את שמחליטה שהגיע הזמן שלך להעז משהו חדש, להתמסר למסע מרתק בינך לבין עצמך, בינך לבינו, בינך לבין בורא עולם.<br>ואם משהו בך קורא את זה ואומר "כן" -</p>
+  <p><strong>אז זו המתנה הכי גדולה שאת יכולה לתת לעצמך, לבית שלך ולחיים שלך.
+  ובעזרת השם, נתחיל.</strong></p>
+  </div>
+  <div class="closepic"><img src="img/shoshi-close.jpg" alt="שושי זליקוביץ׳" width="1000" height="1333" loading="lazy"></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="air-s"></div>
+  <a class="cta" href="https://secure.cardcom.solutions/EA/EA5/VvZTYa029UCqUVFvoUDVuA">לחצי להצטרפות למסע השלם ·&nbsp;ממגנטת&nbsp;+&nbsp;יודעת</a>
+  <a class="cta purple" href="https://secure.cardcom.solutions/EA/EA5/F2ByMpW70PproDh7Hhg">לחצי להתחיל במסע הראשון ·&nbsp;ממגנטת</a>
+</section>
+
+<footer>
+  <strong>שושי זליקוביץ׳ · אשה ללא מאמץ · אימון מנטלי</strong><br>שינוי, ריפוי והשפעה במערכות יחסים<br>כל הזכויות שמורות<br><a href="https://shoshizelikovith.com/isha/accessibility/">הצהרת נגישות</a> · <a href="https://shoshizelikovith.com/isha/terms/">תקנון ומדיניות פרטיות</a>
+</footer>
+
+<div class="tbox" id="tbox" role="dialog" aria-modal="true" aria-label="עדות מלאה"><button class="x" aria-label="סגירה">×</button><img alt=""></div>
+
+<script>
+/* עדויות - פתיחת עדות מלאה, וחצי הקרוסלה */
+(function(){
+  var box=document.getElementById("tbox"), bi=box.querySelector("img"), bx=box.querySelector(".x"), last=null;
+  document.querySelectorAll(".tcard").forEach(function(b){ b.setAttribute("aria-haspopup","dialog"); });
+  function shut(){ if(!box.classList.contains("on")) return; box.classList.remove("on"); if(last) last.focus(); }
+  document.addEventListener("click",function(e){
+    var c=e.target.closest(".tcard");
+    if(c){ last=c; bi.src=c.dataset.full; bi.alt=c.querySelector("img").alt; box.classList.add("on"); bx.focus(); return; }
+    if(e.target.closest("#tbox")) shut();
+  });
+  document.addEventListener("keydown",function(e){
+    if(!box.classList.contains("on")) return;
+    if(e.key==="Escape") shut();
+    else if(e.key==="Tab"){ e.preventDefault(); bx.focus(); }
+  });
+
+  var rail=document.getElementById("wall");
+  if(rail){
+    var w=rail.parentNode;
+    w.querySelector(".tnav.prev").addEventListener("click",function(){
+      rail.scrollBy({left:rail.clientWidth*0.8,behavior:"smooth"});
+    });
+    w.querySelector(".tnav.next").addEventListener("click",function(){
+      rail.scrollBy({left:-rail.clientWidth*0.8,behavior:"smooth"});
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
