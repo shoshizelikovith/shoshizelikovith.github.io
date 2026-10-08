@@ -129,6 +129,13 @@ button{
 button:hover:not(:disabled){transform:scale(1.06); background:var(--purple)}
 button:disabled{opacity:.4; cursor:default}
 .note{text-align:center; font-size:12px; opacity:.5; margin:9px 0 0; font-weight:300}
+/* ההסתייגות ומדיניות הפרטיות, בתחתית הדף */
+.legal{max-width:780px; margin:8px auto 0; text-align:center;
+  font-size:11.5px; line-height:1.65; font-weight:300; color:var(--ink); opacity:.46}
+.legal b{font-weight:600}
+.legal p{margin:0 0 3px}
+.legal p:last-child{margin-bottom:0}
+@media(max-width:520px){ .legal{font-size:11px; padding:0 4px} }
 
 @media (max-width:520px){
   .band{
@@ -190,6 +197,14 @@ button:disabled{opacity:.4; cursor:default}
     <button id="send" type="submit" aria-label="שליחה">↑</button>
   </form>
   <p class="note">שושי זליקוביץ׳</p>
+  <div class="legal">
+    <p><b>״המאמנת האישית״ היא שירות דיגיטלי ואינה אדם.</b> היא עשויה לטעות, ואין בה כדי להחליף
+       טיפול, ייעוץ מקצועי, ליווי אנושי או מענה במצבי מצוקה.</p>
+    <p><b>פרטיות.</b> הכניסה בשם ובמייל בלבד, בלי פתיחת חשבון. ב<b>שיחה דיסקרטית</b> התוכן אינו
+       נשמר. ב<b>שיחה שנשמרת</b> התוכן נשמר אצלנו כדי שהמאמנת תמשיך מאיפה שהפסקתן, ואפשר לבקש
+       את מחיקתו בכל עת. לצורך הפקת התשובה תוכן ההודעות נשלח לספק מודל בינה מלאכותית, גם
+       בשיחה דיסקרטית.</p>
+  </div>
 </footer>
 
 <script>
@@ -296,6 +311,6 @@ async function callAsk(payload){
   } catch (e) { return null; }
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-155103';</script>
+<script>var BOT_BUILD='BOTCHAN-204759';</script>
 </body>
 </html>
