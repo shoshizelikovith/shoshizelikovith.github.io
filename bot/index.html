@@ -40,20 +40,20 @@ header{position:relative; border-bottom:1px solid var(--line)}
 /* המאמנת יושבת בצד, נמסה לתוך הקרם בלי מסגרת ובלי קצה חתוך */
 .hero::before{
   content:''; position:absolute; top:0; bottom:0; left:0;
-  width:min(48%, 310px);
+  width:min(32%, 218px);
   background-image:var(--coach);
-  background-size:auto 124%;
-  background-position:left 32%;
+  background-size:cover;
+  background-position:left 16%;
   background-repeat:no-repeat;
   pointer-events:none; z-index:0;
 }
 /* הקרם נמשך מעל הקצוות, כדי שהיא תימס לרקע ולא תיראה חתוכה */
 .hero::after{
   content:''; position:absolute; top:0; bottom:0; left:0;
-  width:min(48%, 310px); pointer-events:none; z-index:1;
+  width:min(32%, 218px); pointer-events:none; z-index:1;
   background:
-    linear-gradient(to right,  rgba(242,238,227,0) 42%, rgba(242,238,227,1) 97%),
-    linear-gradient(to bottom, rgba(242,238,227,0) 62%, rgba(242,238,227,1) 99%);
+    linear-gradient(to right,  rgba(242,238,227,0) 18%, rgba(242,238,227,1) 100%),
+    linear-gradient(to bottom, rgba(242,238,227,0) 48%, rgba(242,238,227,1) 100%);
 }
 .hero h1, .hero p{position:relative; z-index:2}
 .hero h1{
@@ -159,7 +159,9 @@ button:disabled{opacity:.4; cursor:default}
 @media (max-width:520px){
   .band{display:none}
   .hero{min-height:128px; padding:16px 16px 8px}
-  .hero::before{width:104px; background-size:auto 116%; background-position:left 30%}
+  .hero::before,
+  .hero::after{width:118px}
+  .hero::before{background-size:cover; background-position:left 14%}
   .hero h1{font-size:21px}
   .hero p{font-size:13px}
   #whoBar{padding:12px 16px 0; gap:6px}
@@ -327,6 +329,6 @@ async function callAsk(payload){
   } catch (e) { return null; }
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-221437';</script>
+<script>var BOT_BUILD='BOTCHAN-221635';</script>
 </body>
 </html>
