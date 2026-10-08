@@ -8,9 +8,39 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1008-1515';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1008-1529';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
-var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // שקלים להודעה
+var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // גיבוי בלבד, אם המדידה נכשלה
+// המחירון של המודל, דולר למיליון טוקנים. קריאה מהמטמון זולה פי עשרה מקלט רגיל.
+var USD = {input: 2, output: 10, cache_write: 2.5, cache_read: 0.2};
+var ILS_PER_USD = 3.7;
+var LAST_USAGE_ = null;
+
+/** העלות האמיתית של פנייה אחת, בשקלים. */
+function costOf_(u) {
+  if (!u) return 0;
+  var usd = ((u.input_tokens || 0) * USD.input +
+             (u.output_tokens || 0) * USD.output +
+             (u.cache_creation_input_tokens || 0) * USD.cache_write +
+             (u.cache_read_input_tokens || 0) * USD.cache_read) / 1000000;
+  return Math.round(usd * ILS_PER_USD * 100000) / 100000;
+}
+
+/** סכום רץ של מה שבאמת נצרך, כדי שאפשר יהיה לדעת ולא להעריך. */
+function noteUsage_(u, cost) {
+  try {
+    var p = props_(), t = JSON.parse(p.getProperty('USAGE_TOTALS') || '{}');
+    t.הודעות = (t.הודעות || 0) + 1;
+    t.קלט = (t.קלט || 0) + (u.input_tokens || 0);
+    t.פלט = (t.פלט || 0) + (u.output_tokens || 0);
+    t.כתיבה_למטמון = (t.כתיבה_למטמון || 0) + (u.cache_creation_input_tokens || 0);
+    t.קריאה_ממטמון = (t.קריאה_ממטמון || 0) + (u.cache_read_input_tokens || 0);
+    t.שקלים = Math.round(((t.שקלים || 0) + cost) * 100000) / 100000;
+    t.אחרונה = {קלט: u.input_tokens || 0, פלט: u.output_tokens || 0,
+                ממטמון: u.cache_read_input_tokens || 0, שקלים: cost};
+    p.setProperty('USAGE_TOTALS', JSON.stringify(t));
+  } catch (e) { /* מדידה לא מפילה תשובה */ }
+}
 
 // ---------- הדף ----------
 
@@ -53,6 +83,7 @@ function diag_() {
         o.sources = r.map(function (c) { return c.src; }); } catch (e) {
         o.retrieve = 'שגיאה'; o.retrieve_err = String(e).slice(0, 200); }
   try { o.sheet = props_().getProperty('SHEET_ID') ? true : false; } catch (e) { o.sheet = 'שגיאה'; }
+  try { o.צריכה = JSON.parse(props_().getProperty('USAGE_TOTALS') || '{}'); } catch (e) { o.צריכה = {}; }
   o.last_error = props_().getProperty('LAST_ERROR') || 'אין';
   return o;
 }
@@ -409,6 +440,7 @@ function askModel_(system, messages, mode) {
     return '[שגיאה מהמודל] ' + res.getContentText().slice(0, 400);
   }
   var r = JSON.parse(res.getContentText()), out = '';
+  LAST_USAGE_ = r.usage || null;
   for (var i = 0; i < (r.content || []).length; i++) {
     if (r.content[i].type === 'text') out += r.content[i].text || '';
   }
@@ -881,7 +913,9 @@ function ask(req) {
     Logger.log('זמנים: שליפה ' + (tRet - t0) + ' | הכנה ' + (tPre - tRet) +
                ' | מודל ' + (tAns - tPre) + ' | מצב ' + mode);
 
-    rec.spent = Math.round((Number(rec.spent || 0) + (PRICE[mode] || 0.173)) * 10000) / 10000;
+    var cost = LAST_USAGE_ ? costOf_(LAST_USAGE_) : (PRICE[mode] || 0.173);
+    if (LAST_USAGE_) noteUsage_(LAST_USAGE_, cost);
+    rec.spent = Math.round((Number(rec.spent || 0) + cost) * 100000) / 100000;
     rec.msgs = (rec.msgs || 0) + 1;
     if (!rec.started) {
       rec.started = Utilities.formatDate(new Date(), 'Asia/Jerusalem', 'yyyy-MM-dd');
