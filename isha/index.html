@@ -1001,6 +1001,18 @@ p [style*="font-size"]{line-height:1.4}
 @media(max-width:600px){.floatcard{transform:rotateX(3deg) rotateY(-3deg);animation-name:cfloat-s}.floatcard::before{transform:translate(-8px,9px) rotate(-1.8deg)}}
 @keyframes cfloat-s{0%,100%{transform:rotateX(3deg) rotateY(-3deg) translateY(0)}50%{transform:rotateX(3deg) rotateY(-3deg) translateY(-6px)}}
 @media(prefers-reduced-motion:reduce){.floatcard{animation:none}}
+
+/* ניווט בראש הדף - כרטיסיות שקופצות לחלקי הדף (9.10, בקשת שושי) */
+.pagenav{position:sticky;top:0;z-index:60;background:rgba(242,238,227,.97);padding-top:10px;transition:transform .35s ease,box-shadow .35s ease}
+.pagenav.pn-stuck{box-shadow:0 8px 20px -14px rgba(13,18,44,.45)}
+.pagenav.pn-hide{transform:translateY(-110%)}
+.pagenav ul{list-style:none;margin:0 auto;max-width:1400px;padding:0 12px;display:flex;gap:4px;flex-wrap:nowrap;align-items:flex-end;border-bottom:5px solid var(--ink)}
+.pagenav li{margin:0;padding:0;flex:1 1 auto;display:flex}
+.pagenav a{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:9px 12px 8px;border-radius:12px 12px 0 0;background:var(--ink);color:var(--cream);font-weight:700;font-size:14px;line-height:1.25;text-decoration:none;box-shadow:inset 0 1px 0 rgba(242,238,227,.12);transition:background .2s,color .2s,padding .2s}
+.pagenav a:hover{background:#1c2246}
+.pagenav a.on{background:var(--orange);color:var(--ink);padding-top:13px}
+@media(max-width:760px){.pagenav ul{overflow-x:auto;scrollbar-width:none;padding:0 10px;-webkit-mask-image:linear-gradient(to left,transparent 0,#000 30px);mask-image:linear-gradient(to left,transparent 0,#000 30px)}.pagenav ul::-webkit-scrollbar{display:none}.pagenav li{flex:0 0 auto}.pagenav a{white-space:nowrap}}
+#haderech,#mi-ani,#tochniot,#hamaamenet,#hatzaa,#bonusim,#ech-mitztarfim,#lemi,#shealot,#eduyot{scroll-margin-top:84px}
 </style>
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
@@ -1014,6 +1026,20 @@ p [style*="font-size"]{line-height:1.4}
 <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
+<nav class="pagenav" aria-label="חלקי הדף">
+  <ul>
+    <li><a href="#haderech">החוקים שלא לימדו אותך</a></li>
+    <li><a href="#mi-ani">מי זאת שושי</a></li>
+    <li><a href="#tochniot">הקורסים של אשה ללא מאמץ</a></li>
+    <li><a href="#hamaamenet">המאמנת הדיגיטלית</a></li>
+    <li><a href="#hatzaa">מסלולי הלימוד</a></li>
+    <li><a href="#bonusim">קורסי בונוס</a></li>
+    <li><a href="#ech-mitztarfim">איך מצטרפים</a></li>
+    <li><a href="#lemi">למי זה מתאים</a></li>
+    <li><a href="#shealot">כל השאלות שרצית לשאול</a></li>
+    <li><a href="#eduyot">מה נשים מספרות</a></li>
+  </ul>
+</nav>
 
 <!-- ======== חלק א׳ ======== -->
 <div class="air-s"></div>
@@ -1177,7 +1203,7 @@ p [style*="font-size"]{line-height:1.4}
   וזה שינה לי את כל הדרך.</p><cite>בוגרת הקורס יודעת</cite></blockquote></div>
 </section>
 
-<div class="picband">
+<div class="picband" id="haderech">
   <picture>
     <source media="(max-width:759px)" srcset="img/band-hukim-m.jpg" width="1200" height="900">
     <img src="img/band-hukim-w.jpg" alt="למערכות יחסים יש חוקי טבע שמניעים אותן מבפנים" width="1600" height="900" loading="lazy">
@@ -1465,7 +1491,7 @@ p [style*="font-size"]{line-height:1.4}
 
 
 <!-- ======== חלק ג׳ ======== -->
-<div class="part"><h2>השלב השני</h2></div>
+<div class="part" id="shalav-sheni"><h2>השלב השני</h2></div>
 
 <section class="wrap">
   <h2 class="sec">ואחרי ארבעה שבועות?</h2>
@@ -1601,7 +1627,7 @@ p [style*="font-size"]{line-height:1.4}
 <img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
 
 <section class="wrap">
-  <div class="coachhero">
+  <div class="coachhero" id="hamaamenet">
     <div class="chimg"><img src="img/coach-bot-2.jpg" alt="המאמנת האישית - הדמות של הבוט" width="600" height="900" loading="lazy"></div>
     <div class="chtext">
       <p class="blead chlead"><span data-ed="1" style="font-size: 27px;">בואי נדבר שניה על חווית הלימוד החדשנית שיצרנו לך,<br>
@@ -1699,7 +1725,7 @@ p [style*="font-size"]{line-height:1.4}
 <img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
 
 <section class="wrap">
-  <div class="qhead"><h2>רגע, יש פינוקים שמחכים לך:)</h2></div>
+  <div class="qhead" id="bonusim"><h2>רגע, יש פינוקים שמחכים לך:)</h2></div>
   <p class="blead">כל מי שנכנסת מקבלת ממני מתנה.<br><span style="font-weight: bold;"><span data-ed="1" style="font-size: 25px;">סדרות שלמות במתנה, <br>שהן קורסים בפני עצמם שיצרתי לבוגרות.</span></span><br>וכל אחת פותחת נושאים ואימונים נוספים מעבר לתכני התהליכים.</p>
 
   <div class="onebonus wide">
@@ -1926,7 +1952,7 @@ p [style*="font-size"]{line-height:1.4}
 </section>
 
 <!-- ======== חלק ה׳ ======== -->
-<div class="part"><h2>לפני שאת מחליטה</h2></div>
+<div class="part" id="lemi"><h2>לפני שאת מחליטה</h2></div>
 
 <section class="wide">
   <div class="qhead"><h2>בואי נבדוק ביחד<br>האם הדרך הזו מדויקת לך</h2></div>
@@ -1978,7 +2004,7 @@ p [style*="font-size"]{line-height:1.4}
   <div class="faqgrid">
   <div class="faqpic"><img src="img/shoshi-notebook.jpg" alt="שושי זליקוביץ׳" width="800" height="1067" loading="lazy"></div>
   <div class="faqcol">
-  <h2 class="sec">אולי גם את רצית לשאול?</h2>
+  <h2 class="sec" id="shealot">אולי גם את רצית לשאול?</h2>
   <p class="faqlead">אז הנה.<br>
   אני פה לכל מה שעולה לך.</p>
   <h3 class="mini">שאלות שאולי עולות לך על התהליך ועל התוכן</h3>
@@ -2051,7 +2077,7 @@ p [style*="font-size"]{line-height:1.4}
 <img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
 
 <section>
-  <div class="wide"><h2 class="sec" style="text-align:center">ב-15 השנים האחרונות אני זוכה ללמד<br>אלפי נשים את הדרך של <b class="nm">אשה ללא מאמץ</b></h2>
+  <div class="wide" id="eduyot"><h2 class="sec" style="text-align:center">ב-15 השנים האחרונות אני זוכה ללמד<br>אלפי נשים את הדרך של <b class="nm">אשה ללא מאמץ</b></h2>
   <p style="text-align:center;max-width:620px;margin:0 auto 1.6em"><span data-ed="1" style="font-size: 25px;">הנה טעימה קטנה מהשיתופים שלהן בדרך.</span></p></div>
   <div class="twall">
     <button class="tnav prev" aria-label="הקודם">›</button>
@@ -2193,5 +2219,17 @@ p [style*="font-size"]{line-height:1.4}
 })();
 </script>
 
+<script>
+/* הכרטיסיות נעלמות כשגוללים למטה וחוזרות כשגוללים למעלה; הכרטיסייה של החלק הנוכחי נצבעת בכתום */
+(function(){var n=document.querySelector('.pagenav');if(!n)return;var ul=n.querySelector('ul');var a=window.scrollY,h=false,cur=null,tick=false;
+var links=[].slice.call(n.querySelectorAll('a'));var secs=links.map(function(l){return document.querySelector(l.getAttribute('href'))});
+function set(v){if(v!==h){h=v;n.classList.toggle('pn-hide',v)}}
+function spy(){tick=false;var on=null;for(var k=0;k<secs.length;k++){if(secs[k]&&secs[k].getBoundingClientRect().top<=140)on=links[k]}
+if(on!==cur){if(cur)cur.classList.remove('on');if(on){on.classList.add('on');if(ul.scrollWidth>ul.clientWidth){var r=on.getBoundingClientRect(),u=ul.getBoundingClientRect();ul.scrollBy({left:(r.left+r.width/2)-(u.left+u.width/2),behavior:'smooth'})}}cur=on}}
+window.addEventListener('scroll',function(){var y=window.scrollY;n.classList.toggle('pn-stuck',y>4);
+if(!tick){tick=true;requestAnimationFrame(spy)}
+if(y<=140){set(false);a=y;return}
+if(h){if(y>a)a=y;else if(y<a-24){set(false);a=y}}else{if(y<a)a=y;else if(y>a+24){set(true);a=y}}},{passive:true});spy();})();
+</script>
 </body>
 </html>
