@@ -54,6 +54,14 @@ main{max-width:1100px;margin:0 auto;padding:40px 16px 60px;display:grid;gap:28px
 .contrib{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:15px}
 .contrib b{color:var(--ink)}
 
+.halves{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:10px}
+.half-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:15px;color:var(--muted);font-weight:600}
+.half-top b{color:var(--ink);font-size:17px}
+.half .bar{margin:6px 0 4px}
+.half-left{font-size:15px;color:var(--muted)}
+.half-left b{color:var(--rust)}
+.wait{margin-top:12px;background:var(--bg);border-radius:10px;padding:8px 12px;font-weight:600;font-size:15px}
+
 /* ---------- kids ---------- */
 .kids{display:grid;gap:28px;grid-template-columns:1fr}
 @media (min-width:860px){.kids{grid-template-columns:1fr 1fr}}
@@ -63,6 +71,13 @@ main{max-width:1100px;margin:0 auto;padding:40px 16px 60px;display:grid;gap:28px
 .kid-head h2{font-size:28px}
 .kid-week{font-weight:800;font-size:19px;color:var(--rust)}
 .kid-sub{color:var(--muted);font-weight:600;font-size:15px}
+.togoal{background:var(--bg);border-radius:12px;padding:10px 12px;margin-bottom:12px;font-size:15px;font-weight:600}
+.togoal b{color:var(--rust);font-weight:800}
+.togoal .bar{margin:8px 0 0;height:10px;background:#E4DCD0}
+.how ul{margin:10px 0 0;padding-inline-start:20px}
+.how li{margin-bottom:4px}
+.how b{color:var(--rust)}
+.parents{border:2px solid var(--taupe-l)}
 .times{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
 .times span{background:var(--bg);border-radius:10px;padding:4px 12px;font-size:15px;font-weight:600;color:var(--muted)}
 .times b{color:var(--ink);font-weight:800;margin-inline-start:4px}
@@ -123,7 +138,9 @@ details.parents[open] summary::after{content:" −"}
 .p-sec ul{margin:0;padding-inline-start:20px}
 .rules{width:100%;border-collapse:collapse;font-size:15px;margin-bottom:6px}
 .rules td{padding:6px 4px;border-bottom:1px solid var(--line)}
-.rules td:last-child{text-align:start;font-weight:700;white-space:nowrap}
+.rules td:last-child{text-align:start;font-weight:700}
+.rules td{overflow-wrap:anywhere}
+@media (min-width:600px){.rules td:last-child{white-space:nowrap}.rules tr.long td:last-child{white-space:normal}}
 .route{font-size:15px;margin-bottom:4px}
 
 footer.foot{text-align:center;color:var(--muted);font-size:13px;padding-bottom:30px}

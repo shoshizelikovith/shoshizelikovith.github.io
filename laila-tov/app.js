@@ -70,6 +70,9 @@ function build(D){
     }
     for (const b of D.bonuses.filter(b=>b.kid===k.id)) earn.push({ date:b.date, amt:b.amt, kind:'surprise', reason:b.reason });
     const total = earn.reduce((a,e)=>a+e.amt,0);
+    const spent = (D.spent||[]).filter(s=>s.kid===k.id).reduce((a,s)=>a+s.amt,0);
+    const share = D.goal.shares?.[k.id] ?? D.goal.price;
+    const balance = total - spent;
     // רצף נוכחי: מהערב האחרון שדווח, אחורה בתוך אותו שבוע
     let streak = 0;
     const lastN = list[list.length-1];
@@ -78,7 +81,7 @@ function build(D){
     const from = addDays(lastN ? lastN.date : today, -30);
     const recent = list.filter(n => n.date > from);
     const grace = { start: recent.filter(n=>n.graceStart).length, quiet: recent.filter(n=>n.graceQuiet).length };
-    out[k.id] = { kid:k, byDate, earn, total, streak, grace };
+    out[k.id] = { kid:k, byDate, earn, total, spent, balance, share, toGoal: Math.max(0, share - balance), goalP: Math.min(1, balance/share), streak, grace };
   }
   return out;
 }
@@ -122,13 +125,19 @@ const DRONE = [
   '.....LLLL........LLLL.....'
 ];
 const DRONE_COL = { P:C.taupeL, M:C.charcoal, A:C.taupe, B:C.rust, Y:C.cream, C:C.charcoal, L:C.taupe };
-function mosaicSVG(progress){
-  const cs = 22, rows = DRONE.length, cols = DRONE[0].length, cells = [];
-  for (let r=rows-1; r>=0; r--) for (let c=cols-1; c>=0; c--) if (DRONE[r][c] !== '.') cells.push([r,c,DRONE[r][c]]);
-  const filled = Math.round(cells.length * Math.min(1, progress));
-  let s = '';
-  cells.forEach(([r,c,ch], i) => {
-    const x = c*cs, y = r*cs, on = i < filled, col = on ? DRONE_COL[ch] : C.empty;
+// כל ילד בונה חצי: הימני לילד הראשון, השמאלי לשני. הרחפן שלם רק כששני החצאים מלאים
+function mosaicSVG(progRight, progLeft){
+  const cs = 22, rows = DRONE.length, cols = DRONE[0].length, mid = cols/2;
+  const half = (from, to, p) => {
+    const cells = [];
+    for (let r=rows-1; r>=0; r--) for (let c=to-1; c>=from; c--) if (DRONE[r][c] !== '.') cells.push([r,c,DRONE[r][c]]);
+    const filled = Math.round(cells.length * Math.min(1, p));
+    return cells.map((x,i) => [...x, i < filled]);
+  };
+  const cells = [...half(mid, cols, progRight), ...half(0, mid, progLeft)];
+  let s = `<line x1="${mid*cs}" y1="0" x2="${mid*cs}" y2="${rows*cs}" stroke="#D9D1C6" stroke-width="2" stroke-dasharray="5 5"/>`;
+  cells.forEach(([r,c,ch,on]) => {
+    const x = c*cs, y = r*cs, col = on ? DRONE_COL[ch] : C.empty;
     s += `<rect x="${x+1}" y="${y+1}" width="${cs-2}" height="${cs-2}" rx="3" fill="${col}"/>`
        + `<rect x="${x+1}" y="${y+cs-5}" width="${cs-2}" height="4" rx="2" fill="${on ? shade(col,-.22) : '#E2DBCF'}"/>`
        + `<circle cx="${x+cs/2}" cy="${y+cs/2-1}" r="5.5" fill="${on ? shade(col,.18) : C.emptyStud}"/>`;
@@ -150,15 +159,19 @@ function render(){
   let h = '';
   if (D.sample) h += `<p class="sample">אלה נתוני דוגמה. הם יוחלפו בנתונים האמיתיים מהדף הראשון שתצלמו.</p>`;
 
-  // המטרה המשותפת
-  const g = D.goal, sum = Object.values(M).reduce((a,k)=>a+k.total,0);
+  // המטרה המשותפת: לכל ילד החלק שלו, וקונים רק כששניהם הגיעו
+  const g = D.goal, K = D.kids.map(k => M[k.id]);
+  const ready = K.every(k => k.toGoal === 0);
   h += `<section class="card goal">
-    <div class="goal-head"><h2>חוסכים יחד ל${esc(g.name)}</h2>
-      <div class="goal-num">${money(sum)} <small>מתוך ${money(g.price)}</small></div></div>
-    ${mosaicSVG(sum / g.price)}
-    <div class="bar" aria-hidden="true"><i style="width:${Math.min(100, sum/g.price*100).toFixed(1)}%"></i></div>
-    <div class="contrib">${Object.values(M).map(k=>`<span>${esc(k.kid.name)}: <b>${money(k.total)}</b></span>`).join('')}
-      <span>עוד <b>${money(Math.max(0,g.price-sum))}</b> ל${esc(g.name)}</span></div>
+    <div class="goal-head"><h2>${esc(g.name)} משותף · ${money(g.price)}</h2>
+      <div class="goal-num">${ready ? 'שניכם הגעתם. אפשר לקנות!' : `<small>כל אחד בונה את החצי שלו</small>`}</div></div>
+    ${mosaicSVG(K[0].goalP, K[1]?.goalP ?? 0)}
+    <div class="halves">${K.map(k => `<div class="half">
+        <div class="half-top"><b>${esc(k.kid.name)}</b><span>${money(Math.min(k.balance,k.share))} מתוך ${money(k.share)}</span></div>
+        <div class="bar" aria-hidden="true"><i style="width:${(k.goalP*100).toFixed(1)}%"></i></div>
+        <div class="half-left">${k.toGoal ? `עוד <b>${money(k.toGoal)}</b>` : `<b>החצי שלו מוכן</b>`}</div>
+      </div>`).join('')}</div>
+    ${!ready && K.some(k=>k.toGoal===0) ? `<p class="wait">${esc(K.find(k=>k.toGoal===0).kid.name)} כבר הגיע לחצי שלו. מחכים ש${esc(K.find(k=>k.toGoal>0).kid.name)} יגיע, ואז קונים יחד.</p>` : ''}
   </section>`;
 
   // הילדים
@@ -177,8 +190,10 @@ function render(){
         <img src="${esc(k.img)}" width="${k.w}" height="${k.h}" alt="${esc(k.name)}">
         <div class="kid-id"><h2>${esc(k.name)}</h2>
           <div class="kid-week">${money(wSum)} השבוע</div>
-          <div class="kid-sub">בכספת ${money(st.total)}${st.streak>1?` · רצף של ${st.streak} ערבים`:''}</div></div>
+          <div class="kid-sub">בכספת ${money(st.balance)}${st.streak>1?` · רצף של ${st.streak} ערבים`:''}</div></div>
       </div>
+      <div class="togoal"><div>${st.toGoal ? `עוד <b>${money(st.toGoal)}</b> לחצי שלך ב${esc(g.name)}` : `<b>החצי שלך ב${esc(g.name)} מוכן!</b>`}</div>
+        <div class="bar" aria-hidden="true"><i style="width:${(st.goalP*100).toFixed(1)}%"></i></div></div>
       <div class="times"><span>מתחילים <b>${k.targets.start}</b></span><span>שקט <b>${k.targets.quiet}</b></span></div>
       <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}</div>
       <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
@@ -221,18 +236,38 @@ function render(){
     </section>`;
   }
 
-  // להורים
-  const last = addDays(today, -1), missing = [];
-  for (const k of D.kids)
-    for (let w = weekOf(D.trackingFrom); w <= last; w = addDays(w,7))
-      nightsOf(w).forEach((d,i) => { if (d >= D.trackingFrom && d <= last && !M[k.id].byDate[d]) missing.push(`${DAYNAME[i]} ${dm(d)} · ${k.name}`); });
-  const month = today.slice(0,7);
-  h += `<details class="parents"><summary>להורים</summary>
+  // איך צוברים - מה שהילדים רואים. בונוסי ההפתעה לא מופיעים כנוסחה
+  if (D.view !== 'parent'){
+    h += `<section class="card how"><h2>איך צוברים</h2>
+      <ul>
+        <li>ערב שבו התחלת בזמן, היה שקט בזמן ועשית את כל הסדר: <b>${money(S.base)}</b></li>
+        <li>3 ערבים כאלה ברצף: עוד <b>${money(S.streak3)}</b>. אפשר פעמיים בשבוע</li>
+        <li>שבוע שלם של 6 ערבים: עוד <b>${money(S.streak6)}</b></li>
+        <li>ויש גם בונוסי הפתעה על דברים שהופכים אותך למנהל ערב אלוף...</li>
+      </ul></section>`;
+  }
+
+  // אזור אמא - רק בקישור של אמא (parent.enc). בקישור של הילדים הוא לא קיים בכלל
+  if (D.view === 'parent'){
+    const last = addDays(today, -1), missing = [];
+    for (const k of D.kids)
+      for (let w = weekOf(D.trackingFrom); w <= last; w = addDays(w,7))
+        nightsOf(w).forEach((d,i) => { if (d >= D.trackingFrom && d <= last && !M[k.id].byDate[d]) missing.push(`${DAYNAME[i]} ${dm(d)} · ${k.name}`); });
+    const month = today.slice(0,7);
+    const kname = id => D.kids.find(k=>k.id===id)?.name || id;
+    const notes = D.nights.filter(n => n.note).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
+    const reps = (D.momReports||[]).slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14);
+    h += `<section class="card parents" id="parents"><h2>האזור של אמא</h2>
+    <p class="sub">רק בקישור שלך. הילדים לא רואים את האזור הזה, וגם לא יכולים לפתוח אותו.</p>
     <div class="p-sec"><h3>ערבים שחסר עליהם דיווח</h3>${missing.length?`<ul>${missing.map(m=>`<li>${esc(m)}</li>`).join('')}</ul>`:'<p class="sub">אין. הכל מעודכן.</p>'}
       <p class="sub">ערב בלי דיווח לא נחשב כישלון. אפשר להשלים אותו בכל זמן, והוא מקבל ניקוד מלא גם בדיעבד.</p></div>
+    <div class="p-sec"><h3>הדיווח שלי</h3>${reps.length?`<table class="rules">${reps.map(r=>`<tr class="long"><td>${dm(r.date)} · ${esc(kname(r.kid))}</td><td>${[r.wet===true?'הרטבה':r.wet===false?'בלי הרטבה':'', r.wake&&('קימה '+r.wake), r.tired&&('עייפות '+r.tired), r.calm&&('רוגע '+r.calm), r.focus&&('ריכוז '+r.focus), r.mood&&('מצב רוח '+r.mood)].filter(Boolean).map(esc).join(' · ')}${r.note?`<br><span class="sub">${esc(r.note)}</span>`:''}</td></tr>`).join('')}</table>`:'<p class="sub">עוד אין דיווחים.</p>'}
+      <p class="sub">שולחים לקלוד במילים, למשל: ״דיווח אמא, איתמר: בלי הרטבה, קם בקלות, רגוע״.</p></div>
+    ${notes.length?`<div class="p-sec"><h3>הערות מהערבים</h3><ul>${notes.map(n=>`<li>${dm(n.date)} · ${esc(kname(n.kid))}: ${esc(n.note)}</li>`).join('')}</ul></div>`:''}
     <div class="p-sec"><h3>החודש</h3><table class="rules">
       ${D.kids.map(k=>{ const m = M[k.id].earn.filter(e=>e.date.startsWith(month)).reduce((a,e)=>a+e.amt,0);
         return `<tr><td>${esc(k.name)}</td><td>${money(m)} מתוך יעד של ${money(S.monthlyBudget)}</td></tr>`; }).join('')}
+      ${D.kids.map(k=>`<tr><td>שולם ל${esc(k.name)} עד היום</td><td>${money(M[k.id].spent)}</td></tr>`).join('')}
       ${D.kids.map(k=>`<tr><td>חלון החסד של ${esc(k.name)} (30 יום)</td><td>התחלה ${M[k.id].grace.start} · שקט ${M[k.id].grace.quiet}</td></tr>`).join('')}
     </table></div>
     <div class="p-sec"><h3>החוקים</h3><table class="rules">
@@ -244,11 +279,13 @@ function render(){
       <tr><td>כל 3 ערבים מדויקים, בלי חלון החסד (הפתעה)</td><td>+${money(S.surpriseExact)}</td></tr>
       <tr><td>ערב חריג שאישרת וקבעת לו זמנים</td><td>כמו ערב רגיל</td></tr>
       <tr><td>ליל שישי</td><td>לא נספר</td></tr>
+      <tr><td>${esc(D.goal.name)}: ${D.kids.map(k=>`${esc(k.name)} ${money(M[k.id].share)}`).join(', ')}</td><td>קונים רק כששניהם הגיעו</td></tr>
     </table>
     <p class="sub">בונוסי ההפתעה לא מופיעים לילדים כנוסחה. ההתבוננות מחוץ לתגמולים כרגע.</p></div>
     <div class="p-sec"><h3>המסלול של כל ילד</h3>${D.kids.map(k=>`<p class="route"><b>${esc(k.name)}:</b> ${k.route.map(r=>`${esc(r[0])} ${r[1]}`).join(' · ')}</p>`).join('')}</div>
     <div class="p-sec"><h3>איך מעדכנים</h3><p>מצלמים את הדף השבועי ושולחים לקלוד. הוא קורא, מעדכן כאן ומחזיר שורה אחת של מה שהבין.</p></div>
-  </details>`;
+  </section>`;
+  }
 
   h += `<footer class="foot">עודכן ${esc((D.updated||'').replace('T',' '))}</footer>`;
   $('#app').innerHTML = h;
@@ -261,20 +298,23 @@ function lock(msg){
 // ---------- load ----------
 async function load(){
   const hp = new URLSearchParams(location.hash.slice(1));
+  // הקישור של אמא (#p=) לא נשמר במכשיר, כדי שבמחשב המשותף הילדים לא יגיעו אליו. קישור הילדים (#k=) כן נשמר
+  const p = hp.get('p');
   let k = hp.get('k');
-  try { if (k) localStorage.setItem('lt-key', k); else k = localStorage.getItem('lt-key'); } catch(e){}
-  if (!k) return lock('פתחו את הקישור המלא פעם אחת במכשיר הזה, ומאז הדף ייפתח לבד.');
+  if (!p){ try { if (k) localStorage.setItem('lt-key', k); else k = localStorage.getItem('lt-key'); } catch(e){} }
+  if (!p && !k) return lock('פתחו את הקישור המלא פעם אחת במכשיר הזה, ומאז הדף ייפתח לבד.');
   let payload;
-  try { payload = await (await fetch('data.enc?t='+Date.now(), {cache:'no-store'})).json(); }
+  try { payload = await (await fetch((p ? 'parent.enc' : 'data.enc')+'?t='+Date.now(), {cache:'no-store'})).json(); }
   catch(e){ $('#status').textContent = 'אין חיבור כרגע. נסו שוב בעוד רגע.'; return; }
   try {
-    const key = await crypto.subtle.importKey('raw', b64d(k), 'AES-GCM', false, ['decrypt']);
+    const key = await crypto.subtle.importKey('raw', b64d(p || k), 'AES-GCM', false, ['decrypt']);
     const pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv:b64d(payload.iv) }, key, b64d(payload.ct));
     DATA = JSON.parse(new TextDecoder().decode(pt));
   } catch(e){
-    try { localStorage.removeItem('lt-key'); } catch(_){}
+    if (!p) try { localStorage.removeItem('lt-key'); } catch(_){}
     return lock('המפתח בקישור לא מתאים. פתחו שוב את הקישור המלא.');
   }
+  if (DATA.view === 'parent'){ document.title = 'לילה טוב · אמא'; $('.top h1').textContent = 'לילה טוב · אמא'; }
   M = build(DATA);
   weeks = [];
   const lastWeek = [weekOf(today), ...DATA.nights.map(n=>weekOf(n.date))].sort().pop();
