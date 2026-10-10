@@ -1,0 +1,14 @@
+{
+  "name": "לילה טוב",
+  "short_name": "לילה טוב",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F5F2EB",
+  "theme_color": "#13234A",
+  "icons": [
+    { "src": "img/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
