@@ -38,8 +38,10 @@ function evalNight(n, kid, S){
   const late = (a, b) => mins(a) - mins(b);
   const ds = n.start ? late(n.start, t.start) : 999, dq = n.quiet ? late(n.quiet, t.quiet) : 999;
   const startOk = ds <= S.graceMinutes, quietOk = dq <= S.graceMinutes;
-  const qualifies = startOk && quietOk && n.routine !== false;
-  return { ...n, startOk, quietOk, qualifies,
+  // הסדר: שלוש תיבות בדף (צחצוח, בגדים למחר, קריאת שמע). כולן חייבות להיות מסומנות
+  const routineOk = n.done ? !!(n.done.teeth && n.done.clothes && n.done.shema) : n.routine !== false;
+  const qualifies = startOk && quietOk && routineOk;
+  return { ...n, routineOk, startOk, quietOk, qualifies,
     exact: qualifies && ds <= 0 && dq <= 0,
     alone: qualifies && n.indep === 'לבד',
     graceStart: ds > 0 && ds <= S.graceMinutes, graceQuiet: dq > 0 && dq <= S.graceMinutes };
@@ -106,7 +108,7 @@ function towerSVG(n, isFuture){
   if (!n){
     if (!isFuture) s = `<rect x="2" y="${H-BH}" width="${W-4}" height="${BH-2}" rx="3" fill="none" stroke="${C.ghost}" stroke-width="2" stroke-dasharray="4 3"/><text x="${W/2}" y="${H-BH+14}" text-anchor="middle" font-size="12" font-weight="700" fill="${C.ghost}">?</text>`;
   } else {
-    const mid = n.routine === false ? null : n.indep === 'לבד' ? C.taupe : n.indep === 'תזכורת אחת' ? C.taupeL : null;
+    const mid = !n.routineOk ? null : n.indep === 'לבד' ? C.taupe : n.indep === 'תזכורת אחת' ? C.taupeL : null;
     s += brickSVG(0, C.rust, W, BH, H, !n.startOk);
     s += brickSVG(1, mid || C.taupe, W, BH, H, !mid);
     s += brickSVG(2, C.charcoal, W, BH, H, !n.quietOk);
