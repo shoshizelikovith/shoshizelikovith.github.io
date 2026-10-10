@@ -26,7 +26,11 @@ h1,h2,h3,p{margin:0}
 /* ---------- header ---------- */
 .top{background:var(--charcoal);color:#fff;position:relative;padding-top:env(safe-area-inset-top)}
 .top-in{max-width:1100px;margin:0 auto;padding:22px 20px 26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:14px;text-decoration:none;font-size:32px;font-weight:800;color:var(--bg);line-height:1}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;font-size:30px;font-weight:800;color:var(--bg);line-height:1}
+@media (max-width:420px){.brand{font-size:24px;gap:10px}}
+.logo{position:relative;width:34px;height:20px;background:var(--rust-l);border-radius:4px;flex:none;margin-top:6px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18)}
+.logo::before,.logo::after{content:"";position:absolute;top:-6px;width:10px;height:7px;background:var(--rust-l);border-radius:3px 3px 0 0}
+.logo::before{right:5px}.logo::after{left:5px}
 .who{margin-inline-start:auto;color:var(--bg);text-decoration:none;font-weight:700;font-size:16px;background:#4A5055;border-radius:12px;padding:8px 14px}
 .who[hidden]{display:none}
 .moon{width:34px;height:34px;border-radius:50%;box-shadow:-9px 4px 0 0 var(--rust-l);transform:translateX(9px);flex:none}

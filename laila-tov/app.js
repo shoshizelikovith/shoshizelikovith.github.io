@@ -373,7 +373,7 @@ async function load(){
     try { if (p) sessionStorage.removeItem('lt-pkey'); else localStorage.removeItem('lt-key'); } catch(_){}
     return lock('המפתח בקישור לא מתאים. פתחו שוב את הקישור המלא.');
   }
-  if (DATA.view === 'parent'){ document.title = 'לילה טוב · אמא'; $('#title').textContent = 'לילה טוב · אמא'; }
+  if (DATA.view === 'parent'){ document.title = 'הבנאים האלופים · אמא'; $('#title').textContent = 'הבנאים האלופים · אמא'; }
   M = build(DATA);
   weeks = [];
   const lastWeek = [weekOf(today), ...DATA.nights.map(n=>weekOf(n.date))].sort().pop();
