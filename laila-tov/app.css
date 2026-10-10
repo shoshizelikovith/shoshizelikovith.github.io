@@ -26,7 +26,9 @@ h1,h2,h3,p{margin:0}
 /* ---------- header ---------- */
 .top{background:var(--charcoal);color:#fff;position:relative;padding-top:env(safe-area-inset-top)}
 .top-in{max-width:1100px;margin:0 auto;padding:22px 20px 26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.top h1{font-size:34px;font-weight:800;letter-spacing:.5px;color:var(--bg);line-height:1}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;font-size:32px;font-weight:800;color:var(--bg);line-height:1}
+.who{margin-inline-start:auto;color:var(--bg);text-decoration:none;font-weight:700;font-size:16px;background:#4A5055;border-radius:12px;padding:8px 14px}
+.who[hidden]{display:none}
 .moon{width:34px;height:34px;border-radius:50%;box-shadow:-9px 4px 0 0 var(--rust-l);transform:translateX(9px);flex:none}
 .weeknav{margin-inline-start:auto;display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px}
 .weeknav[hidden]{display:none}
@@ -148,3 +150,98 @@ footer.foot{text-align:center;color:var(--muted);font-size:13px;padding-bottom:3
 /* ---------- lock ---------- */
 .lock{max-width:420px;margin:30px auto;text-align:center}
 .lock h2{font-size:24px;margin-bottom:8px}
+
+/* ---------- עמודים ---------- */
+a.card{display:block;text-decoration:none;color:inherit}
+.page-title{font-size:32px;font-weight:800;line-height:1.15}
+.lead{font-size:19px;font-weight:600;color:var(--muted);margin-top:-14px}
+body.has-tabs main{padding-bottom:120px}
+
+/* מי נכנס */
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pick-kid{background:var(--card);border-radius:22px;padding:18px 12px 16px;text-align:center;text-decoration:none;color:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 3px 0 var(--line),0 10px 26px rgba(54,59,63,.08);border:3px solid transparent}
+.pick-kid:hover,.pick-kid:focus-visible{border-color:var(--rust)}
+.pick-kid img{width:auto;height:170px}
+.pick-name{font-size:28px;font-weight:800;line-height:1.1}
+.pick-money{font-size:16px;font-weight:700;color:var(--rust)}
+.pick-kid.mom{grid-column:1/-1;flex-direction:row;justify-content:center;gap:12px;padding:14px}
+.pick-kid.mom .pick-name{font-size:21px}
+.pick-icon{font-size:28px}
+@media (min-width:700px){.pick-kid img{height:230px}.pick-name{font-size:34px}}
+
+/* הבית שלי */
+.hero{display:flex;align-items:flex-end;gap:18px;padding:0 4px}
+.hero-img{width:auto;height:190px;flex:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.18))}
+.hero-txt h2{font-size:34px;font-weight:800;line-height:1.1}
+.hero-money{margin-top:8px;background:var(--card);border-radius:16px;padding:10px 16px;display:inline-flex;flex-direction:column;box-shadow:0 2px 0 var(--line)}
+.hero-money span{font-size:15px;font-weight:600;color:var(--muted)}
+.hero-money b{font-size:34px;font-weight:800;color:var(--rust);line-height:1.1}
+.hero-streak{margin-top:10px;font-weight:700;font-size:17px}
+a.card.tonight{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap;font-size:18px;line-height:1.4;background:var(--charcoal);color:#fff}
+.tonight .t-txt{flex:1;min-width:200px}
+.tonight b{color:#F2C7AE}
+.t-icon{font-size:34px}
+.t-go{margin-inline-start:auto;white-space:nowrap;font-weight:700;font-size:15px;color:#fff;background:#4A5055;border-radius:10px;padding:4px 10px}
+.week-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.week-head .weeknav{margin:0}
+.weeknav{display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px}
+.weeknav button{width:36px;height:36px;border-radius:12px;border:0;background:var(--bg);color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
+.week-sum{font-size:22px;font-weight:800;color:var(--rust);margin:6px 0 14px}
+.legend{margin-top:12px}
+.fb{display:block}
+.fb p{font-size:17px}
+.goal-mini{display:flex;align-items:center;gap:14px;font-size:17px;font-weight:600}
+.goal-mini>span{font-size:36px}
+.goal-mini>div{flex:1}
+.goal-mini b{color:var(--rust)}
+.goal-mini .bar{margin:8px 0 0}
+
+/* הערב שלי */
+.big-goals{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.big-goal{background:var(--card);border-radius:20px;padding:18px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 3px 0 var(--line);border-top:8px solid var(--rust)}
+.big-goal.night{border-top-color:var(--charcoal)}
+.bg-icon{font-size:40px;line-height:1}
+.bg-label{font-size:18px;font-weight:700}
+.big-goal b{font-size:44px;font-weight:800;line-height:1.05;direction:ltr}
+.steps{list-style:none;margin:14px 0 10px;padding:0;display:grid;gap:8px}
+.steps li{display:flex;align-items:center;gap:12px;background:var(--bg);border-radius:14px;padding:10px 14px;font-size:18px;font-weight:600}
+.steps li.key{background:#F6E3D7;outline:2px solid var(--rust-l)}
+.s-icon{font-size:26px;width:34px;text-align:center}
+.s-name{flex:1}
+.s-time{font-size:21px;font-weight:800;direction:ltr}
+.earn{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line);font-size:17px}
+.earn>span{font-size:30px;line-height:1}
+.earn .amt{color:var(--rust);font-size:21px}
+.how .sub{margin-top:10px}
+
+/* הכספת */
+.coin{margin:0 auto;width:210px;height:210px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#D9875A,var(--rust) 60%,#8C3F1E);
+  color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 -10px 0 rgba(0,0,0,.15),0 10px 24px rgba(181,85,43,.3)}
+.coin span{font-size:18px;font-weight:700;opacity:.9}
+.coin b{font-size:52px;font-weight:800;line-height:1.05}
+.goal-line{font-size:18px;font-weight:600;margin-top:8px}
+.goal-line b{color:var(--rust)}
+.ledger{list-style:none;margin:12px 0 0;padding:0}
+.ledger li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:16px}
+.ledger li span:first-child{color:var(--muted);font-weight:600;white-space:nowrap}
+.ledger b{color:var(--rust);white-space:nowrap}
+
+/* משפטים וטיפים */
+.plain{margin:10px 0 0;padding-inline-start:20px}
+.plain li{margin-bottom:6px;font-size:17px}
+.exp{background:#F6E3D7}
+.exp .big{font-size:22px;font-weight:800;margin-top:8px;line-height:1.35}
+.tips{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+.tips li{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border-radius:14px;padding:12px 14px;font-size:17px}
+.tips li span{font-size:24px;line-height:1.2}
+.p-sec.first{margin-top:0}
+
+/* סרגל הכפתורים למטה */
+.tabs{position:fixed;inset-inline:0;bottom:0;z-index:5;background:var(--card);box-shadow:0 -4px 18px rgba(54,59,63,.12);
+  display:grid;grid-template-columns:repeat(5,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));max-width:720px;margin:0 auto;border-radius:20px 20px 0 0}
+.tabs[hidden]{display:none}
+.tabs a{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--muted);font-size:12.5px;font-weight:700;padding:6px 2px;border-radius:14px;text-align:center;line-height:1.15}
+.tabs a span{font-size:26px;line-height:1.1}
+.tabs a.on{background:#F6E3D7;color:var(--ink)}
+@media (min-width:600px){.tabs a{font-size:14px}}

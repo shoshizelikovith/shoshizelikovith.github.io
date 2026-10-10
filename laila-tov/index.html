@@ -11,24 +11,20 @@
 <link rel="apple-touch-icon" href="img/icon-180.png">
 <link rel="icon" href="img/icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="app.css?v=5">
+<link rel="stylesheet" href="app.css?v=7">
 </head>
 <body>
 <header class="top">
   <div class="top-in">
-    <div class="moon" aria-hidden="true"></div>
-    <h1>לילה טוב</h1>
-    <nav class="weeknav" id="weeknav" hidden>
-      <button type="button" id="prev" aria-label="שבוע קודם">›</button>
-      <span id="weeklabel"></span>
-      <button type="button" id="next" aria-label="שבוע הבא">‹</button>
-    </nav>
+    <a class="brand" href="#/"><span class="moon" aria-hidden="true"></span><span id="title">לילה טוב</span></a>
+    <a class="who" id="who" href="#/" hidden>מי נכנס?</a>
   </div>
   <div class="studs-edge" aria-hidden="true"></div>
 </header>
 <main id="app">
   <p class="status" id="status">טוען…</p>
 </main>
-<script src="app.js?v=5"></script>
+<nav class="tabs" id="tabs" hidden></nav>
+<script src="app.js?v=7"></script>
 </body>
 </html>
