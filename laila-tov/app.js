@@ -75,14 +75,20 @@ function build(D){
         } else run = 0;
       }
     }
-    // צחצוח בוקר וערב: ימים רצופים (שישי לא נספר). כל 6 ברצף = הפתעה
+    // צחצוח בוקר וערב, לפי הסדר: בקרים מראשון עד שישי (שבת בבוקר לא נספר), ערבים ממוצ״ש עד חמישי (ליל שבת לא נספר).
+    // שבוע שלם = 6 בקרים + 6 ערבים ברצף = הפתעה
     const eveTeeth = d => { const n = byDate[d]; return !!n && (n.done ? !!n.done.teeth : n.routine !== false); };
     const lastAny = all.map(n=>n.date).sort().pop();
     let brushRun = 0;
     if (lastAny) for (let d = D.trackingFrom; d <= lastAny; d = addDays(d,1)){
-      if (parse(d).getDay() === 5) continue;
-      if (morning[d] && eveTeeth(d)){ if (++brushRun % S.brushStreak === 0) earn.push({ date:d, amt:S.brushBonus, kind:'surprise', reason:'הפתעה: שבוע שלם של צחצוח בבוקר ובערב' }); }
-      else brushRun = 0;
+      const dow = parse(d).getDay();
+      const events = [];
+      if (dow !== 6) events.push(!!morning[d]);
+      if (dow !== 5 && (d < lastAny || byDate[d])) events.push(eveTeeth(d));
+      for (const ok of events){
+        if (ok){ if (++brushRun % (S.brushStreak*2) === 0) earn.push({ date:d, amt:S.brushBonus, kind:'surprise', reason:'הפתעה: שבוע שלם של צחצוח בבוקר ובערב' }); }
+        else brushRun = 0;
+      }
     }
     for (const b of D.bonuses.filter(b=>b.kid===k.id)) earn.push({ date:b.date, amt:b.amt, kind:'surprise', reason:b.reason });
     earn.sort((a,b)=>b.date.localeCompare(a.date));
@@ -191,9 +197,9 @@ function viewEntry(){
 
 // ---------- הבית שלי ----------
 function viewHome(st){
-  const D = DATA, S = D.settings, k = st.kid, ws = weeks[wi], dates = nightsOf(ws);
+  const D = DATA, S = D.settings, k = st.kid, ws = weeks[wi], dates = nightsOf(ws), days7 = [...dates, addDays(ws,6)];
   const ns = dates.map(d => st.byDate[d]), rep = ns.filter(Boolean), cnt = f => rep.filter(f).length;
-  const wEarn = st.earn.filter(e => e.date >= dates[0] && e.date <= dates[5]);
+  const wEarn = st.earn.filter(e => e.date >= ws && e.date <= days7[6]);
   const wSum = wEarn.reduce((a,e)=>a+e.amt,0);
   const nightSum = d => st.earn.filter(e => e.date===d && e.kind==='base').reduce((a,e)=>a+e.amt,0);
   const fb = D.weeks.filter(w => w.kid===k.id).sort((a,b)=>b.week.localeCompare(a.week))[0];
@@ -213,13 +219,13 @@ function viewHome(st){
   <section class="card">
     <div class="week-head"><h2>השבוע שלי</h2>
       <div class="weeknav"><button type="button" data-w="-1" aria-label="שבוע קודם" ${wi===0?'disabled':''}>›</button>
-        <span>${dm(dates[0])} עד ${dm(dates[5])}</span>
+        <span>${dm(days7[0])} עד ${dm(days7[6])}</span>
         <button type="button" data-w="1" aria-label="שבוע הבא" ${wi===weeks.length-1?'disabled':''}>‹</button></div></div>
     <p class="week-sum">${money(wSum)} השבוע</p>
-    <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}</div>
-    <div class="mrow">${dates.map(d => `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined && d>=today ? '' : '🪥'}</span>`).join('')}</div>
+    <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}<div class="night shab">🕯️</div></div>
+    <div class="mrow">${days7.map((d,i) => i===0 ? '<span class="none"></span>' : `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined && d>=today ? '' : '🪥'}</span>`).join('')}</div>
     <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
-      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}</div>
+      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
     <div class="legend">
       <span><i style="background:${C.rust}"></i>התחלתי בזמן</span>
       <span><i style="background:${C.taupe}"></i>עשיתי לבד</span>
@@ -230,7 +236,7 @@ function viewHome(st){
       <span class="chip">🌙 שקט בזמן: ${cnt(n=>n.quietOk)} מתוך ${rep.length}</span>
       <span class="chip">🧹 התחלתי בזמן: ${cnt(n=>n.startOk)} מתוך ${rep.length}</span>
       <span class="chip">💪 לבד: ${cnt(n=>n.indep==='לבד')} מתוך ${rep.length}</span>
-      <span class="chip">🪥 צחצוח בוקר וערב: ${st.brushRun} ימים ברצף</span></div>
+      <span class="chip">🪥 ${st.brushRun} צחצוחים ברצף, בוקר וערב</span></div>
     ${wEarn.filter(e=>e.kind!=='base').map(b=>`<p class="bonus ${b.kind}">+${money(b.amt)} · ${esc(b.reason)}</p>`).join('')}
     ${graceMsg?`<p class="nudge">${esc(graceMsg)}</p>`:''}
   </section>
@@ -332,7 +338,7 @@ function viewMom(){
       <tr><td>ערב שאמא לא בבית ועמדו בהכל</td><td>+${money(S.momAway)}</td></tr>
       <tr><td>כל 3 ערבים שהכל נעשה לבד (הפתעה)</td><td>+${money(S.surpriseIndep)}</td></tr>
       <tr><td>כל 3 ערבים מדויקים, בלי חלון החסד (הפתעה)</td><td>+${money(S.surpriseExact)}</td></tr>
-      <tr><td>${S.brushStreak} ימים ברצף של צחצוח בבוקר ובערב (הפתעה)</td><td>+${money(S.brushBonus)}</td></tr>
+      <tr><td>שבוע רצוף של צחצוח: ${S.brushStreak} בקרים (ראשון עד שישי) ו-${S.brushStreak} ערבים (מוצ״ש עד חמישי). שבת בבוקר לא נספר (הפתעה)</td><td>+${money(S.brushBonus)}</td></tr>
       <tr><td>ערב חריג שאישרת וקבעת לו זמנים</td><td>כמו ערב רגיל</td></tr>
       <tr><td>ליל שישי</td><td>לא נספר</td></tr>
       <tr><td>${esc(D.goal.name)}: ${D.kids.map(k=>`${esc(k.name)} ${money(M[k.id].share)}`).join(', ')}</td><td>קונים רק כששניהם הגיעו</td></tr>
