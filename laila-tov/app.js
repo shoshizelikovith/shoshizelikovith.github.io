@@ -51,7 +51,10 @@ function build(D){
   const S = D.settings, out = {};
   for (const k of D.kids){
     const byDate = {}, earn = [];
-    const list = D.nights.filter(n => n.kid===k.id).map(n => evalNight(n,k,S)).sort((a,b)=>a.date.localeCompare(b.date));
+    const all = D.nights.filter(n => n.kid===k.id);
+    const list = all.filter(n => n.start || n.quiet).map(n => evalNight(n,k,S)).sort((a,b)=>a.date.localeCompare(b.date));
+    const morning = {};
+    for (const n of all) if (n.morning !== undefined) morning[n.date] = !!n.morning;
     for (const n of list) byDate[n.date] = n;
     let alone = 0, exact = 0;
     for (const n of list){
@@ -72,6 +75,15 @@ function build(D){
         } else run = 0;
       }
     }
+    // צחצוח בוקר וערב: ימים רצופים (שישי לא נספר). כל 6 ברצף = הפתעה
+    const eveTeeth = d => { const n = byDate[d]; return !!n && (n.done ? !!n.done.teeth : n.routine !== false); };
+    const lastAny = all.map(n=>n.date).sort().pop();
+    let brushRun = 0;
+    if (lastAny) for (let d = D.trackingFrom; d <= lastAny; d = addDays(d,1)){
+      if (parse(d).getDay() === 5) continue;
+      if (morning[d] && eveTeeth(d)){ if (++brushRun % S.brushStreak === 0) earn.push({ date:d, amt:S.brushBonus, kind:'surprise', reason:'הפתעה: שבוע שלם של צחצוח בבוקר ובערב' }); }
+      else brushRun = 0;
+    }
     for (const b of D.bonuses.filter(b=>b.kid===k.id)) earn.push({ date:b.date, amt:b.amt, kind:'surprise', reason:b.reason });
     earn.sort((a,b)=>b.date.localeCompare(a.date));
     const total = earn.reduce((a,e)=>a+e.amt,0);
@@ -85,7 +97,7 @@ function build(D){
     const from = addDays(lastN ? lastN.date : today, -30);
     const recent = list.filter(n => n.date > from);
     const grace = { start: recent.filter(n=>n.graceStart).length, quiet: recent.filter(n=>n.graceQuiet).length };
-    out[k.id] = { kid:k, list, byDate, earn, buys, total, spent, balance, share,
+    out[k.id] = { kid:k, list, byDate, morning, brushRun, earn, buys, total, spent, balance, share,
                   toGoal: Math.max(0, share - balance), goalP: Math.min(1, balance/share), streak, grace };
   }
   return out;
@@ -205,17 +217,20 @@ function viewHome(st){
         <button type="button" data-w="1" aria-label="שבוע הבא" ${wi===weeks.length-1?'disabled':''}>‹</button></div></div>
     <p class="week-sum">${money(wSum)} השבוע</p>
     <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}</div>
+    <div class="mrow">${dates.map(d => `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined && d>=today ? '' : '🪥'}</span>`).join('')}</div>
     <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
       return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}</div>
     <div class="legend">
       <span><i style="background:${C.rust}"></i>התחלתי בזמן</span>
       <span><i style="background:${C.taupe}"></i>עשיתי לבד</span>
       <span><i style="background:${C.taupeL}"></i>עם תזכורת</span>
-      <span><i style="background:${C.charcoal}"></i>שקט בזמן</span></div>
+      <span><i style="background:${C.charcoal}"></i>שקט בזמן</span>
+      <span>🪥 צחצוח בבוקר</span></div>
     <div class="chips">
       <span class="chip">🌙 שקט בזמן: ${cnt(n=>n.quietOk)} מתוך ${rep.length}</span>
       <span class="chip">🧹 התחלתי בזמן: ${cnt(n=>n.startOk)} מתוך ${rep.length}</span>
-      <span class="chip">💪 לבד: ${cnt(n=>n.indep==='לבד')} מתוך ${rep.length}</span></div>
+      <span class="chip">💪 לבד: ${cnt(n=>n.indep==='לבד')} מתוך ${rep.length}</span>
+      <span class="chip">🪥 צחצוח בוקר וערב: ${st.brushRun} ימים ברצף</span></div>
     ${wEarn.filter(e=>e.kind!=='base').map(b=>`<p class="bonus ${b.kind}">+${money(b.amt)} · ${esc(b.reason)}</p>`).join('')}
     ${graceMsg?`<p class="nudge">${esc(graceMsg)}</p>`:''}
   </section>
@@ -244,6 +259,7 @@ function viewEvening(st){
     <div class="earn"><span>🏆</span><p><b>ערב מנצח</b> = התחלתי בזמן + שקט בזמן + עשיתי צחצוח, בגדים וקריאת שמע<br><b class="amt">${money(S.base)}</b></p></div>
     <div class="earn"><span>🔥</span><p><b>3 ערבים מנצחים ברצף</b><br>עוד <b class="amt">${money(S.streak3)}</b> (אפשר פעמיים בשבוע)</p></div>
     <div class="earn"><span>⭐</span><p><b>שבוע שלם, 6 ערבים</b><br>עוד <b class="amt">${money(S.streak6)}</b></p></div>
+    <div class="earn"><span>🪥</span><p><b>צחצוח בבוקר ובערב, כל יום ברצף</b><br>תסמנו כל בוקר ותעקבו אחרי הרצף. מי שמתמיד, מחכה לו הפתעה...</p></div>
     <div class="earn"><span>🎁</span><p><b>ויש גם הפתעות</b><br>על דברים שהופכים אותך למנהל ערב אלוף...</p></div>
     <p class="sub">יש לך ${S.graceMinutes} דקות חסד. אבל הכי טוב להגיע בזמן.</p></section>`;
 }
@@ -316,6 +332,7 @@ function viewMom(){
       <tr><td>ערב שאמא לא בבית ועמדו בהכל</td><td>+${money(S.momAway)}</td></tr>
       <tr><td>כל 3 ערבים שהכל נעשה לבד (הפתעה)</td><td>+${money(S.surpriseIndep)}</td></tr>
       <tr><td>כל 3 ערבים מדויקים, בלי חלון החסד (הפתעה)</td><td>+${money(S.surpriseExact)}</td></tr>
+      <tr><td>${S.brushStreak} ימים ברצף של צחצוח בבוקר ובערב (הפתעה)</td><td>+${money(S.brushBonus)}</td></tr>
       <tr><td>ערב חריג שאישרת וקבעת לו זמנים</td><td>כמו ערב רגיל</td></tr>
       <tr><td>ליל שישי</td><td>לא נספר</td></tr>
       <tr><td>${esc(D.goal.name)}: ${D.kids.map(k=>`${esc(k.name)} ${money(M[k.id].share)}`).join(', ')}</td><td>קונים רק כששניהם הגיעו</td></tr>
