@@ -52,7 +52,9 @@ function build(D){
   for (const k of D.kids){
     const byDate = {}, earn = [];
     const all = D.nights.filter(n => n.kid===k.id);
-    const list = all.filter(n => n.start || n.quiet).map(n => evalNight(n,k,S)).sort((a,b)=>a.date.localeCompare(b.date));
+    // ערב דווח אם יש בו משהו מהערב (גם בלי שעות). רשומה של בוקר בלבד היא רק צחצוח בבוקר
+    const hasEvening = n => ['start','quiet','indep','done','routine','special'].some(f => n[f] !== undefined);
+    const list = all.filter(hasEvening).map(n => evalNight(n,k,S)).sort((a,b)=>a.date.localeCompare(b.date));
     const morning = {};
     for (const n of all) if (n.morning !== undefined) morning[n.date] = !!n.morning;
     for (const n of list) byDate[n.date] = n;
@@ -236,7 +238,7 @@ function viewHome(st){
       <span class="chip">🌙 שקט בזמן: ${cnt(n=>n.quietOk)} מתוך ${rep.length}</span>
       <span class="chip">🧹 התחלתי בזמן: ${cnt(n=>n.startOk)} מתוך ${rep.length}</span>
       <span class="chip">💪 לבד: ${cnt(n=>n.indep==='לבד')} מתוך ${rep.length}</span>
-      <span class="chip">🪥 ${st.brushRun} צחצוחים ברצף, בוקר וערב</span></div>
+      <span class="chip">🪥 ${st.brushRun===1 ? 'צחצוח אחד' : st.brushRun+' צחצוחים'} ברצף, בוקר וערב</span></div>
     ${wEarn.filter(e=>e.kind!=='base').map(b=>`<p class="bonus ${b.kind}">+${money(b.amt)} · ${esc(b.reason)}</p>`).join('')}
     ${graceMsg?`<p class="nudge">${esc(graceMsg)}</p>`:''}
   </section>
