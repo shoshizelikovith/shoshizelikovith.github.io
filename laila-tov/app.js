@@ -205,6 +205,12 @@ function viewHome(st){
   const wSum = wEarn.reduce((a,e)=>a+e.amt,0);
   const nightSum = d => st.earn.filter(e => e.date===d && e.kind==='base').reduce((a,e)=>a+e.amt,0);
   const fb = D.weeks.filter(w => w.kid===k.id).sort((a,b)=>b.week.localeCompare(a.week))[0];
+  // ערב שלא ניצח אבל היה בו מאמץ אמיתי: התחיל בזמן, עשה הכל לבד וסימן את כל הסדר. הכרה, בלי כסף
+  const effort = n => n && !n.qualifies && n.startOk && n.routineOk && n.indep === 'לבד';
+  const kudos = [
+    ...dates.filter((d,i) => effort(ns[i])).map(d => `${dayName(d)}: התחלת להתארגן בזמן, עשית הכל לבד וסימנת צחצוח, בגדים וקריאת שמע. נשאר רק דבר אחד, להגיע לשקט ב-${(st.byDate[d].special||k.targets).quiet}. אתה ממש קרוב!`),
+    ...(D.praise||[]).filter(p => p.kid===k.id && p.date >= ws && p.date <= days7[6]).map(p => p.text)
+  ];
   const graceMsg = st.grace.quiet >= S.graceNotice ? 'שמנו לב שאתה כמעט תמיד מגיע לשקט, אבל הרבה פעמים ממש על הקצה. בוא ננסה 3 ערבים להתחיל 5 דקות קודם.'
                  : st.grace.start >= S.graceNotice ? 'שמנו לב שאתה הרבה פעמים מתחיל ממש על הקצה. בוא ננסה 3 ערבים להתחיל 5 דקות קודם.' : '';
   return sampleNote() + `
@@ -227,7 +233,7 @@ function viewHome(st){
     <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}<div class="night shab">🕯️</div></div>
     <div class="mrow">${days7.map((d,i) => i===0 ? '<span class="none"></span>' : `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined ? '' : '🪥'}</span>`).join('')}</div>
     <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
-      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
+      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : effort(n) ? '⭐' : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
     <div class="legend">
       <span><i style="background:${C.rust}"></i>התחלתי בזמן</span>
       <span><i style="background:${C.taupe}"></i>עשיתי לבד</span>
@@ -242,6 +248,7 @@ function viewHome(st){
     ${wEarn.filter(e=>e.kind!=='base').map(b=>`<p class="bonus ${b.kind}">+${money(b.amt)} · ${esc(b.reason)}</p>`).join('')}
     ${graceMsg?`<p class="nudge">${esc(graceMsg)}</p>`:''}
   </section>
+  ${kudos.length ? `<section class="card kudos"><h2>⭐ כל הכבוד!</h2>${kudos.map(t=>`<p>${esc(t)}</p>`).join('')}</section>` : ''}
   ${fb ? `<section class="booklet"><div class="booklet-head"><span class="step">שבוע ${dm(fb.week)}</span><h2>המשוב שלי</h2></div>
     <div class="fb"><p>${esc(fb.feedback)}</p>${fb.next?`<p class="try"><b>האתגר שלי לשבוע הבא:</b> ${esc(fb.next)}</p>`:''}</div></section>` : ''}
   <a class="card goal-mini" href="#/${k.id}/vault"><span>🚁</span><div><div>${goalHalfLine(st)}</div>

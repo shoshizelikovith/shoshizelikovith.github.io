@@ -255,3 +255,5 @@ a.card.tonight{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap;font-
 .mrow span.on{opacity:1;filter:none}
 .night.shab{align-self:end;font-size:20px;opacity:.55;padding-bottom:4px}
 .mrow span.none{visibility:hidden}
+.kudos{background:#FFF6E0;border:2px solid #F0D89A}
+.kudos p{font-size:17px;margin-top:8px;line-height:1.45}
