@@ -7,7 +7,7 @@ const C = { rust:'#B5552B', charcoal:'#363B3F', taupe:'#9C8F82', taupeL:'#CDC3B7
 const NIGHTS = 6;                                   // מוצ״ש עד חמישי. ליל שישי לא נספר
 const DAYNAME = ['מוצ״ש','ראשון','שני','שלישי','רביעי','חמישי'];
 const DAYSHORT = ['מ״ש','א׳','ב׳','ג׳','ד׳','ה׳'];
-const STEP_ICON = { 'סידור חדר':'🧹', 'ארוחת ערב':'🍽️', 'סיום ארוחה וברכת המזון':'🙏', 'מקלחת':'🚿',
+const STEP_ICON = { 'חדר מסודר ובאים לארוחת ערב':'🍽️', 'סידור חדר':'🧹', 'ארוחת ערב':'🍽️', 'סיום ארוחה וברכת המזון':'🙏', 'מקלחת':'🚿',
   'צחצוח שיניים':'🪥', 'בגדים למחר':'👕', 'נכנסים למיטה':'🛏️', 'קריאת שמע שעל המיטה':'📖', 'שקט':'🌙' };
 const TABS = [['', '🏠', 'הבית שלי'], ['evening', '🌙', 'הערב שלי'], ['vault', '💰', 'הכספת'], ['words', '💬', 'המשפטים שלי'], ['tips', '💡', 'טיפים']];
 
@@ -44,7 +44,7 @@ function evalNight(n, kid, S){
   const qualifies = startOk && quietOk;
   return { ...n, routineOk, startOk, quietOk, qualifies,
     exact: qualifies && routineOk && ds <= 0 && dq <= 0,
-    alone: qualifies && routineOk && n.indep === 'לבד',
+    alone: routineOk && n.indep === 'לבד',
     graceStart: ds > 0 && ds <= S.graceMinutes, graceQuiet: dq > 0 && dq <= S.graceMinutes };
 }
 
@@ -209,11 +209,11 @@ function viewHome(st){
   // ערב שלא ניצח אבל היה בו מאמץ אמיתי: התחיל בזמן, עשה הכל לבד וסימן את כל הסדר. הכרה, בלי כסף
   const effort = n => n && !n.qualifies && n.startOk && n.routineOk && n.indep === 'לבד';
   const kudos = [
-    ...dates.filter((d,i) => effort(ns[i])).map(d => `${dayName(d)}: התחלת להתארגן בזמן, עשית הכל לבד וסימנת צחצוח, בגדים וקריאת שמע. נשאר רק דבר אחד, להגיע לשקט ב-${(st.byDate[d].special||k.targets).quiet}. אתה ממש קרוב!`),
+    ...dates.filter((d,i) => effort(ns[i])).map(d => `${dayName(d)}: באת לארוחה בזמן עם חדר מסודר, עשית הכל לבד וסימנת צחצוח, בגדים וקריאת שמע. נשאר רק דבר אחד, להגיע לשקט ב-${(st.byDate[d].special||k.targets).quiet}. אתה ממש קרוב!`),
     ...(D.praise||[]).filter(p => p.kid===k.id && p.date >= ws && p.date <= days7[6]).map(p => p.text)
   ];
   const graceMsg = st.grace.quiet >= S.graceNotice ? 'שמנו לב שאתה כמעט תמיד מגיע לשקט, אבל הרבה פעמים ממש על הקצה. בוא ננסה 3 ערבים להתחיל 5 דקות קודם.'
-                 : st.grace.start >= S.graceNotice ? 'שמנו לב שאתה הרבה פעמים מתחיל ממש על הקצה. בוא ננסה 3 ערבים להתחיל 5 דקות קודם.' : '';
+                 : st.grace.start >= S.graceNotice ? 'שמנו לב שאתה הרבה פעמים מגיע לארוחה ממש על הקצה. בוא ננסה 3 ערבים לסיים את החדר 5 דקות קודם.' : '';
   return sampleNote() + `
   <section class="hero">
     ${kidImg(k, 'hero-img')}
@@ -223,7 +223,7 @@ function viewHome(st){
   </section>
   <a class="card tonight" href="#/${k.id}/evening">
     <span class="t-icon">🌙</span>
-    <span class="t-txt"><b>הערב:</b> מתחילים ב-<b>${k.targets.start}</b><br>שקט במיטה ב-<b>${k.targets.quiet}</b></span>
+    <span class="t-txt"><b>הערב:</b> חדר מסודר ובאים לארוחה ב-<b>${k.targets.start}</b><br>שקט במיטה ב-<b>${k.targets.quiet}</b></span>
     <span class="t-go">למסלול שלי ‹</span></a>
   <section class="card">
     <div class="week-head"><h2>השבוע שלי</h2>
@@ -236,14 +236,14 @@ function viewHome(st){
     <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
       return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : effort(n) ? '⭐' : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
     <div class="legend">
-      <span><i style="background:${C.rust}"></i>התחלתי בזמן</span>
+      <span><i style="background:${C.rust}"></i>לארוחה בזמן</span>
       <span><i style="background:${C.taupe}"></i>עשיתי לבד</span>
       <span><i style="background:${C.taupeL}"></i>עם תזכורת</span>
       <span><i style="background:${C.charcoal}"></i>שקט בזמן</span>
       <span>🪥 צחצוח בבוקר</span></div>
     <div class="chips">
       <span class="chip">🌙 שקט בזמן: ${cnt(n=>n.quietOk)} מתוך ${rep.length}</span>
-      <span class="chip">🧹 התחלתי בזמן: ${cnt(n=>n.startOk)} מתוך ${rep.length}</span>
+      <span class="chip">🍽️ לארוחה בזמן: ${cnt(n=>n.startOk)} מתוך ${rep.length}</span>
       <span class="chip">💪 לבד: ${cnt(n=>n.indep==='לבד')} מתוך ${rep.length}</span>
       <span class="chip">🪥 ${st.brushRun===1 ? 'צחצוח אחד' : st.brushRun+' צחצוחים'} ברצף, בוקר וערב</span></div>
     ${wEarn.filter(e=>e.kind!=='base').map(b=>`<p class="bonus ${b.kind}">+${money(b.amt)} · ${esc(b.reason)}</p>`).join('')}
@@ -263,16 +263,16 @@ function viewEvening(st){
   return `<h2 class="page-title">הערב שלי</h2>
   <p class="lead">שתי השעות הכי חשובות בערב:</p>
   <div class="big-goals">
-    <div class="big-goal"><span class="bg-icon">🧹</span><span class="bg-label">מתחילים להתארגן</span><b>${k.targets.start}</b></div>
+    <div class="big-goal"><span class="bg-icon">🍽️</span><span class="bg-label">חדר מסודר ובאים לארוחה</span><b>${k.targets.start}</b></div>
     <div class="big-goal night"><span class="bg-icon">🌙</span><span class="bg-label">שקט במיטה</span><b>${k.targets.quiet}</b></div>
   </div>
   <section class="card"><h2>המסלול שלי</h2><p class="sub">צעד אחרי צעד, כל ערב.</p>
     <ol class="steps">${k.route.map(([name, t]) => {
-      const key = (name==='סידור חדר' && t===goals[0]) || (name==='שקט' && t===goals[1]);
+      const key = (name==='חדר מסודר ובאים לארוחת ערב' && t===goals[0]) || (name==='שקט' && t===goals[1]);
       return `<li class="${key?'key':''}"><span class="s-icon">${STEP_ICON[name]||'⭐'}</span><span class="s-name">${esc(name)}</span><b class="s-time">${t}</b></li>`; }).join('')}</ol>
     <p class="sub">צחצוח, בגדים למחר וקריאת שמע: רק לסמן ✓ בדף. העיקר שעשית.</p></section>
   <section class="card how"><h2>איך מרוויחים</h2>
-    <div class="earn"><span>🏆</span><p><b>ערב מנצח</b> = התחלתי בזמן + שקט בזמן<br><b class="amt">${money(S.base)}</b></p></div>
+    <div class="earn"><span>🏆</span><p><b>ערב מנצח</b> = באתי לארוחה בזמן עם חדר מסודר + שקט בזמן<br><b class="amt">${money(S.base)}</b></p></div>
     <div class="earn"><span>✅</span><p><b>מסמנים כל ערב צחצוח, בגדים וקריאת שמע</b><br>מי שמסמן הכל, מחכות לו הפתעות...</p></div>
     <div class="earn"><span>🔥</span><p><b>3 ערבים מנצחים ברצף</b><br>עוד <b class="amt">${money(S.streak3)}</b> (אפשר פעמיים בשבוע)</p></div>
     <div class="earn"><span>⭐</span><p><b>שבוע שלם, 6 ערבים</b><br>עוד <b class="amt">${money(S.streak6)}</b></p></div>
@@ -343,11 +343,11 @@ function viewMom(){
       ${D.kids.map(k=>`<tr><td>חלון החסד של ${esc(k.name)} (30 יום)</td><td>התחלה ${M[k.id].grace.start} · שקט ${M[k.id].grace.quiet}</td></tr>`).join('')}
     </table></div>
     <div class="p-sec"><h3>החוקים</h3><table class="rules">
-      <tr><td>ערב מנצח: התחלה ושקט בזמן (עם ${S.graceMinutes} דקות חסד). התיבות לא נדרשות</td><td>${money(S.base)}</td></tr>
+      <tr><td>ערב מנצח: לארוחה (חדר מסודר) ושקט בזמן, עם ${S.graceMinutes} דקות חסד. התיבות לא נדרשות</td><td>${money(S.base)}</td></tr>
       <tr><td>3 ערבים מנצחים ברצף (אפשר פעמיים בשבוע)</td><td>+${money(S.streak3)}</td></tr>
       <tr><td>שבוע מושלם: 6 ערבים</td><td>+${money(S.streak6)}</td></tr>
       <tr><td>ערב מנצח שאמא לא בבית וכל התיבות מסומנות</td><td>+${money(S.momAway)}</td></tr>
-      <tr><td>כל 3 ערבים מנצחים שהכל נעשה לבד וכל התיבות מסומנות (הפתעה)</td><td>+${money(S.surpriseIndep)}</td></tr>
+      <tr><td>כל 3 ערבים שהכל נעשה לבד וכל התיבות מסומנות, גם בלי לנצח בשעות (הפתעה)</td><td>+${money(S.surpriseIndep)}</td></tr>
       <tr><td>כל 3 ערבים מדויקים, בלי חלון החסד וכל התיבות מסומנות (הפתעה)</td><td>+${money(S.surpriseExact)}</td></tr>
       <tr><td>שבוע רצוף של צחצוח: ${S.brushStreak} בקרים (ראשון עד שישי) ו-${S.brushStreak} ערבים (מוצ״ש עד חמישי). שבת בבוקר לא נספר (הפתעה)</td><td>+${money(S.brushBonus)}</td></tr>
       <tr><td>ערב חריג שאישרת וקבעת לו זמנים</td><td>כמו ערב רגיל</td></tr>
