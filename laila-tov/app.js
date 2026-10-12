@@ -225,7 +225,7 @@ function viewHome(st){
         <button type="button" data-w="1" aria-label="שבוע הבא" ${wi===weeks.length-1?'disabled':''}>‹</button></div></div>
     <p class="week-sum">${money(wSum)} השבוע</p>
     <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}<div class="night shab">🕯️</div></div>
-    <div class="mrow">${days7.map((d,i) => i===0 ? '<span class="none"></span>' : `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined && d>=today ? '' : '🪥'}</span>`).join('')}</div>
+    <div class="mrow">${days7.map((d,i) => i===0 ? '<span class="none"></span>' : `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined ? '' : '🪥'}</span>`).join('')}</div>
     <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
       return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
     <div class="legend">
