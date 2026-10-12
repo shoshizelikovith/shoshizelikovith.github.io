@@ -40,10 +40,11 @@ function evalNight(n, kid, S){
   const startOk = ds <= S.graceMinutes, quietOk = dq <= S.graceMinutes;
   // הסדר: שלוש תיבות בדף (צחצוח, בגדים למחר, קריאת שמע). כולן חייבות להיות מסומנות
   const routineOk = n.done ? !!(n.done.teeth && n.done.clothes && n.done.shema) : n.routine !== false;
-  const qualifies = startOk && quietOk && routineOk;
+  // שושי, 12.10: הכסף הבסיסי הוא על השעות בלבד. התיבות המסומנות פותחות את בונוסי ההפתעה
+  const qualifies = startOk && quietOk;
   return { ...n, routineOk, startOk, quietOk, qualifies,
-    exact: qualifies && ds <= 0 && dq <= 0,
-    alone: qualifies && n.indep === 'לבד',
+    exact: qualifies && routineOk && ds <= 0 && dq <= 0,
+    alone: qualifies && routineOk && n.indep === 'לבד',
     graceStart: ds > 0 && ds <= S.graceMinutes, graceQuiet: dq > 0 && dq <= S.graceMinutes };
 }
 
@@ -62,7 +63,7 @@ function build(D){
     for (const n of list){
       if (!n.qualifies) continue;
       earn.push({ date:n.date, amt:S.base, kind:'base', reason:'ערב מנצח' });
-      if (n.momAway) earn.push({ date:n.date, amt:S.momAway, kind:'bonus', reason:'הסתדרתי גם בלי אמא' });
+      if (n.momAway && n.routineOk) earn.push({ date:n.date, amt:S.momAway, kind:'bonus', reason:'הסתדרתי גם בלי אמא' });
       if (n.alone && ++alone % S.surpriseEvery === 0) earn.push({ date:n.date, amt:S.surpriseIndep, kind:'surprise', reason:'הפתעה: ערבים שעשית הכל לבד' });
       if (n.exact && ++exact % S.surpriseEvery === 0) earn.push({ date:n.date, amt:S.surpriseExact, kind:'surprise', reason:'הפתעה: ערבים מדויקים' });
     }
@@ -271,7 +272,8 @@ function viewEvening(st){
       return `<li class="${key?'key':''}"><span class="s-icon">${STEP_ICON[name]||'⭐'}</span><span class="s-name">${esc(name)}</span><b class="s-time">${t}</b></li>`; }).join('')}</ol>
     <p class="sub">צחצוח, בגדים למחר וקריאת שמע: רק לסמן ✓ בדף. העיקר שעשית.</p></section>
   <section class="card how"><h2>איך מרוויחים</h2>
-    <div class="earn"><span>🏆</span><p><b>ערב מנצח</b> = התחלתי בזמן + שקט בזמן + עשיתי צחצוח, בגדים וקריאת שמע<br><b class="amt">${money(S.base)}</b></p></div>
+    <div class="earn"><span>🏆</span><p><b>ערב מנצח</b> = התחלתי בזמן + שקט בזמן<br><b class="amt">${money(S.base)}</b></p></div>
+    <div class="earn"><span>✅</span><p><b>מסמנים כל ערב צחצוח, בגדים וקריאת שמע</b><br>מי שמסמן הכל, מחכות לו הפתעות...</p></div>
     <div class="earn"><span>🔥</span><p><b>3 ערבים מנצחים ברצף</b><br>עוד <b class="amt">${money(S.streak3)}</b> (אפשר פעמיים בשבוע)</p></div>
     <div class="earn"><span>⭐</span><p><b>שבוע שלם, 6 ערבים</b><br>עוד <b class="amt">${money(S.streak6)}</b></p></div>
     <div class="earn"><span>🪥</span><p><b>צחצוח בבוקר ובערב, כל יום ברצף</b><br>תסמנו כל בוקר ותעקבו אחרי הרצף. מי שמתמיד, מחכה לו הפתעה...</p></div>
@@ -341,12 +343,12 @@ function viewMom(){
       ${D.kids.map(k=>`<tr><td>חלון החסד של ${esc(k.name)} (30 יום)</td><td>התחלה ${M[k.id].grace.start} · שקט ${M[k.id].grace.quiet}</td></tr>`).join('')}
     </table></div>
     <div class="p-sec"><h3>החוקים</h3><table class="rules">
-      <tr><td>ערב מנצח: התחלה ושקט בזמן (עם ${S.graceMinutes} דקות חסד), והסדר בוצע</td><td>${money(S.base)}</td></tr>
+      <tr><td>ערב מנצח: התחלה ושקט בזמן (עם ${S.graceMinutes} דקות חסד). התיבות לא נדרשות</td><td>${money(S.base)}</td></tr>
       <tr><td>3 ערבים מנצחים ברצף (אפשר פעמיים בשבוע)</td><td>+${money(S.streak3)}</td></tr>
       <tr><td>שבוע מושלם: 6 ערבים</td><td>+${money(S.streak6)}</td></tr>
-      <tr><td>ערב שאמא לא בבית ועמדו בהכל</td><td>+${money(S.momAway)}</td></tr>
-      <tr><td>כל 3 ערבים שהכל נעשה לבד (הפתעה)</td><td>+${money(S.surpriseIndep)}</td></tr>
-      <tr><td>כל 3 ערבים מדויקים, בלי חלון החסד (הפתעה)</td><td>+${money(S.surpriseExact)}</td></tr>
+      <tr><td>ערב מנצח שאמא לא בבית וכל התיבות מסומנות</td><td>+${money(S.momAway)}</td></tr>
+      <tr><td>כל 3 ערבים מנצחים שהכל נעשה לבד וכל התיבות מסומנות (הפתעה)</td><td>+${money(S.surpriseIndep)}</td></tr>
+      <tr><td>כל 3 ערבים מדויקים, בלי חלון החסד וכל התיבות מסומנות (הפתעה)</td><td>+${money(S.surpriseExact)}</td></tr>
       <tr><td>שבוע רצוף של צחצוח: ${S.brushStreak} בקרים (ראשון עד שישי) ו-${S.brushStreak} ערבים (מוצ״ש עד חמישי). שבת בבוקר לא נספר (הפתעה)</td><td>+${money(S.brushBonus)}</td></tr>
       <tr><td>ערב חריג שאישרת וקבעת לו זמנים</td><td>כמו ערב רגיל</td></tr>
       <tr><td>ליל שישי</td><td>לא נספר</td></tr>
