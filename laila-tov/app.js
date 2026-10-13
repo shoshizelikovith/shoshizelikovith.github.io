@@ -37,7 +37,9 @@ function evalNight(n, kid, S){
   const t = n.special || kid.targets;
   const late = (a, b) => mins(a) - mins(b);
   const ds = n.start ? late(n.start, t.start) : 999, dq = n.quiet ? late(n.quiet, t.quiet) : 999;
-  const startOk = ds <= S.graceMinutes, quietOk = dq <= S.graceMinutes;
+  // התחשבות חריגה של אמא (override): נחשב בזמן, ונרשם עם סיבה באזור של אמא. לא נחשב ״מדויק״
+  const ov = n.override || {};
+  const startOk = ds <= S.graceMinutes || !!ov.start, quietOk = dq <= S.graceMinutes || !!ov.quiet;
   // הסדר: שלוש תיבות בדף (צחצוח, בגדים למחר, קריאת שמע). כולן חייבות להיות מסומנות
   const routineOk = n.done ? !!(n.done.teeth && n.done.clothes && n.done.shema) : n.routine !== false;
   // שושי, 12.10: הכסף הבסיסי הוא על השעות בלבד. התיבות המסומנות פותחות את בונוסי ההפתעה
@@ -234,7 +236,7 @@ function viewHome(st){
     <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}<div class="night shab">🕯️</div></div>
     <div class="mrow">${days7.map((d,i) => i===0 ? '<span class="none"></span>' : `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined ? '' : '🪥'}</span>`).join('')}</div>
     <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
-      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : effort(n) ? '⭐' : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
+      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : effort(n) ? '⭐' : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}${n&&n.override?'<i class="sp">באישור אמא</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
     <div class="legend">
       <span><i style="background:${C.rust}"></i>לארוחה בזמן</span>
       <span><i style="background:${C.taupe}"></i>עשיתי לבד</span>
@@ -326,6 +328,7 @@ function viewMom(){
       nightsOf(w).forEach((d,i) => { if (d >= D.trackingFrom && d <= last && !M[k.id].byDate[d]) missing.push(`${DAYNAME[i]} ${dm(d)} · ${k.name}`); });
   const month = today.slice(0,7);
   const kname = id => D.kids.find(k=>k.id===id)?.name || id;
+  const ovs = D.nights.filter(n => n.override).sort((a,b)=>b.date.localeCompare(a.date));
   const notes = D.nights.filter(n => n.note).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
   const reps = (D.momReports||[]).slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14);
   return sampleNote() + `<h2 class="page-title">האזור של אמא</h2>
@@ -335,6 +338,7 @@ function viewMom(){
       <p class="sub">ערב בלי דיווח לא נחשב כישלון. אפשר להשלים אותו בכל זמן, והוא מקבל ניקוד מלא גם בדיעבד.</p></div>
     <div class="p-sec"><h3>הדיווח שלי</h3>${reps.length?`<table class="rules">${reps.map(r=>`<tr class="long"><td>${dm(r.date)} · ${esc(kname(r.kid))}</td><td>${[r.wet===true?'הרטבה':r.wet===false?'בלי הרטבה':'', r.wake&&('קימה '+r.wake), r.tired&&('עייפות '+r.tired), r.calm&&('רוגע '+r.calm), r.focus&&('ריכוז '+r.focus), r.mood&&('מצב רוח '+r.mood)].filter(Boolean).map(esc).join(' · ')}${r.note?`<br><span class="sub">${esc(r.note)}</span>`:''}</td></tr>`).join('')}</table>`:'<p class="sub">עוד אין דיווחים.</p>'}
       <p class="sub">שולחים לקלוד במילים, למשל: ״דיווח אמא, איתמר: בלי הרטבה, קם בקלות, רגוע״.</p></div>
+    ${ovs.length?`<div class="p-sec"><h3>התחשבויות חריגות שלי</h3><ul>${ovs.map(n=>`<li><b>${dm(n.date)} · ${esc(kname(n.kid))}</b> (${[n.override.start&&'התחלה',n.override.quiet&&'שקט'].filter(Boolean).join(' ו')} נחשב בזמן): ${esc(n.override.reason||'')}</li>`).join('')}</ul><p class="sub">סה״כ ${ovs.length}. כדי לראות אם זה נהיה דפוס.</p></div>`:''}
     ${notes.length?`<div class="p-sec"><h3>הערות מהערבים</h3><ul>${notes.map(n=>`<li>${dm(n.date)} · ${esc(kname(n.kid))}: ${esc(n.note)}</li>`).join('')}</ul></div>`:''}
     <div class="p-sec"><h3>החודש</h3><table class="rules">
       ${D.kids.map(k=>{ const m = M[k.id].earn.filter(e=>e.date.startsWith(month)).reduce((a,e)=>a+e.amt,0);
