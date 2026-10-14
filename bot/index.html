@@ -267,8 +267,16 @@ try{
   const a=localStorage.getItem('yodaat_who'); if(a) whoEl.value=a;
   const b=localStorage.getItem('yodaat_mail'); if(b) mailEl.value=b;
 }catch(e){}
-whoEl.addEventListener('change',()=>{ try{localStorage.setItem('yodaat_who',whoEl.value)}catch(e){} });
-mailEl.addEventListener('change',()=>{ try{localStorage.setItem('yodaat_mail',mailEl.value)}catch(e){} });
+function keepId(){
+  try{
+    localStorage.setItem('yodaat_who', whoEl.value);
+    localStorage.setItem('yodaat_mail', mailEl.value);
+  }catch(e){}
+}
+['input','change','blur'].forEach(ev=>{
+  whoEl.addEventListener(ev, keepId);
+  mailEl.addEventListener(ev, keepId);
+});
 
 /* השיחה נשמרת על המכשיר, כדי שרענון או יציאה לא ימחקו את המסך.
    זה גם הארכיון שלה: היא פותחת וממשיכה לראות מה כתבה. */
@@ -359,6 +367,7 @@ form.addEventListener('submit',async e=>{
   add(q,'me');
   history.push({role:'user',content:q});
   setChatting(true);
+  keepId();
   save();
   qEl.value=''; qEl.style.height='auto'; sendBtn.disabled=true;
 
@@ -443,6 +452,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-152256';</script>
+<script>var BOT_BUILD='BOTCHAN-152750';</script>
 </body>
 </html>
