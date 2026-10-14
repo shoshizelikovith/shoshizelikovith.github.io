@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1014-1517';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1014-1539';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // גיבוי בלבד, אם המדידה נכשלה
 // המחירון של המודל, דולר למיליון טוקנים. קריאה מהמטמון זולה פי עשרה מקלט רגיל.
@@ -48,6 +48,23 @@ function doGet(e) {
   try { ensureTrigger_(); } catch (e2) { /* הדף נפתח גם בלי הטריגר */ }
   if (e && e.parameter && e.parameter.refresh) {
     try { CacheService.getScriptCache().remove('cfg_n'); CFG_ = null; fetchConfig_(); } catch (e3) {}
+  }
+  // הארכיון של התלמידה. מגיע מהשרת, ולכן זהה בטלפון ובמחשב.
+  if (e && e.parameter && e.parameter.hist) {
+    var mailH = String(e.parameter.mail || '').trim().toLowerCase().slice(0, 120);
+    var nH = Math.min(Number(e.parameter.n || 40), 120);
+    var outH = {items: []};
+    if (mailH) {
+      try { outH.items = recentTurns_(mailH, nH); } catch (e4) { outH.items = []; }
+      try {
+        var recH = getRec_(mailH).rec;
+        outH.lesson = recH.lesson || null;
+        outH.course = recH.label || '';
+        outH.done_all = !!recH.done_all;
+      } catch (e5) { /* אין רשומה */ }
+    }
+    return ContentService.createTextOutput(JSON.stringify(outH))
+        .setMimeType(ContentService.MimeType.JSON);
   }
   if (e && e.parameter && e.parameter.diag) {
     return ContentService.createTextOutput(JSON.stringify(diag_()))
@@ -813,6 +830,15 @@ function ask(req) {
               lesson: null};
     }
 
+    // סיימה את כל החומר. מאז אין ״שבוע״, יש בוגרת.
+    if (/סיימתי (?:ללמוד )?(?:את )?הכל|סיימתי את כל (?:הקורס|החומר|השיעורים)/.test(question)) {
+      rec.done_all = true; rec.lesson = null; lesson = null;
+      row = putRec_(mail, rec, row);
+    } else if (/עוד לא סיימתי|אני באמצע|חזרתי ללמוד/.test(question)) {
+      rec.done_all = false;
+      row = putRec_(mail, rec, row);
+    }
+
     // באיזה שבוע היא
     var m = question.match(/(?:שבוע|שיעור)\s*(\d{1,2})/);
     if (m && question.indexOf('ממגנטת') < 0 && question.indexOf('מגנטית') < 0) {
@@ -867,6 +893,11 @@ function ask(req) {
       }
     }
 
+    if (rec.done_all) {
+      where += '\n**היא כבר סיימה ללמוד את כל החומר של הקורס.** אל תשאלי אותה באיזה שבוע ' +
+               'היא, ואל תתייחסי אליה כמי שבאמצע. את יכולה להישען על כל מה שנלמד, ' +
+               'והעבודה איתה היא יישום והעמקה ולא התקדמות בשיעורים.\n';
+    }
     if (lesson) {
       where += '\nהיא נמצאת כרגע ב**שבוע ' + lesson + '** של ' + (rec.label || 'הקורס') +
                '. את יודעת את זה בוודאות. **אל תשאלי אותה שוב באיזה שבוע היא** ' +
@@ -942,7 +973,7 @@ function ask(req) {
     putRec_(mail, rec, row);
     if (!rec['private']) logTurn_(mail, rec, question, answer);
 
-    var out = {a: answer, lesson: lesson};
+    var out = {a: answer, lesson: lesson, done_all: !!rec.done_all};
     if (rid) {
       try { CacheService.getScriptCache().put('ans_' + rid, JSON.stringify(out), 900); }
       catch (e) { /* לא מפיל תשובה */ }
