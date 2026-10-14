@@ -352,7 +352,7 @@ async function loadHistory(){
     clearTimeout(t);
     if(r.ok) d=JSON.parse(await r.text());
   }catch(e){}
-  if(!d || !d.items || !d.items.length){ restore(); askStage(); return; }
+  if(!d || !d.items || !d.items.length){ restore(); return; }
 
   history=d.items.slice();
   courseLabel=d.course||'';
@@ -410,7 +410,7 @@ tag.addEventListener('click',()=>{
   askStage(true);
 });
 
-if(mailEl.value.trim()) loadHistory(); else askStage();
+if(mailEl.value.trim()) loadHistory();
 
 qEl.addEventListener('input',()=>{ qEl.style.height='auto'; qEl.style.height=Math.min(qEl.scrollHeight,140)+'px'; });
 qEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();} });
@@ -480,6 +480,7 @@ form.addEventListener('submit',async e=>{
     if(doneAll) lessonNow=null;
     showTag();
     save();
+    askStage();
   }else{
     /* נכשל גם אחרי שלושה נסיונות. לא מאבדים את מה שהיא כתבה. */
     history.pop();
@@ -539,6 +540,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-154410';</script>
+<script>var BOT_BUILD='BOTCHAN-154551';</script>
 </body>
 </html>
