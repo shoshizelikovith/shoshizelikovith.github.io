@@ -223,11 +223,11 @@ button:disabled{opacity:.4; cursor:default}
     <p>אשה ללא מאמץ · ממגנטת ויודעת</p>
   </div>
   <div id="whoBar">
-    <input id="who" placeholder="השם שלך" autocomplete="off">
+    <input id="who" type="hidden">
     <input id="mail" placeholder="המייל שלך" autocomplete="email" type="email">
     <span id="lessonTag"></span>
   </div>
-  <p id="codeNote">כתבי את <b>המייל שאיתו נרשמת לקורס</b></p>
+  <p id="codeNote">כתבי את <b>המייל שאיתו נרשמת לקורס</b>, ואני אדע מי את</p>
   <div id="privRow">
     <label><input type="radio" name="priv" value="0" checked> <b>שיחה שנשמרת</b> (מומלץ)</label>
     <label><input type="radio" name="priv" value="1"> שיחה דיסקרטית</label>
@@ -449,7 +449,6 @@ form.addEventListener('submit',async e=>{
   const q=qEl.value.trim(); if(!q) return;
   const who=whoEl.value.trim();
   const mail=mailEl.value.trim().toLowerCase();
-  if(!who){ whoEl.focus(); whoEl.style.outline='2px solid var(--pink)'; setTimeout(()=>whoEl.style.outline='',1600); return; }
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){ mailEl.focus(); mailEl.style.outline='2px solid var(--pink)'; setTimeout(()=>mailEl.style.outline='',1600); return; }
 
   add(q,'me');
@@ -541,6 +540,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-155725';</script>
+<script>var BOT_BUILD='BOTCHAN-210719';</script>
 </body>
 </html>
