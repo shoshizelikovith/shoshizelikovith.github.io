@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1008-2024';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1014-1517';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // גיבוי בלבד, אם המדידה נכשלה
 // המחירון של המודל, דולר למיליון טוקנים. קריאה מהמטמון זולה פי עשרה מקלט רגיל.
@@ -727,8 +727,18 @@ function ask(req) {
                'כתבי בבקשה את המייל שלך בשדה למעלה.', lesson: null};
   }
 
+  // הטלפון מנתק בקשות ארוכות, והדף שולח שוב. אם כבר עניתי להודעה הזו -
+  // מחזיר את אותה תשובה במקום לחשב ולחייב פעמיים.
+  var rid = String(req.rid || '').slice(0, 40);
+  if (rid) {
+    try {
+      var hit = CacheService.getScriptCache().get('ans_' + rid);
+      if (hit) return JSON.parse(hit);
+    } catch (e) { /* אין מטמון, ממשיכים רגיל */ }
+  }
+
   var lock = LockService.getScriptLock();
-  try { lock.waitLock(25000); } catch (e) { /* ממשיכים בלי נעילה */ }
+  try { lock.waitLock(8000); } catch (e) { /* ממשיכים בלי נעילה */ }
 
   try {
     var got = getRec_(mail), rec = got.rec, row = got.row;
@@ -894,9 +904,9 @@ function ask(req) {
     // דף שנטען מחדש מגיע בלי היסטוריה. מביאים אותה מהגיליון, אחרת
     // התלמידה פותחת את הבוט ומגלה שהוא לא זוכר כלום.
     if (!history.length && !rec['private']) {
-      history = recentTurns_(mail, 3);
+      history = recentTurns_(mail, 8);
     }
-    var msgs = history.slice(-8).map(function (h) {
+    var msgs = history.slice(-16).map(function (h) {
       return {role: h.role, content: String(h.content)};
     });
     msgs.push({role: 'user', content: question});
@@ -932,7 +942,12 @@ function ask(req) {
     putRec_(mail, rec, row);
     if (!rec['private']) logTurn_(mail, rec, question, answer);
 
-    return {a: answer, lesson: lesson};
+    var out = {a: answer, lesson: lesson};
+    if (rid) {
+      try { CacheService.getScriptCache().put('ans_' + rid, JSON.stringify(out), 900); }
+      catch (e) { /* לא מפיל תשובה */ }
+    }
+    return out;
   } catch (err) {
     // שגיאה לא נעלמת. היא נרשמת, כדי שאפשר יהיה לראות אותה מבחוץ
     // דרך ?diag=1 בלי להיכנס לעורך של גוגל.
