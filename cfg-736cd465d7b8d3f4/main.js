@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1014-1551';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1014-2102';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // גיבוי בלבד, אם המדידה נכשלה
 // המחירון של המודל, דולר למיליון טוקנים. קריאה מהמטמון זולה פי עשרה מקלט רגיל.
@@ -814,7 +814,7 @@ function ask(req) {
         rec.course = 'magnetit'; rec.label = 'ממגנטת';
         row = putRec_(mail, rec, row);
       } else {
-        return {a: 'נעים מאוד, ' + who + '. מצאתי אותך.\n\n' +
+        return {a: 'נעים מאוד' + (rec.name ? ', ' + rec.name : '') + '. מצאתי אותך.\n\n' +
                    'באיזה קורס את רוצה שאלווה אותך עכשיו?\n\n' +
                    '**ממגנטת** (הקורס הראשון)\n' +
                    '**יודעת** (קורס ההמשך, שבעבר נקרא "להיות אשה")\n\n' +
@@ -967,7 +967,7 @@ function ask(req) {
 
     // הפרופיל מתעדכן ברקע בטריגר השעתי. אסור שקריאה שנייה למודל
     // תעכב את התלמידה שמחכה לתשובה.
-    if (who && answer.charAt(0) !== '[' && !rec['private']) {
+    if ((who || rec.name) && answer.charAt(0) !== '[' && !rec['private']) {
       rec.turns = (rec.turns || 0) + 1;
       rec.profile_due = true;
     }
