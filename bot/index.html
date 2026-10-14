@@ -355,6 +355,7 @@ async function loadHistory(){
   if(!d || !d.items || !d.items.length){ restore(); return; }
 
   history=d.items.slice();
+  if(d.name && !whoEl.value.trim()){ whoEl.value=d.name; keepId(); }
   courseLabel=d.course||'';
   doneAll=!!d.done_all; lessonNow=d.lesson||null;
   const hello=chat.querySelector('.msg.hello'); if(hello) hello.remove();
@@ -540,6 +541,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-154551';</script>
+<script>var BOT_BUILD='BOTCHAN-155725';</script>
 </body>
 </html>
