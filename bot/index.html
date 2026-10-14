@@ -96,6 +96,20 @@ header{position:relative; border-bottom:1px solid var(--line)}
   padding:10px 20px 2px; font-size:13px; opacity:.8;
 }
 #idBar b{font-weight:600}
+#lessonTag{cursor:pointer}
+
+/* בחירת השלב, בתוך השיחה עצמה */
+.stage{align-self:center; max-width:94%; text-align:center; margin:2px 0 4px}
+.stage p{margin:0 0 9px; font-size:14.5px; font-weight:300; opacity:.8; line-height:1.7}
+.stage .chips{display:flex; flex-wrap:wrap; gap:7px; justify-content:center}
+.stage .chips button{
+  width:auto; height:auto; border-radius:999px; font:inherit; font-size:14px;
+  padding:8px 15px; background:#fff; color:var(--ink);
+  border:1px solid var(--line); box-shadow:var(--lift); cursor:pointer;
+}
+.stage .chips button.wide{background:var(--purple); color:var(--cream); border-color:var(--purple)}
+.stage .chips button:hover:not(:disabled){transform:translateY(-1px); background:var(--cream-deep)}
+.stage .chips button.wide:hover:not(:disabled){background:var(--pink)}
 #idBar button{
   background:none; border:none; color:var(--purple); font:inherit;
   font-size:12.5px; text-decoration:underline; cursor:pointer;
@@ -323,7 +337,80 @@ document.getElementById('idClear').addEventListener('click',()=>{
   location.reload();
 });
 
-if(mailEl.value.trim()) restore();
+let doneAll=false, lessonNow=null;
+
+/* הארכיון מגיע מהשרת, ולכן הוא זהה בטלפון ובמחשב.
+   אם השרת לא נענה, נופלים למה ששמור על המכשיר. */
+async function loadHistory(){
+  const mail=(mailEl.value||'').trim().toLowerCase();
+  if(!mail) return;
+  let d=null;
+  try{
+    const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),25000);
+    const r=await fetch(EXEC+'?hist=1&n=40&mail='+encodeURIComponent(mail),
+                        {redirect:'follow', signal:ctrl.signal});
+    clearTimeout(t);
+    if(r.ok) d=JSON.parse(await r.text());
+  }catch(e){}
+  if(!d || !d.items || !d.items.length){ restore(); askStage(); return; }
+
+  history=d.items.slice();
+  courseLabel=d.course||'';
+  doneAll=!!d.done_all; lessonNow=d.lesson||null;
+  const hello=chat.querySelector('.msg.hello'); if(hello) hello.remove();
+  const note=document.createElement('div');
+  note.className='msg hello';
+  note.textContent='זו השיחה שלנו עד עכשיו. אפשר פשוט להמשיך.';
+  chat.appendChild(note);
+  d.items.forEach(m=>add(m.content, m.role==='user'?'me':'bot'));
+  showTag();
+  setChatting(true);
+  save();
+  askStage();
+}
+
+function showTag(){
+  const parts=[];
+  if(courseLabel) parts.push(courseLabel);
+  if(doneAll) parts.push('סיימתי ללמוד הכל');
+  else if(lessonNow) parts.push('שבוע '+lessonNow);
+  if(parts.length){ tag.textContent=parts.join(' · '); tag.style.display='inline-block'; }
+  else { tag.style.display='none'; }
+}
+
+/* השאלה על השלב נשאלת בתוך השיחה, בכפתורים, כדי שהתשובה תגיע לבוטית
+   כמו כל הודעה אחרת והיא תדע איפה התלמידה עומדת. */
+function askStage(force){
+  if(!force && (doneAll || lessonNow)) return;
+  if(chat.querySelector('.stage')) return;
+  const weeks = courseLabel==='ממגנטת' ? 4 : 16;
+  const box=document.createElement('div'); box.className='stage';
+  const p=document.createElement('p');
+  p.textContent='כדי שאדע ללוות אותך מדויק - עד איזה שבוע הגעת בלימוד?';
+  box.appendChild(p);
+  const chips=document.createElement('div'); chips.className='chips';
+  for(let i=1;i<=weeks;i++){
+    const b=document.createElement('button'); b.type='button'; b.textContent=i;
+    b.addEventListener('click',()=>{ box.remove(); sendText('אני בשבוע '+i); });
+    chips.appendChild(b);
+  }
+  const done=document.createElement('button');
+  done.type='button'; done.className='wide'; done.textContent='סיימתי ללמוד הכל';
+  done.addEventListener('click',()=>{ box.remove(); sendText('סיימתי ללמוד את הכל'); });
+  chips.appendChild(done);
+  box.appendChild(chips);
+  chat.appendChild(box);
+  chat.scrollTop=chat.scrollHeight;
+}
+
+function sendText(t){ qEl.value=t; form.requestSubmit(); }
+
+tag.addEventListener('click',()=>{
+  const b=chat.querySelector('.stage'); if(b) b.remove();
+  askStage(true);
+});
+
+if(mailEl.value.trim()) loadHistory(); else askStage();
 
 qEl.addEventListener('input',()=>{ qEl.style.height='auto'; qEl.style.height=Math.min(qEl.scrollHeight,140)+'px'; });
 qEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();} });
@@ -388,10 +475,10 @@ form.addEventListener('submit',async e=>{
     add(j.a,'bot');
     history.push({role:'assistant',content:j.a});
     if(j.course) courseLabel=j.course;
-    const parts=[];
-    if(courseLabel) parts.push(courseLabel);
-    if(j.lesson) parts.push('שבוע '+j.lesson);
-    if(parts.length){ tag.textContent=parts.join(' · '); tag.style.display='inline-block'; }
+    if(typeof j.done_all!=='undefined') doneAll=!!j.done_all;
+    if(j.lesson) lessonNow=j.lesson;
+    if(doneAll) lessonNow=null;
+    showTag();
     save();
   }else{
     /* נכשל גם אחרי שלושה נסיונות. לא מאבדים את מה שהיא כתבה. */
@@ -452,6 +539,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-152750';</script>
+<script>var BOT_BUILD='BOTCHAN-154410';</script>
 </body>
 </html>
