@@ -43,10 +43,11 @@ function evalNight(n, kid, S){
   // הסדר: שלוש תיבות בדף (צחצוח, בגדים למחר, קריאת שמע). כולן חייבות להיות מסומנות
   const routineOk = n.done ? !!(n.done.teeth && n.done.clothes && n.done.shema) : n.routine !== false;
   // שושי, 12.10: הכסף הבסיסי הוא על השעות בלבד. התיבות המסומנות פותחות את בונוסי ההפתעה
-  const qualifies = startOk && quietOk;
+  // ערב ״לא נספר״ (excluded) - החלטת אמא: לא מוריד ולא מעלה. בלי כסף, בלי הפתעות, ולא שובר רצף
+  const qualifies = !n.excluded && startOk && quietOk;
   return { ...n, routineOk, startOk, quietOk, qualifies,
     exact: qualifies && routineOk && ds <= 0 && dq <= 0,
-    alone: routineOk && n.indep === 'לבד',
+    alone: !n.excluded && routineOk && n.indep === 'לבד',
     graceStart: ds > 0 && ds <= S.graceMinutes, graceQuiet: dq > 0 && dq <= S.graceMinutes };
 }
 
@@ -73,6 +74,7 @@ function build(D){
     for (const ws of [...new Set(list.map(n => weekOf(n.date)))]){
       let run = 0;
       for (const d of nightsOf(ws)){
+        if (byDate[d]?.excluded) continue;
         if (byDate[d]?.qualifies){
           run++;
           if (run === 3 || run === 6) earn.push({ date:d, amt:S.streak3, kind:'streak', reason:'3 ערבים מנצחים ברצף' });
@@ -104,7 +106,7 @@ function build(D){
     const balance = total - spent;
     let streak = 0;
     const lastN = list[list.length-1];
-    if (lastN) for (const d of nightsOf(weekOf(lastN.date)).filter(d=>d<=lastN.date).reverse()){ if (byDate[d]?.qualifies) streak++; else break; }
+    if (lastN) for (const d of nightsOf(weekOf(lastN.date)).filter(d=>d<=lastN.date).reverse()){ if (byDate[d]?.excluded) continue; if (byDate[d]?.qualifies) streak++; else break; }
     const from = addDays(lastN ? lastN.date : today, -30);
     const recent = list.filter(n => n.date > from);
     const grace = { start: recent.filter(n=>n.graceStart).length, quiet: recent.filter(n=>n.graceQuiet).length };
@@ -236,7 +238,7 @@ function viewHome(st){
     <div class="tower">${ns.map((n,i)=>`<div class="night">${towerSVG(n, dates[i]>=today)}</div>`).join('')}<div class="night shab">🕯️</div></div>
     <div class="mrow">${days7.map((d,i) => i===0 ? '<span class="none"></span>' : `<span class="${st.morning[d]?'on':''}" title="צחצוח בבוקר">${st.morning[d]===undefined ? '' : '🪥'}</span>`).join('')}</div>
     <div class="dlabel">${dates.map((d,i)=>{ const n = ns[i], v = nightSum(d);
-      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : effort(n) ? '⭐' : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}${n&&n.override?'<i class="sp">באישור אמא</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
+      return `<span><b>${DAYSHORT[i]}</b>${dm(d)}<em class="${v?'won':''}">${n ? (v ? money(v) : n.excluded ? 'לא נספר' : effort(n) ? '⭐' : '-') : (d < today ? 'חסר' : '')}</em>${n&&n.special?'<i class="sp">חריג</i>':''}${n&&n.override?'<i class="sp">באישור אמא</i>':''}</span>`; }).join('')}<span><b>ו׳</b>${dm(days7[6])}<em>שבת שלום</em></span></div>
     <div class="legend">
       <span><i style="background:${C.rust}"></i>לארוחה בזמן</span>
       <span><i style="background:${C.taupe}"></i>עשיתי לבד</span>
@@ -329,6 +331,7 @@ function viewMom(){
   const month = today.slice(0,7);
   const kname = id => D.kids.find(k=>k.id===id)?.name || id;
   const ovs = D.nights.filter(n => n.override).sort((a,b)=>b.date.localeCompare(a.date));
+  const exc = D.nights.filter(n => n.excluded).sort((a,b)=>b.date.localeCompare(a.date));
   const notes = D.nights.filter(n => n.note).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,12);
   const reps = (D.momReports||[]).slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,14);
   return sampleNote() + `<h2 class="page-title">האזור של אמא</h2>
@@ -340,6 +343,7 @@ function viewMom(){
       return `<div class="p-sec"><h3>מעקב הרטבה · ${esc(k.name)}</h3><p><b>${run}</b> בקרים יבשים ברצף · ${r.filter(x=>x.wet===false).length} יבשים, ${r.filter(x=>x.wet===true).length} רטובים מתוך ${r.length} שדווחו</p></div>`; }).join('')}
     <div class="p-sec"><h3>הדיווח שלי</h3>${reps.length?`<table class="rules">${reps.map(r=>`<tr class="long"><td>${dm(r.date)} · ${esc(kname(r.kid))}</td><td>${[r.wet===true?'הרטבה':r.wet===false?'בלי הרטבה':'', r.wake&&('קימה '+r.wake), r.tired&&('עייפות '+r.tired), r.calm&&('רוגע '+r.calm), r.focus&&('ריכוז '+r.focus), r.mood&&('מצב רוח '+r.mood)].filter(Boolean).map(esc).join(' · ')}${r.note?`<br><span class="sub">${esc(r.note)}</span>`:''}</td></tr>`).join('')}</table>`:'<p class="sub">עוד אין דיווחים.</p>'}
       <p class="sub">שולחים לקלוד במילים, למשל: ״דיווח אמא, איתמר: בלי הרטבה, קם בקלות, רגוע״.</p></div>
+    ${exc.length?`<div class="p-sec"><h3>ערבים שלא נספרו</h3><ul>${exc.map(n=>`<li><b>${dm(n.date)} · ${esc(kname(n.kid))}</b> (${n.start||'-'} / ${n.quiet||'-'}): ${esc(n.excluded.reason||'')}</li>`).join('')}</ul><p class="sub">לא מורידים ולא מעלים: בלי כסף, ולא שוברים את הרצף.</p></div>`:''}
     ${ovs.length?`<div class="p-sec"><h3>התחשבויות חריגות שלי</h3><ul>${ovs.map(n=>`<li><b>${dm(n.date)} · ${esc(kname(n.kid))}</b> (${[n.override.start&&'התחלה',n.override.quiet&&'שקט'].filter(Boolean).join(' ו')} נחשב בזמן): ${esc(n.override.reason||'')}</li>`).join('')}</ul><p class="sub">סה״כ ${ovs.length}. כדי לראות אם זה נהיה דפוס.</p></div>`:''}
     ${notes.length?`<div class="p-sec"><h3>הערות מהערבים</h3><ul>${notes.map(n=>`<li>${dm(n.date)} · ${esc(kname(n.kid))}: ${esc(n.note)}</li>`).join('')}</ul></div>`:''}
     <div class="p-sec"><h3>החודש</h3><table class="rules">
