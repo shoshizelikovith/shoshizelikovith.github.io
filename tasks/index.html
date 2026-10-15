@@ -255,8 +255,11 @@ document.addEventListener('click',function(e){
   else if(d.act==='runq'){qList().forEach(function(i){if(i.queue==='weekend')upsert({id:i.id,queue:'go'})});render();toast('נשלח להרצה')}
   else if(d.act==='connect'){var raw=(document.getElementById('conn').value||'').trim(),hi=raw.indexOf('#'),pp=new URLSearchParams(hi>-1?raw.slice(hi+1):raw);
     if(pp.get('u')&&pp.get('k')){CFG={u:pp.get('u'),k:pp.get('k')};localStorage.setItem('tasks_cfg',JSON.stringify(CFG));toast('מחובר');sync()}else toast('הקישור לא תקין, להדביק את כולו')}
-  else if(d.act==='copyprompt'){var pi=byId(UI.sheet);var ta=document.getElementById('f_prompt');var done=function(){UI.copied=true;render();setTimeout(function(){UI.copied=false;render()},3500)};
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(promptFor(pi)).then(done,function(){ta.select();document.execCommand('copy');done()})}else{ta.select();document.execCommand('copy');done()}}
+  else if(d.act==='copyprompt'){var pi=byId(UI.sheet),ta=document.getElementById('f_prompt'),ok=false;
+    var done=function(){UI.copied=true;render();setTimeout(function(){UI.copied=false;render()},3500)};
+    var fail=function(){toast('לא הצלחתי להעתיק, לסמן את הפרומפט ולהעתיק ידנית')};
+    try{ta.focus();ta.select();ta.setSelectionRange(0,99999);ok=document.execCommand('copy')}catch(e){}
+    if(ok)done();else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(promptFor(pi)).then(done,fail)}else fail()}
   else if(d.act==='toggletype'){UI.type=UI.type==='project'?'task':'project';render()}
   else if(d.act==='mic'){var c=document.getElementById('cap');c.focus();toast('לחצי על המיקרופון במקלדת ודברי')}
   else if(d.act==='add')addItem();
