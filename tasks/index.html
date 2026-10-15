@@ -212,7 +212,7 @@ function sheetHtml(){
   +'<label>מה</label><textarea class="f ft" id="f_title" rows="1">'+esc(i.title)+'</textarea>'
   +'<button class="btn" style="width:100%;margin:10px 0 4px;font-size:16px;padding:15px;'+(UI.copied?'background:#1f8a70':'')+'" data-act="copyprompt">'+(UI.copied?'✓ הועתק, עכשיו להדביק בצ׳אט עם קלוד':'📋 העתקת פרומפט לקלוד')+'</button>'
   +(chatLink(i)?'<a class="btn o" style="display:block;text-decoration:none;text-align:center;margin-bottom:4px" href="'+esc(chatLink(i))+'">פתיחת הצ׳אט המקורי (במק בלבד)</a>':'')
-  +'<textarea class="f" id="f_prompt" readonly rows="3" style="min-height:70px;font-size:13px;color:#6b6760">'+esc(promptFor(i))+'</textarea>'
+  +'<textarea class="f" id="f_prompt" readonly onfocus="this.select()" rows="3" style="min-height:70px;font-size:13px;color:#6b6760">'+esc(promptFor(i))+'</textarea>'
   +'<label>הערות</label><textarea class="f" id="f_notes" rows="10">'+esc(i.notes)+'</textarea>'
   +'<div class="row2"><div><label>סוג</label><select id="f_type"><option value="task"'+(i.type==='task'?' selected':'')+'>משימה</option><option value="project"'+(i.type==='project'?' selected':'')+'>פרויקט</option><option value="idea"'+(i.type==='idea'?' selected':'')+'>רעיון</option></select></div>'
   +'<div><label>עד מתי</label><input type="date" id="f_due" value="'+esc(i.due)+'"></div></div>'
@@ -259,7 +259,7 @@ document.addEventListener('click',function(e){
     var done=function(){UI.copied=true;render();setTimeout(function(){UI.copied=false;render()},3500)};
     var fail=function(){toast('לא הצלחתי להעתיק, לסמן את הפרומפט ולהעתיק ידנית')};
     try{ta.focus();ta.select();ta.setSelectionRange(0,99999);ok=document.execCommand('copy')}catch(e){}
-    if(ok)done();else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(promptFor(pi)).then(done,fail)}else fail()}
+    if(ok)done();else if(navigator.clipboard&&navigator.clipboard.writeText){var settled=false;navigator.clipboard.writeText(promptFor(pi)).then(function(){settled=true;done()},function(){settled=true;fail()});setTimeout(function(){if(!settled)fail()},1500)}else fail()}
   else if(d.act==='toggletype'){UI.type=UI.type==='project'?'task':'project';render()}
   else if(d.act==='mic'){var c=document.getElementById('cap');c.focus();toast('לחצי על המיקרופון במקלדת ודברי')}
   else if(d.act==='add')addItem();
