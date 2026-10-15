@@ -2,7 +2,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#F2EEE3"><meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="משימות">
-<link rel="stylesheet" href="fonts/assistant.css"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/assistant.css">
+<script>
+window.__showErr=function(msg){try{if(document.getElementById('__err'))return;var d=document.createElement('div');d.id='__err';d.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;background:#fff;color:#111;z-index:99999;padding:20px;font:15px/1.5 -apple-system,Arial,sans-serif;direction:rtl;overflow:auto';
+d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 12. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
+document.documentElement.appendChild(d)}catch(e){}};
+window.addEventListener('error',function(e){window.__showErr((e.message||'')+' @'+(e.lineno||'')+':'+(e.colno||'')+' '+String(e.filename||'').split('/').pop())});
+window.addEventListener('unhandledrejection',function(e){window.__showErr('promise: '+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});
+</script>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>המשימות של שושי</title>
 <style>
 :root{--cream:#F2EEE3;--cream2:#E9E3D3;--paper:#FBF9F2;--mag:#A62F7D;--pink:#DF1767;--navy:#0D122C;--org:#F36E21;--mut:#6b6b73}
