@@ -131,16 +131,16 @@ function qCard(){var q=qList();if(!q.length)return'';var d=new Date().getDay(),h
   return '<div class="free" data-act="queue" style="background:'+(hot?'var(--pink)':'var(--mag)')+'"><div>תור סוף השבוע: '+q.length+' משימות<small style="color:#f6dcea">'+(go?go+' מחכות שאריץ':hot?'היום הזמן להפעיל':'מחכות ליום חמישי')+'</small></div><span>›</span></div>'}
 function sec(t,list,opts){if(!list.length)return'';return'<div class="sec"><span>'+t+'</span><span>'+list.length+'</span></div>'+list.map(function(i){return row(i,opts)}).join('')}
 function viewToday(){
-  var t=today(),op=S.items.filter(function(i){return isOpen(i)&&i.type==='task'&&!i.queue});
+  var t=today(),op0=S.items.filter(function(i){return isOpen(i)&&i.type==='task'&&!i.queue});var mail=op0.filter(function(i){return i.area==='מיילים לטיפול'}).sort(sortT),op=op0.filter(function(i){return mail.indexOf(i)<0});
   var me=op.filter(function(i){return i.needsMe==='true'||i.needsMe===true});
   var rest=op.filter(function(i){return me.indexOf(i)<0});
   var inbox=rest.filter(function(i){return i.status==='inbox'});rest=rest.filter(function(i){return i.status!=='inbox'});
   var td=rest.filter(function(i){return i.due&&i.due<=t}).sort(sortT);
   var wk=rest.filter(function(i){return i.due&&i.due>t&&i.due<=addDays(t,7)}).sort(sortD);
   var later=rest.filter(function(i){return !i.due||i.due>addDays(t,7)}).sort(sortT);
-  var h=sec('מחכה לך',me.sort(sortT))+sec('היום ובאיחור',td)+sec('השבוע',wk)+sec('ממתין לסידור',inbox)+sec('שאר המשימות',later);
+  var h=sec('מיילים שמחכים לך',mail)+sec('מחכה לך',me.sort(sortT))+sec('היום ובאיחור',td)+sec('השבוע',wk)+sec('ממתין לסידור',inbox)+sec('שאר המשימות',later);
   h='<div class="free" data-act="free"><div>יש לי זמן פנוי<small>קלוד יציע מה לקחת</small></div><span>✦</span></div>'+qCard()+h;
-  if(!op.length)h+='<div class="empty">אין משימות פתוחות.<br>כתבי או הקלידי למטה והן יופיעו כאן.</div>';
+  if(!op.length&&!mail.length)h+='<div class="empty">אין משימות פתוחות.<br>כתבי או הקלידי למטה והן יופיעו כאן.</div>';
   return h;
 }
 function viewAreas(){
