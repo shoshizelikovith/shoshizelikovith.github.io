@@ -123,7 +123,7 @@ function row(i,opts){
   if(a)h+='<span><i class="dot" style="background:'+a.c+'"></i>'+esc(a.n)+'</span>';
   if(p&&!opts.noParent)h+='<span>◂ '+esc(p.title)+'</span>';
   if(i.status==='inbox')h+='<span>ממתין לסידור</span>';
-  if(i.queue==='weekend')h+='<span>לסוף שבוע</span>';if(i.queue==='go')h+='<span class="late">ממתין לביצוע</span>';if(i.queue==='run')h+='<span class="late">בביצוע</span>';if(i.queue==='newchat')h+='<span class="late">ממתין לצ׳אט חדש</span>';if(i.queue==='deliver')h+='<span class="late">מועבר לצ׳אט שלו</span>';
+  if(i.queue==='weekend')h+='<span>לסוף שבוע</span>';if(i.queue==='go')h+='<span class="late">ממתין לביצוע</span>';if(i.queue==='run')h+='<span class="late">בביצוע</span>';if(i.queue==='newchat')h+='<span class="late">ממתין לצ׳אט במק</span>';if(i.queue==='deliver')h+='<span class="late">מועבר לצ׳אט שלו</span>';
   return h+'</div></div></div>';
 }
 function qList(){return S.items.filter(function(i){return isOpen(i)&&i.queue==='weekend'})}
@@ -222,7 +222,7 @@ function goHtml(i){
   if(i.type==='project'||!isOpen(i))return '';
   if(i.queue==='go')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ממתין לביצוע במק (כמה דקות, כשהמק פתוח)</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
   if(i.queue==='run')return '<div class="card" style="display:block;background:#dff3e8"><div class="t">קלוד עובד על זה עכשיו'+(/בעלים: local_/.test(i.notes||'')?' (בצ׳אט של הפרויקט)':'')+'</div></div>';
-  if(i.queue==='newchat')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ממתין לפתיחת צ׳אט חדש במק (עד 5 דקות, כשהמק פתוח)</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
+  if(i.queue==='newchat')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ממתין לצ׳אט חדש במק. כדי שייפתח: לכתוב לקלוד בכל צ׳אט ״תפתחי צ׳אטים למשימות״, ויופיע כפתור לחיצה במק</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
   if(i.queue==='deliver')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ההוראה בדרך לצ׳אט של הפרויקט (עד 5 דקות, כשהמק פתוח)</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
   return '<textarea class="f" id="f_goins" rows="6" style="min-height:34vh" placeholder="'+(i.area==='מיילים לטיפול'?'מה לעשות? למשל: אשרי, או: טופל, או: תכתבי לה ככה':'הנחיה לקלוד, לא חובה. למשל: כן, תעשי ככה')+'"></textarea><button class="btn" style="width:100%;margin:6px 0;font-size:16px;padding:14px;background:#1f8a70" data-act="rungo">'+(i.area==='מיילים לטיפול'?'▶ העבירי לטיפול (קלוד יטפל וימשיך)':'▶ בצעי עכשיו')+'</button>';
 }
