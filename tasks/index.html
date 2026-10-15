@@ -320,7 +320,7 @@ document.addEventListener('click',function(e){
     if(ok)done();else if(navigator.clipboard&&navigator.clipboard.writeText){var settled=false;navigator.clipboard.writeText(promptFor(pi)).then(function(){settled=true;done()},function(){settled=true;fail()});setTimeout(function(){if(!settled)fail()},1500)}else fail()}
   else if(d.act==='mail_approve'||d.act==='mail_fix'||d.act==='mail_hold'||d.act==='mail_cancel'){mailAct(d.act.slice(5))}
   else if(d.act==='sendreq'){var rq=document.getElementById('f_req'),rt=rq?rq.value.trim():'';if(!rt){toast('לכתוב קודם מה לסדר');return}
-    upsert({id:uid(),type:'task',status:'open',source:'shoshi',title:'בקשה למנהל המשימות: '+rt.split('\n')[0].slice(0,70),notes:rt,priority:'2',area:'כללי: שירות, מזכירות ותמיכה טכנית',queue:'go'});rq.value='';render();toast('נשלח למנהל המשימות')}
+    upsert({id:uid(),type:'task',status:'open',source:'shoshi',title:'בקשה למנהל המשימות: '+rt.split('\n')[0].slice(0,70),notes:rt,priority:'2',area:'כללי: שירות, מזכירות ותמיכה',queue:'go'});rq.value='';render();toast('נשלח למנהל המשימות')}
   else if(d.act==='rungo'){var gi=byId(UI.sheet),gf=document.getElementById('f_goins'),gt=gf?gf.value.trim():'';
     upsert({id:gi.id,queue:'go',notes:(gi.notes||'')+(gt?'\n[הנחיה משושי '+new Date().toLocaleDateString('he-IL')+'] '+gt:'')});UI.sheet=null;render();toast('נשלח לביצוע. יבוצע כשהמק פתוח')}
   else if(d.act==='gocancel'){upsert({id:UI.sheet,queue:''});UI.sheet=null;render();toast('בוטל')}
