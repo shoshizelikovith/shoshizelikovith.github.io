@@ -133,6 +133,16 @@ function viewToday(){
   if(!op.length)h+='<div class="empty">אין משימות פתוחות.<br>כתבי או הקלידי למטה והן יופיעו כאן.</div>';
   return h;
 }
+function viewAreas(){
+  var all=S.items.filter(function(i){return isOpen(i)&&i.type!=='project'});
+  if(!UI.area){
+    return areas().map(function(a){var l=all.filter(function(i){return i.area===a.n}),u=l.filter(function(i){return pri(i)===1}).length,m=l.filter(function(i){return i.needsMe==='true'||i.needsMe===true}).length;
+      return '<div class="card" data-area="'+esc(a.n)+'"><i class="dot" style="background:'+a.c+';width:14px;height:14px;margin-top:3px;flex:none"></i><div class="body"><div class="t">'+esc(a.n)+'</div><div class="m"><span>'+l.length+' פתוחים</span>'+(u?'<span class="late">'+u+' דחופים</span>':'')+(m?'<span>'+m+' ממני</span>':'')+'</div></div></div>'}).join('')
+      +(all.filter(function(i){return !area(i.area)}).length?'<div class="card" data-area="__none"><div class="body"><div class="t">בלי תחום</div><div class="m"><span>'+all.filter(function(i){return !area(i.area)}).length+' פתוחים</span></div></div></div>':'');
+  }
+  var n=UI.area==='__none',l=all.filter(function(i){return n?!area(i.area):i.area===UI.area}).sort(sortT);
+  return '<button class="back" data-act="backarea">‹ כל התחומים</button>'+sec('אי אפשר בלי',l.filter(function(i){return pri(i)===1}))+sec('חשוב',l.filter(function(i){return pri(i)===2}))+sec('יפה שיהיה',l.filter(function(i){return pri(i)>=3}))+(l.length?'':'<div class="empty">אין כאן כלום פתוח.</div>');
+}
 function viewProjects(){
   var ps=S.items.filter(function(i){return i.type==='project'&&isOpen(i)});
   var h=ps.map(function(p){var k=kids(p.id),d=k.filter(function(x){return x.status==='done'}).length;var a=area(p.area);
@@ -172,17 +182,17 @@ function viewMore(){
   h+='<div class="sec"><span>חיבור</span></div><div class="card"><div class="body"><div class="t">'+(CFG.u?'מחובר לענן':'לא מחובר (שמירה במכשיר בלבד)')+'</div><div class="m">'+(S.last?'סונכרן לאחרונה: '+new Date(S.last).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}):'')+(S.pending.length?' · '+S.pending.length+' ממתינים לשליחה':'')+'</div></div><button class="btn o" style="flex:none" data-act="syncnow">סנכרון</button></div>';
   return h;
 }
-var TITLES={today:'היום',projects:'פרויקטים',ideas:'רעיונות',done:'מה עשיתי',more:'הגדרות'};
+var TITLES={today:'היום',areas:'תחומים',projects:'פרויקטים',ideas:'רעיונות',done:'מה עשיתי',more:'הגדרות'};
 function render(){
   var a=document.getElementById('app'),act=document.activeElement,keep=act&&act.id==='cap'?{v:act.value,s:act.selectionStart}:null;
   var inProj=UI.tab==='projects'&&UI.pid;var t=new Date(),v;
-  v={today:viewToday,projects:inProj?viewProject:viewProjects,ideas:viewIdeas,done:viewDone,more:viewMore}[UI.tab]();
+  v={today:viewToday,areas:viewAreas,projects:inProj?viewProject:viewProjects,ideas:viewIdeas,done:viewDone,more:viewMore}[UI.tab]();
   var ph=UI.tab==='ideas'?'רעיון חדש...':inProj?'להוסיף לפרויקט...':UI.type==='project'?'שם הפרויקט...':'לכתוב משימה...';
-  var showBar=UI.tab!=='done'&&UI.tab!=='more';
+  var showBar=UI.tab!=='done'&&UI.tab!=='more'&&UI.tab!=='areas';
   var oldMain=document.querySelector('main'),sc=oldMain?oldMain.scrollTop:0;
   a.innerHTML='<header><div class="date">יום '+DAYS[t.getDay()]+', '+t.getDate()+' ב'+MON[t.getMonth()]+'</div><h1>'+(inProj&&byId(UI.pid)?esc(byId(UI.pid).title):TITLES[UI.tab])+'</h1></header><main>'+connHtml()+v+'</main>'
   +(showBar?'<div class="bar">'+(UI.tab==='today'||UI.tab==='projects'&&!inProj?'<button class="chip'+(UI.type==='project'?' on':'')+'" data-act="toggletype" style="padding:12px 11px">פרויקט</button>':'')+(UI.tab==='today'?'<button class="chip'+(UI.q?' on':'')+'" data-act="toggleq" style="padding:12px 11px">סוף שבוע</button>':'')+'<textarea id="cap" rows="1" placeholder="'+ph+'"></textarea><button class="fab" data-act="mic">🎙</button><button class="fab send" data-act="add">＋</button></div>':'')
-  +'<nav>'+[['today','☀','היום'],['projects','▤','פרויקטים'],['ideas','✦','רעיונות'],['done','✓','הושלם'],['more','⚙','עוד']].map(function(x){return '<button data-tab="'+x[0]+'" class="'+(UI.tab===x[0]?'on':'')+'"><b>'+x[1]+'</b>'+x[2]+'</button>'}).join('')+'</nav>'
+  +'<nav>'+[['today','☀','היום'],['areas','◉','תחומים'],['projects','▤','פרויקטים'],['ideas','✦','רעיונות'],['done','✓','הושלם'],['more','⚙','עוד']].map(function(x){return '<button data-tab="'+x[0]+'" class="'+(UI.tab===x[0]?'on':'')+'"><b>'+x[1]+'</b>'+x[2]+'</button>'}).join('')+'</nav>'
   +(UI.sheet?sheetHtml():'')+(UI.toast?'<div class="toast">'+esc(UI.toast)+'</div>':'');
   document.querySelector('main').scrollTop=sc;
   var c=document.getElementById('cap');if(c&&keep){c.value=keep.v;c.focus();c.setSelectionRange(keep.s,keep.s)}
@@ -198,7 +208,7 @@ function sheetHtml(){
   +'<label>הערות</label><textarea class="f" id="f_notes" rows="10">'+esc(i.notes)+'</textarea>'
   +'<div class="row2"><div><label>סוג</label><select id="f_type"><option value="task"'+(i.type==='task'?' selected':'')+'>משימה</option><option value="project"'+(i.type==='project'?' selected':'')+'>פרויקט</option><option value="idea"'+(i.type==='idea'?' selected':'')+'>רעיון</option></select></div>'
   +'<div><label>עד מתי</label><input type="date" id="f_due" value="'+esc(i.due)+'"></div></div>'
-  +'<div class="row2"><div><label>דחיפות</label><select id="f_pri"><option value="1"'+(pri(i)===1?' selected':'')+'>דחוף</option><option value="2"'+(pri(i)===2?' selected':'')+'>חשוב</option><option value="3"'+(pri(i)===3?' selected':'')+'>רגיל</option></select></div>'
+  +'<div class="row2"><div><label>דחיפות</label><select id="f_pri"><option value="1"'+(pri(i)===1?' selected':'')+'>אי אפשר בלי (דחוף)</option><option value="2"'+(pri(i)===2?' selected':'')+'>חשוב</option><option value="3"'+(pri(i)===3?' selected':'')+'>יפה שיהיה</option></select></div>'
   +'<div><label>כמה זמן</label><select id="f_est">'+[['','לא ידוע'],[5,'5 דק׳'],[15,'15 דק׳'],[30,'חצי שעה'],[60,'שעה'],[120,'שעתיים'],[240,'חצי יום']].map(function(o){return '<option value="'+o[0]+'"'+(String(i.estMin)===String(o[0])?' selected':'')+'>'+o[1]+'</option>'}).join('')+'</select></div></div>'
   +'<div class="row2"><div><label>תחום</label><select id="f_area"><option value="">ללא</option>'+areas().map(function(a){return '<option'+(a.n===i.area?' selected':'')+'>'+esc(a.n)+'</option>'}).join('')+'</select></div>'
   +'<div><label>מתי לעשות</label><select id="f_queue"><option value="">כרגיל</option><option value="weekend"'+(i.queue==='weekend'||i.queue==='go'?' selected':'')+'>לתור סוף השבוע</option></select></div></div><div class="row2"><div><label>בתוך פרויקט</label><select id="f_parent"><option value="">ללא</option>'+ps.map(function(p){return '<option value="'+p.id+'"'+(p.id===i.parent?' selected':'')+'>'+esc(p.title)+'</option>'}).join('')+'</select></div></div>'
@@ -218,12 +228,14 @@ function freeHtml(){
 
 /* ---------- אירועים ---------- */
 document.addEventListener('click',function(e){
-  var el=e.target.closest('[data-do],[data-edit],[data-tab],[data-act],[data-proj],[data-free],[data-ac],[data-ad]');if(!el)return;
+  var el=e.target.closest('[data-do],[data-edit],[data-tab],[data-act],[data-proj],[data-area],[data-free],[data-ac],[data-ad]');if(!el)return;
   var d=el.dataset;
   if(d.do){var i=byId(d.do);if(i.status==='done'){upsert({id:i.id,status:'open',doneAt:''})}else{upsert({id:i.id,status:'done',doneAt:new Date().toISOString()});toast('נסגר ✓')}render()}
   else if(d.edit){UI.sheet=d.edit;render()}
-  else if(d.tab){UI.tab=d.tab;if(d.tab!=='projects')UI.pid=null;UI.type='task';render()}
+  else if(d.tab){UI.tab=d.tab;if(d.tab!=='projects')UI.pid=null;if(d.tab!=='areas')UI.area=null;UI.type='task';render()}
   else if(d.proj){UI.pid=d.proj;render()}
+  else if(d.area){UI.area=d.area;render()}
+  else if(d.act==='backarea'){UI.area=null;render()}
   else if(d.free){UI.free=+d.free;render()}
   else if(d.ac){var p=d.ac.split('|');var A=areas().map(function(a){return{n:a.n,c:a.c}});A[+p[0]].c=p[1];setAreas(A)}
   else if(d.ad){var A2=areas().map(function(a){return{n:a.n,c:a.c}});A2.splice(+d.ad,1);setAreas(A2)}
