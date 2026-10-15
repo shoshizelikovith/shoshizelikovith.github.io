@@ -208,7 +208,7 @@ function sheetHtml(){
   if(UI.sheet==='queue')return queueHtml();
   var i=byId(UI.sheet);if(!i)return'';
   var ps=S.items.filter(function(x){return x.type==='project'&&x.id!==i.id});
-  return '<div class="sheet-bg" data-act="closesheet"><div class="sheet" onclick="event.stopPropagation()"><h2>עריכה</h2>'
+  return '<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>עריכה</h2>'
   +'<label>מה</label><textarea class="f ft" id="f_title" rows="1">'+esc(i.title)+'</textarea>'
   +'<button class="btn" style="width:100%;margin:10px 0 4px;font-size:16px;padding:15px;'+(UI.copied?'background:#1f8a70':'')+'" data-act="copyprompt">'+(UI.copied?'✓ הועתק, עכשיו להדביק בצ׳אט עם קלוד':'📋 העתקת פרומפט לקלוד')+'</button>'
   +(chatLink(i)?'<a class="btn o" style="display:block;text-decoration:none;text-align:center;margin-bottom:4px" href="'+esc(chatLink(i))+'">פתיחת הצ׳אט המקורי (במק בלבד)</a>':'')
@@ -223,10 +223,10 @@ function sheetHtml(){
   +'<div class="btns"><button class="btn d" data-act="del" data-id="'+i.id+'">מחיקה</button><button class="btn o" data-act="closesheet">ביטול</button><button class="btn" data-act="savesheet" data-id="'+i.id+'">שמירה</button></div></div></div>';
 }
 function queueHtml(){var q=qList().sort(sortT),go=q.filter(function(i){return i.queue==='go'}).length;
-  return '<div class="sheet-bg" data-act="closesheet"><div class="sheet" onclick="event.stopPropagation()"><h2>תור סוף השבוע</h2><div class="m" style="margin-bottom:10px;font-size:13px">משימות לא דחופות שמחכות לניצול המכסה. בלחיצה על ״להפעיל״ אני מריץ אותן בהקדם האפשרי. שליחה, פרסום ומחיקה לא ירוצו בלי אישור שלך.</div>'
+  return '<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>תור סוף השבוע</h2><div class="m" style="margin-bottom:10px;font-size:13px">משימות לא דחופות שמחכות לניצול המכסה. בלחיצה על ״להפעיל״ אני מריץ אותן בהקדם האפשרי. שליחה, פרסום ומחיקה לא ירוצו בלי אישור שלך.</div>'
   +q.map(function(i){return row(i)}).join('')+(go<q.length?'<div class="btns"><button class="btn" data-act="runq">להפעיל את הכל</button></div>':'<div class="empty">הכל מחכה להרצה.</div>')+'</div></div>'}
 function freeHtml(){
-  var m=UI.free||30,h='<div class="sheet-bg" data-act="closesheet"><div class="sheet" onclick="event.stopPropagation()"><h2>כמה זמן יש לך?</h2><div class="chips">'
+  var m=UI.free||30,h='<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>כמה זמן יש לך?</h2><div class="chips">'
   +[15,30,60,90,180].map(function(x){return '<button class="chip'+(m===x?' on':'')+'" data-free="'+x+'">'+(x<60?x+' דק׳':x===60?'שעה':x===90?'שעה וחצי':'3 שעות')+'</button>'}).join('')+'</div>';
   var c=S.items.filter(function(i){return isOpen(i)&&i.type!=='project'&&!i.queue&&(!i.estMin||+i.estMin<=m)&&!(i.needsMe==='true'||i.needsMe===true)});
   c.sort(function(a,b){var pa=(a.type==='idea'?1:0),pb=(b.type==='idea'?1:0);return pa-pb||sortT(a,b)});
@@ -249,7 +249,7 @@ document.addEventListener('click',function(e){
   else if(d.ad){var A2=areas().map(function(a){return{n:a.n,c:a.c}});A2.splice(+d.ad,1);setAreas(A2)}
   else if(d.act==='back'){UI.pid=null;render()}
   else if(d.act==='free'){UI.sheet='free';UI.free=30;render()}
-  else if(d.act==='closesheet'){UI.sheet=null;render()}
+  else if(d.act==='closesheet'){if(el.classList.contains('sheet-bg')&&e.target!==el)return;UI.sheet=null;render()}
   else if(d.act==='queue'){UI.sheet='queue';render()}
   else if(d.act==='toggleq'){UI.q=!UI.q;render()}
   else if(d.act==='runq'){qList().forEach(function(i){if(i.queue==='weekend')upsert({id:i.id,queue:'go'})});render();toast('נשלח להרצה')}
