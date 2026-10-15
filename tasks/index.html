@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="fonts/assistant.css">
 <script>
 window.__showErr=function(msg){try{if(document.getElementById('__err'))return;var d=document.createElement('div');d.id='__err';d.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;background:#fff;color:#111;z-index:99999;padding:20px;font:15px/1.5 -apple-system,Arial,sans-serif;direction:rtl;overflow:auto';
-d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 15. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
+d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 16. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
 document.documentElement.appendChild(d)}catch(e){}};
 window.addEventListener('error',function(e){window.__showErr((e.message||'')+' @'+(e.lineno||'')+':'+(e.colno||'')+' '+String(e.filename||'').split('/').pop())});
 window.addEventListener('unhandledrejection',function(e){window.__showErr('promise: '+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});
@@ -123,7 +123,7 @@ function row(i,opts){
   if(a)h+='<span><i class="dot" style="background:'+a.c+'"></i>'+esc(a.n)+'</span>';
   if(p&&!opts.noParent)h+='<span>◂ '+esc(p.title)+'</span>';
   if(i.status==='inbox')h+='<span>ממתין לסידור</span>';
-  if(i.queue==='weekend')h+='<span>לסוף שבוע</span>';if(i.queue==='go')h+='<span class="late">מחכה שאריץ</span>';
+  if(i.queue==='weekend')h+='<span>לסוף שבוע</span>';if(i.queue==='go')h+='<span class="late">ממתין לביצוע</span>';if(i.queue==='run')h+='<span class="late">בביצוע</span>';
   return h+'</div></div></div>';
 }
 function qList(){return S.items.filter(function(i){return isOpen(i)&&(i.queue==='weekend'||i.queue==='go')})}
@@ -215,9 +215,14 @@ function promptFor(i){
 function advise(i){
   var t=i.title||'',n=i.notes||'',me=(i.needsMe==='true'||i.needsMe===true);
   if(/מזכירת המייל/.test(t)&&/https:\/\/claude\.ai\/code\//.test(n))return{h:'לענות בצ׳אט של המזכירה',b:'ללחוץ על הכפתור הכחול למטה, ולכתוב שם תשובה קצרה. היא תטפל.'};
-  if(/הרשאות מלאות|ווטסאפ|דרייב|דפדפן|סקולר|רב מסר|קארדקום/.test(t))return{h:'לפתוח צ׳אט חדש במחשב',b:'המשימה צריכה גישה למערכות. ללחוץ ״העתקת פרומפט״ ולהדביק בצ׳אט חדש בקלוד על המחשב.'};
-  if(me&&/^(להחליט|להכריע|לאשר|לבחור|לברר)/.test(t))return{h:'להחליט ולהגיד לקלוד',b:'ללחוץ ״העתקת פרומפט״, להדביק בצ׳אט חדש, ולכתוב שורה אחת עם ההחלטה שלך.'};
-  return{h:'להדביק בצ׳אט חדש עם קלוד',b:'ללחוץ ״העתקת פרומפט״ ולהדביק בצ׳אט חדש. קלוד מבצע ומסמן בוצע.'};
+  if(me&&/^(להחליט|להכריע|לאשר|לבחור|לברר)/.test(t))return{h:'להחליט, ולכתוב לקלוד בשורה אחת',b:'לכתוב את ההחלטה בתיבת ההנחיה ולהוסיף ללחוץ ״בצעי עכשיו״.'};
+  return{h:'ללחוץ ״בצעי עכשיו״',b:'קלוד ירוץ על זה במק. אם הוא צריך ממך משהו, תופיע שאלה במשימה.'};
+}
+function goHtml(i){
+  if(i.type==='project'||!isOpen(i))return '';
+  if(i.queue==='go')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ממתין לביצוע במק (כמה דקות, כשהמק פתוח)</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
+  if(i.queue==='run')return '<div class="card" style="display:block;background:#dff3e8"><div class="t">קלוד עובד על זה עכשיו</div></div>';
+  return '<textarea class="f" id="f_goins" rows="2" style="min-height:56px" placeholder="הנחיה לקלוד, לא חובה. למשל: כן, תעשי ככה"></textarea><button class="btn" style="width:100%;margin:6px 0;font-size:16px;padding:14px;background:#1f8a70" data-act="rungo">▶ בצעי עכשיו</button>';
 }
 function adviseHtml(i){var a=advise(i);return '<div class="card" style="display:block;background:#e9e2f3;margin:8px 0 4px"><div class="t" style="font-size:12px;color:var(--mag)">מה מומלץ לעשות</div><div class="t" style="font-size:17px;margin:2px 0">'+esc(a.h)+'</div><div class="m" style="display:block;font-size:14px;color:var(--navy)">'+esc(a.b)+'</div></div>'}
 function chatLink(i){var m=(i.notes||'').match(/(claude:\/\/|https:\/\/claude\.ai\/code\/)[^\s]+/);return m?m[0]:''}
@@ -258,7 +263,7 @@ function sheetHtml(){
   var ps=S.items.filter(function(x){return x.type==='project'&&x.id!==i.id});
   return '<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>עריכה</h2>'
   +'<label>מה</label><textarea class="f ft" id="f_title" rows="1">'+esc(i.title)+'</textarea>'
-  +adviseHtml(i)+'<button class="btn" style="width:100%;margin:10px 0 4px;font-size:16px;padding:15px;'+(UI.copied?'background:#1f8a70':'')+'" data-act="copyprompt">'+(UI.copied?'✓ הועתק, עכשיו להדביק בצ׳אט עם קלוד':'📋 העתקת פרומפט לקלוד')+'</button>'
+  +adviseHtml(i)+goHtml(i)+'<button class="btn o" style="width:100%;margin:10px 0 4px;font-size:14px;padding:11px;'+(UI.copied?'background:#1f8a70':'')+'" data-act="copyprompt">'+(UI.copied?'✓ הועתק, עכשיו להדביק בצ׳אט עם קלוד':'📋 העתקת פרומפט לקלוד')+'</button>'
   +(chatLink(i)?'<a class="btn o" style="display:block;text-decoration:none;text-align:center;margin-bottom:4px" href="'+esc(chatLink(i))+'">'+(chatLink(i).indexOf('claude://')===0?'פתיחת הצ׳אט המקורי (במק בלבד)':'פתיחת הצ׳אט (עובד גם באייפון)')+'</a>':'')
   +'<textarea class="f" id="f_prompt" readonly onfocus="this.select()" rows="2" style="min-height:48px;font-size:13px;color:#6b6760">'+esc(promptFor(i))+'</textarea>'
   +'<label>הערות</label><textarea class="f" id="f_notes" rows="10">'+esc(i.notes)+'</textarea>'
@@ -309,6 +314,9 @@ document.addEventListener('click',function(e){
     try{ta.focus();ta.select();ta.setSelectionRange(0,99999);ok=document.execCommand('copy')}catch(e){}
     if(ok)done();else if(navigator.clipboard&&navigator.clipboard.writeText){var settled=false;navigator.clipboard.writeText(promptFor(pi)).then(function(){settled=true;done()},function(){settled=true;fail()});setTimeout(function(){if(!settled)fail()},1500)}else fail()}
   else if(d.act==='mail_approve'||d.act==='mail_fix'||d.act==='mail_hold'||d.act==='mail_cancel'){mailAct(d.act.slice(5))}
+  else if(d.act==='rungo'){var gi=byId(UI.sheet),gf=document.getElementById('f_goins'),gt=gf?gf.value.trim():'';
+    upsert({id:gi.id,queue:'go',notes:(gi.notes||'')+(gt?'\n[הנחיה משושי '+new Date().toLocaleDateString('he-IL')+'] '+gt:'')});UI.sheet=null;render();toast('נשלח לביצוע. יבוצע כשהמק פתוח')}
+  else if(d.act==='gocancel'){upsert({id:UI.sheet,queue:''});UI.sheet=null;render();toast('בוטל')}
   else if(d.act==='toggletype'){UI.type=UI.type==='project'?'task':'project';render()}
   else if(d.act==='mic'){var c=document.getElementById('cap');c.focus();toast('לחצי על המיקרופון במקלדת ודברי')}
   else if(d.act==='add')addItem();
