@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="fonts/assistant.css">
 <script>
 window.__showErr=function(msg){try{if(document.getElementById('__err'))return;var d=document.createElement('div');d.id='__err';d.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;background:#fff;color:#111;z-index:99999;padding:20px;font:15px/1.5 -apple-system,Arial,sans-serif;direction:rtl;overflow:auto';
-d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 13. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
+d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 15. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
 document.documentElement.appendChild(d)}catch(e){}};
 window.addEventListener('error',function(e){window.__showErr((e.message||'')+' @'+(e.lineno||'')+':'+(e.colno||'')+' '+String(e.filename||'').split('/').pop())});
 window.addEventListener('unhandledrejection',function(e){window.__showErr('promise: '+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});
@@ -212,6 +212,14 @@ function promptFor(i){
   var n=(i.notes||'').replace(/\n+/g,' ').slice(0,500);
   return 'המשימה באפליקציית המשימות: '+i.title+'\nמזהה: '+i.id+(i.area?'\nתחום: '+i.area:'')+(n?'\nהקשר: '+n:'')+'\nקראי את המשימה המלאה עם python3 ~/tasks-app/tasks.py get '+i.id+', בצעי מה שאפשר, ואם צריך ממני משהו אמרי בשורה אחת. סמני אותה בוצעה באפליקציה רק אחרי שאימתת שבוצעה בפועל.';
 }
+function advise(i){
+  var t=i.title||'',n=i.notes||'',me=(i.needsMe==='true'||i.needsMe===true);
+  if(/מזכירת המייל/.test(t)&&/https:\/\/claude\.ai\/code\//.test(n))return{h:'לענות בצ׳אט של המזכירה',b:'ללחוץ על הכפתור הכחול למטה, ולכתוב שם תשובה קצרה. היא תטפל.'};
+  if(/הרשאות מלאות|ווטסאפ|דרייב|דפדפן|סקולר|רב מסר|קארדקום/.test(t))return{h:'לפתוח צ׳אט חדש במחשב',b:'המשימה צריכה גישה למערכות. ללחוץ ״העתקת פרומפט״ ולהדביק בצ׳אט חדש בקלוד על המחשב.'};
+  if(me&&/^(להחליט|להכריע|לאשר|לבחור|לברר)/.test(t))return{h:'להחליט ולהגיד לקלוד',b:'ללחוץ ״העתקת פרומפט״, להדביק בצ׳אט חדש, ולכתוב שורה אחת עם ההחלטה שלך.'};
+  return{h:'להדביק בצ׳אט חדש עם קלוד',b:'ללחוץ ״העתקת פרומפט״ ולהדביק בצ׳אט חדש. קלוד מבצע ומסמן בוצע.'};
+}
+function adviseHtml(i){var a=advise(i);return '<div class="card" style="display:block;background:#e9e2f3;margin:8px 0 4px"><div class="t" style="font-size:12px;color:var(--mag)">מה מומלץ לעשות</div><div class="t" style="font-size:17px;margin:2px 0">'+esc(a.h)+'</div><div class="m" style="display:block;font-size:14px;color:var(--navy)">'+esc(a.b)+'</div></div>'}
 function chatLink(i){var m=(i.notes||'').match(/(claude:\/\/|https:\/\/claude\.ai\/code\/)[^\s]+/);return m?m[0]:''}
 function mailGet(i){var m=/\n?@@MAIL (\{[\s\S]*\})@@\s*$/.exec((i&&i.notes)||'');try{return m?JSON.parse(m[1]):null}catch(e){return null}}
 function mailSet(i,mk){var h=(i.notes||'').replace(/\n?@@MAIL \{[\s\S]*\}@@\s*$/,'');return (h?h+'\n':'')+'@@MAIL '+JSON.stringify(mk)+'@@'}
@@ -250,9 +258,9 @@ function sheetHtml(){
   var ps=S.items.filter(function(x){return x.type==='project'&&x.id!==i.id});
   return '<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>עריכה</h2>'
   +'<label>מה</label><textarea class="f ft" id="f_title" rows="1">'+esc(i.title)+'</textarea>'
-  +'<button class="btn" style="width:100%;margin:10px 0 4px;font-size:16px;padding:15px;'+(UI.copied?'background:#1f8a70':'')+'" data-act="copyprompt">'+(UI.copied?'✓ הועתק, עכשיו להדביק בצ׳אט עם קלוד':'📋 העתקת פרומפט לקלוד')+'</button>'
+  +adviseHtml(i)+'<button class="btn" style="width:100%;margin:10px 0 4px;font-size:16px;padding:15px;'+(UI.copied?'background:#1f8a70':'')+'" data-act="copyprompt">'+(UI.copied?'✓ הועתק, עכשיו להדביק בצ׳אט עם קלוד':'📋 העתקת פרומפט לקלוד')+'</button>'
   +(chatLink(i)?'<a class="btn o" style="display:block;text-decoration:none;text-align:center;margin-bottom:4px" href="'+esc(chatLink(i))+'">'+(chatLink(i).indexOf('claude://')===0?'פתיחת הצ׳אט המקורי (במק בלבד)':'פתיחת הצ׳אט (עובד גם באייפון)')+'</a>':'')
-  +'<textarea class="f" id="f_prompt" readonly onfocus="this.select()" rows="3" style="min-height:70px;font-size:13px;color:#6b6760">'+esc(promptFor(i))+'</textarea>'
+  +'<textarea class="f" id="f_prompt" readonly onfocus="this.select()" rows="2" style="min-height:48px;font-size:13px;color:#6b6760">'+esc(promptFor(i))+'</textarea>'
   +'<label>הערות</label><textarea class="f" id="f_notes" rows="10">'+esc(i.notes)+'</textarea>'
   +'<div class="row2"><div><label>סוג</label><select id="f_type"><option value="task"'+(i.type==='task'?' selected':'')+'>משימה</option><option value="project"'+(i.type==='project'?' selected':'')+'>פרויקט</option><option value="idea"'+(i.type==='idea'?' selected':'')+'>רעיון</option></select></div>'
   +'<div><label>עד מתי</label><input type="date" id="f_due" value="'+esc(i.due)+'"></div></div>'
