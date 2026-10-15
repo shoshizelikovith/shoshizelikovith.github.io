@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="fonts/assistant.css">
 <script>
 window.__showErr=function(msg){try{if(document.getElementById('__err'))return;var d=document.createElement('div');d.id='__err';d.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;background:#fff;color:#111;z-index:99999;padding:20px;font:15px/1.5 -apple-system,Arial,sans-serif;direction:rtl;overflow:auto';
-d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 18. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
+d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 19. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
 document.documentElement.appendChild(d)}catch(e){}};
 window.addEventListener('error',function(e){window.__showErr((e.message||'')+' @'+(e.lineno||'')+':'+(e.colno||'')+' '+String(e.filename||'').split('/').pop())});
 window.addEventListener('unhandledrejection',function(e){window.__showErr('promise: '+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});
@@ -275,9 +275,11 @@ function sheetHtml(){
   +'<div><label>מתי לעשות</label><select id="f_queue"><option value="">כרגיל</option><option value="weekend"'+(i.queue==='weekend'||i.queue==='go'?' selected':'')+'>לתור סוף השבוע</option></select></div></div><div class="row2"><div><label>בתוך פרויקט</label><select id="f_parent"><option value="">ללא</option>'+ps.map(function(p){return '<option value="'+p.id+'"'+(p.id===i.parent?' selected':'')+'>'+esc(p.title)+'</option>'}).join('')+'</select></div></div>'
   +'<div class="btns"><button class="btn d" data-act="del" data-id="'+i.id+'">מחיקה</button><button class="btn o" data-act="closesheet">ביטול</button><button class="btn" data-act="savesheet" data-id="'+i.id+'">שמירה</button></div></div></div>';
 }
-function queueHtml(){var q=qList().sort(sortT),go=q.filter(function(i){return i.queue==='go'}).length;
-  return '<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>תור סוף השבוע</h2><div class="m" style="margin-bottom:10px;font-size:13px">משימות לא דחופות שמחכות לניצול המכסה. בלחיצה על ״להפעיל״ אני מריץ אותן בהקדם האפשרי. שליחה, פרסום ומחיקה לא ירוצו בלי אישור שלך.</div>'
-  +q.map(function(i){return row(i)}).join('')+(go<q.length?'<div class="btns"><button class="btn" data-act="runq">להפעיל את הכל</button></div>':'<div class="empty">הכל מחכה להרצה.</div>')+'</div></div>'}
+function queueHtml(){var q=qList().sort(sortT);
+  var h='<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>תור סוף השבוע</h2><div class="m" style="margin-bottom:10px;font-size:13px">כל מה שחיכה לסוף השבוע. לבחור מה להפעיל עכשיו ומה נשאר לשבוע הבא, ולסדר דחיפות. שליחה, פרסום ומחיקה לא ירוצו בלי אישור שלך.</div>';
+  h+=q.map(function(i){var a=area(i.area);return '<div class="card" style="display:block"><div class="t">'+esc(i.title)+(+i.defers>0?' <span class="tag c">נדחה '+i.defers+'</span>':'')+'</div><div class="m">'+(a?'<span><i class="dot" style="background:'+a.c+'"></i>'+esc(a.n)+'</span>':'')+'</div><div style="margin-top:8px"><select data-qpri="'+i.id+'"><option value="1"'+(pri(i)===1?' selected':'')+'>אי אפשר בלי</option><option value="2"'+(pri(i)===2?' selected':'')+'>חשוב</option><option value="3"'+(pri(i)===3?' selected':'')+'>יפה שיהיה</option></select></div><div class="btns"><button class="btn" data-act="qgo" data-id="'+i.id+'">▶ הפעילי</button><button class="btn o" data-act="qskip" data-id="'+i.id+'">לשבוע הבא</button></div></div>'}).join('');
+  h+=q.length?'<div class="btns"><button class="btn" data-act="runq">להפעיל את הכל לפי הסדר</button></div>':'<div class="empty">אין כרגע משימות בתור.</div>';
+  return h+'<div class="btns"><button class="btn o" data-act="closesheet">סגירה</button></div></div></div>'}
 function freeHtml(){
   var m=UI.free||30,h='<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>כמה זמן יש לך?</h2><div class="chips">'
   +[15,30,60,90,180].map(function(x){return '<button class="chip'+(m===x?' on':'')+'" data-free="'+x+'">'+(x<60?x+' דק׳':x===60?'שעה':x===90?'שעה וחצי':'3 שעות')+'</button>'}).join('')+'</div>';
@@ -304,6 +306,8 @@ document.addEventListener('click',function(e){
   else if(d.act==='free'){UI.sheet='free';UI.free=30;render()}
   else if(d.act==='closesheet'){if(el.classList.contains('sheet-bg')&&e.target!==el)return;UI.sheet=null;render()}
   else if(d.act==='queue'){UI.sheet='queue';render()}
+  else if(d.act==='qgo'){upsert({id:d.id,queue:'go'});render();toast('נשלח לביצוע')}
+  else if(d.act==='qskip'){var qi=byId(d.id);upsert({id:d.id,defers:String((+qi.defers||0)+1)});render();toast('נשאר לשבוע הבא')}
   else if(d.act==='toggleq'){UI.q=!UI.q;render()}
   else if(d.act==='runq'){qList().forEach(function(i){if(i.queue==='weekend')upsert({id:i.id,queue:'go'})});render();toast('נשלח להרצה')}
   else if(d.act==='connect'){var raw=(document.getElementById('conn').value||'').trim(),hi=raw.indexOf('#'),pp=new URLSearchParams(hi>-1?raw.slice(hi+1):raw);
@@ -326,7 +330,8 @@ document.addEventListener('click',function(e){
     upsert({id:d.id,title:v('f_title').trim()||'ללא שם',notes:v('f_notes'),type:v('f_type'),due:v('f_due'),priority:v('f_pri'),estMin:v('f_est'),area:v('f_area'),parent:v('f_parent'),queue:(v('f_queue')==='weekend'?(byId(d.id).queue==='go'?'go':'weekend'):''),status:(byId(d.id).status==='inbox'?'open':byId(d.id).status)});UI.sheet=null;render();toast('נשמר')}
   else if(d.act==='del'){if(confirm('למחוק? אפשר לשחזר דרך קלוד.')){upsert({id:d.id,status:'dropped'});S.items=S.items.filter(function(x){return x.id!==d.id});UI.sheet=null;save();render()}}
 });
-document.addEventListener('change',function(e){if(e.target.dataset&&e.target.dataset.an!==undefined){var A=areas().map(function(a){return{n:a.n,c:a.c}});A[+e.target.dataset.an].n=e.target.value;setAreas(A,true)}});
+document.addEventListener('change',function(e){if(e.target.dataset&&e.target.dataset.qpri){upsert({id:e.target.dataset.qpri,priority:e.target.value});return}
+  if(e.target.dataset&&e.target.dataset.an!==undefined){var A=areas().map(function(a){return{n:a.n,c:a.c}});A[+e.target.dataset.an].n=e.target.value;setAreas(A,true)}});
 function grow(el){if(!el)return;el.style.height='auto';el.style.height=Math.min(el.scrollHeight+2,Math.round(innerHeight*(el.id==='cap'?.45:.8)))+'px'}
 document.addEventListener('input',function(e){var t=e.target;if(t&&(t.id==='cap'||t.id==='f_title'||t.id==='f_notes'))grow(t)});
 document.addEventListener('keydown',function(e){if(e.target.id==='cap'&&e.key==='Enter'&&(e.metaKey||e.ctrlKey)){e.preventDefault();addItem()}});
