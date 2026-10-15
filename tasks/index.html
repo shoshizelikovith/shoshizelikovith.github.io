@@ -203,7 +203,37 @@ function promptFor(i){
   return 'המשימה באפליקציית המשימות: '+i.title+'\nמזהה: '+i.id+(i.area?'\nתחום: '+i.area:'')+(n?'\nהקשר: '+n:'')+'\nקראי את המשימה המלאה עם python3 ~/tasks-app/tasks.py get '+i.id+', בצעי מה שאפשר, ואם צריך ממני משהו אמרי בשורה אחת. סמני אותה בוצעה באפליקציה רק אחרי שאימתת שבוצעה בפועל.';
 }
 function chatLink(i){var m=(i.notes||'').match(/claude:\/\/[^\s]+/);return m?m[0]:''}
+function mailGet(i){var m=/\n?@@MAIL (\{[\s\S]*\})@@\s*$/.exec((i&&i.notes)||'');try{return m?JSON.parse(m[1]):null}catch(e){return null}}
+function mailSet(i,mk){var h=(i.notes||'').replace(/\n?@@MAIL \{[\s\S]*\}@@\s*$/,'');return (h?h+'\n':'')+'@@MAIL '+JSON.stringify(mk)+'@@'}
+function emailSheet(i){
+  var mk=mailGet(i),st='',edit=false;
+  if(mk.sentAt)st='<div class="card" style="display:block;background:#dff3e8"><div class="t">✓ נשלח</div></div>';
+  else if(mk.decision==='approve')st='<div class="card" style="display:block;background:#fff3cf"><div class="t">אושר. יישלח אוטומטית בדקות הקרובות.</div><div class="btns"><button class="btn o" data-act="mail_cancel">ביטול השליחה</button></div></div>';
+  else if(mk.decision==='fix'||mk.decision==='hold')st='<div class="card" style="display:block;background:#fff3cf"><div class="t">'+(mk.decision==='fix'?'ביקשת תיקון':'ביקשת להשאיר פתוח')+'. הסוכנת תחזיר טיוטה חדשה (עד 3 שעות).</div><div class="m" style="display:block;margin-top:5px">ההערה שלך: '+esc(mk.instr||'')+'</div><div class="btns"><button class="btn o" data-act="mail_cancel">ביטול הבקשה</button></div></div>';
+  else edit=true;
+  return '<div class="sheet-bg" data-act="closesheet"><div class="sheet"><h2>מייל מ'+esc(mk.from||mk.to)+'</h2>'+st
+   +(mk.error?'<div class="card" style="display:block;background:#fde0e0"><div class="t">השליחה נכשלה: '+esc(mk.error)+'</div></div>':'')
+   +'<label>מה היא כתבה</label><textarea class="f" readonly rows="5" style="min-height:90px;font-size:14px">'+esc(mk.question||'')+'</textarea>'
+   +(mk.why?'<label>למה אני צריכה אותך</label><div class="m" style="display:block;font-size:14px;color:var(--navy)">'+esc(mk.why)+'</div>':'')
+   +'<label>הטיוטה'+(edit?' (אפשר לערוך כאן)':'')+'</label><textarea class="f" id="f_draft" rows="10" style="min-height:200px"'+(edit?'':' readonly')+'>'+esc(mk.draft||'')+'</textarea>'
+   +(edit?'<button class="btn" style="width:100%;margin:10px 0 4px;font-size:16px;padding:15px" data-act="mail_approve">✅ אשרי ושלחי</button>'
+     +'<label>או: מה לתקן / מה לכתוב</label><textarea class="f" id="f_instr" rows="3" style="min-height:70px" placeholder="למשל: תכתבי שהיא צודקת ושזה נשאר פתוח"></textarea>'
+     +'<div class="btns"><button class="btn o" data-act="mail_fix">✏ תקני לפי ההערה</button><button class="btn o" data-act="mail_hold">⏸ השאירי פתוח</button></div>':'')
+   +'<div class="btns"><button class="btn o" data-act="closesheet">סגירה</button></div></div></div>';
+}
+function mailAct(kind){
+  var i=byId(UI.sheet),mk=mailGet(i);if(!mk)return;
+  var dr=document.getElementById('f_draft'),ins=document.getElementById('f_instr');
+  if(dr)mk.draft=dr.value;var instr=ins?ins.value.trim():'';
+  if(kind==='approve'){if(!mk.draft||mk.draft.trim().length<5){toast('הטיוטה ריקה');return}
+    if(!confirm('לשלוח עכשיו את המייל ל-'+(mk.from||mk.to)+'?'))return;mk.decision='approve';mk.instr=''}
+  else if(kind==='cancel'){mk.decision='';mk.instr=''}
+  else{if(!instr){toast('לכתוב קודם מה לתקן');return}mk.decision=kind;mk.instr=instr}
+  mk.error='';upsert({id:i.id,notes:mailSet(i,mk)});UI.sheet=null;render();
+  toast(kind==='approve'?'אושר, נשלח בדקות הקרובות':kind==='cancel'?'בוטל':'נשלח לסוכנת')
+}
 function sheetHtml(){
+  if(UI.sheet&&byId(UI.sheet)&&byId(UI.sheet).type==='email'&&mailGet(byId(UI.sheet)))return emailSheet(byId(UI.sheet));
   if(UI.sheet==='free')return freeHtml();
   if(UI.sheet==='queue')return queueHtml();
   var i=byId(UI.sheet);if(!i)return'';
@@ -260,6 +290,7 @@ document.addEventListener('click',function(e){
     var fail=function(){toast('לא הצלחתי להעתיק, לסמן את הפרומפט ולהעתיק ידנית')};
     try{ta.focus();ta.select();ta.setSelectionRange(0,99999);ok=document.execCommand('copy')}catch(e){}
     if(ok)done();else if(navigator.clipboard&&navigator.clipboard.writeText){var settled=false;navigator.clipboard.writeText(promptFor(pi)).then(function(){settled=true;done()},function(){settled=true;fail()});setTimeout(function(){if(!settled)fail()},1500)}else fail()}
+  else if(d.act==='mail_approve'||d.act==='mail_fix'||d.act==='mail_hold'||d.act==='mail_cancel'){mailAct(d.act.slice(5))}
   else if(d.act==='toggletype'){UI.type=UI.type==='project'?'task':'project';render()}
   else if(d.act==='mic'){var c=document.getElementById('cap');c.focus();toast('לחצי על המיקרופון במקלדת ודברי')}
   else if(d.act==='add')addItem();
