@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="fonts/assistant.css">
 <script>
 window.__showErr=function(msg){try{if(document.getElementById('__err'))return;var d=document.createElement('div');d.id='__err';d.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;background:#fff;color:#111;z-index:99999;padding:20px;font:15px/1.5 -apple-system,Arial,sans-serif;direction:rtl;overflow:auto';
-d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 12. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
+d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 13. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
 document.documentElement.appendChild(d)}catch(e){}};
 window.addEventListener('error',function(e){window.__showErr((e.message||'')+' @'+(e.lineno||'')+':'+(e.colno||'')+' '+String(e.filename||'').split('/').pop())});
 window.addEventListener('unhandledrejection',function(e){window.__showErr('promise: '+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});
@@ -69,7 +69,8 @@ input,select,textarea.f{width:100%;border:0;background:var(--paper);border-radiu
 var PAL=['#A62F7D','#DF1767','#0D122C','#F36E21','#6d2a8f','#2d3a7a'];
 var DEF_AREAS=[{n:'אשה רוצה עושה 2026',c:PAL[0]},{n:'סרטונים ותוכן',c:PAL[1]},{n:'דף המכירה',c:PAL[2]},{n:'אישי',c:PAL[3]},{n:'בית ומשפחה',c:PAL[4]}];
 var S=JSON.parse(localStorage.getItem('tasks_state')||'null')||{items:[],settings:{},pending:[],last:''};
-var CFG=JSON.parse(localStorage.getItem('tasks_cfg')||'{}');
+if(!S||typeof S!=='object')S={};if(!Array.isArray(S.items))S.items=[];if(!Array.isArray(S.pending))S.pending=[];if(!S.settings||typeof S.settings!=='object')S.settings={};
+var CFG=JSON.parse(localStorage.getItem('tasks_cfg')||'{}')||{};
 var UI={tab:new URLSearchParams(location.search).get('tab')||'today',pid:null,sheet:null,type:'task',toast:'',busy:false};
 (function(){var h=location.hash.replace('#','');if(h){var p=new URLSearchParams(h);if(p.get('k')&&p.get('u')){CFG={u:p.get('u'),k:p.get('k')};localStorage.setItem('tasks_cfg',JSON.stringify(CFG));history.replaceState(null,'',location.pathname)}}})();
 function areas(){return (S.settings&&S.settings.areas&&S.settings.areas.length)?S.settings.areas:DEF_AREAS}
@@ -101,7 +102,8 @@ function sync(){
   var ops=S.pending.slice();
   fetch(CFG.u,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({key:CFG.k,ops:ops})})
   .then(function(r){return r.json()}).then(function(d){
-    UI.busy=false;if(d.error){toast('שגיאת חיבור: '+d.error);return}
+    UI.busy=false;if(d&&d.error){toast('שגיאת חיבור: '+d.error);return}
+    if(!d||!Array.isArray(d.items)){render();return}
     S.pending=S.pending.slice(ops.length);
     if(!S.pending.length){S.items=d.items;if(d.settings&&d.settings.areas)S.settings=d.settings}
     S.last=new Date().toISOString();save();render();if(S.pending.length)sync()
