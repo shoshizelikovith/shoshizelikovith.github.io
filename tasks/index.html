@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="fonts/assistant.css">
 <script>
 window.__showErr=function(msg){try{if(document.getElementById('__err'))return;var d=document.createElement('div');d.id='__err';d.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;background:#fff;color:#111;z-index:99999;padding:20px;font:15px/1.5 -apple-system,Arial,sans-serif;direction:rtl;overflow:auto';
-d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 24. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
+d.innerHTML='<h2>האפליקציה נתקלה בשגיאה</h2><p>גרסה 25. לצלם מסך ולשלוח לקלוד.</p><pre style="white-space:pre-wrap;direction:ltr;text-align:left;background:#eee;padding:10px;font-size:12px">'+String(msg).replace(/</g,'&lt;')+'</pre><p><button onclick="location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">טעינה מחדש</button> <button onclick="try{localStorage.setItem(\'tasks_state_backup\',localStorage.getItem(\'tasks_state\')||\'\');localStorage.removeItem(\'tasks_state\')}catch(e){};location.reload()" style="font-size:16px;padding:12px 18px;margin:4px">ניקוי הנתונים המקומיים</button></p><p style="font-size:13px;color:#555">הניקוי מוחק רק את העותק שבטלפון. מה שסונכרן לגיליון נשאר.</p>';
 document.documentElement.appendChild(d)}catch(e){}};
 window.addEventListener('error',function(e){window.__showErr((e.message||'')+' @'+(e.lineno||'')+':'+(e.colno||'')+' '+String(e.filename||'').split('/').pop())});
 window.addEventListener('unhandledrejection',function(e){window.__showErr('promise: '+(e.reason&&(e.reason.stack||e.reason.message)||e.reason))});
@@ -227,6 +227,15 @@ function advise(i){
   if(me&&/^(להחליט|להכריע|לאשר|לבחור|לברר)/.test(t))return{h:'להחליט, ולכתוב לקלוד בשורה אחת',b:'לכתוב את ההחלטה בתיבה ולהקיש ״בצעי עכשיו״. אם אין עדיין צ׳אט למשימה, תכתבי לקלוד ״תפתחי צ׳אטים למשימות״ ויופיע במק כפתור לחיץ.'};
   return{h:'אין עדיין צ׳אט למשימה הזו',b:'לכתוב הנחיה ולהקיש ״בצעי עכשיו״, ואז לכתוב לקלוד ״תפתחי צ׳אטים למשימות״. יופיע כפתור (צ׳יפ) במחשב, ללחוץ עליו וייפתח צ׳אט משלה.'};
 }
+function goHtml(i){
+  if(i.type==='project'||!isOpen(i))return '';
+  if(i.queue==='go')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ממתין לביצוע במק (כמה דקות, כשהמק פתוח)</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
+  if(i.queue==='run')return '<div class="card" style="display:block;background:#dff3e8"><div class="t">קלוד עובד על זה עכשיו'+(/בעלים: (local_|session_)/.test(i.notes||'')?' (בצ׳אט של הפרויקט)':'')+'</div></div>';
+  if(i.queue==='newchat')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ממתין לצ׳אט חדש במק. כדי שייפתח: לכתוב לקלוד בכל צ׳אט ״תפתחי צ׳אטים למשימות״, ויופיע כפתור לחיצה במק</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
+  if(i.queue==='deliver')return '<div class="card" style="display:block;background:#fff3cf"><div class="t">ההוראה בדרך לצ׳אט של הפרויקט (עד 5 דקות, כשהמק פתוח)</div><div class="btns"><button class="btn o" data-act="gocancel">ביטול</button></div></div>';
+  return '<textarea class="f" id="f_goins" rows="6" style="min-height:34vh" placeholder="'+(i.area==='מיילים לטיפול'?'מה לעשות? למשל: אשרי, או: טופל, או: תכתבי לה ככה':'הנחיה לקלוד, לא חובה. למשל: כן, תעשי ככה')+'"></textarea><button class="btn" style="width:100%;margin:6px 0;font-size:16px;padding:14px;background:#1f8a70" data-act="rungo">'+(i.area==='מיילים לטיפול'?'▶ העבירי לטיפול (קלוד יטפל וימשיך)':'▶ בצעי עכשיו')+'</button>';
+}
+
 function adviseHtml(i){var a=advise(i);return '<div class="card" style="display:block;background:#e9e2f3;margin:8px 0 4px"><div class="t" style="font-size:12px;color:var(--mag)">מה מומלץ לעשות</div><div class="t" style="font-size:17px;margin:2px 0">'+esc(a.h)+'</div><div class="m" style="display:block;font-size:14px;color:var(--navy)">'+esc(a.b)+'</div></div>'}
 function chatLink(i){var m=(i.notes||'').match(/(claude:\/\/|https:\/\/claude\.ai\/code\/)[^\s]+/);return m?m[0]:''}
 function mailGet(i){var m=/\n?@@MAIL (\{[\s\S]*\})@@\s*$/.exec((i&&i.notes)||'');try{return m?JSON.parse(m[1]):null}catch(e){return null}}
