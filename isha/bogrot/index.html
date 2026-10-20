@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>השלמת המסע - אשה ללא מאמץ לבוגרות</title>
+<meta name="description" content="הצעה מיוחדת לבוגרות ממגנטת ויודעת, עם הבוטית האישית וקורסי בונוס">
+<meta name="robots" content="noindex">
+<link rel="icon" href="img/favicon-32.png">
+<style>
+@font-face{font-family:'Assistant';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/assistant-4d5300d9.woff2) format('woff2');unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:'Assistant';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/assistant-27157e4c.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF}
+@font-face{font-family:'Assistant';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/assistant-4d5300d9.woff2) format('woff2');unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:'Assistant';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/assistant-27157e4c.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF}
+@font-face{font-family:'Assistant';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/assistant-4d5300d9.woff2) format('woff2');unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:'Assistant';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/assistant-27157e4c.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212,U+FEFF}
+
+:root{--cream:#F2EEE3;--purple:#A62F7D;--pink:#DF1767;--pink-text:#C9155D;--orange:#F36E21;--ink:#0D122C;}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:"Assistant",system-ui,sans-serif;font-size:18px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:700px;margin:0 auto;padding:0 22px}
+h1,h2,h3{line-height:1.32;margin:0 0 .45em;font-weight:700}
+h2.sec{font-size:clamp(25px,4.8vw,36px);margin:0 0 .7em}
+h3{font-size:clamp(20px,3.6vw,25px);margin:1.6em 0 .6em;color:var(--purple)}
+p{margin:0 0 1.15em}
+ul{margin:0 0 1.3em;padding:0 22px 0 0}li{margin-bottom:.45em}li::marker{color:var(--pink)}
+.air-s{height:clamp(26px,4.5vw,44px)}
+.sep{display:block;width:100%;max-width:740px;margin:clamp(36px,6vw,70px) auto;height:auto}
+.hero{text-align:center;padding-top:34px}
+.hero img{display:block;margin:0 auto;height:auto;width:min(70%,320px)}
+.hero h1{font-size:clamp(30px,6vw,46px);margin:.7em 0 .25em}
+.hero .sub{font-weight:700;color:var(--pink-text);font-size:clamp(26px,5.4vw,38px);line-height:1.3;margin:.3em 0 1.1em}
+.hero .q{font-weight:700;color:var(--purple);font-size:clamp(30px,6.4vw,40px);line-height:1.25;margin-bottom:.5em}
+.hero .guide{font-weight:400;font-size:clamp(23px,4.8vw,31px);line-height:1.4;margin:0 0 1.2em}.hero .guide strong{color:var(--pink-text)}
+.choices{display:grid;gap:14px;grid-template-columns:1fr;margin:0 0 10px}
+.choice{display:block;text-align:center;text-decoration:none;color:#fff;border-radius:20px;padding:22px 22px 20px;cursor:pointer;border:3px solid transparent;box-shadow:0 14px 26px -14px rgba(13,18,44,.6);transition:transform .15s}
+.choice:hover{transform:translateY(-2px)}
+.choice .t{display:block;font-weight:700;font-size:clamp(20px,4.4vw,26px);line-height:1.3}
+.choice .s{display:block;font-size:clamp(15px,3.2vw,17.5px);line-height:1.45;margin-top:6px;opacity:.95}
+.choice .s:empty{display:none}
+.c1{background:#C9155D}
+.c2{background:#A62F7D}
+.c3{background:#0D122C}
+.c4{background:#F36E21;color:#0D122C}
+.choice[aria-current="true"]{border-color:#fff;outline:3px solid var(--ink)}
+.c4[aria-current="true"]{border-color:var(--ink)}
+.cta{display:block;width:100%;text-align:center;background:var(--orange);color:var(--ink);font-size:clamp(17px,3.3vw,20px);font-weight:700;padding:19px 24px;border-radius:14px;text-decoration:none;box-shadow:0 10px 22px -12px rgba(13,18,44,.55)}
+.picband img{display:block;width:100%;height:auto;border-radius:20px;box-shadow:0 1px 0 rgba(13,18,44,.06),0 18px 34px -20px rgba(13,18,44,.55)}
+.price{background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);border-radius:20px;padding:26px 24px 8px;margin-bottom:22px}
+.price.best{box-shadow:0 0 0 2.5px var(--orange) inset,0 16px 30px -20px rgba(13,18,44,.5)}
+.bgrid{display:grid;gap:14px;grid-template-columns:1fr;margin-bottom:10px}
+@media(min-width:620px){.bgrid{grid-template-columns:repeat(3,1fr)}}
+.bcard{background:var(--cream);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55)}
+.bcard>img{width:100%;height:auto;display:block}
+.bcard p{margin:0;padding:12px 14px 14px;font-size:15.5px;line-height:1.5}
+.offer{background:var(--ink);color:var(--cream);border-radius:24px;padding:30px 24px 28px;text-align:center;margin:30px 0 26px;box-shadow:0 18px 34px -20px rgba(13,18,44,.7)}
+.offer p{margin:0 0 .5em}
+.offer .old{opacity:.8;font-size:17px}
+.offer .new{font-size:20px}.offer .new b{font-size:clamp(40px,9vw,58px);display:block;line-height:1.1;color:#fff}
+.offer .ofr ul{padding-right:20px}
+
+h3.chip{display:inline-block;background:var(--acc,#A62F7D);color:#fff;border-radius:999px;padding:6px 18px;font-size:clamp(17px,3.4vw,21px);margin:1.8em 0 .8em}
+.hint{font-size:15px;opacity:.8;margin:-.2em 0 .7em}
+.price{border-top:6px solid var(--acc,#F36E21)}
+.price ul{padding-right:6px;list-style:none}
+.price li{position:relative;padding-right:30px}.price li::before{content:"\2713";position:absolute;right:0;top:0;color:var(--acc);font-weight:700}
+.botrow{display:grid;grid-template-columns:1fr;gap:16px;align-items:center;margin-bottom:1.3em}
+.botrow img{width:min(60%,260px);height:auto;margin:0 auto;border-radius:20px;box-shadow:0 14px 26px -16px rgba(13,18,44,.6)}
+@media(min-width:620px){.botrow{grid-template-columns:230px 1fr}.botrow img{width:100%}}
+.bimg{position:relative}.bimg img{width:100%;height:auto;display:block}
+.tag{position:absolute;top:10px;left:10px;background:var(--pink);color:#fff;font-weight:700;border-radius:999px;padding:4px 14px;font-size:15px;box-shadow:0 6px 14px -6px rgba(13,18,44,.6)}
+.bt{padding:12px 16px 6px}.bt strong{display:block;font-size:17px;line-height:1.35}.bt em{display:block;font-style:normal;color:var(--purple);font-weight:600;font-size:15px;margin:2px 0 6px}.bt ul{padding-right:18px;font-size:15px;line-height:1.5;margin-bottom:8px}
+.offer .lab{font-size:20px;font-weight:700;margin:.2em 0 0;color:var(--cream)}
+.offer .how{text-align:right;font-size:16px;margin:1.2em 0 0;text-wrap:balance}.offer .how ol,.offer .how ul{padding-right:22px;margin:0}
+.cards{display:grid;gap:16px;grid-template-columns:1fr;}
+.cards{grid-template-columns:1fr 1fr;gap:20px;}
+.card{background:var(--cream);box-shadow:0 1px 0 rgba(13,18,44,.06),0 14px 26px -18px rgba(13,18,44,.55);border-radius:18px;padding:24px 24px 20px;
+  box-shadow:0 2px 10px rgba(13,18,44,.05);}
+.card h4{font-size:19px;color:var(--purple);margin-bottom:.3em;}
+.card p{font-size:16.5px;line-height:1.78;margin:0;}
+/* אייקוני הסטודיו - נייר חתוך תלת ממדי. קטנים, שווים בגודל, ולא צועקים. */
+.cards.icons .card{padding-top:22px;}
+.cards.icons img{display:block;width:clamp(52px,11vw,62px);height:auto;margin:0 0 12px;}
+.cards.small .card{padding:20px 20px 17px;}
+.cards.small h4{font-size:17.5px;}
+.cards.small p{font-size:16px;}
+.lessons{font-size:15.5px;line-height:1.75;margin:1em 0 0;}
+.lessons b{color:var(--pink-text);font-weight:700;display:block;margin-bottom:.2em;}
+details{background:var(--cream);box-shadow:0 2px 0 rgba(13,18,44,.05),0 10px 22px -14px rgba(13,18,44,.45);border-radius:16px;padding:0;margin-bottom:11px;overflow:hidden;}
+details summary{list-style:none;cursor:pointer;padding:20px 22px;font-weight:700;font-size:17.5px;}
+details summary::-webkit-details-marker{display:none;}
+details summary:focus-visible{outline:3px solid var(--purple);outline-offset:-4px;border-radius:16px;}
+details summary::after{content:"+";float:left;color:var(--purple);font-size:22px;line-height:1;}
+details[open] summary::after{content:"−";}
+details summary .hk{display:block;font-weight:600;font-size:15.5px;color:var(--purple);margin-top:.3em;}
+details .body{padding:0 22px 20px;font-size:16.5px;line-height:1.8;}
+details .body p{margin:0 0 .8em;max-width:31em;}
+.card p,.fit .item p{line-height:1.68;}
+.cards.small.icons{grid-template-columns:1fr 1fr;gap:12px;margin-bottom:36px}
+.cards.small.icons .card{padding:16px 14px 15px}
+.cards.small.icons img{width:44px;margin-bottom:8px}
+.cards.small.icons h4{font-size:16px;line-height:1.3;margin-bottom:.35em}
+.cards.small.icons p{font-size:15px;line-height:1.55}
+#faq{padding-top:clamp(36px,6vw,70px)}
+#faq details{border-right:8px solid var(--pink)}
+#faq details:nth-of-type(4n+2){border-right-color:var(--purple)}
+#faq details:nth-of-type(4n+3){border-right-color:var(--orange)}
+#faq details:nth-of-type(4n){border-right-color:var(--ink)}
+#faq details summary{font-size:18px}
+#faq h2.sec .hl{color:var(--pink-text)}
+.panel li strong{color:var(--acc)}.panel[data-panel="ג"] li strong{color:#C9155D}
+.nopanel #letter,.nopanel .take{display:none}
+.offer .until{font-size:clamp(20px,4.2vw,26px);line-height:1.5;margin:.7em 0 .3em}
+.offer .until b{color:var(--orange);display:block;font-size:1.05em}
+.offer .until .only{display:inline-block;margin-top:.15em;background:var(--cream);color:var(--ink);font-weight:700;border-radius:999px;padding:0 22px;font-size:.95em}
+.offer .nl{font-size:18px;font-weight:600;margin:.4em 0 .5em}
+.offer .clock{display:flex;gap:10px;justify-content:center;margin:0 0 1.1em;direction:rtl}
+.offer .clock .u{background:rgba(242,238,227,.1);border:1px solid rgba(242,238,227,.25);border-radius:14px;min-width:64px;padding:8px 10px}
+.offer .clock b{display:block;font-size:clamp(28px,7vw,40px);line-height:1.1;color:#fff}
+.offer .clock i{display:block;font-style:normal;font-size:14px;opacity:.85}
+.more{background:var(--ink);color:var(--cream);border-radius:24px;padding:28px 22px;margin:34px 0 0;text-align:center}
+.more h3{color:#fff;margin:0 0 .6em;font-size:clamp(20px,4vw,26px)}
+.more p{margin:0 0 .9em}
+.mrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:1.6em}
+.mrow a{flex:1 1 220px;text-align:center;text-decoration:none;font-weight:700;border-radius:14px;padding:16px 18px;font-size:17.5px}
+.b-wa{background:#25D366;color:#0D122C}.b-ml{background:var(--cream);color:var(--ink)}
+.more .cta{margin-top:.2em}
+.bgrid.one{grid-template-columns:1fr;gap:18px}
+.bcard.wide{flex-direction:column}
+@media(min-width:620px){.bcard.wide{flex-direction:row}.bcard.wide .bimg{flex:0 0 38%}.bcard.wide .bimg img{height:100%;object-fit:cover;object-position:left center}}
+.bcard.wide .bt{padding:16px 18px 10px}.bcard.wide .bt strong{font-size:20px}
+.bcard.wide .bp{font-weight:700;color:var(--acc);margin:.7em 0 .9em;padding:0;font-size:16px;line-height:1.5}
+.bcard.wide ul{font-size:15.5px;padding-right:20px}
+.bsum{text-align:center;font-size:19px;margin:.8em 0 0}.bsum b{color:var(--pink-text)}
+.value{background:var(--cream);border-radius:20px;padding:22px 20px;margin:26px 0 0;box-shadow:0 0 0 2.5px var(--acc) inset,0 14px 26px -18px rgba(13,18,44,.5)}
+.value h4{margin:0 0 .6em;font-size:21px;color:var(--acc)}
+.vr{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px dashed rgba(13,18,44,.2);font-size:17px}
+.vr b{white-space:nowrap}
+.vr.tot{border-bottom:0;font-size:20px;font-weight:700}
+.vlead{margin:-.2em 0 .6em;font-size:16.5px}
+.vsub{margin:.9em 0 0;font-size:clamp(20px,4.4vw,26px);line-height:1.45;text-align:center}.vsub b{color:var(--pink-text);font-size:1.25em}.vsub b.was{color:var(--ink)}
+.panel{display:none;padding-top:30px}
+.panel.on{display:block}
+.nojs .panel{display:block}
+.letter{border-right:3px solid var(--pink);padding:2px 20px 2px 0;margin:0 0 1.4em}
+footer{text-align:center;font-size:15px;padding:30px 22px 50px}
+footer a{color:var(--purple);display:inline-block;padding:12px 8px}
+</style>
+</head>
+<body class="nojs nopanel">
+<header class="wrap hero">
+  <img src="img/logo-720.png" alt="אשה ללא מאמץ - שושי זליקוביץ׳" width="720" height="515">
+  <h1>את כבר מכירה את השפה...</h1>
+  <p class="sub">בניתי לבוגרות היקרות שלנו הצעה שמשלימה בדיוק את מה שאולי חסר לך.</p>
+  <p class="guide">קראי את האפשרויות בעיון, ולחצי על הכפתור שמתאים <strong>למה שכבר רכשת ולמדת אצלנו</strong>.</p>
+  <p class="q">סמני לי, איפה את עכשיו?</p>
+  <nav class="choices" aria-label="בחירת מסלול">
+    <a class="choice c1" href="#a" data-go="א"><span class="t">למדתי רק את יודעת</span><span class="s">בעבר: הקורס ״להיות אשה״</span></a>
+    <a class="choice c2" href="#b" data-go="ב"><span class="t">למדתי רק את ממגנטת</span><span class="s">בעבר: הקורס ״אשה ללא מאמץ בזוגיות״</span></a>
+    <a class="choice c3" href="#c" data-go="ג"><span class="t">למדתי גם את ממגנטת וגם את יודעת</span><span class="s">הכול כבר אצלי. אני רוצה לחזור על החומר, וגם לקבל גישה לבוטית, המאמנת האישית הדיגיטלית, כדי להתאמן איתה בחיים האמיתיים</span></a>
+    <a class="choice c4" href="https://shoshizelikovith.com/isha/"><span class="t">עוד לא למדתי שום קורס שלך על זוגיות</span><span class="s">תני לי פרטים על כל התהליכים</span></a>
+  </nav>
+</header>
+<main>
+
+<section class="panel" id="panel-א" data-panel="א" aria-labelledby="h-א" style="--acc:#C9155D">
+  <div class="wrap">
+    <h2 class="sec" id="h-א">יש לך את ה״מה״,<br>ואת רוצה להרגיש את המהות...</h2>
+    <p>למדת ביודעת, ואת באמת יודעת:) אפילו לייעץ לעצמך ולאחרות.<br>רק מה? לא תמיד את מרגישה שם, בשלווה, בשחרור, במגנטיות...<br>ממגנטת זה ארבעה שבועות של תרגול בדיוק על זה. הנה מה שבפנים ↓</p>
+    <h3 class="chip">למה זה מתאים לך</h3>
+    <ul><li>להפנים את <strong>חוקי המשיכה</strong> בתוכך, לא רק לדעת אותם</li><li>להתאמן באמת <strong>לקבל מציאות</strong>, ו<strong>לשחרר</strong> את מה שלא בשליטתך</li><li>להרגיש <strong>ללא מאמץ</strong>, <strong>שלמה</strong> עם עצמך ומלאה ללא תנאי</li><li>לפגוש <strong>חוסר</strong>, ובאמת <strong>לא להיבהל</strong> ממנו</li><li>והמון <strong>תזכורות</strong> לדייק את החוקים, שעוזרות מאוד ״להיות אשה״:)</li></ul>
+    <h3 class="chip">מה בדיוק את מקבלת בממגנטת</h3><div class="cards small icons">
+    <div class="card"><img src="img/ic-130/video.png" alt="" width="130" height="132" loading="lazy"><h4>23 שיעורי וידאו</h4><p>מבוא שנפתח מיד עם ההרשמה, ואחריו שיעור לכל יום.<br>
+  קצר, ברור וממוקד.<br>
+  לא הרצאות של שעה.</p></div>
+    <div class="card"><img src="img/ic-130/practice.png" alt="" width="130" height="131" loading="lazy"><h4>משימת תרגול לכל שיעור</h4><p>לא שיעורי בית. שאלה אחת חזקה, או תרגיל התבוננות קטן, שלוקח את השיעור מהראש ומכניס אותו לחיים שלך.</p></div>
+    <div class="card"><img src="img/ic-130/cards.png" alt="" width="130" height="129" loading="lazy"><h4>23 כרטיסי חוקי המשיכה</h4><p>חוק אחד בכל פעם, מעוצב, לשמירה ולהדפסה.<br>
+  במקום שאת רואה כל יום.</p></div>
+    <div class="card"><img src="img/ic-130/worksheets.png" alt="" width="130" height="128" loading="lazy"><h4>דפי עבודה מסודרים</h4><p>לכתיבה, להתבוננות ולתרגול.<br>
+  אפשר להדפיס.</p></div>
+    <div class="card"><img src="img/ic-130/download.png" alt="" width="130" height="142" loading="lazy"><h4>וידאו, אודיו והורדה</h4><p>לצפות, להאזין בנסיעה, או להוריד ולשמור אצלך.<br>
+  מאתר הקורסים וגם מהדרייב.</p></div>
+    <div class="card"><img src="img/ic-130/coach.png" alt="" width="130" height="130" loading="lazy"><h4>המאמנת האישית שלך</h4><p>מאמנת דיגיטלית שמכירה את כל הקורס, זמינה לך בכל שעה. עוד על זה בהמשך.</p></div>
+    <div class="card"><img src="img/ic-130/access.png" alt="" width="130" height="137" loading="lazy"><h4>שנה שלמה באתר</h4><p>הגישה שלך פתוחה לשנה. ובדרייב את יכולה להוריד את כל השיעורים ולשמור אותם אצלך לתמיד, בלי תאריך תפוגה.</p></div>
+    <div class="card"><img src="img/ic-130/pace.png" alt="" width="130" height="136" loading="lazy"><h4>בקצב שלך</h4><p>אין שידורים חיים שצריך להספיק, ואין מה לפספס. את נכנסת מתי שנוח לך, ואפשר לחזור לשיעור בכל שלב בחיים.</p></div>
+  <div class="card"><img src="img/ic-130/clock.png" alt="" width="130" height="130" loading="lazy"><h4>הכול נפתח מיד</h4><p>ברגע שהתשלום מסודר: הקורס, הבוטית וקורסי הבונוס.</p></div><div class="card"><img src="img/ic-130/chapters.png" alt="" width="130" height="130" loading="lazy"><h4>יודעת נפתחת לך גם היא</h4><p>ארבעה חודשים של הטמעה, שנה שלמה באתר, ואפשר להוריד לדרייב לתמיד.</p></div></div>
+<p><strong>וכמה זמן זה לוקח לך ביום?</strong><br>
+  בין עשר דקות לארבעים דקות, תלוי בשיעור ובכמה את בוחרת להעמיק בתרגול.
+  ואם פספסת יום - הוא מחכה לך. באמת.</p><h3 class="chip">הסילבוס: מה יש בארבעת השבועות של ממגנטת</h3><p class="hint">לחצי על התיבות כדי לראות את הסילבוס בהרחבה:)</p><details open><summary>שבוע 1 · לחזור לעצמך: להפסיק להוכיח שאת ראויה לאהבה<span class="hk">את מרגישה ראויה לאהבה בלי להוכיח כלום, וזה הדבר הראשון שהוא קולט אצלך.</span></summary>
+  <div class="body">
+    <p>בשבוע הזה את מפרקת את אחד השורשים הכי עמוקים של המאמץ: האמונה שאם רק תהיי מספיק טובה, מספיק נעימה, מספיק מתפקדת ומספיק <strong>נכונה</strong> - אז תקבלי את האהבה שאת רוצה. את מתחילה לזהות איפה הלב שלך עובד קשה מדי, ואיפה את חיה מתוך פחד לאבד אהבה.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>מה הסיפור הזוגי שלך באמת? · למה אהבה מרגישה לפעמים כמו פרויקט מתיש? · למה רדיפה אחרי אהבה לא באמת מביאה אהבה? · מה בך כבר ממגנט, גם לפני שתשתני? · איך קבלה עצמית משנה את מה שאת מושכת מהעולם? · איך למלא אנרגיה בלי לחכות שמישהו אחר ימלא אותך?</p>
+  </div></details>
+
+  <details><summary>שבוע 2 · רגעי החוסר: מה לעשות כשהוא לא נותן לך את מה שאת צריכה ממנו<span class="hk">את פוגשת את הרגע שהכי מטלטל אותך ונשארת בשקט שלך, ומשם נפתחת משיכה חדשה.</span></summary>
+  <div class="body">
+    <p>לא תיאוריה ולא רעיונות יפים, אלא בדיוק המקומות שבהם רוב הנשים נופלות. את בוחרת רצון אחד שלא מתממש בזוגיות, ולומדת מה קורה לך כשאת לא מקבלת אותו: המתח שעולה, הפחד שמנהל, והמחיר שזה גובה מהלב שלך ומהקשר. ואז את לומדת מה לעשות אחרת.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>לבחור את רגע החוסר שבו את רוצה להתחיל שינוי · למה ההתעסקות בו גוזלת ממך את כוח ההשפעה שלך? · למה לא מספיק לשנות התנהגות חיצונית? · איך מתח פנימי משפיע על המשיכה והקרבה ביניכם? · תכנית פעולה לרגע שבו החוסר מטלטל אותך · למה את לא צריכה לפחד מחוסר?</p>
+  </div></details>
+
+  <details><summary>שבוע 3 · ביטוי עצמי ממגנט: איך לומר את מה שחשוב לך בלי להילחם על תוצאה<span class="hk">את אומרת את האמת שלך, ורואה איך הלב שלו נפתח בדיוק שם.</span></summary>
+  <div class="body">
+    <p>אשה ללא מאמץ לא שותקת.<br>
+  היא לא מוחקת את עצמה, ולא מעמידה פנים שלא כואב לה.<br>
+  היא פשוט לומדת לבטא את עצמה אחרת: לא מתוך פחד, ולא מתוך דרישה סמויה שעכשיו הוא ימלא אותה.<br>
+  כאן את מגלה שעצם הביטוי הוא בעצמו מילוי.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>למה להתמקד בעצמך זו נתינה עמוקה לבית · מה באמת היית רוצה שהוא ידע ממך? · מה קורה כשאת שותקת מפחד לאבד אהבה? · מה קורה כשאת מדברת כדי להשיג ממנו תגובה? · איך נשמע ביטוי של אשה שלמה?</p>
+  </div></details>
+
+  <details><summary>שבוע 4 · רצון, חיות וקבלה: לחיות כאשה שמסכימה להיות כלי למילוי<span class="hk">את רוצה בקול, והרצון שלך מושך אלייך מילוי - וזו הרגשה משכרת.</span></summary>
+  <div class="body">
+    <p>הרבה נשים מפחדות לרצות. כי רצון שלא מתממש כואב, וכי אולי זה הופך אותן לתובעניות. כאן את מגלה שרצון נשי נקי הוא לא לקיחה - הוא חיות, הוא נתינה, והוא הכלי שפותח שפע, אהבה וקרבה.</p>
+    <p class="lessons"><b>מה שנלמד ביחד במהלך השבוע הזה</b>מה את באמת רוצה? · למה לבטא רצון זו נתינה נשית עמוקה? · איך לבקש בלי להפוך את הבקשה למאבק? · האומץ לאתגר אותו · חיים מלאים מעבר לזוגיות · לחיות כאשה ללא מאמץ</p>
+  </div></details>
+    <h3 class="chip">הבוטית שלך, על כל הקורס · שווי 1,500 ש״ח</h3>
+    <div class="botrow"><img src="img/coach-bot-2.jpg" alt="הבוטית, המאמנת האישית הדיגיטלית" width="600" height="900" loading="lazy"><div><ul><li>המאמנת האישית הדיגיטלית, שנבנתה לפי שפת הקורס וחוקי המשיכה</li><li>מכירה את כל הקורס, את יודעת שלמדת ואת ממגנטת</li><li>איתך שישה חודשים, בכל שעה, גם באחת בלילה:)</li><li>נכנסים בלחיצה על קישור, בלי אפליקציה ובלי התקנה</li><li>מאמנת, לא יועצת: שואלת, ומחזירה אותך לחוק המדויק</li><li>את בוחרת אם השיחה נשמרת או דיסקרטית לגמרי</li></ul></div></div>
+    <h3 class="chip">שלושת קורסי הבונוס · 1,000 ש״ח כל אחד</h3>
+    <div class="bgrid one"><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-write.jpg" alt="לכתוב את עצמי לדעת" width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>לכתוב את עצמי לדעת</strong><em>30 שיעורים</em><p class="bp">את כבר לא צריכה לחכות שמישהו יפתח לך את הלב.</p><ul><li>הכתיבה ככלי ריפוי: דף, עט ושלוש דקות</li><li>ריפוי ושחרור בכתיבה</li><li>מחסומי ביטוי ויצירה</li><li>ממקורבנות לבעלות על הסיפור הפנימי</li><li>5 שיעורים על התמודדות עם ביקורת</li><li>2 שיעורים על התמכרויות</li><li>להוציא את המועקה בעצמך, ולגלות תשובה מרפאה שלא הייתה עולה בשום דרך אחרת</li></ul></div></div><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-parents.jpg" alt="הורות, זוגיות, ומה שביניהן" width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>הורות, זוגיות, ומה שביניהן</strong><em>7 שיעורים</em><p class="bp">יש רגעים שבהם את רואה אותו עם הילדים, ומשהו בך נסגר.</p><ul><li>המשולש: את, הוא והילדים</li><li>הרגעים הבלתי נסבלים</li><li>הביקורת ההדדית, הפחד והבדידות שנשים כמעט לא מדברות עליהם</li><li>להחזיר את ההרמוניה בבית</li><li>להחזיר את הסמכות והביטחון שלו, ואת הביטחון שלך בו</li><li>שיתוף פעולה של הילדים עם שניכם, מתוך חיבור ואהבה</li><li>בלי לקחת על עצמך את כל האחריות</li></ul></div></div><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-money.jpg" alt="אשה. פרנסה. שפע." width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>אשה. פרנסה. שפע.</strong><em>15 שיעורים</em><p class="bp">הכסף בבית מפסיק להיות הדבר שאת נושאת על הגב.</p><ul><li>מבט חדש לגמרי על תנועת פרנסה של אשה</li><li>איפה נגמרת האחריות שלך ואיפה מתחילה שלו</li><li>איך פועלים עם כסף ללא מאמץ</li><li>התנהלות כלכלית שמגיעה מחיבור נשי מדויק ובריא</li><li>במקום מפחד ומדחיפה</li><li>ואת מפסיקה לפחד על הקיום</li></ul></div></div></div><p class="bsum">שווי שלושת קורסי הבונוס: <b>3,000 ש״ח</b></p>
+    <div class="value"><h4>בואי נתמחר את זה רגע</h4><p class="vlead">כדי שתראי מה בדיוק את מקבלת ואיזה פינוקים הכנתי לך :)</p><div class="vr"><span>ממגנטת, כל הקורס</span><b>2,200 ש״ח</b></div><div class="vr"><span>הבוטית: התייעצות איתה למשך 6 חודשים</span><b>1,500 ש״ח</b></div><div class="vr"><span>שלושת קורסי הבונוס</span><b>3,000 ש״ח</b></div><div class="vr tot"><span>סך הכול</span><b>6,700 ש״ח</b></div><p class="vsub">במקום <b class="was">6,700 ש״ח</b><br>את משלמת <b>1,500 ש״ח</b> בלבד</p></div>
+    <div class="offer">
+      <p class="old">שווי כולל <s>6,700 ש״ח</s></p>
+      <p class="lab">המחיר המיוחד לבוגרות</p>
+      <p class="new"><b>1,500 ש״ח</b></p>
+      <p class="pay">או 10 תשלומים של 150 ש״ח</p>
+      <p class="until">המחיר המיוחד הזה בתוקף עד<br><b>כ׳ במרחשוון תשפ״ז (31.10.2026)</b><br><span class="only">בלבד</span></p>
+      <p class="nl">נשארו</p><div class="clock" aria-live="off"><div class="u"><b data-c="d">-</b><i>ימים</i></div><div class="u"><b data-c="h">-</b><i>שעות</i></div><div class="u"><b data-c="m">-</b><i>דקות</i></div><div class="u"><b data-c="s">-</b><i>שניות</i></div></div>
+      <div class="ofr"><p>אחרי ההצעה, המחיר חוזר למחיר הרגיל.</p></div>
+      <a class="cta" href="mailto:shoshi@shoshizelikovith.com?subject=%D7%94%D7%A6%D7%A2%D7%94%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%20-%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA&body=%D7%94%D7%99%D7%99%20%D7%A9%D7%95%D7%A9%D7%99%2C%0A%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%93%D7%A2%D7%AA%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%9E%D7%91%D7%A6%D7%A2%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%2C%20%D7%AA%D7%A9%D7%9C%D7%97%D7%95%20%D7%9C%D7%99%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA%20%D7%9C%D7%9E%D7%94%20%D7%A9%D7%9B%D7%91%D7%A8%20%D7%9C%D7%9E%D7%93%D7%AA%D7%99.%0A%0A%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%A9%D7%9C%D7%9E%D7%93%D7%AA%D7%99%3A%20%D7%99%D7%95%D7%93%D7%A2%D7%AA%20%28%D7%91%D7%A2%D7%91%D7%A8%3A%20%D7%9C%D7%94%D7%99%D7%95%D7%AA%20%D7%90%D7%A9%D7%94%29%0A%D7%A9%D7%9D%20%D7%9E%D7%9C%D7%90%3A%0A" data-pay="א">אני רוצה הצעה אישית במייל</a>
+      <div class="how"><p>1. את שולחת לנו מייל, וכותבת איזה קורס למדת<br>2. אנחנו בודקות אצלנו מה כבר למדת ומה פתוח לך<br>3. את מקבלת הצעה אישית, עם קישור וקופון רק שלך</p></div>
+      <p class="note">הקופון אישי, לבוגרות בלבד ולא להעברה.</p>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="panel-ב" data-panel="ב" aria-labelledby="h-ב" style="--acc:#A62F7D">
+  <div class="wrap">
+    <h2 class="sec" id="h-ב">את מכירה את החוקים.<br>בואי נכניס אותם הביתה...</h2>
+    <p>עברת את ממגנטת, ואת מכירה את החוקים.<br>ואז מגיע ערב קשה, והוא עושה בדיוק את מה שכואב לך...<br>ביודעת את לומדת מה לעשות עם זה, ברגע עצמו. הנה מה שבפנים ↓</p>
+    <h3 class="chip">למה זה מתאים לך</h3>
+    <ul><li>להתאמן על החוקים ברגעים <strong>האמיתיים</strong>: רצון, גבול, כאב</li><li>ללמוד <strong>לבקש שוב</strong> אחרי ״לא״, בלי להיסגר ובלי להתחנן</li><li><strong>שבוע שלם</strong> לכל שיעור, כדי שהשינוי ייכנס פנימה ויישאר</li><li>ובסוף הדרך, את יותר ויותר <strong>היועצת הזוגית של עצמך</strong></li></ul>
+    <h3 class="chip">מה בדיוק את מקבלת ביודעת</h3><div class="cards small icons">
+    <div class="card"><img src="img/ic-130/chapters.png" alt="" width="130" height="143" loading="lazy"><h4>שיעור שבועי, מחולק לפרקים</h4><p>כדי שיהיה לך נח ללמוד - כל שיעור בנוי מפרקים נפרדים - פרק א׳, פרק ב׳, וכן הלאה. לפעמים שניים, לפעמים חמישה, לפי השיעור.</p></div>
+    <div class="card"><img src="img/ic-130/clock.png" alt="" width="130" height="133" loading="lazy"><h4>כשעה וחצי עד שעתיים לשיעור</h4><p>ויש לך שבוע שלם. את מחלקת אותו איך שנוח לך - פרק ביום, שניים בערב אחד, או הכל ברצף.</p></div>
+    <div class="card"><img src="img/ic-130/worksheets.png" alt="" width="130" height="128" loading="lazy"><h4>דפי סיכום לכל שיעור</h4><p>מסודרים ומעוצבים, להדפסה.<br>
+  כדי שתוכלי לצאת עם הרעיונות מהמסך אל היום שלך.</p></div>
+    <div class="card"><img src="img/ic-130/audio.png" alt="" width="130" height="137" loading="lazy"><h4>גם באודיו</h4><p>לכל פרק יש גם קובץ שמע, להאזנה בנסיעה, בהליכה או תוך כדי עבודות הבית.</p></div>
+    <div class="card"><img src="img/ic-130/coach.png" alt="" width="130" height="130" loading="lazy"><h4>המאמנת האישית שלך</h4><p>מלווה אותך גם כאן, בזמן אמת, בדיוק כשעולה סיטואציה שאת לא בטוחה מה לעשות איתה.</p></div>
+    <div class="card"><img src="img/ic-130/download.png" alt="" width="130" height="142" loading="lazy"><h4>גישה לדרייב והורדה</h4><p>אפשר להוריד את כל השיעורים ודפי הסיכום ולשמור אותם אצלך לתמיד, בלי תאריך תפוגה.</p></div>
+    <div class="card"><img src="img/ic-130/access.png" alt="" width="130" height="137" loading="lazy"><h4>שנה שלמה באתר</h4><p>הגישה שלך פתוחה לשנה, ואפשר לחזור לשיעור בכל שלב בחיים.</p></div>
+    <div class="card"><img src="img/ic-130/pace.png" alt="" width="130" height="136" loading="lazy"><h4>בקצב שלך</h4><p>אין שידורים חיים שצריך להספיק, ואין מה לפספס. פשוט לומדת בקצב שלך.<br></p></div>
+  <div class="card"><img src="img/ic-130/clock.png" alt="" width="130" height="130" loading="lazy"><h4>הכול נפתח מיד</h4><p>ברגע שהתשלום מסודר: הקורס, הבוטית וקורסי הבונוס.</p></div><div class="card"><img src="img/ic-130/chapters.png" alt="" width="130" height="130" loading="lazy"><h4>ממגנטת נפתחת לך גם היא</h4><p>ארבעה שבועות של בסיס, 23 כרטיסי חוקי המשיכה, ושנה שלמה באתר.</p></div></div>
+<h3 class="chip">הסילבוס: מה יש בשישה עשר השבועות של יודעת</h3><p class="hint">לחצי על התיבות כדי לראות את הסילבוס בהרחבה:)</p><details open><summary>שבוע 1 · איך לחיות עכשיו כמו האשה העתידית שאת<span class="hk">את מתעוררת בבוקר לתוך האשה שרצית להיות, לא לתוך רשימת המשימות.</span></summary>
+  <div class="body"><p>מציירות תמונת מציאות מדויקת - מי את כשאת בטובה שלך. עובדים על לנהל את האנרגיה שלך ולהתמקד בה, וזה מה שמזיז את האנרגיה שלו תוך שניות. ותרגול יומי קצר שמחזיק את זה גם בשבוע עמוס.</p></div></details>
+
+  <details><summary>שבוע 2 · מחסרה לשלמה<span class="hk">הרוגע שחיכית שהוא ייתן לך - מגיע ממך, ואז פתאום מגיע גם ממנו.</span></summary>
+  <div class="body"><p>אימון מודעות "סוף יום" שלוקח שבע דקות. דף תרגול לרגעי אמת, לשימוש בזמן אמת ולא אחר כך. ומה שנפתח בבית כשאת לא ממתינה לאישור שלו כדי להיות בשמחה.</p></div></details>
+
+  <details><summary>שבוע 3 · לחיות חיים של עונג<span class="hk">רגע שהיה מפיל אותך הופך לרגע של עונג, ואת מרגישה את זה בגוף.</span></summary>
+  <div class="body"><p>איך נגמרת ההתמכרות למילוי חוסר מבחוץ.<br>
+  הפיכת רגע של חוסר לחוויית עונג - שיטה, לא הלך רוח.<br>
+  וחוסן שנשאר איתך גם כשמשהו נלקח.</p></div></details>
+
+  <details class="soak"><summary><span class="soaktag">שיעור הטמעה</span>שבוע 4 · הטמעה: ריפוי בהלת החוסר<span class="hk">במקום הבהלה שקמה בך כשהוא מתרחק - יש ביטחון שקט שהקשר מחזיק.</span></summary>
+  <div class="body"><p>שני שיעורי הטמעה על כל מה שנפתח בשלושת השבועות הראשונים. עובדים על קבלה עצמית וראויות - להרגיש שווה בלי להוכיח. והשקט הזה מדבק, הוא נרגע יחד איתך.</p></div></details>
+
+  <details><summary>שבוע 5 · מיומנות הקסם הנשית<span class="hk">את מזיזה מצב שלם בלי לומר עליו מילה, ונהנית מזה.</span></summary>
+  <div class="body"><p>מיומנות הקסם: להשפיע על האנרגיה בחדר לפני שנפתח דיון. משחק האחריות - איפה הכוח שלך מתחיל, ואיפה את משוחררת. ותרגול לרגעים שבהם את מאבדת שליטה, כי הם יבואו.</p></div></details>
+
+  <details><summary>שבוע 6 · אשה בביטוי עצמי מקסימלי<span class="hk">את אומרת את מה שיש לך לומר, והוא מתקרב - וזו התחושה הכי טובה שיש.</span></summary>
+  <div class="body"><p>נפרדות והתקרבות: למה דווקא כשאת שלמה עם עצמך הוא רוצה אותך יותר. הרשות לבטא רצון, גבול, ציפייה וכאב - ארבעה דברים שרוב הנשים מחזיקות בפנים. ואיך אומרים אותם כך שהאוויר בחדר מתרכך ולא מתקשה.</p></div></details>
+
+  <details><summary>שבוע 7 · אשה עם רצונות<span class="hk">הרצון שלך נשמע כמו הזמנה, והוא רוצה להיות זה שנותן.</span></summary>
+  <div class="body"><p>הרצון כאוצר - מה נפתח בך כשאת מפסיקה להתנצל עליו. ביטוי רצון ממגנט: אותה בקשה בדיוק, בניסוח שמעורר בו רצון. ואיך מבקשים שוב אחרי "לא", בלי להיסגר ובלי להתחנן.</p></div></details>
+
+  <details><summary>שבוע 8 · על גבולות בזוגיות שלך<span class="hk">את מציבה גבול בלי פחד, ומגלה שהקרבה גדלה בדיוק שם.</span></summary>
+  <div class="body"><p>למה גבול מרגיש מסוכן, ומה קורה ברגע שהוא נאמר בלי איום. איך מציבים אותו כך שהוא לא נשמע כמו סירוב אלא כמו עצמיות. ומה זה מעיר בו - דווקא כאן נפתח אצלו הרצון לשמור עלייך.</p></div></details>
+
+  <details><summary>שבוע 9 · אשה שיוצרת מציאות<span class="hk">את מצפה לטוב, והוא מתחיל להגיע - זו ההרגשה הכי משכרת בתהליך.</span></summary>
+  <div class="body"><p>הציפייה כמנוע: למה מה שאת מחזיקה בפנים קובע מה יקרה בחוץ. איך מחזיקים ציפייה לטוב גם כשהמציאות עוד לא השתנתה. והרגע שבו את מזהה שמשהו קרה בגללך, בלי שעשית כלום.</p></div></details>
+
+  <details class="soak"><summary><span class="soaktag">שיעור הטמעה</span>שבוע 10 · הטמעה: ביטוי עצמי נשי בזוגיות<span class="hk">לא הספקת ליישם הכל? זה בדיוק השבוע שנועד לך.</span></summary>
+  <div class="body"><p>מפת הביטוי העצמי - כל מה שנפתח בשבועות 6 עד 9, במקום אחד.<br>
+  מתי לבטא רצון, מתי גבול, מתי ציפייה ומתי כאב.<br>
+  זה לא אותו דבר.<br>
+  ומה קורה בבית כשאת כבר לא מתלבטת.</p></div></details>
+
+  <details><summary>שבוע 11 · איך להפוך רגעי כאב לרגעים שיוצרים קרבה<span class="hk">את משתפת אותו בכאב, והוא מתקרב - במקום להתגונן או להיעלם.</span></summary>
+  <div class="body"><p>ההבדל בין להאשים לבין לבטא.<br>
+  שתי גרסאות של אותו משפט בדיוק.<br>
+  הרגע שבלעת ולא אמרת - כאן את לומדת מה לעשות איתו במקום זה.<br>
+  ואיך הרצון לפייס עולה ממנו, מעצמו, בלי שביקשת.</p></div></details>
+
+  <details><summary>שבוע 12 · הקשבה רומנטית<span class="hk">הוא לא מדבר, או שאף אחת עוד לא באמת שמעה אותו.</span></summary>
+  <div class="body"><p>הקשבה למסר הלב: מה נמצא מתחת למשפט שהרגיז אותך. למה דווקא המשפטים הצורמים הם אלה שמחביאים את הרצון בך. ומה נפתח אצלו כשהוא מרגיש מובן פעם אחת באמת.</p></div></details>
+
+  <details><summary>שבוע 13 · על קבלה שמעוררת שפע<span class="hk">את מקבלת בחן, והוא רוצה לתת לך עוד - וזה עונג צרוף.</span></summary>
+  <div class="body"><p>למה כל כך קשה לקבל, ומה נחסם בקשר כשלא מקבלים. "מברשת הקסם" - כלי קצר שהופך נתינה קטנה שלו לרצון לתת עוד. והשמחה שנכנסת לבית כשהוא מרגיש שהנתינה שלו נראית.</p></div></details>
+
+  <details><summary>שבוע 14 · סביבת השראה נשית מנצחת<span class="hk">את מוקפת בנשים שמחזיקות אותך, ולא צריכה להסביר לאף אחת.</span></summary>
+  <div class="body"><p>הפתרון לבדידות בזוגיות - בדידות שקיימת גם בקשר טוב, וכמעט אף אחת לא מדברת עליה. מה באמת עוזר, ומה רק מחזיר אותך לתלונה. ואיך בונים סביבה שממשיכה להחזיק אותך גם אחרי שהמסע נגמר.</p></div></details>
+
+  <details><summary>שבוע 15 · להיות היועצת הזוגית של עצמך<span class="hk">כל רגע מהחיים - את מפרקת אותו לבד ויודעת מה לעשות איתו.</span></summary>
+  <div class="body"><p>שלושה שלבים לדייק רגע אמיתי מהחיים שלך, בלי לשאול אף אחת. הדגמה חיה על רגעים של נשים מהמסע - את רואה את זה קורה מול העיניים. וזה הרגע שכבר לא צריך אותי, כי את שומעת את עצמך.</p></div></details>
+
+  <details><summary>שבוע 16 · איזה זיווג מושלם!<span class="hk">את מסתכלת אחורה ולא מזהה את האשה שהתחילה - וזה מרגש.</span></summary>
+  <div class="body"><p>זוגיות רוחנית: מה הקשר הזה בא ללמד דווקא את שניכם. משימת סיום שמסמנת בכתב מה השתנה, בשבילך. ומשפט אחד שמסכם: החיבור, השמחה והביטחון שלא היו שם בהתחלה.</p></div></details>
+    <h3 class="chip">הבוטית שלך, על כל הקורס · שווי 1,500 ש״ח</h3>
+    <div class="botrow"><img src="img/coach-bot-2.jpg" alt="הבוטית, המאמנת האישית הדיגיטלית" width="600" height="900" loading="lazy"><div><ul><li>המאמנת האישית הדיגיטלית, שנבנתה לפי שפת הקורס וחוקי המשיכה</li><li>מכירה את החוקים שכבר למדת, ואת כל שבוע ביודעת</li><li>לידך שישה חודשים, בדיוק כשעולה סיטואציה, גם באחת בלילה:)</li><li>נכנסים בלחיצה על קישור, בלי אפליקציה ובלי התקנה</li><li>מאמנת, לא יועצת: שואלת, ומחזירה אותך לשלב שבו את נמצאת</li><li>את בוחרת אם השיחה נשמרת או דיסקרטית לגמרי</li></ul></div></div>
+    <h3 class="chip">שלושת קורסי הבונוס · 1,000 ש״ח כל אחד</h3>
+    <div class="bgrid one"><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-write.jpg" alt="לכתוב את עצמי לדעת" width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>לכתוב את עצמי לדעת</strong><em>30 שיעורים</em><p class="bp">את כבר לא צריכה לחכות שמישהו יפתח לך את הלב.</p><ul><li>הכתיבה ככלי ריפוי: דף, עט ושלוש דקות</li><li>ריפוי ושחרור בכתיבה</li><li>מחסומי ביטוי ויצירה</li><li>ממקורבנות לבעלות על הסיפור הפנימי</li><li>5 שיעורים על התמודדות עם ביקורת</li><li>2 שיעורים על התמכרויות</li><li>להוציא את המועקה בעצמך, ולגלות תשובה מרפאה שלא הייתה עולה בשום דרך אחרת</li></ul></div></div><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-parents.jpg" alt="הורות, זוגיות, ומה שביניהן" width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>הורות, זוגיות, ומה שביניהן</strong><em>7 שיעורים</em><p class="bp">יש רגעים שבהם את רואה אותו עם הילדים, ומשהו בך נסגר.</p><ul><li>המשולש: את, הוא והילדים</li><li>הרגעים הבלתי נסבלים</li><li>הביקורת ההדדית, הפחד והבדידות שנשים כמעט לא מדברות עליהם</li><li>להחזיר את ההרמוניה בבית</li><li>להחזיר את הסמכות והביטחון שלו, ואת הביטחון שלך בו</li><li>שיתוף פעולה של הילדים עם שניכם, מתוך חיבור ואהבה</li><li>בלי לקחת על עצמך את כל האחריות</li></ul></div></div><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-money.jpg" alt="אשה. פרנסה. שפע." width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>אשה. פרנסה. שפע.</strong><em>15 שיעורים</em><p class="bp">הכסף בבית מפסיק להיות הדבר שאת נושאת על הגב.</p><ul><li>מבט חדש לגמרי על תנועת פרנסה של אשה</li><li>איפה נגמרת האחריות שלך ואיפה מתחילה שלו</li><li>איך פועלים עם כסף ללא מאמץ</li><li>התנהלות כלכלית שמגיעה מחיבור נשי מדויק ובריא</li><li>במקום מפחד ומדחיפה</li><li>ואת מפסיקה לפחד על הקיום</li></ul></div></div></div><p class="bsum">שווי שלושת קורסי הבונוס: <b>3,000 ש״ח</b></p>
+    <div class="value"><h4>בואי נתמחר את זה רגע</h4><p class="vlead">כדי שתראי מה בדיוק את מקבלת ואיזה פינוקים הכנתי לך :)</p><div class="vr"><span>יודעת, כל הקורס</span><b>2,700 ש״ח</b></div><div class="vr"><span>הבוטית: התייעצות איתה למשך 6 חודשים</span><b>1,500 ש״ח</b></div><div class="vr"><span>שלושת קורסי הבונוס</span><b>3,000 ש״ח</b></div><div class="vr tot"><span>סך הכול</span><b>7,200 ש״ח</b></div><p class="vsub">במקום <b class="was">7,200 ש״ח</b><br>את משלמת <b>1,500 ש״ח</b> בלבד</p></div>
+    <div class="offer">
+      <p class="old">שווי כולל <s>7,200 ש״ח</s></p>
+      <p class="lab">המחיר המיוחד לבוגרות</p>
+      <p class="new"><b>1,500 ש״ח</b></p>
+      <p class="pay">או 10 תשלומים של 150 ש״ח</p>
+      <p class="until">המחיר המיוחד הזה בתוקף עד<br><b>כ׳ במרחשוון תשפ״ז (31.10.2026)</b><br><span class="only">בלבד</span></p>
+      <p class="nl">נשארו</p><div class="clock" aria-live="off"><div class="u"><b data-c="d">-</b><i>ימים</i></div><div class="u"><b data-c="h">-</b><i>שעות</i></div><div class="u"><b data-c="m">-</b><i>דקות</i></div><div class="u"><b data-c="s">-</b><i>שניות</i></div></div>
+      <div class="ofr"><p>אחרי ההצעה, המחיר חוזר למחיר הרגיל.</p></div>
+      <a class="cta" href="mailto:shoshi@shoshizelikovith.com?subject=%D7%94%D7%A6%D7%A2%D7%94%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%20-%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA&body=%D7%94%D7%99%D7%99%20%D7%A9%D7%95%D7%A9%D7%99%2C%0A%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%93%D7%A2%D7%AA%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%9E%D7%91%D7%A6%D7%A2%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%2C%20%D7%AA%D7%A9%D7%9C%D7%97%D7%95%20%D7%9C%D7%99%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA%20%D7%9C%D7%9E%D7%94%20%D7%A9%D7%9B%D7%91%D7%A8%20%D7%9C%D7%9E%D7%93%D7%AA%D7%99.%0A%0A%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%A9%D7%9C%D7%9E%D7%93%D7%AA%D7%99%3A%20%D7%9E%D7%9E%D7%92%D7%A0%D7%98%D7%AA%0A%D7%A9%D7%9D%20%D7%9E%D7%9C%D7%90%3A%0A" data-pay="ב">אני רוצה הצעה אישית במייל</a>
+      <div class="how"><p>1. את שולחת לנו מייל, וכותבת איזה קורס למדת<br>2. אנחנו בודקות אצלנו מה כבר למדת ומה פתוח לך<br>3. את מקבלת הצעה אישית, עם קישור וקופון רק שלך</p></div>
+      <p class="note">הקופון אישי, לבוגרות בלבד ולא להעברה.</p>
+    </div>
+  </div>
+</section>
+
+<section class="panel" id="panel-ג" data-panel="ג" aria-labelledby="h-ג" style="--acc:#0D122C">
+  <div class="wrap">
+    <h2 class="sec" id="h-ג">עשית את כל הדרך.<br>עכשיו בואי נחזור אליה, עם מישהי לידך...</h2>
+    <p>עברת את ממגנטת וגם את יודעת.<br>ואז ערב אחד מטלטל, ואת זוכרת שיש שיעור בדיוק על זה... רק איזה?<br>כאן את חוזרת לכל הקורס, עם הבוטית לידך. הנה מה שבפנים ↓</p>
+    <h3 class="chip">למה זה מתאים לך</h3>
+    <ul><li>את <strong>לא מתחילה</strong> שום דבר חדש, רק חוזרת <strong>לתרגל</strong> את שלך</li><li>מי שחוזרת לחומר אחרי תקופה, מגלה בו <strong>עוד רובד</strong></li><li><strong>כל הקורס במקום אחד</strong>, ומישהי שזוכרת בשבילך איפה מה:)</li><li>התרגול נכנס <strong>לרגע עצמו</strong>, לא לשבוע אחרי</li></ul>
+    
+    <h3 class="chip">הבוטית שלך, על כל הקורס · שווי 1,500 ש״ח</h3>
+    <div class="botrow"><img src="img/coach-bot-2.jpg" alt="הבוטית, המאמנת האישית הדיגיטלית" width="600" height="900" loading="lazy"><div><ul><li>המאמנת האישית הדיגיטלית, שנבנתה לפי שפת הקורס וחוקי המשיכה</li><li>מכירה כל שיעור בממגנטת וכל שבוע ביודעת</li><li>איתך שישה חודשים, בכל שעה, גם באחת בלילה:)</li><li>מספרת לבוטית מה קרה הערב, וחוזרות יחד לחוק ולתרגיל</li><li>מאמנת, לא יועצת: שואלת את השאלה שמחזירה אותך לעצמך</li><li>נכנסים בקישור, בלי אפליקציה, ואת בוחרת אם השיחה נשמרת</li></ul></div></div>
+    <h3 class="chip">שלושת קורסי הבונוס · 1,000 ש״ח כל אחד</h3>
+    <div class="bgrid one"><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-write.jpg" alt="לכתוב את עצמי לדעת" width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>לכתוב את עצמי לדעת</strong><em>30 שיעורים</em><p class="bp">את כבר לא צריכה לחכות שמישהו יפתח לך את הלב.</p><ul><li>הכתיבה ככלי ריפוי: דף, עט ושלוש דקות</li><li>ריפוי ושחרור בכתיבה</li><li>מחסומי ביטוי ויצירה</li><li>ממקורבנות לבעלות על הסיפור הפנימי</li><li>5 שיעורים על התמודדות עם ביקורת</li><li>2 שיעורים על התמכרויות</li><li>להוציא את המועקה בעצמך, ולגלות תשובה מרפאה שלא הייתה עולה בשום דרך אחרת</li></ul></div></div><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-parents.jpg" alt="הורות, זוגיות, ומה שביניהן" width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>הורות, זוגיות, ומה שביניהן</strong><em>7 שיעורים</em><p class="bp">יש רגעים שבהם את רואה אותו עם הילדים, ומשהו בך נסגר.</p><ul><li>המשולש: את, הוא והילדים</li><li>הרגעים הבלתי נסבלים</li><li>הביקורת ההדדית, הפחד והבדידות שנשים כמעט לא מדברות עליהם</li><li>להחזיר את ההרמוניה בבית</li><li>להחזיר את הסמכות והביטחון שלו, ואת הביטחון שלך בו</li><li>שיתוף פעולה של הילדים עם שניכם, מתוך חיבור ואהבה</li><li>בלי לקחת על עצמך את כל האחריות</li></ul></div></div><div class="bcard wide"><div class="bimg"><img src="img/bonus/b-money.jpg" alt="אשה. פרנסה. שפע." width="900" height="506" loading="lazy"><span class="tag">1,000 ש״ח</span></div><div class="bt"><strong>אשה. פרנסה. שפע.</strong><em>15 שיעורים</em><p class="bp">הכסף בבית מפסיק להיות הדבר שאת נושאת על הגב.</p><ul><li>מבט חדש לגמרי על תנועת פרנסה של אשה</li><li>איפה נגמרת האחריות שלך ואיפה מתחילה שלו</li><li>איך פועלים עם כסף ללא מאמץ</li><li>התנהלות כלכלית שמגיעה מחיבור נשי מדויק ובריא</li><li>במקום מפחד ומדחיפה</li><li>ואת מפסיקה לפחד על הקיום</li></ul></div></div></div><p class="bsum">שווי שלושת קורסי הבונוס: <b>3,000 ש״ח</b></p>
+    <div class="value"><h4>בואי נתמחר את זה רגע</h4><p class="vlead">כדי שתראי מה בדיוק את מקבלת ואיזה פינוקים הכנתי לך :)</p><div class="vr"><span>הבוטית: התייעצות איתה למשך 6 חודשים</span><b>1,500 ש״ח</b></div><div class="vr"><span>שלושת קורסי הבונוס</span><b>3,000 ש״ח</b></div><div class="vr tot"><span>סך הכול</span><b>4,500 ש״ח</b></div><p class="vsub">במקום <b class="was">4,500 ש״ח</b><br>את משלמת <b>690 ש״ח</b> בלבד</p></div>
+    <div class="offer">
+      <p class="old">שווי כולל <s>4,500 ש״ח</s></p>
+      <p class="lab">המחיר המיוחד לבוגרות</p>
+      <p class="new"><b>690 ש״ח</b></p>
+      <p class="pay">או 10 תשלומים של 69 ש״ח</p>
+      <p class="until">המחיר המיוחד הזה בתוקף עד<br><b>כ׳ במרחשוון תשפ״ז (31.10.2026)</b><br><span class="only">בלבד</span></p>
+      <p class="nl">נשארו</p><div class="clock" aria-live="off"><div class="u"><b data-c="d">-</b><i>ימים</i></div><div class="u"><b data-c="h">-</b><i>שעות</i></div><div class="u"><b data-c="m">-</b><i>דקות</i></div><div class="u"><b data-c="s">-</b><i>שניות</i></div></div>
+      <div class="ofr"><p>שווי כולל: 4,500 ש״ח<br>אחרי ההצעה, המחיר חוזר למחיר הרגיל.</p></div>
+      <a class="cta" href="mailto:shoshi@shoshizelikovith.com?subject=%D7%94%D7%A6%D7%A2%D7%94%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%20-%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA&body=%D7%94%D7%99%D7%99%20%D7%A9%D7%95%D7%A9%D7%99%2C%0A%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%93%D7%A2%D7%AA%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%9E%D7%91%D7%A6%D7%A2%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%2C%20%D7%AA%D7%A9%D7%9C%D7%97%D7%95%20%D7%9C%D7%99%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA%20%D7%9C%D7%9E%D7%94%20%D7%A9%D7%9B%D7%91%D7%A8%20%D7%9C%D7%9E%D7%93%D7%AA%D7%99.%0A%0A%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%A9%D7%9C%D7%9E%D7%93%D7%AA%D7%99%3A%20%D7%9E%D7%9E%D7%92%D7%A0%D7%98%D7%AA%20%D7%95%D7%99%D7%95%D7%93%D7%A2%D7%AA%0A%D7%A9%D7%9D%20%D7%9E%D7%9C%D7%90%3A%0A" data-pay="ג">אני רוצה הצעה אישית במייל</a>
+      <div class="how"><p>1. את שולחת לנו מייל, וכותבת איזה קורס למדת<br>2. אנחנו בודקות אצלנו מה כבר למדת ומה פתוח לך<br>3. את מקבלת הצעה אישית, עם קישור וקופון רק שלך</p></div>
+      <p class="note">הקופון אישי, לבוגרות בלבד ולא להעברה.</p>
+    </div>
+  </div>
+</section>
+</main>
+<img class="sep" src="img/separator-1480.png" alt="" width="1480" height="111" loading="lazy">
+<section class="wrap" id="letter">
+  <div class="letter"><p>בוגרת יקרה,<br>את כבר יודעת את הסוד הכי פחות זוהר של הדרך הזו:<br>היא לא עובדת מקריאה.<br>היא עובדת מתרגול,<br>מרגע אחד בבית שבו בחרת אחרת.<br>ואם את כאן, את חוזרת לזה שוב,<br>גם אחרי שכבר למדת.<br>את זה אני הכי מעריכה.<br>אז בחרתי לפנק דווקא אותך:)<br>ובעזרת השם, נמשיך ביחד.<br>חיבוק♥<br>שושי</p></div>
+</section>
+<section class="wrap" id="faq">
+  <h2 class="sec">שאלות שאולי <span class="hl">עולות לך</span></h2>
+  <details><summary>מה ההבדל בין ההצעה הזו לדף הרגיל?</summary><p>הדף הרגיל בנוי למי שמתחילה מאפס.<br>כאן את מקבלת רק את מה שחסר לך, עם הבוטית ושלושת קורסי הבונוס.</p></details><details><summary>אני מקבלת גישה גם למה שכבר למדתי?</summary><p>כן. כל השיעורים נפתחים לך מחדש לשנה שלמה באתר, וההורדה לדרייב נשארת אצלך לתמיד.<br>רוצה שוב את סדרת המיילים והתזכורות? תבקשי במייל, ונאפס לך אותה מההתחלה.</p></details><details><summary>מתי זה נפתח?</summary><p>מיד. ברגע שהתשלום מסודר, נפתחים לך הקורסים, הבוטית וקורסי הבונוס.</p></details><details><summary>איך מקבלים את ההצעה?</summary><p>שולחים לנו מייל, ואנחנו בודקות מה כבר למדת ומה פתוח לך.<br>ההצעה מגיעה אלייך עם קישור וקופון אישי, לבוגרות בלבד ולא להעברה.</p></details><details><summary>עד מתי ההצעה?</summary><p>ההצעה פתוחה לזמן קצר, ואחריה המחיר חוזר למחיר הרגיל.</p></details>
+</section>
+<section class="wrap" id="more">
+  <div class="more">
+    <h3>יש לך עוד שאלות? את מתלבטת, מה מדויק לך?</h3>
+    <p>את יכולה להתייעץ איתי.</p>
+    <div class="mrow"><a class="b-wa" href="https://wa.me/972504244200?text=%D7%94%D7%99%D7%99%20%D7%A9%D7%95%D7%A9%D7%99%2C%20%D7%99%D7%A9%20%D7%9C%D7%99%20%D7%A9%D7%90%D7%9C%D7%94%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%94%D7%A6%D7%A2%D7%94%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA">לשלוח לי הודעה בוואטסאפ</a><a class="b-ml" href="mailto:shoshi@shoshizelikovith.com?subject=%D7%A9%D7%90%D7%9C%D7%94%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%94%D7%A6%D7%A2%D7%94%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA">לשלוח לי מייל</a></div>
+    <div class="take"><h3>ואם את כבר רוצה לקחת את ההצעה</h3>
+    <a class="cta" href="mailto:shoshi@shoshizelikovith.com?subject=%D7%94%D7%A6%D7%A2%D7%94%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%20-%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA&body=%D7%94%D7%99%D7%99%20%D7%A9%D7%95%D7%A9%D7%99%2C%0A%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%93%D7%A2%D7%AA%20%D7%9C%D7%92%D7%91%D7%99%20%D7%94%D7%9E%D7%91%D7%A6%D7%A2%20%D7%9C%D7%91%D7%95%D7%92%D7%A8%D7%95%D7%AA%2C%20%D7%AA%D7%A9%D7%9C%D7%97%D7%95%20%D7%9C%D7%99%20%D7%94%D7%A6%D7%A2%D7%94%20%D7%9E%D7%95%D7%AA%D7%90%D7%9E%D7%AA%20%D7%9C%D7%9E%D7%94%20%D7%A9%D7%9B%D7%91%D7%A8%20%D7%9C%D7%9E%D7%93%D7%AA%D7%99.%0A%0A%D7%94%D7%A7%D7%95%D7%A8%D7%A1%20%D7%A9%D7%9C%D7%9E%D7%93%D7%AA%D7%99%3A%20%0A%D7%A9%D7%9D%20%D7%9E%D7%9C%D7%90%3A%0A">אני רוצה הצעה אישית במייל, לחצי כאן</a></div>
+  </div>
+</section>
+<footer>
+  <a href="https://shoshizelikovith.com/isha/terms/">תקנון</a> · <a href="https://shoshizelikovith.com/isha/accessibility/">נגישות</a>
+</footer>
+<script>
+(function(){
+  document.body.classList.remove('nojs');
+  var map={'a':'א','b':'ב','c':'ג'};
+  function show(l){
+    var ps=document.querySelectorAll('.panel');
+    for(var i=0;i<ps.length;i++){ps[i].classList.toggle('on',ps[i].getAttribute('data-panel')===l);}
+    document.body.classList.remove('nopanel');
+    var src=document.querySelector('.panel.on a.cta[data-pay]'),mc=document.querySelector('#more .take a.cta');if(src&&mc)mc.setAttribute('href',src.getAttribute('href'));
+    var cs=document.querySelectorAll('.choice[data-go]');
+    for(var j=0;j<cs.length;j++){ if(cs[j].getAttribute('data-go')===l){cs[j].setAttribute('aria-current','true');}else{cs[j].removeAttribute('aria-current');} }
+  }
+  function fromHash(){var h=(location.hash||'').replace('#','');if(map[h]){show(map[h]);return true;}return false;}
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('.choice[data-go]'); if(!a) return;
+    e.preventDefault(); var l=a.getAttribute('data-go');
+    show(l); try{history.replaceState(null,'','#'+{'א':'a','ב':'b','ג':'c'}[l]);}catch(x){}
+    var el=document.getElementById('panel-'+l); if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  window.addEventListener('hashchange',fromHash);
+  fromHash();
+  var END=new Date('2026-10-31T23:59:59+02:00').getTime();
+  function tick(){
+    var ms=END-Date.now(); if(ms<0) ms=0;
+    var s=Math.floor(ms/1000),v={d:Math.floor(s/86400),h:Math.floor(s%86400/3600),m:Math.floor(s%3600/60),s:s%60};
+    var els=document.querySelectorAll('[data-c]');
+    for(var i=0;i<els.length;i++){els[i].textContent=v[els[i].getAttribute('data-c')];}
+  }
+  tick(); setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
