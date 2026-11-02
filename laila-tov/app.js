@@ -253,6 +253,9 @@ function viewHome(st){
     ${wEarn.filter(e=>e.kind!=='base').map(b=>`<p class="bonus ${b.kind}">+${money(b.amt)} · ${esc(b.reason)}</p>`).join('')}
     ${graceMsg?`<p class="nudge">${esc(graceMsg)}</p>`:''}
   </section>
+  ${k.reco ? `<section class="card reco"><h2>🧭 ההמלצה שלי</h2>
+    ${[['💪','במה אני כבר חזק','strong'],['🌱','במה אפשר להשתפר','grow'],['🎯','על מה אני מתמקד','focus']].map(([ic,t,f]) => k.reco[f] && k.reco[f].length ? `<div class="rc"><h3>${ic} ${t}</h3><ul>${k.reco[f].map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>` : '').join('')}
+  </section>` : ''}
   ${kudos.length ? `<section class="card kudos"><h2>⭐ כל הכבוד!</h2>${kudos.map(t=>`<p>${esc(t)}</p>`).join('')}</section>` : ''}
   ${fb ? `<section class="booklet"><div class="booklet-head"><span class="step">שבוע ${dm(fb.week)}</span><h2>המשוב שלי</h2></div>
     <div class="fb"><p>${esc(fb.feedback)}</p>${fb.next?`<p class="try"><b>האתגר שלי לשבוע הבא:</b> ${esc(fb.next)}</p>`:''}</div></section>` : ''}
