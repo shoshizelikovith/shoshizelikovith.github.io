@@ -150,6 +150,7 @@ main{
   border-bottom-left-radius:6px; box-shadow:var(--lift);
 }
 .bot strong{color:var(--purple); font-weight:600}
+.saveIns:hover:not(:disabled){transform:none; background:none}
 .botbox{display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; max-width:100%}
 .saveIns{
   background:none; border:0; padding:4px 6px; cursor:pointer;
@@ -188,6 +189,7 @@ button{
 }
 button:hover:not(:disabled){transform:scale(1.06); background:var(--purple)}
 button:disabled{opacity:.4; cursor:default}
+button.saveIns:hover:not(:disabled){transform:none; background:none}
 .note{text-align:center; font-size:12px; opacity:.5; margin:9px 0 0; font-weight:300}
 /* ההסתייגות ומדיניות הפרטיות, בתחתית הדף */
 .legal{max-width:780px; margin:6px auto 0; text-align:center;
@@ -607,6 +609,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-172722';</script>
+<script>var BOT_BUILD='BOTCHAN-173100';</script>
 </body>
 </html>
