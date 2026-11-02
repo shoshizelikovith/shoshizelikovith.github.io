@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#F2EEE3">
+<title>מעקב הפניות</title>
+<link rel="stylesheet" href="fonts/assistant.css">
+<style>
+:root{
+  --cream:#F2EEE3; --card:#F8F4EA; --line:#E2DACB; --navy:#0D122C; --soft:#5C5A6B;
+  --purple:#A62F7D; --pink:#DF1767; --orange:#F36E21; --purple-t:#A62F7D1F; --pink-t:#DF17671A;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--cream);color:var(--navy);font-family:'Assistant';font-size:17px;line-height:1.5}
+body{padding:0 16px 80px}
+.wrap{max-width:1080px;margin:0 auto}
+header{padding:28px 0 8px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+h1{font-size:30px;font-weight:800;margin:0;letter-spacing:-.3px}
+h1 span{color:var(--purple)}
+.upd{font-size:14px;color:var(--soft)}
+.upd a{color:var(--purple);font-weight:700;text-decoration:none;border-bottom:1.5px solid var(--purple-t)}
+h2{font-size:21px;font-weight:800;margin:44px 0 14px}
+h2 small{font-weight:400;font-size:15px;color:var(--soft);margin-inline-start:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}
+/* --- הגיבורה --- */
+.hero{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px;margin-top:18px}
+.big{display:flex;flex-direction:column;justify-content:center}
+.big .n{font-size:64px;font-weight:800;line-height:1;color:var(--purple)}
+.big .n b{color:var(--navy);font-weight:800}
+.big .t{font-size:18px;margin-top:6px}
+.ring{display:flex;align-items:center;gap:16px}
+.ring svg{flex:none}
+.ring .lbl{font-size:16px}
+.ring .lbl b{display:block;font-size:22px}
+.ring .lbl i{font-style:normal;color:var(--soft);font-size:14px}
+/* --- משפך --- */
+.funnel{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fun h3{margin:0 0 12px;font-size:18px}
+.step{display:grid;grid-template-columns:110px 1fr 54px;align-items:center;gap:10px;margin:9px 0;font-size:15px}
+.bar{height:26px;border-radius:13px;background:var(--purple-t);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:13px;background:var(--purple);transition:width .8s}
+.fun.p .bar{background:var(--pink-t)} .fun.p .bar i{background:var(--pink)}
+.step .v{font-weight:800;text-align:left}
+/* --- ציר זמן --- */
+.days{display:flex;align-items:flex-end;gap:4px;height:150px;padding-top:10px;overflow-x:auto}
+.day{flex:1 0 22px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:2px;height:100%;cursor:pointer}
+.day .s{width:100%;border-radius:6px 6px 2px 2px}
+.day .d{font-size:11px;color:var(--soft);white-space:nowrap}
+.day .dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+.legend{display:flex;gap:16px;font-size:14px;color:var(--soft);margin-top:10px;flex-wrap:wrap}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
+/* --- הצעות --- */
+.offers .row{display:grid;grid-template-columns:minmax(0,1.6fr) 1fr 80px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.offers .row:last-child{border:0}
+.mini{height:10px;border-radius:5px;background:var(--purple-t);overflow:hidden}
+.mini i{display:block;height:100%;background:var(--purple)}
+/* --- צריך אותך --- */
+.need{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.need .card h3{margin:0 0 10px;font-size:17px;display:flex;justify-content:space-between}
+.need .card h3 em{font-style:normal;background:var(--pink);color:var(--cream);border-radius:12px;padding:0 10px;font-size:15px}
+.need ul{list-style:none;margin:0;padding:0;max-height:260px;overflow:auto}
+.need li{padding:7px 0;border-bottom:1px solid var(--line);font-size:15px;cursor:pointer}
+.need li:last-child{border:0}
+.need li small{display:block;color:var(--soft);font-size:13px}
+/* --- שאלות --- */
+.ask{background:var(--navy);color:var(--cream);border-radius:22px;padding:22px}
+.ask h2{margin:0 0 4px;color:var(--cream)}
+.ask p{margin:0 0 14px;opacity:.8;font-size:15px}
+.ask form{display:flex;gap:8px}
+.ask input{flex:1;min-width:0;font:inherit;font-size:18px;padding:13px 16px;border-radius:14px;border:0;background:var(--cream);color:var(--navy)}
+.ask button{font:inherit;font-weight:800;padding:0 20px;border:0;border-radius:14px;background:var(--pink);color:var(--cream);cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{font:inherit;font-size:14px;padding:6px 12px;border-radius:16px;border:1px solid #F2EEE355;background:transparent;color:var(--cream);cursor:pointer}
+.answer{margin-top:16px;background:#F2EEE314;border-radius:16px;padding:16px;display:none}
+.answer .head{font-size:24px;font-weight:800}
+.answer .head b{color:#F7A3C6}
+.answer .sub{font-size:15px;opacity:.85;margin-top:4px}
+.answer ul{margin:10px 0 0;padding:0;list-style:none;columns:2;column-gap:20px;font-size:15px}
+.answer li{padding:3px 0;cursor:pointer;break-inside:avoid}
+.answer li small{opacity:.7}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.filters select{font:inherit;font-size:15px;padding:7px 10px;border-radius:12px;border:0;background:var(--cream);color:var(--navy)}
+/* --- טבלה --- */
+.tools{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.tools input{flex:1;min-width:180px;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+.list{display:grid;gap:8px}
+.lead{display:grid;grid-template-columns:1.2fr 1fr 1.4fr 1.4fr 70px;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 14px;font-size:15px;cursor:pointer}
+.lead:hover{border-color:var(--purple)}
+.lead b{font-weight:700}
+.lead small{display:block;color:var(--soft);font-size:13px}
+.tag{display:inline-block;font-size:12.5px;font-weight:700;border-radius:10px;padding:1px 9px;background:var(--purple-t);color:var(--purple)}
+.tag.p{background:var(--pink-t);color:var(--pink)} .tag.n{background:#0D122C14;color:var(--navy)}
+.yes{color:var(--purple);font-weight:800}
+/* --- כרטיס --- */
+.ov{position:fixed;inset:0;background:#0D122C88;display:none;align-items:flex-end;justify-content:center;z-index:9}
+.ov.on{display:flex}
+.sheet{background:var(--cream);width:100%;max-width:640px;max-height:88vh;overflow:auto;border-radius:24px 24px 0 0;padding:22px 20px 34px}
+.sheet h3{margin:0;font-size:24px}
+.sheet .x{float:left;font:inherit;font-size:22px;border:0;background:none;cursor:pointer;color:var(--navy)}
+.sheet dl{display:grid;grid-template-columns:120px 1fr;gap:8px 12px;margin:16px 0 0;font-size:15px}
+.sheet dt{color:var(--soft)}
+.sheet dd{margin:0;white-space:pre-wrap}
+.sheet .acts{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.sheet .acts a{font-weight:700;text-decoration:none;color:var(--cream);background:var(--purple);padding:8px 16px;border-radius:12px;font-size:15px}
+.lock{max-width:420px;margin:18vh auto;text-align:center}
+.lock input{font:inherit;width:100%;padding:13px;border-radius:14px;border:1px solid var(--line);margin:14px 0;background:var(--card);text-align:center}
+.lock button{font:inherit;font-weight:800;padding:11px 26px;border:0;border-radius:14px;background:var(--purple);color:var(--cream)}
+@media (max-width:760px){
+  body{font-size:16px}
+  h1{font-size:25px}
+  .hero,.funnel,.need{grid-template-columns:1fr}
+  .big .n{font-size:52px}
+  .lead{grid-template-columns:1fr 1fr;row-gap:4px}
+  .lead .c3,.lead .c4{grid-column:span 2}
+  .answer ul{columns:1}
+  .step{grid-template-columns:96px 1fr 46px}
+  .offers .row{grid-template-columns:1fr 70px}
+  .offers .row .mini{grid-column:span 2;order:3}
+  .sheet dl{grid-template-columns:96px 1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="lock" id="lock">
+    <h1>מעקב <span>הפניות</span></h1>
+    <p>הדף נעול. הקוד נמצא בהודעה שקיבלת מקלוד.</p>
+    <form id="lf"><input id="lk" type="password" autocomplete="current-password" placeholder="קוד הכניסה"><button>כניסה</button></form>
+    <p id="lerr" style="color:var(--pink)"></p>
+  </div>
+</div>
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+<script>
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let D=null, L=[];
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+async function decrypt(pass){
+  const b64=(await (await fetch('data.enc?'+Date.now(),{cache:'no-store'})).text()).replace(/\s/g,'');
+  const raw=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+  const salt=raw.slice(8,16), ct=raw.slice(16);
+  const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveBits']);
+  const bits=new Uint8Array(await crypto.subtle.deriveBits({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},base,384));
+  const key=await crypto.subtle.importKey('raw',bits.slice(0,32),'AES-CBC',false,['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-CBC',iv:bits.slice(32,48)},key,ct);
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function open(pass){
+  try{ D=await decrypt(pass); store.set('leads-k',pass); L=D.leads; render(); }
+  catch(e){ $('#lerr').textContent='הקוד לא נכון, או שאין חיבור.'; }
+}
+(function boot(){
+  const m=location.hash.match(/k=([^&]+)/);
+  if(m){ store.set('leads-k',decodeURIComponent(m[1])); history.replaceState(null,'',location.pathname); }
+  $('#lf').onsubmit=e=>{e.preventDefault();open($('#lk').value.trim())};
+  const k=store.get('leads-k'); if(k) open(k);
+})();
+
+/* ---------- עזרים ---------- */
+const real=()=>L.filter(x=>x.source!=='רכשה בלי פנייה מתועדת');
+const isAl=x=>x.kind==='בוגרת', isNew=x=>x.kind!=='בוגרת';
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const bought=x=>!!x.bought;
+const hasFU=x=>(x.followup||[]).length>0;
+const offerOf=x=>(x.offer||'לא תועד').split('(')[0].trim();
+const fmtD=s=>s?s.slice(8,10)+'.'+s.slice(5,7):'';
+function ringSVG(p,color){
+  const r=34,c=2*Math.PI*r;
+  return `<svg width="86" height="86" viewBox="0 0 86 86"><circle cx="43" cy="43" r="${r}" fill="none" stroke="${color}22" stroke-width="10"/>
+  <circle cx="43" cy="43" r="${r}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${c*p/100} ${c}" transform="rotate(-90 43 43)"/>
+  <text x="43" y="49" text-anchor="middle" font-family="Assistant" font-weight="800" font-size="19" fill="#0D122C">${p}%</text></svg>`;
+}
+function tag(x){const k=x.kind||'עוד לא נבדק';return `<span class="tag ${k==='בוגרת'?'':k==='מתעניינת חדשה'?'p':'n'}">${esc(k)}</span>`}
+
+/* ---------- הדף ---------- */
+function render(){
+  const R=real(), al=R.filter(isAl), nw=R.filter(isNew);
+  const b=R.filter(bought), direct=L.filter(x=>x.source==='רכשה בלי פנייה מתועדת');
+  $('#app').innerHTML=`
+  <header><h1>מעקב <span>הפניות</span> · אשה ללא מאמץ</h1>
+  <div class="upd">עודכן ${esc(D.generated)} · מתעדכן לבד כל 10 דקות · <a href="${esc(D.sheet_url)}" target="_blank">לגיליון המלא, להשלמה ←</a></div></header>
+
+  <div class="hero">
+    <div class="card big"><div class="n">${b.length} <b>/ ${R.length}</b></div>
+      <div class="t">רכשו מתוך כל מי שפנתה · ${pct(b.length,R.length)}%${direct.length?`<br><small style="color:var(--soft)">ועוד ${direct.length} שרכשו ישירות, בלי פנייה מתועדת</small>`:''}</div></div>
+    <div class="card ring">${ringSVG(pct(al.filter(bought).length,al.length),'#A62F7D')}
+      <div class="lbl"><b>בוגרות</b>${al.filter(bought).length} רכשו מתוך ${al.length}<br><i>${al.filter(hasFU).length} קיבלו פולו-אפ</i></div></div>
+    <div class="card ring">${ringSVG(pct(nw.filter(bought).length,nw.length),'#DF1767')}
+      <div class="lbl"><b>מתעניינות ותלמידות</b>${nw.filter(bought).length} רכשו מתוך ${nw.length}<br><i>${nw.filter(x=>x.kind==='עוד לא נבדק').length} עוד לא נבדקו</i></div></div>
+  </div>
+
+  <h2>הדרך מפנייה לרכישה</h2>
+  <div class="funnel">${funnel('בוגרות',al,'')}${funnel('מתעניינות חדשות ותלמידות',nw,'p')}</div>
+
+  <h2>פניות לפי יום <small>לחיצה על יום מציגה מי פנתה</small></h2>
+  <div class="card">${days(R)}</div>
+
+  <h2>מה הוצע, ומה עבד</h2>
+  <div class="card offers">${offers(R)}</div>
+
+  <h2>מה מחכה לך</h2>
+  <div class="need">${need(R)}</div>
+
+  <h2></h2>
+  <div class="ask"><h2>שאלי את הנתונים</h2>
+    <p>כתבי שאלה במילים שלך, או בחרי סינון. התשובה מגיעה מיד.</p>
+    <form id="qf"><input id="q" placeholder="למשל: כמה בוגרות רכשו השבוע?" autocomplete="off"><button>שאלי</button></form>
+    <div class="chips">${['כמה בוגרות רכשו?','אחוז רכישה במתעניינות חדשות','מי לא קיבלה פולו-אפ?','מי פנתה בווטסאפ השבוע?','כמה רכשו בהצעת 690?','למי יש טלפון ולא רכשה?','מי פנתה היום?','כמה פנו במייל?'].map(c=>`<button class="chip" type="button">${c}</button>`).join('')}</div>
+    <div class="filters">
+      ${sel('fk','כל הסוגים',['בוגרת','תלמידה','מתעניינת חדשה','עוד לא נבדק'])}
+      ${sel('fc','כל הערוצים',['מייל','ווטסאפ','ישירות לדף'])}
+      ${sel('fo','כל ההצעות',[...new Set(L.map(offerOf))])}
+      ${sel('fb','רכשה או לא',['רכשה','לא רכשה'])}
+      ${sel('ff','פולו-אפ',['היה פולו-אפ','לא היה פולו-אפ'])}
+    </div>
+    <div class="answer" id="ans"></div>
+  </div>
+
+  <h2>כל הפניות <small>${L.length}</small></h2>
+  <div class="tools"><input id="s" placeholder="חיפוש לפי שם, מייל, טלפון, קוד או שאלה"></div>
+  <div class="list" id="list"></div>`;
+  list(L);
+  $('#s').oninput=e=>{const q=e.target.value.trim().toLowerCase();list(q?L.filter(x=>JSON.stringify(x).toLowerCase().includes(q)):L)};
+  $('#qf').onsubmit=e=>{e.preventDefault();ask($('#q').value)};
+  document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{$('#q').value=c.textContent;ask(c.textContent)});
+  document.querySelectorAll('.filters select').forEach(s=>s.onchange=filt);
+  document.querySelectorAll('[data-id]').forEach(bind);
+  document.querySelectorAll('.day').forEach(d=>d.onclick=()=>{const g=R.filter(x=>x.first_at===d.dataset.d);show(`${g.length} פנו ב-${fmtD(d.dataset.d)}`,`${g.filter(bought).length} מהן רכשו`,g)});
+}
+function sel(id,all,opts){return `<select id="${id}"><option value="">${all}</option>${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}
+function funnel(title,g,cls){
+  const s=[['פנו',g.length],['קיבלו הצעה',g.filter(x=>x.offer).length],['קיבלו פולו-אפ',g.filter(hasFU).length],['רכשו',g.filter(bought).length]];
+  return `<div class="card fun ${cls}"><h3>${title}</h3>${s.map(([t,v])=>`<div class="step"><span>${t}</span><div class="bar"><i style="width:${pct(v,g.length||1)}%"></i></div><span class="v">${v}</span></div>`).join('')}</div>`;
+}
+function days(R){
+  const m={};R.forEach(x=>{if(x.first_at){(m[x.first_at]=m[x.first_at]||{e:0,w:0,b:0});x.channel==='מייל'?m[x.first_at].e++:m[x.first_at].w++;if(bought(x))m[x.first_at].b++}});
+  const ks=Object.keys(m).sort(), mx=Math.max(1,...ks.map(k=>m[k].e+m[k].w));
+  return `<div class="days">${ks.map(k=>`<div class="day" data-d="${k}" title="${fmtD(k)}: ${m[k].e+m[k].w} פניות">
+    ${m[k].b?'<span class="dot"></span>':''}<span class="s" style="height:${m[k].w/mx*110}px;background:var(--pink)"></span>
+    <span class="s" style="height:${m[k].e/mx*110}px;background:var(--purple)"></span><span class="d">${fmtD(k)}</span></div>`).join('')}</div>
+    <div class="legend"><span><i style="background:var(--purple)"></i>מייל</span><span><i style="background:var(--pink)"></i>ווטסאפ</span><span><i style="background:var(--orange);border-radius:50%"></i>מישהי מאותו יום רכשה</span></div>`;
+}
+function offers(R){
+  const m={};R.forEach(x=>(m[offerOf(x)]=m[offerOf(x)]||[]).push(x));
+  return Object.entries(m).sort((a,b)=>b[1].length-a[1].length).map(([o,g])=>{const b=g.filter(bought).length;
+    return `<div class="row"><span>${esc(o)}</span><div class="mini"><i style="width:${pct(b,g.length)}%"></i></div><span><b>${b}</b>/${g.length} · ${pct(b,g.length)}%</span></div>`}).join('');
+}
+function need(R){
+  const call=L.filter(x=>(x.call||'').trim()&&!bought(x));
+  const nofu=R.filter(x=>!bought(x)&&!hasFU(x)&&x.offer&&x.first_at&&(Date.now()-new Date(x.first_at))/864e5>2);
+  const unk=R.filter(x=>x.kind==='עוד לא נבדק'&&!bought(x));
+  const box=(t,g,sub)=>`<div class="card"><h3>${t}<em>${g.length}</em></h3><ul>${g.slice(0,60).map(x=>`<li data-id="${x.id}">${esc(x.name||x.email||x.phone)}<small>${esc(sub(x))}</small></li>`).join('')||'<li>אין כרגע</li>'}</ul></div>`;
+  return box('לחזור אליהן בטלפון',call,x=>`${x.phone||'אין טלפון'} · ${x.call}`)+
+         box('קיבלו הצעה ואין פולו-אפ',nofu,x=>`${fmtD(x.first_at)} · ${offerOf(x)}`)+
+         box('עוד לא נבדק אם בוגרת',unk,x=>`${x.channel||''} · ${fmtD(x.first_at)}`);
+}
+function list(g){
+  $('#list').innerHTML=g.map(x=>`<div class="lead" data-id="${x.id}">
+    <div><b>${esc(x.name||'(בלי שם)')}</b><small>${esc(x.phone||'')}${x.phone&&x.email?' · ':''}${esc(x.email||'')}</small></div>
+    <div>${tag(x)}<small>${esc(x.channel||'')} · ${fmtD(x.first_at)}</small></div>
+    <div class="c3">${esc(offerOf(x))}<small>${esc(x.source||'')}</small></div>
+    <div class="c4"><small>${esc((x.status||'').slice(0,110))}</small></div>
+    <div>${bought(x)?'<span class="yes">✓ רכשה</span>':hasFU(x)?'<small>פולו-אפ</small>':''}</div></div>`).join('');
+  document.querySelectorAll('#list [data-id]').forEach(bind);
+}
+function bind(el){el.onclick=()=>card(L.find(x=>x.id===el.dataset.id))}
+function card(x){
+  if(!x)return;
+  const F=[['טלפון','phone'],['מייל','email'],['ערוץ','channel'],['מאיפה הגיעה','source'],['בעקבות מה','trigger'],['תאריך פנייה','first_at'],['סוג','kind'],['מה למדה','history'],['מה הוצע','offer'],['קוד','code'],['השאלות שלה','questions'],['פולו-אפ','followup'],['המשך הטיפול','status'],['רכישה','purchase'],['הצעד הבא','next'],['לחזור טלפונית','call'],['הערות שלך','notes'],['יומן','log']];
+  const tel=(x.phone||'').replace(/\D/g,''), intl=tel.startsWith('0')?'972'+tel.slice(1):tel;
+  $('#sheet').innerHTML=`<button class="x" onclick="$('#ov').classList.remove('on')">✕</button><h3>${esc(x.name||'')}</h3>${tag(x)} ${bought(x)?'<span class="yes">✓ רכשה</span>':''}
+  <dl>${F.filter(([,f])=>x[f]&&(!Array.isArray(x[f])||x[f].length)).map(([t,f])=>`<dt>${t}</dt><dd>${esc(Array.isArray(x[f])?x[f].join('\n'):x[f])}</dd>`).join('')}</dl>
+  <div class="acts">${tel?`<a href="tel:${tel}">התקשרי</a><a href="https://wa.me/${intl}" target="_blank">ווטסאפ</a>`:''}<a href="${esc(D.sheet_url)}" target="_blank">להשלמה בגיליון (שורה ${x.id})</a></div>`;
+  $('#ov').classList.add('on');
+}
+$('#ov').onclick=e=>{if(e.target.id==='ov')$('#ov').classList.remove('on')};
+
+/* ---------- שאלות ---------- */
+function show(head,sub,g){
+  const a=$('#ans');a.style.display='block';
+  a.innerHTML=`<div class="head">${head}</div><div class="sub">${sub||''}</div>${g&&g.length?`<ul>${g.slice(0,200).map(x=>`<li data-id="${x.id}">${esc(x.name||x.email||x.phone)} <small>${esc(x.kind||'')}${bought(x)?' · רכשה':''}</small></li>`).join('')}</ul>`:''}`;
+  a.querySelectorAll('[data-id]').forEach(bind);
+}
+function filt(){
+  const v=id=>$('#'+id).value;let g=L;
+  if(v('fk'))g=g.filter(x=>(x.kind||'עוד לא נבדק')===v('fk'));
+  if(v('fc'))g=g.filter(x=>x.channel===v('fc'));
+  if(v('fo'))g=g.filter(x=>offerOf(x)===v('fo'));
+  if(v('fb'))g=g.filter(x=>v('fb')==='רכשה'?bought(x):!bought(x));
+  if(v('ff'))g=g.filter(x=>v('ff')==='היה פולו-אפ'?hasFU(x):!hasFU(x));
+  const b=g.filter(bought).length;
+  show(`<b>${g.length}</b> פניות`,`${b} רכשו · ${pct(b,g.length)}% רכישה`,g);
+}
+function ask(q){
+  q=(q||'').trim(); if(!q)return;
+  let g=real(), parts=[];
+  const has=(...w)=>w.some(x=>q.includes(x));
+  if(has('בוגר')){g=g.filter(isAl);parts.push('בוגרות')}
+  else if(has('חדש','מתעניינ')){g=g.filter(x=>x.kind==='מתעניינת חדשה'||x.kind==='עוד לא נבדק');parts.push('מתעניינות חדשות')}
+  else if(has('תלמיד','לקוח')){g=g.filter(x=>x.kind==='תלמידה');parts.push('תלמידות')}
+  if(has('ווטסאפ','וואטסאפ','וואצאפ')){g=g.filter(x=>x.channel==='ווטסאפ');parts.push('בווטסאפ')}
+  else if(has('מייל')){g=g.filter(x=>x.channel==='מייל');parts.push('במייל')}
+  const today=new Date().toISOString().slice(0,10), ago=d=>new Date(Date.now()-d*864e5).toISOString().slice(0,10);
+  const dk=x=>has('רכש','קנ')&&x.purchase_at?x.purchase_at:x.first_at;
+  if(has('היום')){g=g.filter(x=>dk(x)===today);parts.push('היום')}
+  else if(has('אתמול')){g=g.filter(x=>dk(x)===ago(1));parts.push('אתמול')}
+  else if(has('השבוע','שבוע')){g=g.filter(x=>(dk(x)||'')>=ago(7));parts.push('ב-7 הימים האחרונים')}
+  const num=q.match(/\b(690|1,?500|1,?700|2,?900|2,?700|500)\b/);
+  if(num){const n=num[1].replace(',','');g=g.filter(x=>(x.offer||'').replace(',','').includes(n)||(x.code||'').includes(n)||(x.purchase||'').replace(',','').includes(n));parts.push('עם '+num[1])}
+  if(has('אשה500')){g=g.filter(x=>JSON.stringify(x).includes('אשה500'));parts.push('קופון אשה500')}
+  if(has('טלפון')){g=g.filter(x=>x.phone);parts.push('עם טלפון')}
+  if(has('בלי פולו','לא קיבלה פולו','אין פולו','ללא פולו')){g=g.filter(x=>!hasFU(x));parts.push('בלי פולו-אפ')}
+  else if(has('פולו')){g=g.filter(hasFU);parts.push('שקיבלו פולו-אפ')}
+  if(has('שאל')&&!has('שאלי')){g=g.filter(x=>(x.questions||[]).length);parts.push('ששאלו שאלה')}
+  const notB=has('לא רכש','לא קנ','לא שילמ'), isB=!notB&&has('רכש','קנ','שילמ');
+  const asksPct=has('אחוז','%','יחס','המרה');
+  const by=parts.length?' · '+parts.join(' · '):'';
+  if(asksPct){const b=g.filter(bought).length;return show(`<b>${pct(b,g.length)}%</b> רכשו`,`${b} מתוך ${g.length}${by}`,g.filter(bought))}
+  if(notB)g=g.filter(x=>!bought(x)); if(isB)g=g.filter(bought);
+  const name=L.filter(x=>x.name&&q.includes(x.name.split(' ')[0])&&x.name.split(' ')[0].length>2);
+  if(name.length&&!parts.length&&!isB&&!notB){return name.length===1?card(name[0]):show(`נמצאו ${name.length}`,'',name)}
+  if(!parts.length&&!isB&&!notB&&!has('כמה','מי','כל')){const t=q.toLowerCase(),f=L.filter(x=>JSON.stringify(x).toLowerCase().includes(t));
+    return show(f.length?`<b>${f.length}</b> תוצאות ל״${esc(q)}״`:'לא מצאתי',f.length?'':'נסי במילים כמו: בוגרות, חדשות, ווטסאפ, מייל, השבוע, רכשו, פולו-אפ, אחוז, 690. שאלה מורכבת יותר - כתבי לקלוד בצ׳אט.',f)}
+  const b=g.filter(bought).length;
+  show(`<b>${g.length}</b>${isB?' רכשו':notB?' עוד לא רכשו':' פניות'}`,(isB||notB?'':`${b} מהן רכשו (${pct(b,g.length)}%)`)+by,g);
+}
+</script>
+</body>
+</html>
