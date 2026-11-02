@@ -248,11 +248,11 @@ function offers(R){
     return `<div class="row"><span>${esc(o)}</span><div class="mini"><i style="width:${pct(b,g.length)}%"></i></div><span><b>${b}</b>/${g.length} · ${pct(b,g.length)}%</span></div>`}).join('');
 }
 function need(R){
-  const call=L.filter(x=>(x.call||'').trim()&&!bought(x));
+  const call=L.filter(x=>!bought(x)&&((x.call||'').trim()||/שיחה חוזרת|לחזור (אליה )?בטלפון|לחזור טלפונית|ביקשה שיחה/.test((x.next||'')+' '+(x.status||''))));
   const nofu=R.filter(x=>!bought(x)&&!hasFU(x)&&x.offer&&x.first_at&&(Date.now()-new Date(x.first_at))/864e5>2);
   const unk=R.filter(x=>x.kind==='עוד לא נבדק'&&!bought(x));
   const box=(t,g,sub)=>`<div class="card"><h3>${t}<em>${g.length}</em></h3><ul>${g.slice(0,60).map(x=>`<li data-id="${x.id}">${esc(x.name||x.email||x.phone)}<small>${esc(sub(x))}</small></li>`).join('')||'<li>אין כרגע</li>'}</ul></div>`;
-  return box('לחזור אליהן בטלפון',call,x=>`${x.phone||'אין טלפון'} · ${x.call}`)+
+  return box('לחזור אליהן בטלפון',call,x=>`${x.phone||'אין טלפון'} · ${x.call||x.next||x.status||''}`)+
          box('קיבלו הצעה ואין פולו-אפ',nofu,x=>`${fmtD(x.first_at)} · ${offerOf(x)}`)+
          box('עוד לא נבדק אם בוגרת',unk,x=>`${x.channel||''} · ${fmtD(x.first_at)}`);
 }
