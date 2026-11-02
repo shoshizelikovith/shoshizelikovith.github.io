@@ -45,7 +45,10 @@ function evalNight(n, kid, S){
   // שושי, 12.10: הכסף הבסיסי הוא על השעות בלבד. התיבות המסומנות פותחות את בונוסי ההפתעה
   // ערב ״לא נספר״ (excluded) - החלטת אמא: לא מוריד ולא מעלה. בלי כסף, בלי הפתעות, ולא שובר רצף
   const qualifies = !n.excluded && startOk && quietOk;
-  return { ...n, routineOk, startOk, quietOk, qualifies,
+  // הקדמה (שושי, 2.11): הגעה לארוחה או כניסה לשקט 5 דקות לפני היעד. נצבר לרצף, והתיבות פותחות את ההפתעה
+  const E = S.earlyMinutes || 5, earlyStart = !!n.start && ds <= -E, earlyQuiet = !!n.quiet && dq <= -E;
+  return { ...n, routineOk, startOk, quietOk, qualifies, earlyStart, earlyQuiet,
+    early: qualifies && routineOk && n.date >= (S.earlyFrom || '2000-01-01') && (earlyStart || earlyQuiet),
     exact: qualifies && routineOk && ds <= 0 && dq <= 0,
     alone: !n.excluded && routineOk && n.indep === 'לבד',
     graceStart: ds > 0 && ds <= S.graceMinutes, graceQuiet: dq > 0 && dq <= S.graceMinutes };
@@ -62,7 +65,12 @@ function build(D){
     const morning = {};
     for (const n of all) if (n.morning !== undefined) morning[n.date] = !!n.morning;
     for (const n of list) byDate[n.date] = n;
-    let alone = 0, exact = 0;
+    let alone = 0, exact = 0, earlyRun = 0;
+    for (const n of list){
+      if (n.excluded) continue;
+      if (n.early){ if (++earlyRun % (S.earlyStreak||3) === 0) earn.push({ date:n.date, amt:S.earlyBonus||5, kind:'surprise', reason:'הפתעה: ערבים ברצף שהקדמת ב-5 דקות' }); }
+      else earlyRun = 0;
+    }
     for (const n of list){
       if (!n.qualifies) continue;
       earn.push({ date:n.date, amt:S.base, kind:'base', reason:'ערב מנצח' });
@@ -249,6 +257,7 @@ function viewHome(st){
       <span class="chip">🌙 שקט בזמן: ${cnt(n=>n.quietOk)} מתוך ${rep.length}</span>
       <span class="chip">🍽️ לארוחה בזמן: ${cnt(n=>n.startOk)} מתוך ${rep.length}</span>
       <span class="chip">💪 לבד: ${cnt(n=>n.indep==='לבד')} מתוך ${rep.length}</span>
+      <span class="chip">⏱️ הקדמתי ב-5 דקות: ${cnt(n=>n.early)} מתוך ${rep.length}</span>
       <span class="chip">🪥 ${st.brushRun===1 ? 'צחצוח אחד' : st.brushRun+' צחצוחים'} ברצף, בוקר וערב</span></div>
     ${wEarn.filter(e=>e.kind!=='base').map(b=>`<p class="bonus ${b.kind}">+${money(b.amt)} · ${esc(b.reason)}</p>`).join('')}
     ${graceMsg?`<p class="nudge">${esc(graceMsg)}</p>`:''}
@@ -271,7 +280,7 @@ function viewEvening(st){
   <p class="lead">שתי השעות הכי חשובות בערב:</p>
   <div class="big-goals">
     <div class="big-goal"><span class="bg-icon">🍽️</span><span class="bg-label">חדר מסודר ובאים לארוחה</span><b>${k.targets.start}</b></div>
-    <div class="big-goal night"><span class="bg-icon">🌙</span><span class="bg-label">שקט במיטה</span><b>${k.targets.quiet}</b></div>
+    <div class="big-goal night"><span class="bg-icon">🌙</span><span class="bg-label">שקט במיטה</span><b>${k.targets.quiet}</b><small class="bg-note">אמא רושמת בבוקר מתי היה שקט</small></div>
   </div>
   <section class="card"><h2>המסלול שלי</h2><p class="sub">צעד אחרי צעד, כל ערב.</p>
     <ol class="steps">${k.route.map(([name, t]) => {
@@ -284,6 +293,8 @@ function viewEvening(st){
     <div class="earn"><span>🔥</span><p><b>3 ערבים מנצחים ברצף</b><br>עוד <b class="amt">${money(S.streak3)}</b> (אפשר פעמיים בשבוע)</p></div>
     <div class="earn"><span>⭐</span><p><b>שבוע שלם, 6 ערבים</b><br>עוד <b class="amt">${money(S.streak6)}</b></p></div>
     <div class="earn"><span>🪥</span><p><b>צחצוח בבוקר ובערב, כל יום ברצף</b><br>תסמנו כל בוקר ותעקבו אחרי הרצף. מי שמתמיד, מחכה לו הפתעה...</p></div>
+    <div class="earn"><span>⏱️</span><p><b>מי שמקדים ב-5 דקות</b> לארוחה או לשקט, ועושה את זה כמה ערבים ברצף<br>מחכה לו הפתעה...</p></div>
+    <div class="earn"><span>🤫</span><p><b>מה זה שקט?</b> כשאמא לא שומעת שום רעש. אמא רושמת את השעה בבוקר, לא צריך לסמן בערב.</p></div>
     <div class="earn"><span>🎁</span><p><b>ויש גם הפתעות</b><br>על דברים שהופכים אותך למנהל ערב אלוף...</p></div>
     <p class="sub">יש לך ${S.graceMinutes} דקות חסד. אבל הכי טוב להגיע בזמן.</p></section>`;
 }
@@ -362,6 +373,8 @@ function viewMom(){
       <tr><td>ערב מנצח שאמא לא בבית וכל התיבות מסומנות</td><td>+${money(S.momAway)}</td></tr>
       <tr><td>כל 3 ערבים שהכל נעשה לבד וכל התיבות מסומנות, גם בלי לנצח בשעות (הפתעה)</td><td>+${money(S.surpriseIndep)}</td></tr>
       <tr><td>כל 3 ערבים מדויקים, בלי חלון החסד וכל התיבות מסומנות (הפתעה)</td><td>+${money(S.surpriseExact)}</td></tr>
+      <tr><td>${S.earlyStreak||3} ערבים ברצף שבהם הקדים ב-${S.earlyMinutes||5} דקות לארוחה או לשקט, וכל התיבות מסומנות (הפתעה, סמויה)</td><td>+${money(S.earlyBonus||5)}</td></tr>
+      <tr><td>שקט במיטה: אמא רושמת בבוקר מתי שמעה שקט. הילדים לא מסמנים בערב</td><td>-</td></tr>
       <tr><td>שבוע רצוף של צחצוח: ${S.brushStreak} בקרים (ראשון עד שישי) ו-${S.brushStreak} ערבים (מוצ״ש עד חמישי). שבת בבוקר לא נספר (הפתעה)</td><td>+${money(S.brushBonus)}</td></tr>
       <tr><td>ערב חריג שאישרת וקבעת לו זמנים</td><td>כמו ערב רגיל</td></tr>
       <tr><td>ליל שישי</td><td>לא נספר</td></tr>

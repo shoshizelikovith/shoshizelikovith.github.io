@@ -263,3 +263,4 @@ a.card.tonight{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap;font-
 .reco h3{font-size:18px;font-weight:800;margin-bottom:4px}
 .reco ul{margin:0;padding-inline-start:20px;font-size:17px;line-height:1.45}
 .reco li{margin-bottom:5px}
+.bg-note{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:4px;line-height:1.3}
