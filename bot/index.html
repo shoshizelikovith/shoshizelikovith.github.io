@@ -150,6 +150,11 @@ main{
   border-bottom-left-radius:6px; box-shadow:var(--lift);
 }
 .bot strong{color:var(--purple); font-weight:600}
+.botbox{display:flex; flex-direction:column; align-items:flex-start; gap:6px; min-width:0; max-width:100%}
+.saveIns{
+  background:none; border:0; padding:4px 6px; cursor:pointer;
+  font-family:inherit; font-size:13.5px; color:var(--purple); text-decoration:underline;
+}
 .hello{
   align-self:center; text-align:center; max-width:92%;
   background:none; border:none; box-shadow:none;
@@ -240,7 +245,7 @@ button:disabled{opacity:.4; cursor:default}
   <details id="privMore"><summary>מה ההבדל?</summary>
   <p><b>שיחה שנשמרת</b> - אני זוכרת אותך. לא תצטרכי להסביר הכל מחדש בכל פעם,
   ואוכל להמשיך מאיפה שעצרנו ולראות מה כבר ניסית. ככה הליווי מתקדם איתך לאורך הקורס.
-  שושי עשויה לקרוא כדי לשפר את הליווי.</p>
+  שושי עשויה לקרוא כדי לשפר את הליווי, והיא מקבלת התראה אם עולה חשד לסכנה.</p>
   <p><b>שיחה דיסקרטית</b> - לא נשמר כלום, ובפעם הבאה מתחילים מאפס.</p>
   </details>
 </header>
@@ -264,7 +269,7 @@ button:disabled{opacity:.4; cursor:default}
        טיפול, ייעוץ מקצועי, ליווי אנושי או מענה במצבי מצוקה.</p>
     <p><b>פרטיות.</b> הכניסה בשם ובמייל בלבד, בלי פתיחת חשבון. ב<b>שיחה דיסקרטית</b> התוכן אינו
        נשמר. ב<b>שיחה שנשמרת</b> התוכן נשמר אצלנו כדי שהמאמנת תמשיך מאיפה שהפסקתן, ואפשר לבקש
-       את מחיקתו בכל עת. לצורך הפקת התשובה תוכן ההודעות נשלח לספק מודל בינה מלאכותית, גם
+       את מחיקתו בכל עת. אם עולה בה חשד לסכנה, שושי מקבלת על כך התראה. לצורך הפקת התשובה תוכן ההודעות נשלח לספק מודל בינה מלאכותית, גם
        בשיחה דיסקרטית.</p>
   </details>
 </footer>
@@ -414,7 +419,8 @@ tag.addEventListener('click',()=>{
 if(mailEl.value.trim()) loadHistory();
 
 qEl.addEventListener('input',()=>{ qEl.style.height='auto'; qEl.style.height=Math.min(qEl.scrollHeight,140)+'px'; });
-qEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit();} });
+/* בטלפון Enter יורד שורה, ושולחים בכפתור. אחרת הודעה נחתכת לשתיים באמצע משפט. */
+qEl.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey&&!matchMedia('(pointer:coarse)').matches){e.preventDefault();form.requestSubmit();} });
 
 /* תשובה של הבוט מגיעה עם האווטר לצידה, שאלה של התלמידה לבד */
 /* המודל לפעמים משאיר כוכביות של הדגשה. הן לא מעוצבות כאן, אז מנקים. */
@@ -425,6 +431,59 @@ function clean(t){
     .replace(/^[ \t]*[\*\-][ \t]+/gm,'')
     .replace(/\*/g,'')
     .replace(/[\u2013\u2014]/g,'-');
+}
+
+/* התובנה כתמונה להורדה. השאלה שבסוף התשובה לא נכנסת, היא לא חלק מהתובנה. */
+function insightLines(ctx,text,maxW){
+  const out=[];
+  text.split('\n').forEach(par=>{
+    if(!par.trim()){ out.push(''); return; }
+    let line='';
+    par.trim().split(/\s+/).forEach(w=>{
+      const t=line?line+' '+w:w;
+      if(ctx.measureText(t).width>maxW&&line){ out.push(line); line=w; } else line=t;
+    });
+    out.push(line);
+  });
+  return out;
+}
+async function saveInsight(text,btn){
+  const paras=text.trim().split(/\n\s*\n/);
+  if(paras.length>1&&/\?\s*$/.test(paras[paras.length-1])) paras.pop();
+  const body=paras.join('\n\n');
+  try{ await document.fonts.load('600 44px Assistant'); }catch(e){}
+  const W=1080, pad=96, c=document.createElement('canvas'), ctx=c.getContext('2d');
+  let size=46, lines=[];
+  c.width=W; c.height=10;
+  ctx.font='600 '+size+'px Assistant, sans-serif';
+  lines=insightLines(ctx,body,W-pad*2);
+  while(lines.length*size*1.5>1500&&size>26){
+    size-=2; ctx.font='600 '+size+'px Assistant, sans-serif';
+    lines=insightLines(ctx,body,W-pad*2);
+  }
+  const lh=size*1.5;
+  c.height=Math.max(1080,Math.ceil(lines.length*lh+pad*2+190));
+  ctx.fillStyle='#F2EEE3'; ctx.fillRect(0,0,W,c.height);
+  ctx.direction='rtl'; ctx.textAlign='right'; ctx.textBaseline='top';
+  ctx.fillStyle='#A62F7D'; ctx.font='700 40px Assistant, sans-serif';
+  ctx.fillText('התובנה שלי',W-pad,pad);
+  ctx.fillStyle='#0D122C'; ctx.font='600 '+size+'px Assistant, sans-serif';
+  let y=pad+100;
+  lines.forEach(l=>{ if(l) ctx.fillText(l,W-pad,y); y+=lh; });
+  ctx.fillStyle='#A62F7D'; ctx.font='400 28px Assistant, sans-serif';
+  ctx.fillText('המאמנת האישית של שושי זליקוביץ׳',W-pad,c.height-pad);
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));
+  const name='התובנה-שלי.png', file=new File([blob],name,{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){
+    try{ await navigator.share({files:[file]}); }catch(e){}
+  }else{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  }
+  btn.textContent='נשמר';
+  setTimeout(()=>{ btn.textContent='שמרי לי את התובנה'; },2500);
 }
 
 function add(text,cls){
@@ -438,7 +497,14 @@ function add(text,cls){
     const img=document.createElement('img');
     img.className='av'; img.src=AV; img.alt='';
     const d=document.createElement('div'); d.className='msg bot'; d.textContent=text;
-    row.appendChild(img); row.appendChild(d);
+    row.appendChild(img);
+    if(text.length>=60){
+      const box=document.createElement('div'); box.className='botbox';
+      const save=document.createElement('button');
+      save.type='button'; save.className='saveIns'; save.textContent='שמרי לי את התובנה';
+      save.addEventListener('click',()=>saveInsight(text,save));
+      box.appendChild(d); box.appendChild(save); row.appendChild(box);
+    }else row.appendChild(d);
     chat.appendChild(row);
   }
   chat.scrollTop=chat.scrollHeight;
@@ -540,6 +606,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-210719';</script>
+<script>var BOT_BUILD='BOTCHAN-171914';</script>
 </body>
 </html>
