@@ -327,7 +327,7 @@ function viewMom(){
   const last = addDays(today, -1), missing = [];
   for (const k of D.kids)
     for (let w = weekOf(D.trackingFrom); w <= last; w = addDays(w,7))
-      nightsOf(w).forEach((d,i) => { if (d >= D.trackingFrom && d <= last && !M[k.id].byDate[d]) missing.push(`${DAYNAME[i]} ${dm(d)} · ${k.name}`); });
+      nightsOf(w).forEach((d,i) => { if (d >= D.trackingFrom && d <= last && !M[k.id].byDate[d] && !(D.skipped||[]).some(r => d >= r.from && d <= r.to)) missing.push(`${DAYNAME[i]} ${dm(d)} · ${k.name}`); });
   const month = today.slice(0,7);
   const kname = id => D.kids.find(k=>k.id===id)?.name || id;
   const ovs = D.nights.filter(n => n.override).sort((a,b)=>b.date.localeCompare(a.date));
