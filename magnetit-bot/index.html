@@ -922,6 +922,8 @@ async function ask(q, hist, email){
 }
 /* היסטוריה שמורה מהשרת (רק בשיחה שנשמרת) */
 async function loadServerHistory(){
+  /* כבוי 4.11: גוגל דוחה בשגיאה 400 פרמטר בשם sid בכתובת exec, והשיחה ממילא שמורה בדפדפן לפי אותו מזהה. */
+  return;
   if (DEMO || S.priv || !S.sid) return;
   var ctrl = new AbortController(); var t = setTimeout(function(){ ctrl.abort(); }, 20000);
   try {
