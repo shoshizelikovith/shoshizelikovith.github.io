@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>המאמנת שלך במגנטית | שושי זליקוביץ׳</title>
+<meta name="description" content="המאמנת הדיגיטלית של מגנטית. ספרי רגע מהבית, ומצאי את הצעד שמתאים לך מתוך 21 הצעדים.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0D122C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='24' fill='%230D122C'/%3E%3Cpath d='M14 12L20 10L20 21L14 21Z' fill='%23DF1767'/%3E%3Cpath d='M28 10L34 12L34 21L28 21Z' fill='%23DF1767'/%3E%3Cellipse cx='24' cy='33' rx='4.5' ry='6' fill='%23F36E21'/%3E%3C/svg%3E">
+<style>
+/* Assistant, קובץ משתנה אחד לכל המשקלים. רישיון OFL, מוטמע מקומית. */
+@font-face{font-family:'Assistant';font-style:normal;font-weight:200 800;font-display:swap;
+  src:url(fonts/assistant-4d5300d9.woff2) format('woff2');
+  unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+@font-face{font-family:'Assistant';font-style:normal;font-weight:200 800;font-display:swap;
+  src:url(fonts/assistant-188705ea.woff2) format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Assistant';font-style:normal;font-weight:200 800;font-display:swap;
+  src:url(fonts/assistant-27157e4c.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+:root{
+  --cream:#F2EEE3; --ink:#0D122C; --mag:#DF1767; --org:#F36E21;
+  --lift:0 1px 1px rgba(13,18,44,.06), 0 8px 22px rgba(13,18,44,.10);
+  --lift-sm:0 1px 1px rgba(13,18,44,.06), 0 4px 10px rgba(13,18,44,.08);
+  --col:720px;
+  --vh:100dvh;
+}
+*{box-sizing:border-box}
+html,body{height:100%; overscroll-behavior-y:none}
+body{
+  margin:0; background:var(--cream); color:var(--ink);
+  font-family:'Assistant',sans-serif; font-weight:400; font-size:17px; line-height:1.7;
+  -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%;
+  display:flex; flex-direction:column; height:100vh; height:var(--vh); overflow:hidden;
+}
+button,input,textarea{font-family:inherit; font-size:inherit; color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--mag); outline-offset:2px}
+.vh{position:absolute!important; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+/* ---------- האווטר: החיריק הנמשך אל הקטבים ---------- */
+.mk{display:block; flex-shrink:0}
+.mk .dot{transform-box:fill-box; transform-origin:50% 100%}
+.mk.idle .dot{animation:breathe 4.8s ease-in-out infinite}
+.mk.pull .dot{animation:pull 1.25s cubic-bezier(.5,0,.3,1) infinite}
+.mk.pull .pole{animation:pole 1.25s ease-in-out infinite}
+.mk.pull .pole.b{animation-delay:.08s}
+@keyframes breathe{0%,70%,100%{transform:none}82%{transform:scale(.94,1.32)}}
+@keyframes pull{0%,100%{transform:none}48%{transform:scale(.8,1.9)}62%{transform:scale(.86,1.7)}}
+@keyframes pole{0%,100%{transform:none}50%{transform:translateY(1.4px)}}
+
+/* ---------- מסך הפתיחה, כחול לילה עם קצה חתוך ---------- */
+.hero{
+  position:relative; background:var(--ink); color:var(--cream);
+  clip-path:polygon(0 0,100% 0,100% 100%,0 calc(100% - 28px));
+  padding:28px 22px 54px; flex-shrink:0;
+}
+.hero-in{max-width:var(--col); margin:0 auto}
+.hero .logo{display:block; width:196px; height:auto}
+.hero .tag{margin:8px 0 0; font-size:15px; font-weight:400; letter-spacing:.2px; opacity:.78}
+.coach{display:flex; align-items:center; gap:14px; margin:30px 0 0}
+.hero h1{margin:0; font-size:28px; line-height:1.2; font-weight:700}
+.hero .lead{margin:14px 0 0; font-size:17.5px; line-height:1.7; max-width:34em}
+.hero .lead b{font-weight:700; color:var(--cream); box-shadow:inset 0 -.32em 0 var(--mag)}
+.listen{--p:0%; align-self:flex-start; display:inline-flex; align-items:center; gap:9px; min-height:44px; margin:14px 0 0; padding:8px 14px;
+  background:linear-gradient(to left, rgba(223,23,103,.55) var(--p), transparent var(--p)); color:var(--cream);
+  border:1.5px solid rgba(242,238,227,.5); font-size:15.5px; font-weight:600; line-height:1.2; cursor:pointer}
+.listen .ic{fill:var(--org); flex-shrink:0}
+.listen .pa{display:none}
+.listen[aria-pressed="true"] .pl{display:none}
+.listen[aria-pressed="true"] .pa{display:inline}
+.listen .len{font-weight:400; font-size:14px; opacity:.72}
+.ask{margin:24px 0 0; font-size:16px; font-weight:600}
+.pick{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0 0}
+.pick button{
+  min-height:52px; padding:10px 14px; border:2px solid var(--cream); font-weight:700; font-size:16.5px; line-height:1.3;
+  clip-path:polygon(0 4px,100% 0,100% 100%,0 100%);
+}
+.pick .yes{background:var(--mag); border-color:var(--mag); color:var(--cream)}
+.pick .no{background:transparent; color:var(--cream); clip-path:none}
+.pick button:hover{filter:brightness(1.08)}
+
+/* אחרי ההודעה הראשונה מסך הפתיחה מתכווץ לשורה אחת */
+.bar{display:none; align-items:center; gap:11px; padding:10px 16px; background:var(--ink); color:var(--cream); flex-shrink:0;
+  clip-path:polygon(0 0,100% 0,100% 100%,0 calc(100% - 7px)); padding-bottom:15px}
+.bar-in{display:flex; align-items:center; gap:11px; width:100%; max-width:var(--col); margin:0 auto}
+.bar .t{flex:1; min-width:0}
+.bar .t b{display:block; font-size:17px; line-height:1.25; font-weight:700}
+.bar .t span{display:block; font-size:13.5px; opacity:.75; line-height:1.3}
+.bar .new{background:none; border:1.5px solid rgba(242,238,227,.5); color:var(--cream); min-height:44px; padding:6px 13px; font-size:14px; font-weight:600}
+body:not(.chatting) .hero{flex:1; min-height:0; overflow-y:auto; display:flex}
+body:not(.chatting) main{display:none}
+.hero-in{display:flex; flex-direction:column; width:100%}
+body:not(.chatting) .ask{margin-top:auto; padding-top:26px}
+body.chatting .hero{display:none}
+body.chatting .bar{display:flex}
+
+/* ---------- השיחה ---------- */
+main{flex:1; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; min-height:0}
+.log{max-width:var(--col); margin:0 auto; padding:18px 14px 12px; display:flex; flex-direction:column; gap:16px}
+body:not(.chatting) .log:empty{padding:0}
+.turn{display:flex; gap:9px; align-items:flex-start}
+.turn.me{justify-content:flex-end}
+.turn .mk{margin-top:2px}
+.stack{display:flex; flex-direction:column; gap:10px; min-width:0; flex:1; max-width:100%}
+.turn.me .stack{align-items:flex-end; flex:0 1 auto; max-width:86%}
+
+/* גיליון נייר: קרם על קרם, עומק מצל, קצה אחד חתוך */
+.sheet{filter:drop-shadow(0 1px 1px rgba(13,18,44,.07)) drop-shadow(0 6px 14px rgba(13,18,44,.09))}
+.sheet > .in{background:var(--cream); padding:13px 16px 14px;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%)}
+.txt{white-space:pre-wrap; word-wrap:break-word; overflow-wrap:anywhere}
+.turn.bot .sheet{align-self:flex-start; max-width:92%}
+.turn.me .sheet{filter:drop-shadow(0 4px 10px rgba(13,18,44,.16))}
+.turn.me .sheet > .in{background:var(--ink); color:var(--cream);
+  clip-path:polygon(0 0,100% 0,100% 100%,12px 100%,0 calc(100% - 12px))}
+.note{align-self:center; text-align:center; font-size:15px; opacity:.72; max-width:90%; padding:2px 8px}
+.err{align-self:stretch; font-size:15.5px; padding:10px 14px; background:var(--cream); border-right:5px solid var(--mag); box-shadow:var(--lift-sm)}
+
+/* מחוון ״חושבת״ */
+.think .in{display:flex; align-items:center; gap:10px; padding:9px 14px}
+.think .in span{font-size:15px; opacity:.7}
+
+/* תשובות מהירות */
+.chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:2px}
+.chips button{
+  min-height:44px; padding:8px 15px; background:transparent; color:var(--ink);
+  border:2px solid var(--ink); font-weight:600; font-size:15.5px; line-height:1.3; text-align:right;
+}
+.chips button:hover{background:var(--ink); color:var(--cream)}
+
+/* ---------- כרטיסים ---------- */
+.card{filter:drop-shadow(0 1px 1px rgba(13,18,44,.07)) drop-shadow(0 10px 22px rgba(13,18,44,.12)); max-width:440px; width:100%}
+.card > .in{background:var(--cream); padding:18px 18px 18px; position:relative;
+  clip-path:polygon(0 8px,100% 0,100% 100%,0 100%)}
+.kicker{font-size:14px; font-weight:700; letter-spacing:.3px; color:var(--mag); display:flex; align-items:center; gap:7px}
+.poles{display:inline-flex; gap:3px; align-items:flex-end}
+.poles i{display:block; width:5px; height:12px; background:var(--mag); clip-path:polygon(0 18%,100% 0,100% 100%,0 100%)}
+.poles i + i{clip-path:polygon(0 0,100% 18%,100% 100%,0 100%)}
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:10px 20px;
+  border:none; font-weight:700; font-size:16.5px; line-height:1.25;
+  clip-path:polygon(0 4px,100% 0,100% 100%,0 100%);
+}
+.btn.ink{background:var(--ink); color:var(--cream)}
+.btn.mag{background:var(--mag); color:var(--cream)}
+.btn.line{background:transparent; color:var(--ink); box-shadow:inset 0 0 0 2px var(--ink); clip-path:none}
+.btn:disabled{opacity:.55; cursor:default}
+.btn .ok{display:none}
+.btn.done .ok{display:inline}
+
+/* כרטיס צעד */
+.step .top{display:flex; gap:14px; align-items:flex-start}
+.step .num{flex-shrink:0; text-align:center; line-height:1}
+.step .num small{display:block; font-size:13px; font-weight:700; letter-spacing:.5px}
+.step .num b{display:block; font-size:62px; font-weight:800; color:var(--mag); letter-spacing:-2px; margin-top:2px}
+.step h3{margin:4px 0 0; font-size:19.5px; line-height:1.35; font-weight:700}
+.track{display:flex; gap:3px; align-items:center; margin:16px 0 0; direction:rtl}
+.track i{flex:1; height:9px; background:var(--ink); opacity:.22; clip-path:polygon(0 25%,100% 0,100% 100%,0 100%)}
+.track i.past{opacity:.5}
+.track i.on{flex:0 0 14px; height:14px; opacity:1; background:var(--org); border-radius:50%; clip-path:none}
+.track-l{display:flex; justify-content:space-between; font-size:12.5px; opacity:.7; margin-top:4px}
+.where{margin:14px 0 0; font-size:15.5px; line-height:1.6}
+.where b{font-weight:700}
+.step .btn{margin-top:14px; width:100%}
+
+/* כרטיס סגנון */
+.style .name{margin:6px 0 0; font-size:23px; line-height:1.25; font-weight:800}
+.map{display:grid; grid-template-columns:1fr 70px 1fr; grid-template-rows:auto auto; gap:8px 6px; margin:16px 0 0; align-items:center}
+.map .s{font-size:14.5px; line-height:1.3; padding:8px 10px; min-height:48px; display:flex; align-items:center; opacity:.55; font-weight:600}
+.map .s.l{justify-content:flex-end; text-align:left}
+.map .s.on{opacity:1; background:var(--ink); color:var(--cream); font-weight:700; clip-path:polygon(0 4px,100% 0,100% 100%,0 100%)}
+.map svg{grid-column:2; grid-row:1 / span 2; justify-self:center}
+.map .stretch{transform-box:fill-box; transform-origin:0% 50%; animation:stretch 1.1s .3s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes stretch{to{transform:scale(2.9,.86)}}
+.style .why{margin:12px 0 0; font-size:15px; opacity:.8; line-height:1.6}
+
+/* כרטיס המשפט: סימניה */
+.mark-card{max-width:340px}
+.mark-card .label{font-size:14px; font-weight:700; color:var(--mag); margin:0 0 8px; display:flex; gap:7px; align-items:center}
+.bookmark{filter:drop-shadow(0 2px 2px rgba(13,18,44,.12)) drop-shadow(0 14px 26px rgba(13,18,44,.2))}
+.bookmark .in{
+  background:var(--ink); color:var(--cream); text-align:center;
+  padding:26px 24px 66px;
+  clip-path:polygon(0 10px,100% 0,100% 100%,50% calc(100% - 34px),0 100%);
+}
+.bookmark .poles{gap:5px}
+.bookmark .poles i{width:9px; height:22px}
+.bookmark q{display:block; quotes:none; margin:16px 0 0; font-size:23px; line-height:1.4; font-weight:700}
+.bookmark .hd{display:block; width:13px; height:19px; margin:16px auto 0; background:var(--org); border-radius:50%}
+.bookmark .src{display:block; margin-top:12px; font-size:13px; opacity:.72}
+.mark-card .acts{display:flex; gap:8px; margin-top:12px}
+.mark-card .acts .btn{flex:1; padding:10px 12px}
+
+/* כרטיס ההזמנה */
+.offer > .in{padding-top:22px}
+.offer .ribbon{position:absolute; top:0; right:0; left:0; height:8px; background:var(--mag)}
+.offer h3{margin:4px 0 0; font-size:21px; line-height:1.3; font-weight:800}
+.offer h3 span{display:block; font-size:16px; font-weight:600; color:var(--mag); margin-top:2px}
+.offer p{margin:10px 0 0; font-size:16px; line-height:1.65}
+.offer .btn{margin-top:14px; width:100%}
+form.lead{margin:14px 0 0; display:grid; gap:10px}
+form.lead label{display:grid; gap:4px; font-size:14.5px; font-weight:600}
+form.lead label small{font-weight:400; opacity:.7}
+form.lead input{
+  min-height:48px; padding:10px 13px; border:2px solid rgba(13,18,44,.35); background:var(--cream); font-size:17px; border-radius:0;
+}
+form.lead input:focus{border-color:var(--ink); outline:none; box-shadow:0 0 0 3px rgba(223,23,103,.35)}
+form.lead input[type=tel]{direction:ltr; text-align:right}
+form.lead .row2{display:flex; gap:8px}
+form.lead .row2 .btn{flex:1}
+form.lead .msgline{min-height:1.4em; font-size:14.5px; color:var(--mag); font-weight:600}
+.thanks{margin:14px 0 0; padding:12px 14px; background:var(--ink); color:var(--cream); font-weight:600; display:flex; gap:10px; align-items:center;
+  clip-path:polygon(0 4px,100% 0,100% 100%,0 100%)}
+.thanks i{flex-shrink:0; width:11px; height:15px; border-radius:50%; background:var(--org)}
+
+/* ---------- שורת הכתיבה ---------- */
+footer{flex-shrink:0; padding:10px 14px calc(8px + env(safe-area-inset-bottom)); background:var(--cream);
+  box-shadow:0 -6px 18px rgba(13,18,44,.07); position:relative; z-index:2}
+.compose{display:flex; gap:9px; max-width:var(--col); margin:0 auto; align-items:flex-end}
+textarea{
+  flex:1; min-width:0; font-size:17px; line-height:1.5; padding:11px 14px; min-height:50px; max-height:150px;
+  border:2px solid rgba(13,18,44,.3); background:var(--cream); resize:none; border-radius:0;
+}
+textarea:focus{border-color:var(--ink); outline:none}
+textarea::placeholder{color:var(--ink); opacity:.5}
+.send{width:50px; height:50px; flex-shrink:0; border:none; background:var(--mag); color:var(--cream);
+  display:flex; align-items:center; justify-content:center; clip-path:polygon(0 5px,100% 0,100% 100%,0 100%)}
+.send:disabled{opacity:.45; cursor:default}
+
+@media (min-width:700px){
+  .hero{padding:44px 32px 70px; clip-path:polygon(0 0,100% 0,100% 100%,0 calc(100% - 44px))}
+  .hero .logo{width:240px}
+  .hero h1{font-size:34px}
+  .pick{max-width:520px}
+  body:not(.chatting) .hero{align-items:center}
+  body:not(.chatting) .ask{margin-top:30px; padding-top:0}
+  .log{padding:26px 20px 16px; gap:18px}
+  .turn.me .stack{max-width:70%}
+}
+@media (prefers-reduced-motion:reduce){
+  .mk .dot,.mk .pole{animation:none!important}
+  .map .stretch{animation:none!important; transform:scale(2.9,.86)}
+}
+
+/* ---------- סבב 2: דלתות, דיסקרטיות, עדות, תקרות ---------- */
+.txt strong{font-weight:700}
+.left{align-self:flex-start; font-size:14.5px; font-weight:600; color:var(--mag); display:flex; align-items:center; gap:7px; padding:0 2px}
+.left i{width:9px; height:13px; border-radius:50%; background:var(--org); flex-shrink:0}
+
+/* כרטיס המייל */
+.door form{display:grid; gap:8px; margin-top:10px}
+.door label{font-size:14.5px; font-weight:600}
+.door .row{display:flex; gap:8px}
+.door input{flex:1; min-width:0; min-height:50px; padding:10px 13px; border:2px solid rgba(13,18,44,.35); background:var(--cream);
+  font-size:17px; border-radius:0; direction:ltr; text-align:right}
+.door input:focus{border-color:var(--ink); outline:none; box-shadow:0 0 0 3px rgba(223,23,103,.35)}
+.door .row .btn{flex-shrink:0; min-height:50px}
+.door .msgline{font-size:14.5px; color:var(--mag); font-weight:600}
+.door .msgline:empty{display:none}
+.linkbtn{background:none; border:none; padding:0 2px; min-height:44px; color:var(--ink); font-weight:600; font-size:15px;
+  text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--mag); text-decoration-thickness:2px; text-align:right}
+.door .linkbtn{justify-self:start}
+
+/* כרטיס העדות */
+.testi{max-width:380px}
+.testi > .in{display:flex; gap:12px; align-items:flex-start; padding:14px 16px}
+.testi .hd{flex-shrink:0; width:12px; height:17px; border-radius:50%; background:var(--org); margin-top:7px}
+.testi p{margin:2px 0 0; font-size:16px; line-height:1.6; white-space:pre-wrap}
+
+/* אפשרויות בתחתית: דיסקרטית והסתייגות */
+.opts{max-width:var(--col); margin:4px auto 0; display:flex; align-items:center; justify-content:space-between; gap:10px}
+.switch{display:inline-flex; align-items:center; gap:10px; min-height:44px; cursor:pointer; font-size:15px; font-weight:700; user-select:none}
+.switch input{position:absolute; opacity:0; width:1px; height:1px}
+.switch .tr{position:relative; width:46px; height:26px; flex-shrink:0; background:rgba(13,18,44,.28); transition:background .2s;
+  clip-path:polygon(0 3px,100% 0,100% 100%,0 100%)}
+.switch .tr::after{content:''; position:absolute; top:5px; right:5px; width:17px; height:17px; background:var(--cream); transition:transform .2s}
+.switch input:checked + .tr{background:var(--ink)}
+.switch input:checked + .tr::after{transform:translateX(-19px); background:var(--org); border-radius:50%}
+.switch input:focus-visible + .tr{outline:3px solid var(--mag); outline-offset:2px}
+.privnote{max-width:var(--col); margin:0 auto; font-size:14px; line-height:1.55; display:none}
+.privnote strong{font-weight:700}
+body:not(.chatting) .privnote, .privnote.show{display:block}
+.legal{max-width:var(--col); margin:2px auto 0; font-size:12.5px; line-height:1.45; text-align:center; opacity:.78}
+.legal .linkbtn{font-size:12.5px; min-height:32px; padding:6px 2px; font-weight:700}
+body.typing .opts, body.typing .privnote, body.typing .legal{display:none}
+/* מסך הפתיחה: קודם בוחרות דלת, ולכן בלי תיבת כתיבה. בטלפון שורת פרטיות קצרה, כדי שהכפתורים לא ייחתכו */
+body:not(.chatting) .compose{display:none}
+.privshort{display:none; max-width:var(--col); margin:0 auto; font-size:14px; line-height:1.45}
+@media (max-width:699px){
+  body:not(.chatting) .privnote:not(.show){display:none}
+  body:not(.chatting) .privnote:not(.show) + .privshort{display:block}
+}
+@media (max-width:699px) and (max-height:760px){
+  .hero .logo{width:150px}
+  .hero .tag{margin-top:4px; font-size:14px}
+  .hero .coach{margin-top:12px}
+  .hero h1{font-size:25px}
+  .hero .lead{margin-top:8px; font-size:16.5px; line-height:1.55}
+  .listen{margin-top:10px}
+  .hero .ask{margin-top:10px}
+}
+
+/* חלון ההסתייגות */
+.modal{position:fixed; inset:0; z-index:50; background:rgba(13,18,44,.55); display:flex; align-items:flex-end; justify-content:center; padding:0}
+.modal[hidden]{display:none}
+.modal .panel{background:var(--cream); width:100%; max-width:600px; max-height:86vh; overflow-y:auto; padding:24px 22px calc(18px + env(safe-area-inset-bottom));
+  clip-path:polygon(0 12px,100% 0,100% 100%,0 100%); position:relative}
+.modal h2{margin:0 0 10px; font-size:21px; line-height:1.3; font-weight:800; display:flex; gap:8px; align-items:center}
+.modal p{margin:0 0 12px; font-size:16px; line-height:1.7}
+.modal strong{font-weight:700}
+.modal .acts{display:flex; gap:8px; margin-top:6px; flex-wrap:wrap}
+.modal .acts .btn{flex:1; min-width:140px; text-decoration:none}
+@media (min-width:700px){ .modal{align-items:center; padding:24px} }
+/* תיקוני נגישות לפני פרסום, 4.11. נשארים בפלטת המותג: טקסט קטן בכחול לילה, כפתור מג׳נטה בטקסט גדול */
+.pick .yes,.btn.mag{font-size:19px; font-weight:700}
+.kicker,.mark-card .label,.left,.door .msgline,form.lead .msgline,.offer h3 span{color:var(--ink)}
+textarea::placeholder,.door input::placeholder,form.lead input::placeholder{color:var(--ink); opacity:.65}
+.map .s{opacity:.62}
+.btn.done:disabled{opacity:1; background:transparent; color:var(--ink); box-shadow:inset 0 0 0 2px var(--ink); clip-path:none}
+.legal .linkbtn{min-height:44px; margin:-9px 0; padding:12px 2px}
+</style>
+</head>
+<body>
+
+<!-- מסך הפתיחה -->
+<section class="hero" id="hero" aria-labelledby="h1">
+  <div class="hero-in">
+    <img class="logo" src="img/magnetit-temp-neg.svg" width="2870" height="910" alt="מגנטית">
+    <p class="tag">צעדים ראשונים לנשיות ללא מאמץ</p>
+    <div class="coach">
+      <svg class="mk idle" width="56" height="56" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>
+      <h1 id="h1">המאמנת שלך במגנטית</h1>
+    </div>
+    <p class="lead">תכתבי לי רגע אחד מהבית או מהזוגיות, משהו שקרה ממש לאחרונה. ביחד נבין מה קורה בך, ואמצא לך <b>צעד אחד</b> מתוך 21 הצעדים של מגנטית, שמדבר בדיוק על הרגע הזה.</p>
+    <button type="button" class="listen" id="listen" aria-pressed="false">
+      <svg class="ic" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path class="pl" d="M4 2l11 7-11 7z"/><path class="pa" d="M4 2h3.6v14H4zM10.4 2H14v14h-3.6z"/></svg>
+      <span class="lbl">הקשיבי לשושי</span><span class="len">40 שניות</span>
+    </button>
+    <audio id="greet" src="audio/shoshi-open.mp3" preload="none"></audio>
+    <p class="ask" id="askLbl">לפני שמתחילות, את כבר במגנטית?</p>
+    <div class="pick" role="group" aria-labelledby="askLbl">
+      <button type="button" class="yes" data-in="1">אני כבר במגנטית</button>
+      <button type="button" class="no" data-in="0">עוד לא, אני רק מציצה</button>
+    </div>
+  </div>
+</section>
+
+<!-- הכותרת המכווצת -->
+<header class="bar" id="bar">
+  <div class="bar-in">
+    <svg class="mk idle" id="barMark" width="40" height="40" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>
+    <div class="t"><b>המאמנת שלך במגנטית</b><span>מגנטית · שושי זליקוביץ׳</span></div>
+    <button type="button" class="new" id="newChat">שיחה חדשה</button>
+  </div>
+</header>
+
+<main id="main">
+  <div class="log" id="log" role="log" aria-live="polite" aria-label="השיחה"></div>
+</main>
+
+<footer>
+  <form class="compose" id="f">
+    <label for="q" class="vh">ההודעה שלך</label>
+    <textarea id="q" rows="1" placeholder="תכתבי לי מה קרה..." enterkeyhint="send"></textarea>
+    <button class="send" id="send" type="submit" aria-label="שליחה">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M11 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square"/></svg>
+    </button>
+  </form>
+  <div class="opts">
+    <label class="switch"><input type="checkbox" id="priv" role="switch" aria-describedby="privNote"><span class="tr" aria-hidden="true"></span><span>שיחה דיסקרטית</span></label>
+  </div>
+  <p class="privnote" id="privNote" aria-live="polite"></p>
+  <p class="privshort" id="privShort"></p>
+  <p class="legal">המאמנת היא שירות דיגיטלי, לא אדם. היא עשויה לטעות, ולא מחליפה ליווי אישי או טיפול. · <button type="button" class="linkbtn" id="openTerms" aria-haspopup="dialog">תנאי שימוש ופרטיות</button></p>
+</footer>
+
+<!-- הסתייגות מלאה -->
+<div class="modal" id="terms" role="dialog" aria-modal="true" aria-labelledby="termsH" hidden>
+  <div class="panel">
+    <h2 id="termsH"><span class="poles" aria-hidden="true"><i></i><i></i></span>תנאי שימוש ופרטיות</h2>
+    <p><strong>״המאמנת שלך במגנטית״ היא שירות דיגיטלי ואינה אדם.</strong> היא עשויה לטעות, ואין בה כדי להחליף טיפול, ייעוץ מקצועי, ליווי אנושי או מענה במצבי מצוקה.</p>
+    <p><strong>פרטיות.</strong> הכניסה במייל בלבד, בלי פתיחת חשבון, ובטעימה בלי מייל בכלל. ב<strong>שיחה דיסקרטית</strong> התוכן אינו נשמר. ב<strong>שיחה שנשמרת</strong> התוכן נשמר אצלנו כדי שהמאמנת תמשיך מאיפה שהפסקתן, ואפשר לבקש את מחיקתו בכל עת. לצורך הפקת התשובה תוכן ההודעות נשלח לספק מודל בינה מלאכותית, גם בשיחה דיסקרטית.</p>
+    <div class="acts">
+      <a class="btn line" href="privacy.html">לתנאים המלאים</a>
+      <button type="button" class="btn ink" id="closeTerms">סגירה</button>
+    </div>
+  </div>
+</div>
+
+<!-- הסימן: שני קטבים במג׳נטה והחיריק הכתום שנמשך אליהם -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="mark">
+      <circle cx="24" cy="24" r="24" fill="#0D122C"/>
+      <path class="pole a" d="M13.5 12.2L20.5 10L20.5 21.5L13.5 21.5Z" fill="#DF1767"/>
+      <path class="pole b" d="M27.5 10L34.5 12.2L34.5 21.5L27.5 21.5Z" fill="#DF1767"/>
+      <ellipse class="dot" cx="24" cy="33.5" rx="4.6" ry="6" fill="#F36E21"/>
+    </g>
+  </defs>
+</svg>
+
+<script src="config.js"></script>
+<script>
+(function(){
+'use strict';
+/* שיחה דיסקרטית כברירת מחדל? שושי עוד מחליטה. true = דיסקרטית, false = שיחה שנשמרת. */
+var DEFAULT_PRIVATE = false;
+
+var CFG = window.MAGNETIT_BOT || {};
+var API = (CFG.API_URL || '').trim();
+var DEMO = !API;
+var DELAY = typeof CFG.DEMO_DELAY === 'number' ? CFG.DEMO_DELAY : 1100;
+var DEMO_TASTE = 3;                     // בהדגמה בלבד: כמה הודעות בטעימה (במנוע: 6)
+var KEY = 'magnetit_coach_v1';
+var EMAIL_KEY = 'magnetit_coach_email'; // נשמר גם אחרי ״שיחה חדשה״, כדי לא לבקש שוב
+var RETURN_AFTER = 20 * 60 * 1000;      // אחרי כמה זמן נחשבת ״חזרה״
+var STYLES = {bohelet:'נאחזת באהבה', shofetet:'יודעת בשבילו', meratza:'עובדת בלהוכיח', nihulit:'מחזיקה בשביל כולם'};
+var STYLE_POS = ['bohelet','shofetet','meratza','nihulit']; // ימין-למעלה, שמאל-למעלה, ימין-למטה, שמאל-למטה
+var LOGO = {"vb": [-2800.5008635578583, -610.0, 2870.5008635578583, 910.0], "paths": [{"d": "M-516.4 -518.1L-516.4 -378.2L-458.5 -378.2L-525 0L-330.7 0L-268.6 -381.7L-258.2 -381.7C-201.2 -381.7 -190 -348.9 -190 -270.3L-190 -139.9L-265.1 -139.9L-265.1 0L0 0L0 -276.3C0 -447.3 -57.9 -518.1 -214.2 -518.1Z", "fill": "#0D122C", "clip": null}, {"d": "M-773.4 -107.9L-752.7 0L-573 0L-665.4 -518.1L-917.6 -518.1L-917.6 -378.2L-826.1 -378.2L-810.5 -287.6C-793.3 -185.7 -818.3 -147.7 -931.4 -147.7L-955.6 -147.7L-955.6 0L-931.4 0C-837.3 0 -798.4 -41.5 -778.6 -107.9Z", "fill": "#0D122C", "clip": null}, {"d": "M-1154.7 0C-1037.3 0 -1003.6 -37.1 -1003.6 -165.8L-1003.6 -518.1L-1256.6 -518.1L-1256.6 -378.2L-1196.2 -378.2L-1196.2 -196.9C-1196.2 -154.6 -1204.8 -139.9 -1241.1 -139.9L-1287.7 -139.9L-1287.7 0Z", "fill": "#0D122C", "clip": null}, {"d": "M-1335.7 -518.1L-1619 -518.1L-1619 -378.2L-1526.6 -378.2L-1526.6 -266C-1526.6 -164.9 -1553.3 -139.9 -1631.9 -139.9L-1641.4 -139.9L-1683.7 -518.1L-1874.6 -518.1L-1815 0L-1612.9 0C-1431.6 0 -1335.7 -59.6 -1335.7 -266Z", "fill": "#0D122C", "clip": [-1924.5699481865286, -398.5, 900.0, 900.0]}, {"d": "M-1335.7 -518.1L-1619 -518.1L-1619 -378.2L-1526.6 -378.2L-1526.6 -266C-1526.6 -164.9 -1553.3 -139.9 -1631.9 -139.9L-1641.4 -139.9L-1683.7 -518.1L-1874.6 -518.1L-1815 0L-1612.9 0C-1431.6 0 -1335.7 -59.6 -1335.7 -266Z", "fill": "#DF1767", "clip": [-1924.5699481865286, -900.0, 900.0, 488.5]}, {"d": "M-1922.6 -518.1L-2115.1 -518.1L-2115.1 -204.7L-1922.6 -204.7Z", "fill": "#0D122C", "clip": null}, {"d": "M-2704.6 -518.1L-2704.6 -378.2L-2650.2 -378.2L-2650.2 -139.9L-2730.5 -139.9L-2730.5 0L-2464.5 0L-2464.5 -378.2L-2428.3 -378.2C-2374.7 -378.2 -2355.7 -357.5 -2355.7 -288.4L-2355.7 0L-2163.1 0L-2163.1 -297.9C-2163.1 -456.8 -2222.7 -518.1 -2391.1 -518.1Z", "fill": "#0D122C", "clip": null}], "dot": {"cx": -1572.8082901554403, "cy": 103.0, "rx": 48.0, "ry": 63.36, "fill": "#F36E21"}};
+
+/* הנוסחים מ״טקסטים-לדף-ולמנוע.md״ (הכותבת), מילה במילה. */
+var T = {
+  btn_in: 'אני כבר במגנטית',
+  door_ask_email: 'איזה כיף :)\nתכתבי לי את המייל שאיתו הצטרפת למגנטית, ואני אבדוק שאת ברשימה.\nאת זה עושים רק פעם אחת.',
+  door_email_placeholder: 'המייל שאיתו הצטרפת',
+  door_email_btn: 'בדיקה',
+  door_skip: 'אין לי את המייל עכשיו, בואי נתחיל בטעימה',
+  door_found: 'מצאתי אותך 💛\nהליווי שלי פתוח לך עד {date}.\nבכל פעם שקורה משהו, בבית, בזוגיות, בלב, תחזרי לכאן, ונמצא ביחד את הצעד שמחכה לך.',
+  door_not_found: 'לא מצאתי את המייל הזה ברשימה של מגנטית.\nיש מצב שהצטרפת עם מייל אחר? אפשר לנסות שוב.\nואם זה לא מסתדר, תכתבי לשושי ל-shoshi@shoshizelikovith.com ונבדוק.\nובינתיים, אפשר להתחיל בטעימה קצרה :)',
+  door_not_found_chips: ['לנסות מייל אחר', 'בואי נתחיל בטעימה'],
+  taste_end: 'זו הייתה הטעימה שלנו 💛\nהצעד הזה, ועוד 20 צעדים קצרים, מחכים לך בתוך מגנטית: סרטונים של כשתי דקות, ומצגת שמסכמת כל צעד בכתב.\nומי שבפנים מקבלת גם אותי, כדי למצוא איתה את הצעד הנכון לכל רגע, ולחזור אחרי הצפייה לחדד אותו.\nרוצה שנחזור אלייך עם כל הפרטים?',
+  taste_end_chips: ['כן, אשמח לפרטים', 'כבר רכשתי את מגנטית'],
+  step_kicker: 'הצעד שלך עכשיו',
+  step_where_in: '**איפה מוצאים:** בתיקייה שקיבלת במייל, או באתר, לפי מספר הצעד. ויש שם גם מצגת שמסכמת אותו בכתב.',
+  step_where_out: '**איפה מוצאים:** הצעד הזה מחכה לך בתוך מגנטית, הסדרה של שושי. סרטון של כשתי דקות, ומצגת שמסכמת אותו בכתב.',
+  btn_watched: 'צפיתי, חזרתי',
+  btn_watched_done: 'צפית בצעד הזה',
+  btn_read: 'קראתי במצגת, חזרתי',
+  style_kicker: 'הסגנון שאני מזהה בך',
+  style_note: 'זו לא תווית וזה לא אבחון. זה הכיוון שהמאמץ שלך נמשך אליו עכשיו, וממנו בוחרות את הצעד.',
+  sentence_label: 'המשפט שלך לדרך',
+  sentence_save_btn: 'לשמירה כתמונה',
+  sentence_image_title: 'המשפט שלי לדרך',
+  offer_kicker: 'אם תרצי להמשיך',
+  offer_title: 'התהליך המלא עם שושי',
+  offer_subtitle: 'אשה ללא מאמץ',
+  offer_text: 'מגנטית פותחת שער: רואים, מזהים, מבינים משהו על עצמך.\nאשה ללא מאמץ היא השלב הבא. ללמוד לחיות את זה באמת, בתוך הבית ובתוך הקשר.',
+  offer_title_taste: 'מגנטית',
+  offer_subtitle_taste: '21 צעדים ראשונים לנשיות ללא מאמץ',
+  offer_text_taste: 'סרטונים קצרים של כשתי דקות, מצגת שמסכמת כל צעד, והמאמנת הזו לצידך, כדי למצוא את הצעד שמתאים לכל רגע.',
+  offer_btn: 'רוצה פרטים',
+  lead_thanks: 'תודה :) שושי או מישהי מהצוות יחזרו אלייך עם כל הפרטים.',
+  error_retry: 'משהו נתקע רגע. מה שכתבת חזר לתיבה למטה, תנסי לשלוח שוב בעוד רגע.',
+  error_generic: 'משהו נתקע רגע. תנסי שוב בעוד כמה שניות.',
+  private_off_note: '**שיחה שנשמרת** (מומלץ) - אני זוכרת אותך, ונמשיך מאיפה שעצרנו, בלי להסביר הכל מחדש. שושי עשויה לקרוא שיחות, בלי פרטים מזהים, כדי לשפר את התוכן.',
+  private_on_note: '**שיחה דיסקרטית** - לא נשמר כלום אצלנו, ובפעם הבאה מתחילות מאפס.',
+  testimonial_share_ask: 'ואפשר ששושי תשתף את המילים שלך עם נשים אחרות?\nבלי שם, עם השם הפרטי שלך, או רק בשבילה. מה שנוח לך.',
+  testimonial_share_chips: ['בלי שם', 'עם שם פרטי', 'רק לשושי'],
+  testimonial_thanks: 'תודה 💛 העברתי לשושי.\nמילים כאלה נותנות לה כח, ולעוד הרבה נשים אמונה שיכול להיות להן טוב יותר.',
+  testimonial_thanks_private: 'תודה 💛 העברתי לשושי, רק בשבילה.',
+  demo_open_in: 'איזה כיף שאת כאן 💛\nתכתבי לי על רגע אחד מהזמן האחרון שבו הרגשת שאת מתאמצת. מה קרה שם?',
+  demo_open_out: 'נעים מאוד :)\nמגנטית היא סדרה של 21 צעדים קצרים של שושי. וגם בלי הסדרה, אני יכולה לעזור לך לזהות את סגנון המאמץ שלך ואיזה צעד מחכה לך.\nתכתבי לי על רגע אחד מהזמן האחרון שבו הרגשת שאת מתאמצת. מה קרה שם?',
+  demo_open_chips: ['הסברתי לו משהו והוא לא הבין', 'אני מחזיקה את כל הבית לבד', 'הוא מתרחק ואני נלחצת'],
+  demo_reflect: 'הסברת, ושוב הסברת, ונשארת עם תחושה שהוא לא באמת שמע.\nרגע לפני שאני מציעה צעד - באותו רגע, מה עשית? הסברת שוב, שתקת, או עזבת ועשית לבד?',
+  demo_reflect_chips: ['הסברתי שוב ושוב', 'שתקתי ונעלבתי', 'עזבתי ועשיתי לבד'],
+  demo_recommend: 'ממה שסיפרת, זה נשמע לי כמו הסגנון ׳נאחזת באהבה׳ (כשמשהו בקשר מרגיש רחוק, כל הכוח הולך להחזיק אותו קרוב). תגידי לי אם זה מרגיש לך נכון.\nיש צעד אחד שמדבר בדיוק על הרגע הזה.\nתכנסי לתיקייה שקיבלת במייל או לאתר, ויש לך שם גם מצגת שמסכמת אותו. אחרי שתצפי, תחזרי לספר לי מה לקחת ממנו.',
+  demo_after_watch: 'איזה כיף שחזרת 💛\nמה לקחת מהצעד? משפט או רגע אחד שנשאר איתך.',
+  demo_after_watch_chips: ['שהמילים הן לא העיקר', 'לחזור אליי לפני שאני מדברת', 'שהוא פוגש את מה שבתוכי'],
+  demo_deepen: 'וכשאת חושבת על השיחה ההיא איתו - איפה היית את באותו רגע? אצלך, או אצלו, מחכה שיאשר?',
+  demo_deepen_chips: ['אצלו, מחכה', 'קצת פה קצת שם'],
+  demo_sentence: 'בואי נהפוך את זה למשפט שלך, שתוכלי לחזור אליו ביום רגיל.\nזה הניסוח שעלה לי מתוך מה שכתבת, ואפשר לשנות:',
+  demo_sentence_text: 'לפני שאני מסבירה, אני חוזרת אליי.',
+  demo_sentence_chips: ['זה בדיוק זה', 'אפשר לנסח אחרת'],
+  demo_offer: 'תשמרי אותו קרוב. אפשר גם להעלות אותו לסטטוס, כתזכורת קטנה לעצמך :)\nואם מגנטית פתחה אצלך את השאלה ״אוקיי, אז מה עכשיו?״ - בדיוק בשביל זה יש את אשה ללא מאמץ, התהליך המלא עם שושי.',
+  demo_offer_chips: ['אני רוצה לספר על רגע אחר'],
+  demo_end: 'זו הדגמה של העיצוב, ולכן התשובות כאן מוכנות מראש. כשהמנוע יחובר, אמשיך איתך באמת.'
+};
+
+var $ = function(s, r){ return (r || document).querySelector(s); };
+var log = $('#log'), main = $('#main'), qEl = $('#q'), sendBtn = $('#send'), privEl = $('#priv'), privNote = $('#privNote');
+
+/* גובה אמיתי של המסך בטלפון, גם כשהמקלדת פתוחה */
+function fitVh(){
+  var h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty('--vh', h + 'px');
+}
+if (window.visualViewport){ visualViewport.addEventListener('resize', fitVh); }
+window.addEventListener('resize', fitVh); fitVh();
+
+/* ---------- זיכרון ---------- */
+function rid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function load(){
+  try { var s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s && s.msgs) return s; } catch(e){}
+  return null;
+}
+function fresh(){ return {sid: rid(), msgs: [], inMagnetit: null, lastStep: null, watched: {}, style: null, leadSent: false,
+  demo: 0, demoTaste: 0, ts: Date.now(), priv: DEFAULT_PRIVATE, door: null, member: null, doorShown: false, pending: null}; }
+var S = load() || fresh();
+if (typeof S.priv !== 'boolean') S.priv = DEFAULT_PRIVATE;
+function save(){ S.ts = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+function savedEmail(){ try { return localStorage.getItem(EMAIL_KEY) || ''; } catch(e){ return ''; } }
+function setSavedEmail(v){ try { if (v) localStorage.setItem(EMAIL_KEY, v); else localStorage.removeItem(EMAIL_KEY); } catch(e){} }
+
+/* ---------- עזרי תצוגה ---------- */
+function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
+function esc(t){ return String(t == null ? '' : t).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function fmt(t){
+  return esc(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/ (:\)|💛)/g, '\u00a0$1')                                          // סמיילי לא נשאר לבד בשורה
+    .replace(/(\S*@[^\s<]+)/g, '<span style="white-space:nowrap">$1</span>');   // מייל לא נשבר באמצע
+}
+function mark(cls, size){ return '<svg class="mk ' + (cls || '') + '" width="' + size + '" height="' + size + '" viewBox="0 0 48 48" aria-hidden="true"><use href="#mark"/></svg>'; }
+var POLES = '<span class="poles" aria-hidden="true"><i></i><i></i></span>';
+function pad(n){ return n < 10 ? '0' + n : '' + n; }
+function heDate(iso){
+  var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || ''); if (!m) return '';
+  return (+m[3]) + '.' + (+m[2]) + '.' + m[1];
+}
+function isMember(m){ return ((m && m.door) || S.door) === 'member'; }
+
+function scrollToEl(node){
+  requestAnimationFrame(function(){ main.scrollTop = Math.max(0, node.offsetTop - 12); });
+}
+function scrollEnd(){ requestAnimationFrame(function(){ main.scrollTop = main.scrollHeight; }); }
+function startChat(){ stopGreet(); document.body.classList.add('chatting'); }
+/* הקלטת הפתיחה בקול של שושי: רק בלחיצה, ונעצרת כשהשיחה מתחילה */
+function stopGreet(){ var a = document.getElementById('greet'); if (a && !a.paused) a.pause(); }
+(function(){
+  var a = document.getElementById('greet'), l = document.getElementById('listen');
+  if (!a || !l) return;
+  l.addEventListener('click', function(){ if (a.paused) a.play(); else a.pause(); });
+  a.addEventListener('play', function(){ l.setAttribute('aria-pressed', 'true'); });
+  a.addEventListener('pause', function(){ l.setAttribute('aria-pressed', 'false'); });
+  a.addEventListener('timeupdate', function(){ if (a.duration) l.style.setProperty('--p', (a.currentTime / a.duration * 100) + '%'); });
+  a.addEventListener('ended', function(){ a.currentTime = 0; l.style.setProperty('--p', '0%'); });
+})();
+
+/* ---------- ציור הודעות ---------- */
+function renderUser(text){
+  var t = el('div', 'turn me');
+  var st = el('div', 'stack');
+  var sh = el('div', 'sheet'); var inn = el('div', 'in txt'); inn.textContent = text;
+  sh.appendChild(inn); st.appendChild(sh); t.appendChild(st);
+  log.appendChild(t); return t;
+}
+function botShell(){
+  var t = el('div', 'turn bot'); t.innerHTML = mark('', 34);
+  var st = el('div', 'stack'); t.appendChild(st); log.appendChild(t);
+  return {turn: t, stack: st};
+}
+function textSheet(text){ var sh = el('div', 'sheet'); sh.appendChild(el('div', 'in txt', fmt(text))); return sh; }
+
+/* הודעה של המאמנת: מהמנוע (assistant) או מהדף עצמו (local) */
+function renderBot(m, live){
+  var b = botShell(), st = b.stack;
+  if (m.text) st.appendChild(textSheet(m.text));
+  if (live && m.door === 'taste' && !m.limit && (m.tasteLeft === 1 || m.tasteLeft === 2)){
+    st.appendChild(el('p', 'left', '<i aria-hidden="true"></i>' + (m.tasteLeft === 1 ? 'נשארה לנו עוד הודעה אחת בטעימה' : 'נשארו לנו עוד 2 הודעות בטעימה')));
+  }
+  if (m.testimonial) st.appendChild(testiCard(m.testimonial));
+  if (m.style && m.style.key) st.appendChild(styleCard(m.style));
+  if (m.step && m.step.n) st.appendChild(stepCard(m.step, m));
+  if (m.sentence) st.appendChild(sentenceCard(m.sentence, (m.step && m.step.n) || (S.lastStep && S.lastStep.n) || null));
+  if (m.offer || m.limit) st.appendChild(offerCard(m));
+  if (live && m.emailForm) st.appendChild(emailCard());
+  if (live && m.chips && m.chips.length) st.appendChild(chipsEl(m.chips));
+  return b.turn;
+}
+
+function chipsEl(list){
+  var c = el('div', 'chips'); c.setAttribute('role', 'group'); c.setAttribute('aria-label', 'תשובות מהירות');
+  list.slice(0, 4).forEach(function(x){
+    var b = el('button'); b.type = 'button'; b.textContent = x;
+    b.addEventListener('click', function(){ chipAction(x); });
+    c.appendChild(b);
+  });
+  return c;
+}
+function clearChips(){ Array.prototype.forEach.call(log.querySelectorAll('.chips, .ret, .left, .card.door'), function(c){ c.remove(); }); }
+
+function stepCard(step, m){
+  var n = +step.n, title = step.title || '', member = isMember(m);
+  var c = el('div', 'card step'); c.setAttribute('role', 'group'); c.setAttribute('aria-label', 'צעד ' + n);
+  var ticks = '';
+  for (var i = 1; i <= 21; i++) ticks += '<i class="' + (i === n ? 'on' : (i < n ? 'past' : '')) + '"></i>';
+  var done = !!S.watched[n];
+  c.innerHTML =
+    '<div class="in">' +
+      '<div class="kicker">' + POLES + esc(T.step_kicker) + '</div>' +
+      '<div class="top" style="margin-top:8px">' +
+        '<div class="num"><small>צעד</small><b>' + pad(n) + '</b></div>' +
+        '<h3>' + esc(title) + '</h3>' +
+      '</div>' +
+      '<div class="track" aria-hidden="true">' + ticks + '</div>' +
+      '<div class="track-l" aria-hidden="true"><span>צעד 1</span><span>צעד 21</span></div>' +
+      '<p class="where">' + fmt(member ? T.step_where_in : T.step_where_out) + '</p>' +
+      (member ?
+        '<button type="button" class="btn ink w' + (done ? ' done' : '') + '"' + (done ? ' disabled' : '') + '>' +
+          '<span class="ok" aria-hidden="true">✓</span><span class="lbl">' + esc(done ? T.btn_watched_done : T.btn_watched) + '</span></button>' +
+        (done ? '' : '<button type="button" class="btn line r">' + esc(T.btn_read) + '</button>') : '') +
+    '</div>';
+  if (member){
+    var w = $('.w', c), r = $('.r', c);
+    var mark_ = function(){ S.watched[n] = 1; save(); w.disabled = true; w.classList.add('done'); $('.lbl', w).textContent = T.btn_watched_done; if (r) r.remove(); };
+    w.addEventListener('click', function(){ mark_(); send('צפיתי בצעד ' + n); });
+    if (r) r.addEventListener('click', function(){ mark_(); send('קראתי את המצגת של צעד ' + n); });
+  }
+  return c;
+}
+
+function styleCard(style){
+  var key = style.key, name = style.name || STYLES[key] || '';
+  var idx = Math.max(0, STYLE_POS.indexOf(key));
+  /* החיריק יוצא מהמרכז ונמשך לפינה של הסגנון שלה */
+  var tx = [62, 8, 62, 8][idx], ty = [12, 12, 68, 68][idx];
+  var c = el('div', 'card style'); c.setAttribute('role', 'group'); c.setAttribute('aria-label', T.style_kicker + ': ' + name);
+  function cell(k, i){ return '<div class="s' + (i % 2 ? ' l' : '') + (k === key ? ' on' : '') + '" style="grid-column:' + (i % 2 ? 3 : 1) + ';grid-row:' + (i < 2 ? 1 : 2) + '">' + esc(STYLES[k]) + '</div>'; }
+  c.innerHTML =
+    '<div class="in">' +
+      '<div class="kicker">' + POLES + esc(T.style_kicker) + '</div>' +
+      '<p class="name">' + esc(name) + '</p>' +
+      '<div class="map" aria-hidden="true">' +
+        STYLE_POS.map(cell).join('') +
+        '<svg width="70" height="80" viewBox="0 0 70 80">' +
+          '<g transform="translate(35 40) rotate(' + (Math.atan2(ty - 40, tx - 35) * 180 / Math.PI).toFixed(1) + ')">' +
+            '<ellipse class="stretch" cx="0" cy="0" rx="7" ry="7" fill="#F36E21"/></g>' +
+        '</svg>' +
+      '</div>' +
+      '<p class="why">' + esc(T.style_note) + '</p>' +
+    '</div>';
+  return c;
+}
+
+function sentenceCard(sentence, stepN){
+  var c = el('div', 'card mark-card'); c.style.filter = 'none';
+  c.innerHTML =
+    '<p class="label">' + POLES + esc(T.sentence_label) + '</p>' +
+    '<div class="bookmark"><div class="in">' + POLES +
+      '<q>' + esc(sentence) + '</q>' +
+      '<span class="hd" aria-hidden="true"></span>' +
+      '<span class="src">' + (stepN ? 'מתוך צעד ' + stepN + ' · ' : '') + 'מגנטית</span>' +
+    '</div></div>' +
+    '<div class="acts">' +
+      '<button type="button" class="btn mag save">' + esc(T.sentence_save_btn) + '</button>' +
+      '<button type="button" class="btn line copy">העתקה</button>' +
+    '</div>';
+  $('.save', c).addEventListener('click', function(){ savePng(sentence, stepN, this); });
+  $('.copy', c).addEventListener('click', function(){
+    var b = this;
+    var done = function(){ b.textContent = 'הועתק'; setTimeout(function(){ b.textContent = 'העתקה'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(sentence).then(done, done); else done();
+  });
+  return c;
+}
+
+/* בטעימה הכרטיס מזמין למגנטית, אצל רוכשת לאשה ללא מאמץ */
+function offerCard(m){
+  var member = isMember(m);
+  var title = member ? T.offer_title : T.offer_title_taste, sub = member ? T.offer_subtitle : T.offer_subtitle_taste;
+  var c = el('div', 'card offer' + (member ? '' : ' taste')); c.setAttribute('role', 'group'); c.setAttribute('aria-label', title);
+  c.innerHTML =
+    '<div class="in"><span class="ribbon" aria-hidden="true"></span>' +
+      '<div class="kicker">' + POLES + esc(T.offer_kicker) + '</div>' +
+      '<h3>' + esc(title) + '<span>' + esc(sub) + '</span></h3>' +
+      '<p class="txt">' + fmt(member ? T.offer_text : T.offer_text_taste) + '</p>' +
+      '<div class="slot"></div>' +
+    '</div>';
+  var slot = $('.slot', c);
+  if (S.leadSent){ slot.innerHTML = thanksHtml(); return c; }
+  addLeadBtn(slot);
+  return c;
+}
+function addLeadBtn(slot){
+  var b = el('button', 'btn mag lead-open', esc(T.offer_btn)); b.type = 'button';
+  b.addEventListener('click', function(){ openLead(slot); });
+  slot.appendChild(b);
+}
+function openLead(slot){
+  if (S.leadSent){ slot.innerHTML = thanksHtml(); return; }
+  if ($('form.lead', slot)) { $('input', slot).focus(); return; }
+  var b = $('.lead-open', slot); if (b) b.remove();
+  slot.appendChild(leadForm(slot)); $('input', slot).focus();
+}
+function thanksHtml(){ return '<div class="thanks" role="status"><i aria-hidden="true"></i><span>' + esc(T.lead_thanks) + '</span></div>'; }
+
+function leadForm(slot){
+  var f = el('form', 'lead'); f.noValidate = true;
+  var u = rid();
+  f.innerHTML =
+    '<label for="n' + u + '">השם שלך<input id="n' + u + '" name="name" autocomplete="name" required></label>' +
+    '<label for="p' + u + '">טלפון<input id="p' + u + '" name="phone" type="tel" inputmode="tel" autocomplete="tel" required></label>' +
+    '<label for="w' + u + '"><span>מתי נוח שיחזרו אלייך <small>(לא חובה)</small></span><input id="w' + u + '" name="note" placeholder="למשל: בבוקר, או אחרי 20:00"></label>' +
+    '<div class="msgline" aria-live="polite"></div>' +
+    '<div class="row2"><button class="btn mag" type="submit">שליחה</button><button class="btn line" type="button">ביטול</button></div>';
+  var msg = $('.msgline', f);
+  $('.btn.line', f).addEventListener('click', function(){ f.remove(); addLeadBtn(slot); });
+  f.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var name = f.name.value.trim(), phone = f.phone.value.trim(), note = f.note.value.trim();
+    var digits = phone.replace(/\D/g, '');
+    if (name.length < 2){ msg.textContent = 'רק השם, כדי שנדע איך לפנות אלייך.'; f.name.focus(); return; }
+    if (digits.length < 9 || digits.length > 13){ msg.textContent = 'נראה שחסרה ספרה במספר הטלפון.'; f.phone.focus(); return; }
+    var sb = $('button[type=submit]', f); sb.disabled = true; sb.textContent = 'שולחת...'; msg.textContent = '';
+    var r = DEMO ? (await wait(600), {ok: true}) : await post({event: 'lead', sid: S.sid, name: name, phone: phone, note: note}, 25000, 2);
+    if (r && r.ok){
+      S.leadSent = true; save();
+      Array.prototype.forEach.call(log.querySelectorAll('.offer .slot'), function(s){ s.innerHTML = thanksHtml(); });
+    } else {
+      sb.disabled = false; sb.textContent = 'שליחה';
+      msg.textContent = 'השליחה לא עברה. הפרטים נשארו כאן, תנסי שוב בעוד רגע.';
+    }
+  });
+  return f;
+}
+
+function testiCard(t){
+  var priv = t === 'none' || (t && t.perm === 'none');
+  var c = el('div', 'card testi'); c.setAttribute('role', 'status');
+  c.innerHTML = '<div class="in"><span class="hd" aria-hidden="true"></span><div>' +
+    '<div class="kicker">' + POLES + 'העברתי לשושי</div>' +
+    '<p>' + fmt(priv ? T.testimonial_thanks_private : T.testimonial_thanks) + '</p></div></div>';
+  return c;
+}
+
+/* ---------- הדלת של הרוכשות: מייל ---------- */
+function emailCard(){
+  var c = el('div', 'card door'); c.setAttribute('role', 'group'); c.setAttribute('aria-label', 'בדיקת מייל');
+  var u = rid();
+  c.innerHTML = '<div class="in">' +
+    '<div class="kicker">' + POLES + 'כניסה לרוכשות מגנטית</div>' +
+    '<form novalidate>' +
+      '<label for="e' + u + '" class="vh">' + esc(T.door_email_placeholder) + '</label>' +
+      '<div class="row"><input id="e' + u + '" name="email" type="email" inputmode="email" autocomplete="email" placeholder="' + esc(T.door_email_placeholder) + '">' +
+      '<button type="submit" class="btn mag">' + esc(T.door_email_btn) + '</button></div>' +
+      '<div class="msgline" aria-live="polite"></div>' +
+      '<button type="button" class="linkbtn skip">' + esc(T.door_skip) + '</button>' +
+    '</form></div>';
+  var f = $('form', c), inp = $('input', c), msg = $('.msgline', c);
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = inp.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ msg.textContent = 'נראה שחסר משהו בכתובת המייל.'; inp.focus(); return; }
+    checkEmail(v, c);
+  });
+  $('.skip', c).addEventListener('click', function(){ c.remove(); send(T.door_skip); });
+  return c;
+}
+
+/* בדיקת המייל = השאלה הראשונה שלה, עם profile.email */
+async function checkEmail(email, card){
+  if (busy) return;
+  busy = true; sendBtn.disabled = true;
+  var btn = card && $('button[type=submit]', card), msg = card && $('.msgline', card);
+  if (btn){ btn.disabled = true; btn.textContent = 'בודקת...'; }
+  /* השאלה שנשלחת עם המייל: ההודעה האחרונה שלה, חוץ מ״לנסות מייל אחר״ */
+  var lastUser = -1;
+  S.msgs.forEach(function(m, i){ if (m.role === 'user' && m.text !== 'לנסות מייל אחר') lastUser = i; });
+  var q = lastUser >= 0 ? S.msgs[lastUser].text : T.btn_in;
+  var hist = history(lastUser >= 0 ? lastUser : S.msgs.length);
+  var th = thinking();
+  var r = await ask(q, hist, email);
+  stopThinking(th);
+  busy = false; sendBtn.disabled = false;
+  if (!r || !r.ok){
+    if (btn){ btn.disabled = false; btn.textContent = T.door_email_btn; }
+    if (msg) msg.textContent = T.error_generic;
+    return;
+  }
+  if (card) card.remove();
+  var m = toMsg(r);
+  if (r.member && r.member.found){
+    setSavedEmail(email); S.email = email;
+    acceptReply(r, m);
+  } else {
+    /* לא נמצאה: התשובה שכבר חושבה נשמרת לטעימה, כדי לא לשלם עליה פעמיים */
+    setSavedEmail(''); S.email = '';
+    S.door = 'taste'; S.pending = m;
+    var loc = {role: 'local', text: T.door_not_found, chips: T.door_not_found_chips};
+    S.msgs.push(loc); save();
+    scrollToEl(renderBot(loc, true));
+  }
+}
+
+function askEmail(withText){
+  var loc = {role: 'local', text: withText ? T.door_ask_email : '', emailForm: true};
+  S.msgs.push(loc); save();
+  var t = renderBot(loc, true); scrollToEl(t);
+  var i = $('.card.door input', t); if (i && window.matchMedia('(pointer:fine)').matches) i.focus();
+}
+
+/* כפתורים שהדף מטפל בהם בעצמו, בלי לשאול את המנוע */
+function chipAction(x){
+  if (busy) return;
+  if (x === 'לנסות מייל אחר' || x === 'כבר רכשתי את מגנטית'){
+    clearChips(); renderUser(x); S.msgs.push({role: 'user', text: x}); save();
+    askEmail(x === 'כבר רכשתי את מגנטית'); return;
+  }
+  if (x === 'בואי נתחיל בטעימה' && S.pending){
+    clearChips(); renderUser(x); S.msgs.push({role: 'user', text: x});
+    var m = S.pending; S.pending = null; S.msgs.push(m);
+    if (DEMO) S.demo = Math.max(S.demo || 0, 1);
+    save();
+    scrollToEl(renderBot(m, true)); return;
+  }
+  if (x === 'כן, אשמח לפרטים'){
+    clearChips(); renderUser(x); S.msgs.push({role: 'user', text: x}); save();
+    var slots = log.querySelectorAll('.offer .slot'), slot = slots[slots.length - 1];
+    if (!slot){ var b = botShell(); var oc = offerCard({door: S.door}); b.stack.appendChild(oc); slot = $('.slot', oc); }
+    openLead(slot); scrollToEl(slot.closest('.card')); return;
+  }
+  send(x);
+}
+
+/* ---------- שמירת המשפט כתמונה (1080x1920, מתאים לסטטוס) ---------- */
+function wrapLines(ctx, text, maxW){
+  var words = text.split(/\s+/), lines = [], cur = '';
+  words.forEach(function(w){
+    var t = cur ? cur + ' ' + w : w;
+    if (ctx.measureText(t).width > maxW && cur){ lines.push(cur); cur = w; } else cur = t;
+  });
+  if (cur) lines.push(cur);
+  return lines;
+}
+function drawLogo(ctx, x, y, w, colorMap){
+  var vb = LOGO.vb, s = w / vb[2];
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.translate(-vb[0], -vb[1]);
+  LOGO.paths.forEach(function(p){
+    ctx.save();
+    if (p.clip){ ctx.beginPath(); ctx.rect(p.clip[0], p.clip[1], p.clip[2], p.clip[3]); ctx.clip(); }
+    ctx.fillStyle = (colorMap && colorMap[p.fill]) || p.fill;
+    ctx.fill(new Path2D(p.d));
+    ctx.restore();
+  });
+  var d = LOGO.dot; ctx.fillStyle = d.fill; ctx.beginPath(); ctx.ellipse(d.cx, d.cy, d.rx, d.ry, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+function renderSentence(sentence, stepN){
+  var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  var ctx = cv.getContext('2d');
+  ctx.fillStyle = '#F2EEE3'; ctx.fillRect(0, 0, W, H);
+  drawLogo(ctx, (W - 440) / 2, 150, 440);
+  ctx.direction = 'rtl'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = '#0D122C'; ctx.font = '600 40px Assistant';
+  ctx.fillText('צעדים ראשונים לנשיות ללא מאמץ', W / 2, 360);
+  var bx = 110, bw = 860, by = 470, maxW = bw - 150;
+  var size = 100, lines;
+  do { ctx.font = '700 ' + size + 'px Assistant'; lines = wrapLines(ctx, sentence, maxW); size -= 4; } while (lines.length > 6 && size > 48);
+  size += 4; var lh = Math.round(size * 1.38);
+  var bh = 150 + 60 + lines.length * lh + 230;
+  by = Math.max(440, Math.round(440 + (1580 - 440 - bh) / 2));
+  ctx.save();
+  ctx.shadowColor = 'rgba(13,18,44,.28)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 22;
+  ctx.fillStyle = '#0D122C';
+  ctx.beginPath(); ctx.moveTo(bx, by + 18); ctx.lineTo(bx + bw, by); ctx.lineTo(bx + bw, by + bh); ctx.lineTo(bx + bw / 2, by + bh - 90); ctx.lineTo(bx, by + bh); ctx.closePath(); ctx.fill();
+  ctx.restore();
+  ctx.fillStyle = '#DF1767';
+  var px = W / 2, py = by + 70;
+  ctx.beginPath(); ctx.moveTo(px - 34, py + 8); ctx.lineTo(px - 8, py); ctx.lineTo(px - 8, py + 56); ctx.lineTo(px - 34, py + 56); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(px + 8, py); ctx.lineTo(px + 34, py + 8); ctx.lineTo(px + 34, py + 56); ctx.lineTo(px + 8, py + 56); ctx.fill();
+  ctx.fillStyle = '#F2EEE3'; ctx.font = '700 ' + size + 'px Assistant';
+  var ty = py + 56 + 60 + size;
+  lines.forEach(function(l, i){ ctx.fillText(l, W / 2, ty + i * lh); });
+  var hy = ty + (lines.length - 1) * lh + 80;
+  ctx.fillStyle = '#F36E21'; ctx.beginPath(); ctx.ellipse(W / 2, hy, 17, 25, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#0D122C'; ctx.font = '700 46px Assistant';
+  ctx.fillText(T.sentence_image_title, W / 2, H - 250);
+  ctx.font = '400 36px Assistant';
+  ctx.fillText((stepN ? 'מתוך צעד ' + stepN + ' · ' : '') + 'שושי זליקוביץ׳', W / 2, H - 190);
+  return cv;
+}
+async function savePng(sentence, stepN, btn){
+  var lbl = btn.textContent; btn.disabled = true; btn.textContent = 'מכינה...';
+  try {
+    if (document.fonts){ await Promise.all([document.fonts.load('700 80px Assistant', 'אבג'), document.fonts.load('400 36px Assistant', 'אבג')]); }
+    var cv = renderSentence(sentence, stepN);
+    var url = cv.toDataURL('image/png');
+    var name = 'המשפט-שלי-מגנטית.png';
+    var shared = false;
+    if (navigator.canShare && window.matchMedia('(pointer:coarse)').matches){
+      try {
+        var blob = await new Promise(function(r){ cv.toBlob(r, 'image/png'); });
+        var file = new File([blob], name, {type: 'image/png'});
+        if (navigator.canShare({files: [file]})){ await navigator.share({files: [file], title: T.sentence_image_title}); shared = true; }
+      } catch(e){ shared = e && e.name === 'AbortError'; }
+    }
+    if (!shared){ var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+    btn.textContent = 'נשמר';
+  } catch(e){ btn.textContent = 'לא הצליח, תנסי שוב'; }
+  setTimeout(function(){ btn.textContent = lbl; btn.disabled = false; }, 2000);
+}
+
+/* ---------- תקשורת עם המנוע ---------- */
+function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+async function postOnce(payload, ms){
+  var ctrl = new AbortController(); var t = setTimeout(function(){ ctrl.abort(); }, ms);
+  try {
+    var r = await fetch(API, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify(payload), redirect: 'follow', signal: ctrl.signal});
+    clearTimeout(t);
+    if (!r.ok) return null;
+    try { return JSON.parse(await r.text()); } catch(e){ return null; }
+  } catch(e){ clearTimeout(t); return null; }
+}
+/* כמה ניסיונות עם אותו מזהה הודעה, כדי שניסיון חוזר לא יחושב פעמיים */
+async function post(payload, ms, tries){
+  var waits = [0, 2000, 4000].slice(0, tries || 3);
+  for (var i = 0; i < waits.length; i++){
+    if (waits[i]) await wait(waits[i]);
+    var j = await postOnce(payload, i === 0 ? ms : Math.min(ms, 40000));
+    if (j && j.ok) return j;
+  }
+  return null;
+}
+async function ask(q, hist, email){
+  if (DEMO){ await wait(DELAY); return demoReply(q, email); }
+  var profile = {inMagnetit: S.inMagnetit, lastStep: S.lastStep ? S.lastStep.n : null};
+  var em = email || S.email || '';
+  if (em) profile.email = em;
+  return post({event: 'ask', sid: S.sid, rid: rid(), q: q, history: hist, private: !!S.priv, profile: profile}, 55000, 3);
+}
+/* היסטוריה שמורה מהשרת (רק בשיחה שנשמרת) */
+async function loadServerHistory(){
+  if (DEMO || S.priv || !S.sid) return;
+  var ctrl = new AbortController(); var t = setTimeout(function(){ ctrl.abort(); }, 20000);
+  try {
+    var url = API + (API.indexOf('?') < 0 ? '?' : '&') + 'hist=1&sid=' + encodeURIComponent(S.sid);
+    var r = await fetch(url, {redirect: 'follow', signal: ctrl.signal}); clearTimeout(t);
+    if (!r.ok) return;
+    var j = JSON.parse(await r.text());
+    if (!j || !j.ok || !j.history || !j.history.length) return;
+    var localCount = S.msgs.filter(function(m){ return m.role === 'user' || m.role === 'assistant'; }).length;
+    if (j.history.length <= localCount || busy) return;
+    S.msgs = j.history.map(function(h){ return {role: h.role, text: h.text || '', step: h.step || null, style: h.style || null}; });
+    save(); log.innerHTML = ''; restore(true);
+  } catch(e){ clearTimeout(t); }
+}
+
+/* ---------- מצב הדגמה: תשובות מוכנות שמראות את כל הכרטיסים ---------- */
+function demoReply(q, email){
+  var found = email ? !/^no/i.test(email) : !!(S.member && S.member.found);
+  var base = {ok: true, step: null, style: null, sentence: null, offer: false, chips: [], door: found ? 'member' : 'taste'};
+  if (email) base.member = found ? {found: true, until: new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10)} : {found: false};
+  if (!found){
+    S.demoTaste = (S.demoTaste || 0) + 1;
+    if (S.demoTaste > DEMO_TASTE){
+      return Object.assign(base, {answer: T.taste_end, offer: true, chips: T.taste_end_chips, limit: 'taste_end', tasteLeft: 0});
+    }
+    base.tasteLeft = DEMO_TASTE - S.demoTaste;
+  } else base.tasteLeft = null;
+  var st = S.demo || 0;
+  if (/צפיתי|קראתי/.test(q) && st < 3) st = 3;
+  var r;
+  if (/לכתוב לשושי/.test(q)) r = {answer: T.testimonial_share_ask, chips: T.testimonial_share_chips, keep: true};
+  else if (T.testimonial_share_chips.indexOf(q) >= 0) r = {answer: '', testimonial: {perm: q === 'רק לשושי' ? 'none' : (q === 'בלי שם' ? 'anon' : 'firstname')}, keep: true};
+  else if (st === 0) r = {answer: S.inMagnetit === false ? T.demo_open_out : T.demo_open_in, chips: T.demo_open_chips};
+  else if (st === 1) r = {answer: T.demo_reflect, chips: T.demo_reflect_chips};
+  else if (st === 2) r = {answer: T.demo_recommend, style: {key: 'bohelet', name: 'נאחזת באהבה'},
+                         step: {n: 3, title: 'את יכולה לומר את המשפט הכי נכון בעולם - ולא להגיע אליו'}};
+  else if (st === 3) r = {answer: T.demo_after_watch, chips: T.demo_after_watch_chips};
+  else if (st === 4) r = {answer: T.demo_deepen, chips: T.demo_deepen_chips};
+  else if (st === 5) r = {answer: T.demo_sentence, sentence: T.demo_sentence_text, chips: T.demo_sentence_chips};
+  else if (st === 6) r = {answer: T.demo_offer, offer: true, chips: T.demo_offer_chips.concat(['אני רוצה לכתוב לשושי כמה מילים'])};
+  else r = {answer: T.demo_end};
+  if (!r.keep && !(email && !found)) S.demo = st + 1;   // בדיקת מייל שנכשלה לא מקדמת את ההדגמה
+  delete r.keep;
+  return Object.assign(base, r);
+}
+
+/* ---------- שליחה ---------- */
+var busy = false;
+function history(upto){
+  return S.msgs.slice(0, upto == null ? S.msgs.length : upto)
+    .filter(function(m){ return (m.role === 'user' || m.role === 'assistant') && m.text; })
+    .slice(-16).map(function(m){ return {role: m.role, text: m.text}; });
+}
+function thinking(){
+  var t = el('div', 'turn bot think-row');
+  t.innerHTML = '<div class="stack"><div class="sheet think"><div class="in">' + mark('pull', 30) + '<span>רגע, אני חושבת...</span></div></div></div>';
+  t.setAttribute('aria-label', 'המאמנת כותבת');
+  log.appendChild(t); scrollEnd();
+  var bm = $('#barMark'); if (bm){ bm.classList.remove('idle'); bm.classList.add('pull'); }
+  return t;
+}
+function stopThinking(t){
+  if (t) t.remove();
+  var bm = $('#barMark'); if (bm){ bm.classList.remove('pull'); bm.classList.add('idle'); }
+}
+function autosize(){ qEl.style.height = 'auto'; qEl.style.height = Math.min(qEl.scrollHeight + 4, 150) + 'px'; }
+
+function toMsg(r){
+  var m = {role: 'assistant', text: r.answer || '', step: r.step || null, style: r.style || null, sentence: r.sentence || null,
+           offer: !!r.offer, chips: r.chips || [], door: r.door || null, tasteLeft: r.tasteLeft == null ? null : r.tasteLeft,
+           limit: r.limit || null, testimonial: r.testimonial || null};
+  if (m.limit) m.offer = true;
+  return m;
+}
+/* תשובה מהמנוע: דלת, צעד וסגנון נכנסים לזיכרון, ואז הציור */
+function acceptReply(r, m){
+  var doorTurn = null;
+  if (r.door) S.door = r.door;
+  if (r.member){
+    S.member = r.member;
+    if (r.member.found && !S.doorShown){
+      S.doorShown = true;
+      var d = heDate(r.member.until);
+      var txt = d ? T.door_found.replace('{date}', d) : T.door_found.split('\n').filter(function(l){ return l.indexOf('{date}') < 0; }).join('\n');
+      var loc = {role: 'local', text: txt}; S.msgs.push(loc); doorTurn = renderBot(loc, false);
+    }
+  }
+  if (m.step && m.step.n) S.lastStep = {n: +m.step.n, title: m.step.title || ''};
+  if (m.style && m.style.key) S.style = m.style;
+  S.msgs.push(m); save();
+  var t = renderBot(m, true);
+  scrollToEl(doorTurn || t);
+}
+
+async function send(text){
+  text = (text || '').trim();
+  if (!text || busy) return;
+  busy = true; sendBtn.disabled = true;
+  startChat(); clearChips();
+  var hist = history();
+  renderUser(text); scrollEnd();
+  S.msgs.push({role: 'user', text: text}); save();
+  qEl.value = ''; autosize();
+  var th = thinking();
+  var r = await ask(text, hist);
+  stopThinking(th);
+  if (r && r.ok){
+    acceptReply(r, toMsg(r));
+  } else {
+    /* המנוע לא ענה: ההודעה יוצאת מהשיחה וחוזרת לתיבה */
+    S.msgs.pop(); save();
+    var mine = log.lastElementChild;
+    if (mine && mine.classList.contains('me')) mine.remove();
+    var e = el('div', 'err'); e.textContent = T.error_retry;
+    e.setAttribute('role', 'alert'); log.appendChild(e); scrollEnd();
+    qEl.value = text; autosize();
+  }
+  busy = false; sendBtn.disabled = false;
+  if (window.matchMedia('(pointer:fine)').matches) qEl.focus();
+}
+
+/* ---------- שיחה דיסקרטית ---------- */
+var noteTimer = null;
+function showPriv(flash){
+  privEl.checked = !!S.priv;
+  privNote.innerHTML = fmt(S.priv ? T.private_on_note : T.private_off_note);
+  $('#privShort').textContent = S.priv ? 'שיחה דיסקרטית: לא נשמר כלום אצלנו.' : 'השיחה נשמרת, ושושי עשויה לקרוא אותה בלי פרטים מזהים.';
+  if (flash){ privNote.classList.add('show'); clearTimeout(noteTimer); noteTimer = setTimeout(function(){ privNote.classList.remove('show'); }, 7000); }
+}
+privEl.addEventListener('change', function(){ S.priv = privEl.checked; save(); showPriv(true); if (!S.priv) loadServerHistory(); });
+
+/* ---------- אירועים ---------- */
+$('#f').addEventListener('submit', function(e){ e.preventDefault(); send(qEl.value); });
+qEl.addEventListener('input', autosize);
+qEl.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && window.matchMedia('(pointer:fine)').matches){ e.preventDefault(); send(qEl.value); }
+});
+/* בטלפון, כשהמקלדת פתוחה, האפשרויות בתחתית מתקפלות כדי לפנות מקום לשיחה */
+qEl.addEventListener('focus', function(){ if (window.matchMedia('(pointer:coarse)').matches) document.body.classList.add('typing'); });
+qEl.addEventListener('blur', function(){ document.body.classList.remove('typing'); });
+
+Array.prototype.forEach.call(document.querySelectorAll('.pick button'), function(b){
+  b.addEventListener('click', function(){
+    if (busy) return;
+    var yes = b.getAttribute('data-in') === '1';
+    S.inMagnetit = yes; save();
+    if (!yes){ send(b.textContent); return; }
+    /* ״אני כבר במגנטית״: מייל אחד, ואם כבר נשמר - בודקים בלי לבקש שוב */
+    startChat(); renderUser(b.textContent); S.msgs.push({role: 'user', text: b.textContent}); save();
+    var em = savedEmail();
+    if (em) checkEmail(em, null); else askEmail(true);
+  });
+});
+$('#newChat').addEventListener('click', function(){
+  if (!confirm('להתחיל שיחה חדשה? השיחה הזו תימחק מהמכשיר.')) return;
+  try { localStorage.removeItem(KEY); } catch(e){}
+  S = fresh(); log.innerHTML = ''; document.body.classList.remove('chatting'); main.scrollTop = 0; showPriv(false);
+});
+
+/* חלון ההסתייגות */
+var terms = $('#terms'), lastFocus = null;
+function openTerms(){ lastFocus = document.activeElement; terms.hidden = false; $('#closeTerms').focus(); }
+function closeTerms(){ terms.hidden = true; if (lastFocus) lastFocus.focus(); }
+$('#openTerms').addEventListener('click', openTerms);
+$('#closeTerms').addEventListener('click', closeTerms);
+terms.addEventListener('click', function(e){ if (e.target === terms) closeTerms(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !terms.hidden) closeTerms(); });
+
+/* ---------- חזרה לשיחה קיימת ---------- */
+function restore(fromServer){
+  if (!S.msgs.length) return;
+  startChat();
+  var lastIdx = S.msgs.length - 1;
+  S.msgs.forEach(function(m, i){
+    if (m.role === 'user') renderUser(m.text);
+    else renderBot(m, i === lastIdx);
+  });
+  var away = !fromServer && Date.now() - (S.ts || 0) > RETURN_AFTER;
+  if (away && S.door === 'member'){
+    var pend = S.lastStep && !S.watched[S.lastStep.n] ? S.lastStep.n : null;
+    clearChips();
+    var b = botShell(); b.turn.classList.add('ret');
+    b.stack.appendChild(textSheet(pend ? 'שמחה שחזרת. צפית בצעד ' + pend + '?' : 'שמחה שחזרת. ממשיכות מאיפה שעצרנו?'));
+    if (pend){
+      var c = chipsEl(['צפיתי בצעד ' + pend, 'עוד לא, תזכירי לי מה הוא']);
+      c.firstChild.addEventListener('click', function(){ S.watched[pend] = 1; save(); });
+      b.stack.appendChild(c);
+    }
+  }
+  scrollEnd();
+}
+showPriv(false);
+restore(false);
+loadServerHistory();
+
+})();
+</script>
+</body>
+</html>
