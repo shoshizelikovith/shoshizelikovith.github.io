@@ -291,6 +291,9 @@ body:not(.chatting) .privnote, .privnote.show{display:block}
 body.typing .opts, body.typing .privnote, body.typing .legal{display:none}
 /* מסך הפתיחה: קודם בוחרות דלת, ולכן בלי תיבת כתיבה. בטלפון שורת פרטיות קצרה, כדי שהכפתורים לא ייחתכו */
 body:not(.chatting) .compose{display:none}
+.past{align-self:stretch; margin:2px 0 6px; font-size:15px; line-height:1.55}
+.past summary{min-height:44px; display:flex; align-items:center; font-weight:600; cursor:pointer; text-decoration:underline; text-decoration-color:var(--mag); text-underline-offset:4px}
+.past p{margin:0 0 10px; white-space:pre-wrap; opacity:.85}
 .privshort{display:none; max-width:var(--col); margin:0 auto; font-size:14px; line-height:1.45}
 @media (max-width:699px){
   body:not(.chatting) .privnote:not(.show){display:none}
@@ -876,10 +879,22 @@ function hasRealUserMsg(){
   return S.msgs.some(function(m){ return m.role === 'user' && !isControlText(m.text); });
 }
 /* שיחה שנטענה מהשרת ← מצב הדף (צעד אחרון, סגנון, צעדים שצפתה בהם) */
-function adoptHistory(list){
-  S.msgs = list.map(function(h){ return {role: h.role, text: h.text || '', step: h.step || null, style: h.style || null}; });
+function showPast(list){
+  var d = document.createElement('details'); d.className = 'past';
+  var sm = document.createElement('summary'); sm.textContent = 'לקרוא את השיחות הקודמות'; d.appendChild(sm);
+  list.forEach(function(h){
+    if (!h.text) return;
+    var p = document.createElement('p'); var b = document.createElement('b');
+    b.textContent = h.role === 'user' ? 'את: ' : 'המאמנת: ';
+    p.appendChild(b); p.appendChild(document.createTextNode(h.text)); d.appendChild(p);
+  });
+  log.appendChild(d); scrollEnd();
+}
+function adoptHistory(list, keepMsgs){
+  var all = list.map(function(h){ return {role: h.role, text: h.text || '', step: h.step || null, style: h.style || null}; });
+  if (!keepMsgs) S.msgs = all;
   S.lastStep = null; S.style = null; S.watched = {};
-  S.msgs.forEach(function(m){
+  all.forEach(function(m){
     if (m.role === 'assistant'){
       if (m.step && m.step.n) S.lastStep = {n: +m.step.n, title: m.step.title || ''};
       if (m.style && m.style.key) S.style = m.style;
@@ -905,10 +920,12 @@ async function afterVerified(email){
     return;
   }
   if (h && h.history && h.history.length){
-    adoptHistory(h.history);
+    /* 5.11, שושי: לא מציפים את השיחה הקודמת ולא שולחים אותה למודל. שיחה נקייה, והזיכרון ממשיך דרך המנוע. אפשר לקרוא בלחיצה. */
+    adoptHistory(h.history, true);
     S.doorShown = true;
-    S.msgs.push({role: 'local', text: T.welcome_back}); save();
-    log.innerHTML = ''; restore(true);
+    var wb = {role: 'local', text: T.welcome_back}; S.msgs.push(wb); save();
+    scrollToEl(renderBot(wb, true));
+    showPast(h.history);
     return;
   }
   replayAsk(email);
@@ -1040,6 +1057,7 @@ async function fetchHistory(){
 }
 /* בטעינת הדף: אם השרת מכיר יותר מהשיחה שבמכשיר (המשכת ממכשיר אחר), מציגים אותה. שיחה ריקה (אחרי ״שיחה חדשה״) לא נטענת מחדש */
 async function loadServerHistory(){
+  return;   /* 5.11: לא מחליפים את השיחה במכשיר בהיסטוריה מהשרת. ראו showPast */
   if (DEMO || S.priv || !getToken() || !S.msgs.length) return;
   var h = await fetchHistory();
   if (!h || !h.history || !h.history.length || busy) return;
