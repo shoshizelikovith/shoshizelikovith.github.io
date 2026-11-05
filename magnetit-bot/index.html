@@ -1119,6 +1119,8 @@ function stopThinking(t){
 function autosize(){ qEl.style.height = 'auto'; qEl.style.height = Math.min(qEl.scrollHeight + 4, 150) + 'px'; }
 
 function toMsg(r){
+  /* כרטיס משפט לא חוזר על עצמו אם המודל כתב את אותו משפט שוב */
+  if (r.sentence && S.msgs.some(function(x){ return x.sentence === r.sentence; })) r.sentence = null;
   var m = {role: 'assistant', text: r.answer || '', step: r.step || null, style: r.style || null, sentence: r.sentence || null,
            offer: !!r.offer, chips: r.chips || [], door: r.door || null, tasteLeft: r.tasteLeft == null ? null : r.tasteLeft,
            limit: r.limit || null, testimonial: r.testimonial || null};
@@ -1196,7 +1198,9 @@ qEl.addEventListener('keydown', function(e){
 });
 /* בטלפון, כשהמקלדת פתוחה, האפשרויות בתחתית מתקפלות כדי לפנות מקום לשיחה */
 qEl.addEventListener('focus', function(){ if (window.matchMedia('(pointer:coarse)').matches) document.body.classList.add('typing'); });
-qEl.addEventListener('blur', function(){ document.body.classList.remove('typing'); });
+/* 5.11, נמצא בבדיקה: הורדת המחלקה ברגע היציאה מהשדה הקפיצה את הכפתור, והלחיצה הראשונה על ״שליחה״ הלכה לאיבוד */
+qEl.addEventListener('blur', function(){ setTimeout(function(){ if (document.activeElement !== qEl) document.body.classList.remove('typing'); }, 300); });
+sendBtn.addEventListener('mousedown', function(e){ e.preventDefault(); });
 
 Array.prototype.forEach.call(document.querySelectorAll('.pick button'), function(b){
   b.addEventListener('click', function(){
