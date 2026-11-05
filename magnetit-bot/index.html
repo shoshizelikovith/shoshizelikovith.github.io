@@ -251,7 +251,7 @@ textarea::placeholder{color:var(--ink); opacity:.5}
 .left i{width:9px; height:13px; border-radius:50%; background:var(--org); flex-shrink:0}
 
 /* כרטיס המייל */
-.door form{display:grid; gap:8px; margin-top:10px}
+.door form{display:grid; grid-template-columns:minmax(0,1fr); gap:8px; margin-top:10px}
 .door label{font-size:14.5px; font-weight:600}
 .door .row{display:flex; gap:8px}
 .door input{flex:1; min-width:0; min-height:50px; padding:10px 13px; border:2px solid rgba(13,18,44,.35); background:var(--cream);
@@ -263,6 +263,9 @@ textarea::placeholder{color:var(--ink); opacity:.5}
 .linkbtn{background:none; border:none; padding:0 2px; min-height:44px; color:var(--ink); font-weight:600; font-size:15px;
   text-decoration:underline; text-underline-offset:3px; text-decoration-color:var(--mag); text-decoration-thickness:2px; text-align:right}
 .door .linkbtn{justify-self:start}
+/* כרטיס הקוד: ספרות משמאל לימין, באמצע, בלי שהכפתור ייחתך בטלפון */
+.door.code input{text-align:center; font-size:22px; font-weight:700; letter-spacing:.3em; padding-inline:6px}
+.door .links{display:flex; flex-wrap:wrap; gap:0 18px}
 
 /* כרטיס העדות */
 .testi{max-width:380px}
@@ -403,6 +406,7 @@ textarea::placeholder,.door input::placeholder,form.lead input::placeholder{colo
 </svg>
 
 <script src="config.js"></script>
+<script src="card.js"></script>
 <script>
 (function(){
 'use strict';
@@ -416,10 +420,10 @@ var DELAY = typeof CFG.DEMO_DELAY === 'number' ? CFG.DEMO_DELAY : 1100;
 var DEMO_TASTE = 3;                     // בהדגמה בלבד: כמה הודעות בטעימה (במנוע: 6)
 var KEY = 'magnetit_coach_v1';
 var EMAIL_KEY = 'magnetit_coach_email'; // נשמר גם אחרי ״שיחה חדשה״, כדי לא לבקש שוב
+var TOKEN_KEY = 'magnetit_coach_token'; // אישור שהמכשיר הזה עבר קוד במייל (60 יום). נשמר גם אחרי ״שיחה חדשה״
 var RETURN_AFTER = 20 * 60 * 1000;      // אחרי כמה זמן נחשבת ״חזרה״
 var STYLES = {bohelet:'נאחזת באהבה', shofetet:'יודעת בשבילו', meratza:'עובדת בלהוכיח', nihulit:'מחזיקה בשביל כולם'};
 var STYLE_POS = ['bohelet','shofetet','meratza','nihulit']; // ימין-למעלה, שמאל-למעלה, ימין-למטה, שמאל-למטה
-var LOGO = {"vb": [-2800.5008635578583, -610.0, 2870.5008635578583, 910.0], "paths": [{"d": "M-516.4 -518.1L-516.4 -378.2L-458.5 -378.2L-525 0L-330.7 0L-268.6 -381.7L-258.2 -381.7C-201.2 -381.7 -190 -348.9 -190 -270.3L-190 -139.9L-265.1 -139.9L-265.1 0L0 0L0 -276.3C0 -447.3 -57.9 -518.1 -214.2 -518.1Z", "fill": "#0D122C", "clip": null}, {"d": "M-773.4 -107.9L-752.7 0L-573 0L-665.4 -518.1L-917.6 -518.1L-917.6 -378.2L-826.1 -378.2L-810.5 -287.6C-793.3 -185.7 -818.3 -147.7 -931.4 -147.7L-955.6 -147.7L-955.6 0L-931.4 0C-837.3 0 -798.4 -41.5 -778.6 -107.9Z", "fill": "#0D122C", "clip": null}, {"d": "M-1154.7 0C-1037.3 0 -1003.6 -37.1 -1003.6 -165.8L-1003.6 -518.1L-1256.6 -518.1L-1256.6 -378.2L-1196.2 -378.2L-1196.2 -196.9C-1196.2 -154.6 -1204.8 -139.9 -1241.1 -139.9L-1287.7 -139.9L-1287.7 0Z", "fill": "#0D122C", "clip": null}, {"d": "M-1335.7 -518.1L-1619 -518.1L-1619 -378.2L-1526.6 -378.2L-1526.6 -266C-1526.6 -164.9 -1553.3 -139.9 -1631.9 -139.9L-1641.4 -139.9L-1683.7 -518.1L-1874.6 -518.1L-1815 0L-1612.9 0C-1431.6 0 -1335.7 -59.6 -1335.7 -266Z", "fill": "#0D122C", "clip": [-1924.5699481865286, -398.5, 900.0, 900.0]}, {"d": "M-1335.7 -518.1L-1619 -518.1L-1619 -378.2L-1526.6 -378.2L-1526.6 -266C-1526.6 -164.9 -1553.3 -139.9 -1631.9 -139.9L-1641.4 -139.9L-1683.7 -518.1L-1874.6 -518.1L-1815 0L-1612.9 0C-1431.6 0 -1335.7 -59.6 -1335.7 -266Z", "fill": "#DF1767", "clip": [-1924.5699481865286, -900.0, 900.0, 488.5]}, {"d": "M-1922.6 -518.1L-2115.1 -518.1L-2115.1 -204.7L-1922.6 -204.7Z", "fill": "#0D122C", "clip": null}, {"d": "M-2704.6 -518.1L-2704.6 -378.2L-2650.2 -378.2L-2650.2 -139.9L-2730.5 -139.9L-2730.5 0L-2464.5 0L-2464.5 -378.2L-2428.3 -378.2C-2374.7 -378.2 -2355.7 -357.5 -2355.7 -288.4L-2355.7 0L-2163.1 0L-2163.1 -297.9C-2163.1 -456.8 -2222.7 -518.1 -2391.1 -518.1Z", "fill": "#0D122C", "clip": null}], "dot": {"cx": -1572.8082901554403, "cy": 103.0, "rx": 48.0, "ry": 63.36, "fill": "#F36E21"}};
 
 /* הנוסחים מ״טקסטים-לדף-ולמנוע.md״ (הכותבת), מילה במילה. */
 var T = {
@@ -431,6 +435,19 @@ var T = {
   door_found: 'מצאתי אותך 💛\nהליווי שלי פתוח לך עד {date}.\nבכל פעם שקורה משהו, בבית, בזוגיות, בלב, תחזרי לכאן, ונמצא ביחד את הצעד שמחכה לך.',
   door_not_found: 'לא מצאתי את המייל הזה ברשימה של מגנטית.\nיש מצב שהצטרפת עם מייל אחר? אפשר לנסות שוב.\nואם זה לא מסתדר, תכתבי לשושי ל-shoshi@shoshizelikovith.com ונבדוק.\nובינתיים, אפשר להתחיל בטעימה קצרה :)',
   door_not_found_chips: ['לנסות מייל אחר', 'בואי נתחיל בטעימה'],
+  /* זיהוי בקוד במייל. טיוטה, עבר את הכותבת 5.11 (ראו טקסטים-לדף-ולמנוע.md) */
+  code_ask: 'שלחתי קוד בן 6 ספרות אל {email}.\nתכתבי אותו כאן, והוא תקף ל-10 דקות.\nככה אני יודעת שזו את, ושאף אחת אחרת לא תקרא את השיחות שלך.',
+  code_placeholder: 'הקוד מהמייל',
+  code_btn: 'אישור',
+  code_resend: 'לא הגיע לי קוד',
+  code_other: 'מייל אחר',
+  code_sent: 'שלחתי שוב, תציצי גם בתיקיית הספאם :)',
+  code_wrong: 'הקוד לא מתאים. תנסי שוב, או תבקשי קוד חדש.',
+  code_old: 'הקוד כבר לא תקף. תלחצי על ״לא הגיע לי קוד״ ואשלח לך חדש.',
+  code_fail: 'לא הצלחתי לשלוח לך קוד כרגע.\nתכתבי לשושי ל-shoshi@shoshizelikovith.com ונסדר את זה.\nובינתיים, בואי נתחיל בטעימה קצרה :)',
+  code_fail_chips: ['לנסות מייל אחר', 'בואי נתחיל בטעימה'],
+  code_expired: 'עבר קצת זמן מאז שהתחברת, אז אני צריכה לוודא שוב שזו את.\nתכתבי את המייל ואשלח קוד.',
+  welcome_back: 'איזה כיף שחזרת 💛\nהשיחות שלנו שמורות ואני זוכרת את העיקר, אז אפשר להמשיך מאיפה שעצרנו.\nמה קורה אצלך?',
   taste_end: 'זו הייתה הטעימה שלנו 💛\nהצעד הזה, ועוד 20 צעדים קצרים, מחכים לך בתוך מגנטית: סרטונים של כשתי דקות, ומצגת שמסכמת כל צעד בכתב.\nומי שבפנים מקבלת גם אותי, כדי למצוא איתה את הצעד הנכון לכל רגע, ולחזור אחרי הצפייה לחדד אותו.\nרוצה שנחזור אלייך עם כל הפרטים?',
   taste_end_chips: ['כן, אשמח לפרטים', 'כבר רכשתי את מגנטית'],
   step_kicker: 'הצעד שלך עכשיו',
@@ -441,7 +458,7 @@ var T = {
   btn_read: 'קראתי במצגת, חזרתי',
   style_kicker: 'הסגנון שאני מזהה בך',
   style_note: 'זו לא תווית וזה לא אבחון. זה הכיוון שהמאמץ שלך נמשך אליו עכשיו, וממנו בוחרות את הצעד.',
-  sentence_label: 'המשפט שלך לדרך',
+  sentence_label: 'המשפט שלי לדרך',
   sentence_save_btn: 'לשמירה כתמונה',
   sentence_image_title: 'המשפט שלי לדרך',
   offer_kicker: 'אם תרצי להמשיך',
@@ -503,6 +520,10 @@ if (typeof S.priv !== 'boolean') S.priv = DEFAULT_PRIVATE;
 function save(){ S.ts = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
 function savedEmail(){ try { return localStorage.getItem(EMAIL_KEY) || ''; } catch(e){ return ''; } }
 function setSavedEmail(v){ try { if (v) localStorage.setItem(EMAIL_KEY, v); else localStorage.removeItem(EMAIL_KEY); } catch(e){} }
+function getToken(){ try { return localStorage.getItem(TOKEN_KEY) || ''; } catch(e){ return ''; } }
+function setToken(v){ try { if (v) localStorage.setItem(TOKEN_KEY, v); else localStorage.removeItem(TOKEN_KEY); } catch(e){} }
+/* מצב ״רוכשת״ בלי אישור בקוד (נשאר משלב קודם) לא נחשב: המנוע ממילא מתייחס אליו כטעימה */
+if (S.door === 'member' && !getToken()){ S.door = 'taste'; S.member = null; S.email = ''; S.doorShown = false; }
 
 /* ---------- עזרי תצוגה ---------- */
 function el(tag, cls, html){ var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
@@ -566,6 +587,7 @@ function renderBot(m, live){
   if (m.sentence) st.appendChild(sentenceCard(m.sentence, (m.step && m.step.n) || (S.lastStep && S.lastStep.n) || null));
   if (m.offer || m.limit) st.appendChild(offerCard(m));
   if (live && m.emailForm) st.appendChild(emailCard());
+  if (live && m.codeForm) st.appendChild(codeCard(m.codeForm));
   if (live && m.chips && m.chips.length) st.appendChild(chipsEl(m.chips));
   return b.turn;
 }
@@ -635,13 +657,14 @@ function styleCard(style){
 }
 
 function sentenceCard(sentence, stepN){
+  prepareCard().catch(function(){});
   var c = el('div', 'card mark-card'); c.style.filter = 'none';
   c.innerHTML =
     '<p class="label">' + POLES + esc(T.sentence_label) + '</p>' +
     '<div class="bookmark"><div class="in">' + POLES +
       '<q>' + esc(sentence) + '</q>' +
       '<span class="hd" aria-hidden="true"></span>' +
-      '<span class="src">' + (stepN ? 'מתוך צעד ' + stepN + ' · ' : '') + 'מגנטית</span>' +
+      '<span class="src">' + (stepN ? 'בהשראת צעד ' + stepN + ' במגנטית' : 'בהשראת מגנטית') + '</span>' +
     '</div></div>' +
     '<div class="acts">' +
       '<button type="button" class="btn mag save">' + esc(T.sentence_save_btn) + '</button>' +
@@ -725,7 +748,8 @@ function testiCard(t){
   return c;
 }
 
-/* ---------- הדלת של הרוכשות: מייל ---------- */
+/* ---------- הדלת של הרוכשות: מייל ← קוד במייל ← אסימון למכשיר ---------- */
+var VALID_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 function emailCard(){
   var c = el('div', 'card door'); c.setAttribute('role', 'group'); c.setAttribute('aria-label', 'בדיקת מייל');
   var u = rid();
@@ -739,49 +763,177 @@ function emailCard(){
       '<button type="button" class="linkbtn skip">' + esc(T.door_skip) + '</button>' +
     '</form></div>';
   var f = $('form', c), inp = $('input', c), msg = $('.msgline', c);
+  if (savedEmail()) inp.value = savedEmail();
   f.addEventListener('submit', function(e){
     e.preventDefault();
     var v = inp.value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ msg.textContent = 'נראה שחסר משהו בכתובת המייל.'; inp.focus(); return; }
-    checkEmail(v, c);
+    if (!VALID_EMAIL.test(v)){ msg.textContent = 'נראה שחסר משהו בכתובת המייל.'; inp.focus(); return; }
+    startCode(v, c);
   });
   $('.skip', c).addEventListener('click', function(){ c.remove(); send(T.door_skip); });
   return c;
 }
 
-/* בדיקת המייל = השאלה הראשונה שלה, עם profile.email */
-async function checkEmail(email, card){
+/* כרטיס הקוד: ספרות בלבד. ״לא הגיע לי קוד״ שולח שוב, ״מייל אחר״ חוזר לשדה המייל */
+function codeCard(email){
+  var c = el('div', 'card door code'); c.setAttribute('role', 'group'); c.setAttribute('aria-label', 'קוד מהמייל');
+  var u = rid();
+  c.innerHTML = '<div class="in">' +
+    '<div class="kicker">' + POLES + 'כניסה לרוכשות מגנטית</div>' +
+    '<form novalidate>' +
+      '<label for="c' + u + '" class="vh">' + esc(T.code_placeholder) + '</label>' +
+      '<div class="row"><input id="c' + u + '" name="code" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" maxlength="7" dir="ltr" placeholder="' + esc(T.code_placeholder) + '">' +
+      '<button type="submit" class="btn mag">' + esc(T.code_btn) + '</button></div>' +
+      '<div class="msgline" aria-live="polite"></div>' +
+      '<div class="links"><button type="button" class="linkbtn resend">' + esc(T.code_resend) + '</button>' +
+      '<button type="button" class="linkbtn other">' + esc(T.code_other) + '</button></div>' +
+    '</form></div>';
+  var f = $('form', c), inp = $('input', c), msg = $('.msgline', c);
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = inp.value.replace(/\D/g, '');
+    if (v.length !== 6){ msg.textContent = T.code_wrong.split('.')[0] + '.'; inp.focus(); return; }
+    verifyCode(email, v, c);
+  });
+  $('.resend', c).addEventListener('click', function(){ resendCode(email, c); });
+  $('.other', c).addEventListener('click', function(){ c.remove(); askEmail(false); });
+  return c;
+}
+
+function lockInput(on){ busy = on; sendBtn.disabled = on; }
+
+/* מייל לא ברשימה, או שלא הצלחנו לשלוח קוד: ממשיכות בטעימה */
+function noEntry(card, text, chips){
+  if (card) card.remove();
+  setSavedEmail(''); setToken(''); S.email = ''; S.door = 'taste'; S.member = null;
+  var loc = {role: 'local', text: text, chips: chips}; S.msgs.push(loc); save();
+  scrollToEl(renderBot(loc, true));
+}
+
+/* שלב 1: המייל. נמצא ברשימה ← נשלח קוד ומוצג כרטיס הקוד */
+async function startCode(email, card){
   if (busy) return;
-  busy = true; sendBtn.disabled = true;
+  lockInput(true);
   var btn = card && $('button[type=submit]', card), msg = card && $('.msgline', card);
   if (btn){ btn.disabled = true; btn.textContent = 'בודקת...'; }
-  /* השאלה שנשלחת עם המייל: ההודעה האחרונה שלה, חוץ מ״לנסות מייל אחר״ */
+  var r = DEMO ? (await wait(DELAY), {ok: true, member: {found: !/^no/i.test(email)}, sent: true})
+               : await post({event: 'code_send', sid: S.sid, email: email}, 30000, 2);
+  lockInput(false);
+  if (!r || !r.ok){
+    if (btn){ btn.disabled = false; btn.textContent = T.door_email_btn; }
+    if (msg) msg.textContent = T.error_generic;
+    return;
+  }
+  if (!(r.member && r.member.found)){ noEntry(card, T.door_not_found, T.door_not_found_chips); return; }
+  if (!r.sent){ noEntry(card, T.code_fail, T.code_fail_chips); return; }
+  if (card) card.remove();
+  var loc = {role: 'local', text: T.code_ask.replace('{email}', email), codeForm: email};
+  S.msgs.push(loc); save();
+  var t = renderBot(loc, true); scrollToEl(t);
+  var i = $('.card.door input', t); if (i && window.matchMedia('(pointer:fine)').matches) i.focus();
+}
+
+async function resendCode(email, card){
+  if (busy) return;
+  lockInput(true);
+  var msg = $('.msgline', card);
+  var r = DEMO ? (await wait(DELAY), {ok: true, member: {found: true}, sent: true})
+               : await post({event: 'code_send', sid: S.sid, email: email}, 30000, 2);
+  lockInput(false);
+  if (!r || !r.ok){ msg.textContent = T.error_generic; return; }
+  if (!r.sent){ noEntry(card, T.code_fail, T.code_fail_chips); return; }
+  msg.textContent = T.code_sent;
+  var inp = $('input', card); inp.value = ''; inp.focus();
+}
+
+/* שלב 2: הקוד. הצלחה ← אסימון נשמר במכשיר */
+async function verifyCode(email, code, card){
+  if (busy) return;
+  lockInput(true);
+  var btn = $('button[type=submit]', card), msg = $('.msgline', card);
+  btn.disabled = true; btn.textContent = 'בודקת...'; msg.textContent = '';
+  var r = DEMO ? (await wait(DELAY), {ok: true, verified: true, token: 'demo-token', member: {found: true, until: new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10)}, returning: false})
+               : await post({event: 'code_check', email: email, code: code}, 30000, 1);
+  lockInput(false);
+  btn.disabled = false; btn.textContent = T.code_btn;
+  if (!r || !r.ok){ msg.textContent = T.error_generic; return; }
+  if (!r.verified){
+    var inp = $('input', card); inp.value = ''; inp.focus();
+    msg.textContent = r.reason === 'wrong' ? T.code_wrong : T.code_old;
+    return;
+  }
+  setToken(r.token); setSavedEmail(email); S.email = email; S.door = 'member'; S.member = r.member || {found: true};
+  S.msgs.forEach(function(m){ if (m.codeForm) m.codeForm = null; });
+  save(); card.remove();
+  afterVerified(email, r);
+}
+
+/* טקסטים שהם פקדים של הדף ולא שאלה אמיתית שלה */
+function isControlText(t){
+  return [T.btn_in, 'עוד לא, אני רק מציצה', 'לנסות מייל אחר', 'כבר רכשתי את מגנטית', 'בואי נתחיל בטעימה', T.door_skip, 'כן, אשמח לפרטים'].indexOf(t) >= 0;
+}
+function hasRealUserMsg(){
+  return S.msgs.some(function(m){ return m.role === 'user' && !isControlText(m.text); });
+}
+/* שיחה שנטענה מהשרת ← מצב הדף (צעד אחרון, סגנון, צעדים שצפתה בהם) */
+function adoptHistory(list){
+  S.msgs = list.map(function(h){ return {role: h.role, text: h.text || '', step: h.step || null, style: h.style || null}; });
+  S.lastStep = null; S.style = null; S.watched = {};
+  S.msgs.forEach(function(m){
+    if (m.role === 'assistant'){
+      if (m.step && m.step.n) S.lastStep = {n: +m.step.n, title: m.step.title || ''};
+      if (m.style && m.style.key) S.style = m.style;
+    } else {
+      var w = /(?:צפיתי|קראתי)[^0-9\n]{0,25}צעד\s+(\d{1,2})(?!\d)/.exec(m.text);
+      if (w) S.watched[+w[1]] = 1;
+    }
+  });
+}
+
+/* אחרי שהמכשיר מזוהה: יש שיחות קודמות ← מציגות ומברכות. אין ← ממשיכות עם השאלה האחרונה שלה, כמו קודם */
+async function afterVerified(email){
+  var h = null;
+  if (!DEMO && !hasRealUserMsg()){
+    lockInput(true); var th = thinking();
+    h = await fetchHistory();
+    stopThinking(th); lockInput(false);
+  }
+  if (h && h.authFail){   // האישור של המכשיר פג או נמחק: מבקשים לוודא שוב, בלי לבזבז הודעת טעימה
+    S.email = ''; S.door = 'taste'; S.member = null; S.doorShown = false;
+    var loc = {role: 'local', text: T.code_expired, emailForm: true}; S.msgs.push(loc); save();
+    scrollToEl(renderBot(loc, true));
+    return;
+  }
+  if (h && h.history && h.history.length){
+    adoptHistory(h.history);
+    S.doorShown = true;
+    S.msgs.push({role: 'local', text: T.welcome_back}); save();
+    log.innerHTML = ''; restore(true);
+    return;
+  }
+  replayAsk(email);
+}
+
+async function replayAsk(email){
+  if (busy) return;
+  lockInput(true);
   var lastUser = -1;
   S.msgs.forEach(function(m, i){ if (m.role === 'user' && m.text !== 'לנסות מייל אחר') lastUser = i; });
   var q = lastUser >= 0 ? S.msgs[lastUser].text : T.btn_in;
   var hist = history(lastUser >= 0 ? lastUser : S.msgs.length);
   var th = thinking();
   var r = await ask(q, hist, email);
-  stopThinking(th);
-  busy = false; sendBtn.disabled = false;
-  if (!r || !r.ok){
-    if (btn){ btn.disabled = false; btn.textContent = T.door_email_btn; }
-    if (msg) msg.textContent = T.error_generic;
-    return;
-  }
-  if (card) card.remove();
-  var m = toMsg(r);
-  if (r.member && r.member.found){
-    setSavedEmail(email); S.email = email;
-    acceptReply(r, m);
-  } else {
-    /* לא נמצאה: התשובה שכבר חושבה נשמרת לטעימה, כדי לא לשלם עליה פעמיים */
-    setSavedEmail(''); S.email = '';
-    S.door = 'taste'; S.pending = m;
-    var loc = {role: 'local', text: T.door_not_found, chips: T.door_not_found_chips};
-    S.msgs.push(loc); save();
-    scrollToEl(renderBot(loc, true));
-  }
+  stopThinking(th); lockInput(false);
+  if (r && r.ok){ acceptReply(r, toMsg(r)); return; }
+  var e = el('div', 'err'); e.textContent = T.error_generic; e.setAttribute('role', 'alert'); log.appendChild(e); scrollEnd();
+}
+
+/* ״אני כבר במגנטית״: מכשיר שכבר אושר ממשיך בלי קוד. מייל שמור בלי אישור ← קוד. אחרת מבקשים מייל */
+function enterMember(){
+  var em = savedEmail();
+  if (em && getToken()){ S.email = em; save(); afterVerified(em); }
+  else if (em) startCode(em, null);
+  else askEmail(true);
 }
 
 function askEmail(withText){
@@ -798,13 +950,6 @@ function chipAction(x){
     clearChips(); renderUser(x); S.msgs.push({role: 'user', text: x}); save();
     askEmail(x === 'כבר רכשתי את מגנטית'); return;
   }
-  if (x === 'בואי נתחיל בטעימה' && S.pending){
-    clearChips(); renderUser(x); S.msgs.push({role: 'user', text: x});
-    var m = S.pending; S.pending = null; S.msgs.push(m);
-    if (DEMO) S.demo = Math.max(S.demo || 0, 1);
-    save();
-    scrollToEl(renderBot(m, true)); return;
-  }
   if (x === 'כן, אשמח לפרטים'){
     clearChips(); renderUser(x); S.msgs.push({role: 'user', text: x}); save();
     var slots = log.querySelectorAll('.offer .slot'), slot = slots[slots.length - 1];
@@ -815,67 +960,29 @@ function chipAction(x){
 }
 
 /* ---------- שמירת המשפט כתמונה (1080x1920, מתאים לסטטוס) ---------- */
-function wrapLines(ctx, text, maxW){
-  var words = text.split(/\s+/), lines = [], cur = '';
-  words.forEach(function(w){
-    var t = cur ? cur + ' ' + w : w;
-    if (ctx.measureText(t).width > maxW && cur){ lines.push(cur); cur = w; } else cur = t;
-  });
-  if (cur) lines.push(cur);
-  return lines;
+var cardAssets = null;
+function loadImg(src){
+  return new Promise(function(res, rej){ var i = new Image(); i.onload = function(){ res(i); }; i.onerror = rej; i.src = src; });
 }
-function drawLogo(ctx, x, y, w, colorMap){
-  var vb = LOGO.vb, s = w / vb[2];
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.translate(-vb[0], -vb[1]);
-  LOGO.paths.forEach(function(p){
-    ctx.save();
-    if (p.clip){ ctx.beginPath(); ctx.rect(p.clip[0], p.clip[1], p.clip[2], p.clip[3]); ctx.clip(); }
-    ctx.fillStyle = (colorMap && colorMap[p.fill]) || p.fill;
-    ctx.fill(new Path2D(p.d));
-    ctx.restore();
-  });
-  var d = LOGO.dot; ctx.fillStyle = d.fill; ctx.beginPath(); ctx.ellipse(d.cx, d.cy, d.rx, d.ry, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.restore();
+/* טוען מראש לוגו, חתימה וגופן, כדי שבלחיצה הציור יהיה מיידי (בספארי השיתוף חייב לקרות מיד אחרי הלחיצה) */
+function prepareCard(){
+  if (!cardAssets){
+    var fonts = document.fonts ? ['600', '700', '800'].map(function(w){ return document.fonts.load(w + ' 80px Assistant', 'אבג 123'); }) : [];
+    cardAssets = Promise.all([loadImg('img/magnetit-temp.svg'), loadImg('img/sig-im.png'), Promise.all(fonts)]);
+    cardAssets.catch(function(){ cardAssets = null; });   // ניסיון נוסף בלחיצה הבאה
+  }
+  return cardAssets;
 }
-function renderSentence(sentence, stepN){
-  var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
-  var ctx = cv.getContext('2d');
-  ctx.fillStyle = '#F2EEE3'; ctx.fillRect(0, 0, W, H);
-  drawLogo(ctx, (W - 440) / 2, 150, 440);
-  ctx.direction = 'rtl'; ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#0D122C'; ctx.font = '600 40px Assistant';
-  ctx.fillText('צעדים ראשונים לנשיות ללא מאמץ', W / 2, 360);
-  var bx = 110, bw = 860, by = 470, maxW = bw - 150;
-  var size = 100, lines;
-  do { ctx.font = '700 ' + size + 'px Assistant'; lines = wrapLines(ctx, sentence, maxW); size -= 4; } while (lines.length > 6 && size > 48);
-  size += 4; var lh = Math.round(size * 1.38);
-  var bh = 150 + 60 + lines.length * lh + 230;
-  by = Math.max(440, Math.round(440 + (1580 - 440 - bh) / 2));
-  ctx.save();
-  ctx.shadowColor = 'rgba(13,18,44,.28)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 22;
-  ctx.fillStyle = '#0D122C';
-  ctx.beginPath(); ctx.moveTo(bx, by + 18); ctx.lineTo(bx + bw, by); ctx.lineTo(bx + bw, by + bh); ctx.lineTo(bx + bw / 2, by + bh - 90); ctx.lineTo(bx, by + bh); ctx.closePath(); ctx.fill();
-  ctx.restore();
-  ctx.fillStyle = '#DF1767';
-  var px = W / 2, py = by + 70;
-  ctx.beginPath(); ctx.moveTo(px - 34, py + 8); ctx.lineTo(px - 8, py); ctx.lineTo(px - 8, py + 56); ctx.lineTo(px - 34, py + 56); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(px + 8, py); ctx.lineTo(px + 34, py + 8); ctx.lineTo(px + 34, py + 56); ctx.lineTo(px + 8, py + 56); ctx.fill();
-  ctx.fillStyle = '#F2EEE3'; ctx.font = '700 ' + size + 'px Assistant';
-  var ty = py + 56 + 60 + size;
-  lines.forEach(function(l, i){ ctx.fillText(l, W / 2, ty + i * lh); });
-  var hy = ty + (lines.length - 1) * lh + 80;
-  ctx.fillStyle = '#F36E21'; ctx.beginPath(); ctx.ellipse(W / 2, hy, 17, 25, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.fillStyle = '#0D122C'; ctx.font = '700 46px Assistant';
-  ctx.fillText(T.sentence_image_title, W / 2, H - 250);
-  ctx.font = '400 36px Assistant';
-  ctx.fillText((stepN ? 'מתוך צעד ' + stepN + ' · ' : '') + 'שושי זליקוביץ׳', W / 2, H - 190);
+async function renderSentence(sentence, stepN){
+  var a = await prepareCard();
+  var cv = document.createElement('canvas');
+  drawCard_2(cv, {text: sentence, step: stepN, title: T.sentence_image_title, logoImg: a[0], sigImg: a[1]});
   return cv;
 }
 async function savePng(sentence, stepN, btn){
   var lbl = btn.textContent; btn.disabled = true; btn.textContent = 'מכינה...';
   try {
-    if (document.fonts){ await Promise.all([document.fonts.load('700 80px Assistant', 'אבג'), document.fonts.load('400 36px Assistant', 'אבג')]); }
-    var cv = renderSentence(sentence, stepN);
+    var cv = await renderSentence(sentence, stepN);
     var url = cv.toDataURL('image/png');
     var name = 'המשפט-שלי-מגנטית.png';
     var shared = false;
@@ -916,27 +1023,29 @@ async function post(payload, ms, tries){
 async function ask(q, hist, email){
   if (DEMO){ await wait(DELAY); return demoReply(q, email); }
   var profile = {inMagnetit: S.inMagnetit, lastStep: S.lastStep ? S.lastStep.n : null};
-  var em = email || S.email || '';
+  var tok = getToken(), em = S.email || email || '';
   if (em) profile.email = em;
-  return post({event: 'ask', sid: S.sid, rid: rid(), q: q, history: hist, private: !!S.priv, profile: profile}, 55000, 3);
+  var payload = {event: 'ask', sid: S.sid, rid: rid(), q: q, history: hist, private: !!S.priv, profile: profile};
+  if (tok) payload.token = tok;   // בלי אסימון תקף המנוע מתייחס אליה כטעימה
+  return post(payload, 55000, 3);
 }
-/* היסטוריה שמורה מהשרת (רק בשיחה שנשמרת) */
+/* היסטוריה שמורה מהשרת: כל השיחות השמורות של המייל, ממכשירים אחרים. POST עם האסימון (גוגל דוחה פרמטרים בכתובת). null אם אין. */
+async function fetchHistory(){
+  var tok = getToken();
+  if (DEMO || !tok) return null;
+  var r = await postOnce({event: 'hist', token: tok}, 25000);
+  if (!r) return null;
+  if (r.ok === false && r.error === 'auth'){ setToken(''); return {authFail: true}; }
+  return r.ok ? r : null;
+}
+/* בטעינת הדף: אם השרת מכיר יותר מהשיחה שבמכשיר (המשכת ממכשיר אחר), מציגים אותה. שיחה ריקה (אחרי ״שיחה חדשה״) לא נטענת מחדש */
 async function loadServerHistory(){
-  /* כבוי 4.11: גוגל דוחה בשגיאה 400 פרמטר בשם sid בכתובת exec, והשיחה ממילא שמורה בדפדפן לפי אותו מזהה. */
-  return;
-  if (DEMO || S.priv || !S.sid) return;
-  var ctrl = new AbortController(); var t = setTimeout(function(){ ctrl.abort(); }, 20000);
-  try {
-    var url = API + (API.indexOf('?') < 0 ? '?' : '&') + 'hist=1&sid=' + encodeURIComponent(S.sid);
-    var r = await fetch(url, {redirect: 'follow', signal: ctrl.signal}); clearTimeout(t);
-    if (!r.ok) return;
-    var j = JSON.parse(await r.text());
-    if (!j || !j.ok || !j.history || !j.history.length) return;
-    var localCount = S.msgs.filter(function(m){ return m.role === 'user' || m.role === 'assistant'; }).length;
-    if (j.history.length <= localCount || busy) return;
-    S.msgs = j.history.map(function(h){ return {role: h.role, text: h.text || '', step: h.step || null, style: h.style || null}; });
-    save(); log.innerHTML = ''; restore(true);
-  } catch(e){ clearTimeout(t); }
+  if (DEMO || S.priv || !getToken() || !S.msgs.length) return;
+  var h = await fetchHistory();
+  if (!h || !h.history || !h.history.length || busy) return;
+  var localCount = S.msgs.filter(function(m){ return m.role === 'user' || m.role === 'assistant'; }).length;
+  if (h.history.length <= localCount) return;
+  adoptHistory(h.history); save(); log.innerHTML = ''; restore(true);
 }
 
 /* ---------- מצב הדגמה: תשובות מוכנות שמראות את כל הכרטיסים ---------- */
@@ -1016,6 +1125,12 @@ function acceptReply(r, m){
   S.msgs.push(m); save();
   var t = renderBot(m, true);
   scrollToEl(doorTurn || t);
+  /* האישור של המכשיר לא תקף יותר (פג או נמחק): המנוע ענה כטעימה, ומבקשים לוודא שוב בקוד */
+  if (r.auth === 'invalid' && !DEMO){
+    setToken(''); S.email = ''; S.door = 'taste'; S.member = null; S.doorShown = false;
+    var loc2 = {role: 'local', text: T.code_expired, emailForm: true}; S.msgs.push(loc2); save();
+    scrollToEl(renderBot(loc2, true));
+  }
 }
 
 async function send(text){
@@ -1073,8 +1188,7 @@ Array.prototype.forEach.call(document.querySelectorAll('.pick button'), function
     if (!yes){ send(b.textContent); return; }
     /* ״אני כבר במגנטית״: מייל אחד, ואם כבר נשמר - בודקים בלי לבקש שוב */
     startChat(); renderUser(b.textContent); S.msgs.push({role: 'user', text: b.textContent}); save();
-    var em = savedEmail();
-    if (em) checkEmail(em, null); else askEmail(true);
+    enterMember();
   });
 });
 $('#newChat').addEventListener('click', function(){
