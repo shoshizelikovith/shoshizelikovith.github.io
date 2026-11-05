@@ -349,7 +349,7 @@ textarea::placeholder,.door input::placeholder,form.lead input::placeholder{colo
     <p class="ask" id="askLbl">לפני שמתחילות, את כבר במגנטית?</p>
     <div class="pick" role="group" aria-labelledby="askLbl">
       <button type="button" class="yes" data-in="1">אני כבר במגנטית</button>
-      <button type="button" class="no" data-in="0">עוד לא, אני רק מציצה</button>
+      <button type="button" class="no" data-in="0">עוד לא, רק באה לראות</button>
     </div>
   </div>
 </section>
@@ -873,7 +873,7 @@ async function verifyCode(email, code, card){
 
 /* טקסטים שהם פקדים של הדף ולא שאלה אמיתית שלה */
 function isControlText(t){
-  return [T.btn_in, 'עוד לא, אני רק מציצה', 'לנסות מייל אחר', 'כבר רכשתי את מגנטית', 'בואי נתחיל בטעימה', T.door_skip, 'כן, אשמח לפרטים'].indexOf(t) >= 0;
+  return [T.btn_in, 'עוד לא, רק באה לראות', 'לנסות מייל אחר', 'כבר רכשתי את מגנטית', 'בואי נתחיל בטעימה', T.door_skip, 'כן, אשמח לפרטים'].indexOf(t) >= 0;
 }
 function hasRealUserMsg(){
   return S.msgs.some(function(m){ return m.role === 'user' && !isControlText(m.text); });
