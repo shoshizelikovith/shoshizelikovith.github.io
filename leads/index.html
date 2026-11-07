@@ -27,6 +27,18 @@ h2 small{font-weight:400;font-size:15px;color:var(--soft);margin-inline-start:8p
 /* --- הגיבורה --- */
 .hero{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px;margin-top:18px}
 .big{display:flex;flex-direction:column;justify-content:center}
+.sales .top{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:14px}
+.sales .top .card{display:flex;flex-direction:column;justify-content:center}
+.sales .sum{font-size:56px;font-weight:800;line-height:1;color:var(--purple)}
+.sales .mid{font-size:30px;font-weight:800;line-height:1.1;color:var(--navy)}
+.sales .lb{font-size:15px;color:var(--soft);margin-top:6px}
+.stbl{width:100%;border-collapse:collapse;font-size:15px}
+.stbl th{text-align:right;font-weight:700;color:var(--soft);font-size:13px;padding:6px 8px;border-bottom:1px solid var(--line)}
+.stbl td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.stbl td.n{font-weight:800;white-space:nowrap}
+.stbl small{display:block;color:var(--soft);font-size:13px}
+.stbl tfoot td{font-weight:800;border-bottom:0;font-size:17px}
+@media(max-width:760px){.sales .top{grid-template-columns:1fr 1fr}.sales .mid{font-size:23px}.sales .sum{font-size:46px}.sales .top .card:first-child{grid-column:1/-1}.stbl .hm{display:none}}
 .big .n{font-size:64px;font-weight:800;line-height:1;color:var(--purple)}
 .big .n b{color:var(--navy);font-weight:800}
 .big .t{font-size:18px;margin-top:6px}
@@ -174,6 +186,30 @@ function ringSVG(p,color){
 }
 function tag(x){const k=x.kind||'עוד לא נבדק';return `<span class="tag ${k==='בוגרת'?'':k==='מתעניינת חדשה'?'p':'n'}">${esc(k)}</span>`}
 
+/* ---------- מכירות ---------- */
+const nis=n=>Math.round(n).toLocaleString('he-IL')+' ₪';
+function saleKind(x){if(/ליווי/.test(x.product))return 'ליווי אישי';if(/^בוגרת/.test(x.coupon||'')||/בוגרות/.test(x.product))return 'הצעת בוגרות';return 'רכישה רגילה'+(x.coupon?' ('+x.coupon+')':'');}
+function saleShort(p){if(/ליווי/.test(p))return '5 פגישות ליווי אישיות';if(/המסע|יודעת/.test(p))return 'המסע השלם';if(/ממגנטת/.test(p))return 'ממגנטת';return p;}
+function salesBlock(){
+  const S=D.sales||[]; if(!S.length) return '';
+  const who=x=>{const l=L.find(y=>(y.purchase||'').includes('#'+x.id));return l&&l.name?l.name:x.name};
+  const tot=S.reduce((a,x)=>a+x.amount,0), crs=S.filter(x=>!/ליווי/.test(x.product)).reduce((a,x)=>a+x.amount,0);
+  const al=S.filter(x=>saleKind(x)==='הצעת בוגרות'), reg=S.filter(x=>/^רכישה רגילה/.test(saleKind(x)));
+  const pend=S.filter(x=>x.collected!=null).reduce((a,x)=>a+(x.amount-x.collected),0);
+  const first=S[0].date, days=Math.max(1,Math.round((Date.now()-new Date(first.slice(0,10)))/864e5));
+  const rows=S.slice().reverse().map(x=>`<tr><td>${fmtD(x.date)}<small>${x.date.slice(11,16)}</small></td><td>${esc(who(x))}${who(x)!==x.name?`<small>שילם/ה: ${esc(x.name)}</small>`:''}</td><td>${esc(saleShort(x.product))}<small>${esc(saleKind(x))}</small></td><td class="hm">${x.pays>1?x.pays+' תשלומים':'תשלום אחד'}${x.note?`<small>${esc(x.note)}</small>`:''}</td><td class="n">${nis(x.amount)}</td></tr>`).join('');
+  return `<h2>💰 המכירות מאז שנפתחה ההרשמה <small>הרכישה הראשונה: ${fmtD(first)}.${first.slice(0,4)} · ${days} ימים</small></h2>
+  <div class="sales"><div class="top">
+    <div class="card"><div class="sum">${nis(tot)}</div><div class="lb">סך הכל נמכר, ${S.length} עסקאות${pend?`<br>מתוכם ${nis(pend)} עוד ייגבו בהוראת קבע`:''}</div></div>
+    <div class="card"><div class="mid">${nis(crs)}</div><div class="lb">הקורס (ממגנטת והמסע השלם)</div></div>
+    <div class="card"><div class="mid">${nis(tot-crs)}</div><div class="lb">ליווי אישי</div></div>
+    <div class="card"><div class="mid">${al.length} · ${reg.length}</div><div class="lb">בוגרות · רכישות רגילות</div></div>
+  </div>
+  <div class="card" style="margin-top:14px;overflow-x:auto"><table class="stbl"><thead><tr><th>תאריך</th><th>מי</th><th>מה</th><th class="hm">תשלומים</th><th>סכום</th></tr></thead>
+  <tbody>${rows}</tbody><tfoot><tr><td colspan="3">סך הכל</td><td class="hm"></td><td class="n">${nis(tot)}</td></tr></tfoot></table>
+  <p class="lb" style="margin:10px 0 0">נמשך אוטומטית מקארדקום בכל עדכון. עסקה שבוטלה ושולמה מחדש נספרת פעם אחת. הסכום הוא שווי העסקה המלא, גם כשהיא בתשלומים.</p></div></div>`;
+}
+
 /* ---------- הדף ---------- */
 function render(){
   const R=real(), al=R.filter(isAl), nw=R.filter(isNew);
@@ -190,6 +226,8 @@ function render(){
     <div class="card ring">${ringSVG(pct(nw.filter(bought).length,nw.length),'#DF1767')}
       <div class="lbl"><b>מתעניינות ותלמידות</b>${nw.filter(bought).length} רכשו מתוך ${nw.length}<br><i>${nw.filter(x=>x.kind==='עוד לא נבדק').length} עוד לא נבדקו</i></div></div>
   </div>
+
+  ${salesBlock()}
 
   <h2>הדרך מפנייה לרכישה</h2>
   <div class="funnel">${funnel('בוגרות',al,'')}${funnel('מתעניינות חדשות ותלמידות',nw,'p')}</div>
