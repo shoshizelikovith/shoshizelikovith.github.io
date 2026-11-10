@@ -381,7 +381,7 @@ function gateShow(why){
   document.body.classList.remove('authed');
   gate.hidden=false; gMsg.textContent='';
   let returning=false; try{ returning=!!localStorage.getItem('yodaat_mail') && !localStorage.getItem('isha_seen_code'); }catch(e){}
-  if(returning || why==='expired'){
+  if(returning){
     document.getElementById('gTitle').textContent='משהו קטן השתנה פה ♥';
     document.getElementById('gText').textContent='מעכשיו, כשנכנסים ממכשיר חדש, אשלח לך קוד למייל. כל זה בשביל דבר אחד: שאף אחד אחר לא יוכל להיכנס בשמך ולקרוא את מה שכתבת כאן. מה שאת כותבת נשאר בינך לבין שושי, ובשיחה דיסקרטית רק אצלך.';
   }
@@ -476,13 +476,13 @@ function showTag(){
 
 /* השאלה על השלב נשאלת בתוך השיחה, בכפתורים, כדי שהתשובה תגיע לבוטית
    כמו כל הודעה אחרת והיא תדע איפה התלמידה עומדת. */
-function askStage(force){
+function askStage(force, mode){
   if(!force && (doneAll || lessonNow)) return;
   if(chat.querySelector('.stage')) return;
   const weeks = courseLabel==='ממגנטת' ? 4 : 16;
   const box=document.createElement('div'); box.className='stage';
   const p=document.createElement('p');
-  p.textContent='כדי שאדע ללוות אותך מדויק - עד איזה שבוע הגעת בלימוד?';
+  p.textContent = mode==='grad' ? 'עד איזה שבוע הגעת בצפייה החוזרת?' : 'כדי שאדע ללוות אותך מדויק - עד איזה שבוע הגעת בלימוד?';
   box.appendChild(p);
   const chips=document.createElement('div'); chips.className='chips';
   for(let i=1;i<=weeks;i++){
@@ -491,8 +491,10 @@ function askStage(force){
     chips.appendChild(b);
   }
   const done=document.createElement('button');
-  done.type='button'; done.className='wide'; done.textContent='סיימתי ללמוד הכל';
-  done.addEventListener('click',()=>{ box.remove(); sendText('סיימתי ללמוד את הכל'); });
+  done.type='button'; done.className='wide';
+  const doneTxt = mode==='grad' ? 'צפיתי בהכל ואני רוצה רק לתרגל' : 'סיימתי ללמוד הכל';
+  done.textContent=doneTxt;
+  done.addEventListener('click',()=>{ box.remove(); sendText(mode==='grad' ? doneTxt : 'סיימתי ללמוד את הכל'); });
   chips.appendChild(done);
   box.appendChild(chips);
   chat.appendChild(box);
@@ -562,7 +564,8 @@ async function saveInsight(text,btn){
   try{
     const r=await loadDesign();
     const c=document.createElement('canvas');
-    window.drawIshaCard(c,{text:text,logoImg:r[1]});
+    const jr = lessonNow ? 'שבוע '+lessonNow+(courseLabel?' ב'+courseLabel:'') : (doneAll && courseLabel ? 'בוגרת '+courseLabel : (courseLabel||''));
+    window.drawIshaCard(c,{text:text,journey:jr,logoImg:r[1]});
     const blob=await new Promise((ok,no)=>{ try{ c.toBlob(b=>b?ok(b):no(),'image/png'); }catch(e){ no(e); } });
     await shareBlob(blob,'התובנה-שלי.png');
     btn.textContent='נשמר'; setTimeout(()=>{ btn.textContent='שמרי לי את התובנה'; },2500);
@@ -675,7 +678,8 @@ form.addEventListener('submit',async e=>{
     if(doneAll) lessonNow=null;
     showTag();
     save();
-    askStage();
+    if(j.stage){ const old=chat.querySelector('.stage'); if(old) old.remove(); askStage(true, j.stage); }
+    else askStage();
   }else{
     /* נכשל גם אחרי שלושה נסיונות. לא מאבדים את מה שהיא כתבה. */
     history.pop();
