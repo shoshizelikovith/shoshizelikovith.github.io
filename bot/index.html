@@ -565,9 +565,9 @@ async function saveInsight(text,btn){
     const r=await loadDesign();
     const c=document.createElement('canvas');
     const jr = lessonNow ? 'שבוע '+lessonNow+(courseLabel?' ב'+courseLabel:'') : (doneAll && courseLabel ? 'בוגרת '+courseLabel : (courseLabel||''));
-    const mag = courseLabel==='ממגנטת';
+    const bannerFile = courseLabel==='ממגנטת' ? 'course-banner.jpg' : (courseLabel==='יודעת' ? 'course-banner-yodaat.jpg' : '');
     const extra = await Promise.all([window.IshaDesign.loadImg(DESIGN+'img/coach-avatar.jpg').catch(()=>null),
-      mag ? window.IshaDesign.loadImg(DESIGN+'img/course-banner.jpg').catch(()=>null) : Promise.resolve(null)]);
+      bannerFile ? window.IshaDesign.loadImg(DESIGN+'img/'+bannerFile).catch(()=>null) : Promise.resolve(null)]);
     window.drawIshaCard(c,{text:text,journey:jr,logoImg:r[1],avatarImg:extra[0],courseBannerImg:extra[1],variant:'b'});
     const blob=await new Promise((ok,no)=>{ try{ c.toBlob(b=>b?ok(b):no(),'image/png'); }catch(e){ no(e); } });
     await shareBlob(blob,'התובנה-שלי.png');
@@ -761,6 +761,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-132732';</script>
+<script>var BOT_BUILD='BOTCHAN-133616';</script>
 </body>
 </html>
