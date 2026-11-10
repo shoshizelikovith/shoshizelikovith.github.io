@@ -46,7 +46,10 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
   'use strict';
   var D = window.IshaDesign, C = D.C;
   var SAMPLE = {
-    title: 'מתלמידה אלופה שלי, תראו מה היא כתבה למאמנת הדיגיטלית',
+    kicker: 'הודעה מהמאמנת הדיגיטלית',
+    sub: 'תראי מה היא כתבה לי',
+    consent: 'קיבלתי ממנה אישור לשתף אותך',
+    title: 'שושי, דש מתלמידה אלופה שלך!',
     quote: 'היום הבנתי שאני לא צריכה להוכיח לו כלום. פשוט הייתי נוכחת, והוא התקרב לבד',
     botLine: 'איזה רגע. את מרגישה את ההבדל בגוף?',
     footer: 'אשה ללא מאמץ'
@@ -67,7 +70,7 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
   function readData() {
     var d = new URLSearchParams(location.search).get('d');
     if (!d) return SAMPLE;
-    try { var o = decode(d); return { title: o.title || '', quote: o.quote || '', botLine: o.botLine || '', footer: o.footer || SAMPLE.footer }; }
+    try { var o = decode(d); return { kicker: o.kicker || SAMPLE.kicker, title: o.title || SAMPLE.title, sub: o.sub || SAMPLE.sub, consent: o.consent || SAMPLE.consent, quote: o.quote || '', botLine: o.botLine || '', footer: o.footer || SAMPLE.footer }; }
     catch (e) { return SAMPLE; }
   }
 
@@ -116,9 +119,20 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
     var logo = D.placeCenter(ctx, imgs.logo, cx, 96, 270, 190);
     var y = logo.y + (logo.h || 190) + 64;
 
+    // ״הודעה מהמאמנת הדיגיטלית״ - הבוטית שולחת לשושי דש
+    if (data.kicker) {
+      ctx.save(); ctx.font = '700 34px Assistant, sans-serif';
+      var kw = ctx.measureText(data.kicker).width + 64; ctx.restore();
+      D.roundRect(ctx, cx - kw / 2, y - 10, kw, 62, 31); ctx.fillStyle = C.purple; ctx.fill();
+      D.text(ctx, data.kicker, cx, y + 32, 700, 34, C.cream, 'center', 1);
+      y += 92;
+    }
     // כותרת
-    var T = D.fitParas(ctx, D.cleanText(data.title, false), { w: 860, h: 300, weight: 800, max: 76, min: 46, lh: 1.24, paraGap: 0.3 });
-    y = D.drawParas(ctx, T, cx, y, C.ink, 800) + 56;
+    var T = D.fitParas(ctx, D.cleanText(data.title, false), { w: 860, h: 240, weight: 800, max: 76, min: 46, lh: 1.24, paraGap: 0.3 });
+    y = D.drawParas(ctx, T, cx, y, C.ink, 800) + 20;
+    if (data.sub) { var Sb = D.fitParas(ctx, D.cleanText(data.sub, false), { w: 860, h: 120, weight: 600, max: 48, min: 34, lh: 1.25, paraGap: 0.2 });
+      y = D.drawParas(ctx, Sb, cx, y, C.ink, 600); }
+    y += 46;
 
     // מסגרת השיחה
     var FX = 104, FW = W - 2 * FX, HEAD = 150, PAD = 46;
@@ -173,6 +187,9 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
     ctx.restore();
     ctx.restore();
 
+    // אישור השיתוף, כדי שיהיה ברור שהיא הסכימה
+    if (data.consent) D.text(ctx, data.consent, cx, FY + FH + 62, 600, 32, C.purple, 'center', 0.85);
+
     // שורת תחתית על היריעה החלקה
     D.text(ctx, data.footer || 'אשה ללא מאמץ', cx, 1866, 700, 42, C.purple, 'center', 1);
     canvas.__layout = { titleSize: T.size, quoteSize: Q.size, botSize: B ? B.size : 0, frameTop: FY, frameBottom: FY + FH, overflow: HEAD + bodyH > areaBottom - areaTop };
@@ -208,8 +225,8 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
       .then(function (r) { return r.json(); })
       .then(function (o) {
         if (!o || !o.ok) { document.body.insertAdjacentHTML('afterbegin', '<p style="text-align:center;padding:16px">הסטורי הזה לא זמין.</p>'); return null; }
-        return { title: o.name ? o.name + ', תלמידה אלופה שלי, כתבה את זה למאמנת הדיגיטלית' : 'תראו מה תלמידה אלופה שלי כתבה למאמנת הדיגיטלית שלנו',
-                 quote: o.quote, botLine: o.bot || '', footer: SAMPLE.footer };
+        return { kicker: SAMPLE.kicker, title: o.name ? 'שושי, דש מ' + o.name + ', תלמידה אלופה שלך!' : SAMPLE.title,
+                 sub: SAMPLE.sub, consent: SAMPLE.consent, quote: o.quote, botLine: o.bot || '', footer: SAMPLE.footer };
       });
   }
   window.IshaStory.done = Promise.all([D.ready(), D.loadImg('img/logo.png'), D.loadImg('img/coach-avatar.jpg'), loadData()])
