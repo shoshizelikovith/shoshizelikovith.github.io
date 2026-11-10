@@ -79,6 +79,17 @@ header{position:relative; border-bottom:1px solid var(--line)}
   background:var(--purple); color:var(--cream); font-weight:600; display:none;
 }
 #codeNote{font-size:12.5px; opacity:.65; margin:9px 20px 0}
+#gate{margin:10px 20px 0; padding:14px 16px; background:var(--cream-soft); border-radius:14px; line-height:1.55}
+#gate h2{font-size:17px; margin:0 0 6px; color:var(--purple)}
+#gate p{margin:0 0 8px; font-size:14px}
+#gate .gRow{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:6px}
+#gate input{font:inherit; font-size:16px; padding:8px 12px; border:1px solid var(--cream-deep); border-radius:999px; background:#fff; width:150px; direction:ltr; text-align:center; letter-spacing:3px}
+#gate button.gMain{font:inherit; font-size:14.5px; font-weight:600; padding:8px 18px; border:0; border-radius:999px; background:var(--purple); color:#fff; cursor:pointer; width:auto; height:auto}
+#gate button.gLink{font:inherit; font-size:13px; background:none; border:0; color:var(--purple); text-decoration:underline; cursor:pointer; padding:4px 0; width:auto; height:auto}
+#gate .gMsg{font-size:13.5px; color:var(--pink); min-height:1em; margin-top:6px}
+#gate [hidden]{display:none !important}
+body.chatting #gate{display:none}
+body.authed #codeNote{display:none}
 #privRow{
   margin:11px 20px 0; font-size:13px; opacity:.82;
   display:flex; gap:16px; align-items:center; flex-wrap:wrap;
@@ -236,6 +247,18 @@ button.saveIns:hover:not(:disabled){transform:none; background:none}
     <span id="lessonTag"></span>
   </div>
   <p id="codeNote">כתבי את <b>המייל שאיתו נרשמת לקורס</b>, ואני אדע מי את</p>
+  <div id="gate" hidden>
+    <h2 id="gTitle">שאדע שזו באמת את</h2>
+    <p id="gText">כתבי למעלה את המייל שאיתו נרשמת לקורס, ואשלח לך לשם קוד קטן של 6 ספרות. זה קורה פעם אחת בכל מכשיר, ואז חודשיים לא אבקש שוב :)</p>
+    <div class="gRow" id="gSendRow"><button type="button" class="gMain" id="gSend">שלחי לי קוד</button></div>
+    <div id="gCodeBox" hidden>
+      <p id="gSent"></p>
+      <div class="gRow"><input id="gCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000">
+        <button type="button" class="gMain" id="gEnter">כניסה</button></div>
+      <button type="button" class="gLink" id="gResend">לא הגיע? שלחי לי שוב</button>
+    </div>
+    <div class="gMsg" id="gMsg"></div>
+  </div>
   <div id="privRow">
     <label><input type="radio" name="priv" value="0" checked> <b>שיחה שנשמרת</b> (מומלץ)</label>
     <label><input type="radio" name="priv" value="1"> שיחה דיסקרטית</label>
@@ -248,7 +271,8 @@ button.saveIns:hover:not(:disabled){transform:none; background:none}
   <details id="privMore"><summary>מה ההבדל?</summary>
   <p><b>שיחה שנשמרת</b> - אני זוכרת אותך. לא תצטרכי להסביר הכל מחדש בכל פעם,
   ואוכל להמשיך מאיפה שעצרנו ולראות מה כבר ניסית. ככה הליווי מתקדם איתך לאורך הקורס.
-  שושי עשויה לקרוא כדי לשפר את הליווי, והיא מקבלת התראה אם עולה חשד לסכנה.</p>
+  שושי עשויה לקרוא כדי לשפר את הליווי, והיא מקבלת התראה אם עולה חשד לסכנה.
+  הכניסה בקוד שנשלח למייל, כדי שאף אחד אחר לא יוכל להיכנס בשמך ולקרוא את השיחה.</p>
   <p><b>שיחה דיסקרטית</b> - לא נשמר כלום, ובפעם הבאה מתחילים מאפס.</p>
   </details>
 </header>
@@ -270,7 +294,7 @@ button.saveIns:hover:not(:disabled){transform:none; background:none}
     <summary>תנאי שימוש ופרטיות</summary>
     <p><b>״המאמנת האישית״ היא שירות דיגיטלי ואינה אדם.</b> היא עשויה לטעות, ואין בה כדי להחליף
        טיפול, ייעוץ מקצועי, ליווי אנושי או מענה במצבי מצוקה.</p>
-    <p><b>פרטיות.</b> הכניסה בשם ובמייל בלבד, בלי פתיחת חשבון. ב<b>שיחה דיסקרטית</b> התוכן אינו
+    <p><b>פרטיות.</b> הכניסה במייל ובקוד חד-פעמי שנשלח אליו, בלי פתיחת חשבון. ב<b>שיחה דיסקרטית</b> התוכן אינו
        נשמר. ב<b>שיחה שנשמרת</b> התוכן נשמר אצלנו כדי שהמאמנת תמשיך מאיפה שהפסקתן, ואפשר לבקש
        את מחיקתו בכל עת. אם עולה בה חשד לסכנה, שושי מקבלת על כך התראה. לצורך הפקת התשובה תוכן ההודעות נשלח לספק מודל בינה מלאכותית, גם
        בשיחה דיסקרטית.</p>
@@ -339,7 +363,7 @@ function setChatting(on){
     document.getElementById('idWho').textContent = bits.join(' · ');
   }
 }
-document.getElementById('idEdit').addEventListener('click',()=>setChatting(false));
+document.getElementById('idEdit').addEventListener('click',()=>{ setChatting(false); if(!legacy){ setTok(''); gSendRow.hidden=false; gCodeBox.hidden=true; gateShow(); } });
 document.getElementById('idClear').addEventListener('click',()=>{
   try{ localStorage.removeItem(shelf()); }catch(e){}
   location.reload();
@@ -347,19 +371,82 @@ document.getElementById('idClear').addEventListener('click',()=>{
 
 let doneAll=false, lessonNow=null;
 
+/* ---- כניסה בקוד למייל (11.2026). האסימון נשמר במכשיר לחודשיים. ---- */
+let legacy=false;
+function getTok(){ try{ return localStorage.getItem('isha_token')||''; }catch(e){ return ''; } }
+function setTok(t){ try{ if(t) localStorage.setItem('isha_token',t); else localStorage.removeItem('isha_token'); }catch(e){} }
+const gate=document.getElementById('gate'), gMsg=document.getElementById('gMsg'),
+      gCodeBox=document.getElementById('gCodeBox'), gSendRow=document.getElementById('gSendRow');
+function gateShow(why){
+  document.body.classList.remove('authed');
+  gate.hidden=false; gMsg.textContent='';
+  let returning=false; try{ returning=!!localStorage.getItem('yodaat_mail') && !localStorage.getItem('isha_seen_code'); }catch(e){}
+  if(returning){
+    document.getElementById('gTitle').textContent='משהו קטן השתנה פה ♥';
+    document.getElementById('gText').innerHTML='מעכשיו, בכל מכשיר חדש אשלח לך קוד קטן למייל.<br>ככה אף אחד אחר לא ייכנס בטעות עם המייל שלך, ממכשיר אחר, ויראה את השיחות שלך.<br><br><b>בשיחה שנשמרת</b>, שושי יכולה לעקוב ולראות איך את מתקדמת, כדי ללוות אותך טוב יותר.<br><b>בשיחה דיסקרטית</b>, מה שאת כותבת לא נשמר בכלל, ולא מגיע אפילו לשושי.';
+  }
+}
+function gateHide(){ gate.hidden=true; document.body.classList.add('authed'); }
+const G_ERR={
+  wrong:n=> n>1 ? 'הקוד לא מתאים. נשארו לך עוד '+n+' ניסיונות.' : 'הקוד לא מתאים. נשאר לך עוד ניסיון אחד.',
+  expired:()=> 'הקוד הזה כבר לא בתוקף. אפשר לבקש קוד חדש.',
+  locked:()=> 'היו כמה טעויות ברצף, אז עצרתי רגע כדי לשמור עלייך. אפשר לבקש קוד חדש.',
+  rate:()=> 'כבר שלחתי לך כמה קודים בשעה האחרונה. אפשר לבקש שוב בעוד שעה, ובינתיים שווה לבדוק אם הקוד האחרון מחכה לך במייל.',
+  notfound:()=> 'המייל הזה לא מופיע אצלי ברשימת התלמידות. אולי נרשמת עם מייל אחר? ואם את בטוחה שזה המייל, כתבי לשושי והיא תסדר את זה :)',
+  busy:()=> 'לא הצלחתי לשלוח מייל כרגע. נסי שוב בעוד כמה דקות.'
+};
+async function sendCode(){
+  const mail=mailEl.value.trim().toLowerCase();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){ mailEl.focus(); mailEl.style.outline='2px solid var(--pink)'; setTimeout(()=>mailEl.style.outline='',1600); return; }
+  keepId(); gMsg.textContent='שולחת...';
+  const j=await post({event:'code_send', mail, who:whoEl.value.trim()}, 30000);
+  if(!j){ gMsg.textContent=G_ERR.busy(); return; }
+  if(typeof j.found==='undefined'){ legacy=true; gateHide(); gMsg.textContent=''; loadHistory(); return; }  /* מנוע ישן: כניסה במייל כמו קודם */
+  if(!j.found){ gMsg.textContent=G_ERR.notfound(); return; }
+  if(!j.sent){ gMsg.textContent=(G_ERR[j.reason]||G_ERR.busy)(); return; }
+  gMsg.textContent='';
+  gSendRow.hidden=true; gCodeBox.hidden=false;
+  document.getElementById('gSent').textContent='שלחתי קוד ל-'+mail+'. כתבי אותו כאן (ואם לא הגיע, שווה להציץ גם בספאם או בקידומי מכירות).';
+  document.getElementById('gCode').focus();
+}
+async function checkCode(){
+  const mail=mailEl.value.trim().toLowerCase(), code=document.getElementById('gCode').value.replace(/\D/g,'');
+  if(code.length!==6){ gMsg.textContent='הקוד הוא 6 ספרות.'; return; }
+  gMsg.textContent='בודקת...';
+  const j=await post({event:'code_check', mail, code}, 30000);
+  if(!j){ gMsg.textContent=G_ERR.busy(); return; }
+  if(!j.verified){ gMsg.textContent=(G_ERR[j.reason]||G_ERR.busy)(j.left); if(j.reason!=='wrong'){ gSendRow.hidden=false; gCodeBox.hidden=true; } return; }
+  setTok(j.token); try{ localStorage.setItem('isha_seen_code','1'); }catch(e){}
+  if(j.name && !whoEl.value.trim()){ whoEl.value=j.name; keepId(); }
+  gMsg.textContent=''; gateHide();
+  loadHistory();
+}
+document.getElementById('gSend').addEventListener('click',sendCode);
+document.getElementById('gResend').addEventListener('click',()=>{ gSendRow.hidden=false; gCodeBox.hidden=true; sendCode(); });
+document.getElementById('gEnter').addEventListener('click',checkCode);
+document.getElementById('gCode').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); checkCode(); } });
+document.getElementById('gCode').addEventListener('input',e=>{ if(e.target.value.replace(/\D/g,'').length===6) checkCode(); });
+
 /* הארכיון מגיע מהשרת, ולכן הוא זהה בטלפון ובמחשב.
    אם השרת לא נענה, נופלים למה ששמור על המכשיר. */
 async function loadHistory(){
   const mail=(mailEl.value||'').trim().toLowerCase();
   if(!mail) return;
   let d=null;
-  try{
-    const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),25000);
-    const r=await fetch(EXEC+'?hist=1&n=40&mail='+encodeURIComponent(mail),
-                        {redirect:'follow', signal:ctrl.signal});
-    clearTimeout(t);
-    if(r.ok) d=JSON.parse(await r.text());
-  }catch(e){}
+  if(legacy){
+    try{
+      const ctrl=new AbortController(); const t=setTimeout(()=>ctrl.abort(),25000);
+      const r=await fetch(EXEC+'?hist=1&n=40&mail='+encodeURIComponent(mail),
+                          {redirect:'follow', signal:ctrl.signal});
+      clearTimeout(t);
+      if(r.ok) d=JSON.parse(await r.text());
+    }catch(e){}
+  }else{
+    if(!getTok()){ gateShow(); return; }
+    d=await post({event:'hist', token:getTok(), n:40}, 25000);
+    if(d && d.auth==='need'){ setTok(''); gateShow('expired'); return; }
+    gateHide();
+  }
   if(!d || !d.items || !d.items.length){ restore(); return; }
 
   history=d.items.slice();
@@ -389,13 +476,13 @@ function showTag(){
 
 /* השאלה על השלב נשאלת בתוך השיחה, בכפתורים, כדי שהתשובה תגיע לבוטית
    כמו כל הודעה אחרת והיא תדע איפה התלמידה עומדת. */
-function askStage(force){
+function askStage(force, mode){
   if(!force && (doneAll || lessonNow)) return;
   if(chat.querySelector('.stage')) return;
   const weeks = courseLabel==='ממגנטת' ? 4 : 16;
   const box=document.createElement('div'); box.className='stage';
   const p=document.createElement('p');
-  p.textContent='כדי שאדע ללוות אותך מדויק - עד איזה שבוע הגעת בלימוד?';
+  p.textContent = mode==='grad' ? 'עד איזה שבוע הגעת בצפייה החוזרת?' : 'כדי שאדע ללוות אותך מדויק - עד איזה שבוע הגעת בלימוד?';
   box.appendChild(p);
   const chips=document.createElement('div'); chips.className='chips';
   for(let i=1;i<=weeks;i++){
@@ -404,8 +491,10 @@ function askStage(force){
     chips.appendChild(b);
   }
   const done=document.createElement('button');
-  done.type='button'; done.className='wide'; done.textContent='סיימתי ללמוד הכל';
-  done.addEventListener('click',()=>{ box.remove(); sendText('סיימתי ללמוד את הכל'); });
+  done.type='button'; done.className='wide';
+  const doneTxt = mode==='grad' ? 'צפיתי בהכל ואני רוצה רק לתרגל' : 'סיימתי ללמוד הכל';
+  done.textContent=doneTxt;
+  done.addEventListener('click',()=>{ box.remove(); sendText(mode==='grad' ? doneTxt : 'סיימתי ללמוד את הכל'); });
   chips.appendChild(done);
   box.appendChild(chips);
   chat.appendChild(box);
@@ -419,7 +508,7 @@ tag.addEventListener('click',()=>{
   askStage(true);
 });
 
-if(mailEl.value.trim()) loadHistory();
+if(getTok()) loadHistory(); else gateShow();
 
 qEl.addEventListener('input',()=>{ qEl.style.height='auto'; qEl.style.height=Math.min(qEl.scrollHeight,140)+'px'; });
 /* בטלפון Enter יורד שורה, ושולחים בכפתור. אחרת הודעה נחתכת לשתיים באמצע משפט. */
@@ -450,7 +539,44 @@ function insightLines(ctx,text,maxW){
   });
   return out;
 }
+/* הכרטיס המעוצב של אשה ללא מאמץ (11.2026). אם משהו לא נטען - הכרטיס הפשוט שלמטה. */
+const DESIGN='https://shoshizelikovith.com/bot/design/';
+let designP=null;
+function loadDesign(){
+  if(designP) return designP;
+  designP=new Promise((res,rej)=>{ const sc=document.createElement('script'); sc.src=DESIGN+'isha-card.js';
+    sc.onload=res; sc.onerror=rej; document.head.appendChild(sc); })
+    .then(()=>Promise.all([window.IshaDesign.ready(), window.IshaDesign.loadImg(DESIGN+'img/logo.png')]));
+  return designP;
+}
+async function shareBlob(blob,name){
+  const file=new File([blob],name,{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){
+    try{ await navigator.share({files:[file]}); }catch(e){}
+  }else{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  }
+}
 async function saveInsight(text,btn){
+  try{
+    const r=await loadDesign();
+    const c=document.createElement('canvas');
+    const jr = lessonNow ? 'שבוע '+lessonNow+(courseLabel?' ב'+courseLabel:'') : (doneAll && courseLabel ? 'בוגרת '+courseLabel : (courseLabel||''));
+    const mag = courseLabel==='ממגנטת';
+    const extra = await Promise.all([window.IshaDesign.loadImg(DESIGN+'img/coach-avatar.jpg').catch(()=>null),
+      mag ? window.IshaDesign.loadImg(DESIGN+'img/course-banner.jpg').catch(()=>null) : Promise.resolve(null)]);
+    window.drawIshaCard(c,{text:text,journey:jr,logoImg:r[1],avatarImg:extra[0],courseBannerImg:extra[1],variant:'b'});
+    const blob=await new Promise((ok,no)=>{ try{ c.toBlob(b=>b?ok(b):no(),'image/png'); }catch(e){ no(e); } });
+    await shareBlob(blob,'התובנה-שלי.png');
+    btn.textContent='נשמר'; setTimeout(()=>{ btn.textContent='שמרי לי את התובנה'; },2500);
+    return;
+  }catch(e){ /* נופלים לכרטיס הפשוט */ }
+  return saveInsightPlain(text,btn);
+}
+async function saveInsightPlain(text,btn){
   const paras=text.trim().split(/\n\s*\n/);
   if(paras.length>1&&/\?\s*$/.test(paras[paras.length-1])) paras.pop();
   const body=paras.join('\n\n');
@@ -519,6 +645,7 @@ form.addEventListener('submit',async e=>{
   const who=whoEl.value.trim();
   const mail=mailEl.value.trim().toLowerCase();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){ mailEl.focus(); mailEl.style.outline='2px solid var(--pink)'; setTimeout(()=>mailEl.style.outline='',1600); return; }
+  if(!legacy && !getTok()){ gateShow(); gMsg.textContent='רגע לפני ששולחות, צריך קוד כניסה מהמייל.'; return; }
 
   add(q,'me');
   history.push({role:'user',content:q});
@@ -534,12 +661,17 @@ form.addEventListener('submit',async e=>{
   row.appendChild(img); row.appendChild(dots);
   chat.appendChild(row); chat.scrollTop=chat.scrollHeight;
 
-  const payload={who,mail,q,history:history.slice(0,-1),
+  const payload={who,mail,token:getTok(),q,history:history.slice(0,-1),
       private:document.querySelector('input[name=priv]:checked').value==='1'};
 
   const j=await callAsk(payload);
 
   row.remove();
+  if(j&&j.auth==='need'){
+    history.pop(); const d0=document.querySelector('.msg.me:last-of-type'); if(d0) d0.remove();
+    qEl.value=q; setTok(''); setChatting(false); gSendRow.hidden=false; gCodeBox.hidden=true; gateShow('expired');
+    sendBtn.disabled=false; return;
+  }
   if(j&&j.a){
     add(j.a,'bot');
     history.push({role:'assistant',content:j.a});
@@ -549,7 +681,8 @@ form.addEventListener('submit',async e=>{
     if(doneAll) lessonNow=null;
     showTag();
     save();
-    askStage();
+    if(j.stage){ const old=chat.querySelector('.stage'); if(old) old.remove(); askStage(true, j.stage); }
+    else askStage();
   }else{
     /* נכשל גם אחרי שלושה נסיונות. לא מאבדים את מה שהיא כתבה. */
     history.pop();
@@ -596,6 +729,25 @@ async function askOnce(payload, ms){
   } catch (e) { clearTimeout(t); return null; }
 }
 
+/* בקשה כללית למנוע (קוד, היסטוריה). בתוך Apps Script דרך api(). */
+async function post(payload, ms){
+  if (window.google && google.script && google.script.run) {
+    return new Promise(function(res){
+      var done=false, t=setTimeout(function(){ if(!done){done=true; res(null);} }, ms);
+      google.script.run.withSuccessHandler(function(v){ if(!done){done=true; clearTimeout(t); res(v);} })
+        .withFailureHandler(function(){ if(!done){done=true; clearTimeout(t); res(null);} }).api(payload);
+    });
+  }
+  var ctrl = new AbortController(), t = setTimeout(function(){ ctrl.abort(); }, ms);
+  try {
+    var r = await fetch(EXEC, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+                              body: JSON.stringify(payload), redirect:'follow', signal: ctrl.signal});
+    clearTimeout(t);
+    if (!r.ok) return null;
+    try { return JSON.parse(await r.text()); } catch(e){ return null; }
+  } catch (e) { clearTimeout(t); return null; }
+}
+
 /* שלושה נסיונות. לכל הודעה מזהה קבוע, ולכן נסיון חוזר מחזיר את התשובה
    שכבר חושבה בשרת במקום לחשב ולשלם עליה שוב. */
 async function callAsk(payload){
@@ -604,11 +756,11 @@ async function callAsk(payload){
   for (var i = 0; i < waits.length; i++) {
     if (waits[i]) await new Promise(function(r){ setTimeout(r, waits[i]); });
     var j = await askOnce(payload, i === 0 ? 55000 : 40000);
-    if (j && j.a) return j;
+    if (j && (j.a || j.auth)) return j;
   }
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-173100';</script>
+<script>var BOT_BUILD='BOTCHAN-132732';</script>
 </body>
 </html>
