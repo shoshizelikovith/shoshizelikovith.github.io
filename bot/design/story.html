@@ -10,7 +10,10 @@
     title   - הכותרת העליונה
     quote   - מה שהתלמידה כתבה (בועה סגולה, מימין). בלי שם ובלי תמונה שלה.
     botLine - לא חובה. תשובה קצרה של הבוטית (בועת קרם, משמאל).
-    footer  - לא חובה. ברירת מחדל ״אשה ללא מאמץ״.
+    footer  - לא חובה. ברירת מחדל: אין. הלוגו למעלה כבר אומר ״אשה ללא מאמץ״, אז התחתית נשארת אוויר.
+    course  - לא חובה. 'magnetit' = הבאנר של ממגנטת (img/course-banner.jpg) כגלויה מונחת באלכסון
+              משמאל למעלה, והלוגו הראשי מימין - באותה שפה של כרטיס ב. בלי course - כמו קודם.
+              אפשר גם ?course=magnetit בכתובת (גובר על מה שבנתונים), גם במסלול ?id=&s=.
   בלי פרמטר - נתוני דוגמה.
   יצירת קישור:  'story.html?d=' + IshaStory.encode({title:'...', quote:'...'})
   צריך לצידו: isha-card.js, fonts/, img/logo.png, img/coach-avatar.jpg
@@ -52,7 +55,8 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
     title: 'שושי, דש מתלמידה אלופה שלך!',
     quote: 'היום הבנתי שאני לא צריכה להוכיח לו כלום. פשוט הייתי נוכחת, והוא התקרב לבד',
     botLine: 'איזה רגע. את מרגישה את ההבדל בגוף?',
-    footer: 'אשה ללא מאמץ'
+    footer: '',
+    course: ''
   };
 
   function encode(obj) {
@@ -69,8 +73,9 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
   }
   function readData() {
     var d = new URLSearchParams(location.search).get('d');
-    if (!d) return SAMPLE;
-    try { var o = decode(d); return { kicker: o.kicker || SAMPLE.kicker, title: o.title || SAMPLE.title, sub: o.sub || SAMPLE.sub, consent: o.consent || SAMPLE.consent, quote: o.quote || '', botLine: o.botLine || '', footer: o.footer || SAMPLE.footer }; }
+    var qc = new URLSearchParams(location.search).get('course') || '';
+    if (!d) { var s0 = {}; for (var k in SAMPLE) s0[k] = SAMPLE[k]; if (qc) s0.course = qc; return s0; }
+    try { var o = decode(d); return { kicker: o.kicker || SAMPLE.kicker, title: o.title || SAMPLE.title, sub: o.sub || SAMPLE.sub, consent: o.consent || SAMPLE.consent, quote: o.quote || '', botLine: o.botLine || '', footer: o.footer || SAMPLE.footer, course: qc || o.course || '' }; }
     catch (e) { return SAMPLE; }
   }
 
@@ -112,12 +117,28 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
     var W = 1080, H = 1920, cx = W / 2;
     var ctx = D.prepare(canvas, W, H);
     ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
-    D.cornerRibbon(ctx, W, 1);
-    D.bottomBands(ctx, W, H, 1770);
-
-    // לוגו למעלה, קטן ועדין
-    var logo = D.placeCenter(ctx, imgs.logo, cx, 96, 270, 190);
-    var y = logo.y + (logo.h || 190) + 64;
+    var banner = data.course === 'magnetit' ? imgs.banner : null, y;
+    if (banner) {
+      // כמו כרטיס ב: יריעת נייר עליונה, הלוגו הראשי מימין, ובאנר ממגנטת כגלויה מונחת באלכסון משמאל
+      D.bottomBands(ctx, W, H, data.footer ? 1850 : 1915);
+      var topEdge = function (x) { return 440 + Math.sin(x / W * Math.PI * 1.1 + 2.4) * 26 - 34 * (x / W); };
+      D.sheet(ctx, D.wave(-40, W + 40, function (x) { return topEdge(x) + 14; }, 24), [[W + 40, -40], [-40, -40]], C.deep, 0.0);
+      ctx.save();
+      ctx.beginPath(); D.smoothPath(ctx, D.wave(-40, W + 40, topEdge, 24), true);
+      ctx.lineTo(W + 40, -40); ctx.lineTo(-40, -40); ctx.closePath();
+      ctx.shadowColor = 'rgba(13,18,44,.14)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 8;
+      ctx.fillStyle = C.soft; ctx.fill();
+      ctx.restore();
+      D.placeCenter(ctx, imgs.logo, 830, 84, 250, 175);
+      D.bannerCard(ctx, banner, 330, 222, 490, -0.05);
+      y = 506;
+    } else {
+      D.cornerRibbon(ctx, W, 1);
+      D.bottomBands(ctx, W, H, data.footer ? 1770 : 1820);
+      // לוגו למעלה, קטן ועדין
+      var logo = D.placeCenter(ctx, imgs.logo, cx, 96, 270, 190);
+      y = logo.y + (logo.h || 190) + 64;
+    }
 
     // ״הודעה מהמאמנת הדיגיטלית״ - הבוטית שולחת לשושי דש
     if (data.kicker) {
@@ -136,7 +157,7 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
 
     // מסגרת השיחה
     var FX = 104, FW = W - 2 * FX, HEAD = 150, PAD = 46;
-    var areaTop = y, areaBottom = 1540;
+    var areaTop = y, areaBottom = banner ? 1680 : 1540;
     var innerW = FW - 2 * PAD;
 
     var B = data.botLine ? measureBubble(ctx, data.botLine, innerW * 0.68 - 2 * 36, 240, 42, 30, 600) : null;
@@ -190,8 +211,8 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
     // אישור השיתוף, כדי שיהיה ברור שהיא הסכימה
     if (data.consent) D.text(ctx, data.consent, cx, FY + FH + 62, 600, 32, C.purple, 'center', 0.85);
 
-    // שורת תחתית על היריעה החלקה
-    D.text(ctx, data.footer || 'אשה ללא מאמץ', cx, 1866, 700, 42, C.purple, 'center', 1);
+    // התחתית נשארת אוויר: הלוגו למעלה כבר אומר ״אשה ללא מאמץ״. שורה מופיעה רק אם נשלחה במפורש.
+    if (data.footer) D.text(ctx, data.footer, cx, 1866, 600, 34, C.purple, 'center', 0.6);
     canvas.__layout = { titleSize: T.size, quoteSize: Q.size, botSize: B ? B.size : 0, frameTop: FY, frameBottom: FY + FH, overflow: HEAD + bodyH > areaBottom - areaTop };
     return canvas;
   }
@@ -226,13 +247,19 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
       .then(function (o) {
         if (!o || !o.ok) { document.body.insertAdjacentHTML('afterbegin', '<p style="text-align:center;padding:16px">הסטורי הזה לא זמין.</p>'); return null; }
         return { kicker: SAMPLE.kicker, title: o.name ? 'שושי, דש מ' + o.name + ', תלמידה אלופה שלך!' : SAMPLE.title,
-                 sub: SAMPLE.sub, consent: SAMPLE.consent, quote: o.quote, botLine: o.bot || '', footer: SAMPLE.footer };
+                 sub: SAMPLE.sub, consent: SAMPLE.consent, quote: o.quote, botLine: o.bot || '', footer: SAMPLE.footer, course: q.get('course') || o.course || '' };
       });
   }
   window.IshaStory.done = Promise.all([D.ready(), D.loadImg('img/logo.png'), D.loadImg('img/coach-avatar.jpg'), loadData()])
     .then(function (r) {
       if (!r[3]) return;
-      drawIshaStory(canvas, r[3], { logo: r[1], avatar: r[2] });
+      // הבאנר נטען רק כשצריך אותו
+      return (r[3].course === 'magnetit' ? D.loadImg('img/course-banner.jpg') : Promise.resolve(null))
+        .then(function (banner) { r.push(banner); return r; });
+    })
+    .then(function (r) {
+      if (!r || !r[3]) return;
+      drawIshaStory(canvas, r[3], { logo: r[1], avatar: r[2], banner: r[4] });
       btn.disabled = false;
       btn.addEventListener('click', function () { save(canvas, btn); });
     });
