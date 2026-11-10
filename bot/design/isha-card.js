@@ -314,12 +314,15 @@
     var y = logo.y + (logo.h || 160) + 70;
 
     // כותרת קטנה, ונקודה כתומה אחת כמו הנקודה של ה-שׁ
-    var title = o.title || 'התובנה שלי';
+    var title = o.title || 'תובנה מהמסע שלי';
     text(ctx, title, cx, y, 700, 44, C.purple, 'center', 1);
     ctx.save(); ctx.font = font(700, 44);
     var tw = ctx.measureText(title).width; ctx.restore();
     ctx.fillStyle = C.orange;
     ctx.beginPath(); ctx.arc(cx + tw / 2 + 24, y - 15, 8, 0, Math.PI * 2); ctx.fill();
+
+    // איפה היא בדרך: ״שבוע 2 בממגנטת״ - כדי שיהיה ברור שזו תובנה מתוך מסע
+    if (o.journey) { text(ctx, o.journey, cx, y + 56, 600, 32, C.ink, 'center', 0.62); y += 40; }
 
     // הטקסט
     var top = y + 64, bottom = 990;
@@ -339,7 +342,7 @@
     }
 
     // שורת תחתית, על המשטח החלק של היריעה העליונה
-    text(ctx, o.footer || 'המאמנת הדיגיטלית · אשה ללא מאמץ', cx, 1290, 600, 32, C.purple, 'center', 0.5);
+    text(ctx, o.footer || 'מתוך ההתכתבות שלי עם המאמנת הדיגיטלית · אשה ללא מאמץ', cx, 1290, 600, 32, C.purple, 'center', 0.5);
     canvas.__layout = { size: L.size, lines: L.paras.reduce(function (n, p) { return n + p.length; }, 0), truncated: !!L.truncated, textTop: ty, textBottom: ty + L.height };
     return canvas;
   }
