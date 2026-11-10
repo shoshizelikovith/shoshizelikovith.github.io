@@ -477,6 +477,18 @@ function showTag(){
 /* השאלה על השלב נשאלת בתוך השיחה, בכפתורים, כדי שהתשובה תגיע לבוטית
    כמו כל הודעה אחרת והיא תדע איפה התלמידה עומדת. */
 function askStage(force, mode){
+  if(mode==='pkg'){
+    if(chat.querySelector('.stage')) return;
+    const box=document.createElement('div'); box.className='stage';
+    const chips=document.createElement('div'); chips.className='chips';
+    ['הצטרפתי לתהליך המלא','רק לממגנטת','לא בטוחה'].forEach(t=>{
+      const b=document.createElement('button'); b.type='button'; b.className='wide'; b.textContent=t;
+      b.addEventListener('click',()=>{ box.remove(); sendText(t); });
+      chips.appendChild(b);
+    });
+    box.appendChild(chips); chat.appendChild(box); chat.scrollTop=chat.scrollHeight;
+    return;
+  }
   if(!force && (doneAll || lessonNow)) return;
   if(chat.querySelector('.stage')) return;
   const weeks = courseLabel==='ממגנטת' ? 4 : 16;
@@ -761,6 +773,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-133616';</script>
+<script>var BOT_BUILD='BOTCHAN-135150';</script>
 </body>
 </html>
