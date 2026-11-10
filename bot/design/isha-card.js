@@ -1,13 +1,23 @@
 /* כרטיס ״התובנה שלי״ של הבוטית - אשה ללא מאמץ. 1080x1350 (מתאים גם לסטטוס).
  * נבנה 10.11.2026 כתחליף לכרטיס הפשוט ב-saveInsight של בוט-ענן/index.html.
  *
- * drawIshaCard(canvas, {text, title, logoImg, footer, decoImg})
+ * drawIshaCard(canvas, {text, title, journey, logoImg, courseLogoImg, avatarImg, decoImg, variant, footer})
  *   text    - התובנה. כל אורך. פסקאות מופרדות בשורה ריקה. ** של הדגשה מוסרים.
  *             פסקה אחרונה שהיא שאלה (נגמרת ב-?) יורדת, כמו ב-saveInsight הישן.
  *             טקסט ארוך מוקטן עד 34px, ומעבר לזה נחתך בסוף משפט ומקבל ״...״.
  *   title   - הכותרת הקטנה. ברירת מחדל ״התובנה שלי״.
  *   logoImg - Image טעון של img/logo.png (הלוגו הראשי, כחול לילה על שקוף).
- *   footer  - שורת התחתית. ברירת מחדל ״המאמנת הדיגיטלית · אשה ללא מאמץ״.
+ *   journey - לא חובה. איפה היא בדרך, למשל ״שבוע 2 בממגנטת״.
+ *   courseLogoImg - לא חובה. Image טעון של img/course-logo.png (הכיתוב ממגנטת, מג׳נטה על שקוף).
+ *   courseBannerImg - לא חובה. Image טעון של img/course-banner.jpg (הבאנר של ממגנטת עם האיור, 1920x1080).
+ *             כשהוא קיים הוא מחליף את הכיתוב ממגנטת: בגרסה א הוא ראש הכרטיס ברוחב מלא והכרטיס ״נחתך״ ממנו
+ *             באלכסון (הלוגו הראשי כבר בתוך הבאנר, לכן לא מצויר שוב); בגרסה ב הוא גלויה מונחת בזווית
+ *             משמאל לצד הלוגו הראשי. היחס נשמר תמיד, בלי מתיחה. בלעדיו - הכרטיס כמו קודם.
+ *   avatarImg - לא חובה. Image טעון של img/coach-avatar.jpg (המאמנת הדיגיטלית).
+ *   variant - 'a' (ברירת מחדל): התובנה בבועת נייר, המאמנת ״מקלידה״ לידה, ממגנטת כחותם בתחתית.
+ *             'b': חותם משותף למעלה, והתובנה בתוך מסך שיחה עם המאמנת, כמו בבוטית.
+ *   footer  - לא חובה. שורת טקסט בתחתית - רק אם נשלחה (בגרסה א רק כשאין courseLogoImg).
+ *   בלי courseLogoImg/avatarImg הכרטיס עדיין מצויר, פשוט בלי החלקים האלה.
  *   decoImg - לא חובה. Image טעון של אלמנט מהמאגר (למשל img/heart-layers.png),
  *             נכנס קטן בפינה השמאלית התחתונה, על רצועות הנייר.
  * מחזיר את ה-canvas.
@@ -139,6 +149,7 @@
     s = s.replace(/\s+\S*$/, '');
     var m = s.match(/^([\s\S]*[.!?])\s[^.!?]*$/);
     var base = (m && m[1].length > s.length * 0.6) ? m[1] : s;
+    if (base !== s && /[?!]$/.test(base)) return base; // נגמר בשאלה או קריאה - בלי ״...״ אחריהן
     return base.replace(/[\s,;:.]+$/, '') + '...';
   }
 
@@ -290,6 +301,48 @@
     ctx.closePath();
   }
 
+  /* ---------- באנר הקורס ---------- */
+
+  /* באנר הקורס כראש הכרטיס: ברוחב מלא, ביחס המקורי (רק חיתוך שורות מלמעלה ומלמטה, בלי מתיחה),
+   * ויריעת נייר קרם עולה עליו בקצה אלכסוני-גלי - כאילו הכרטיס נחתך מתוך הבאנר.
+   * srcTop/srcBot - איזה חלק מגובה הבאנר נכנס (0-1). yL/yR - גובה הקצה בשמאל ובימין.
+   * מחזיר את גובה הקצה הנמוך ביותר. */
+  function bannerHeader(ctx, img, W, H, srcTop, srcBot, yL, yR) {
+    var nw = img.naturalWidth || img.width, nh = img.naturalHeight || img.height;
+    var sy = nh * srcTop, sh = nh * (srcBot - srcTop), s = W / nw;
+    ctx.drawImage(img, 0, sy, nw, sh, 0, 0, W, sh * s);
+    // האלכסון עולה בצד שמאל (על האיור), ומתיישר בימין כדי לא לחתוך את שורות הכיתוב של הבאנר
+    var edge = wave(-40, W + 40, function (x) {
+      var t = Math.max(0, Math.min(1, x / (W * 0.55))), ss = t * t * (3 - 2 * t);
+      return yL + (yR - yL) * ss + Math.sin(x / W * Math.PI * 1.6 + 0.4) * 9 * (1 - ss * 0.8);
+    }, 24);
+    var close = [[W + 40, H + 40], [-40, H + 40]];
+    // שכבת עומק דקה מתחת ליריעה, ואז היריעה עצמה
+    sheet(ctx, edge.map(function (p) { return [p[0], p[1] - 12]; }), close, C.deep, 0.6);
+    sheet(ctx, edge, close, C.cream, 1);
+    return Math.max(yL, yR) + 10;
+  }
+
+  /* באנר הקורס כגלויה מונחת בזווית: מסגרת נייר לבנה דקה, צל רך, יחס מקורי.
+   * cx/cy - מרכז, w - רוחב הגלויה. */
+  function bannerCard(ctx, img, cx, cy, w, rot) {
+    var nw = img.naturalWidth || img.width, nh = img.naturalHeight || img.height;
+    var h = w * nh / nw, f = Math.round(w * 0.022);
+    ctx.save();
+    ctx.translate(cx, cy); ctx.rotate(rot || 0);
+    roundRect(ctx, -w / 2 - f, -h / 2 - f, w + 2 * f, h + 2 * f, 14);
+    ctx.save();
+    ctx.shadowColor = 'rgba(13,18,44,.22)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 12;
+    ctx.fillStyle = C.soft; ctx.fill();
+    ctx.restore();
+    roundRect(ctx, -w / 2, -h / 2, w, h, 8);
+    ctx.save(); ctx.clip();
+    ctx.drawImage(img, -w / 2, -h / 2, w, h);
+    ctx.restore();
+    ctx.restore();
+    return { w: w + 2 * f, h: h + 2 * f };
+  }
+
   function prepare(canvas, W, H) {
     canvas.width = W; canvas.height = H;
     if (canvas.setAttribute) canvas.setAttribute('dir', 'rtl');
@@ -300,50 +353,217 @@
 
   /* ---------- הכרטיס ---------- */
 
-  function drawIshaCard(canvas, o) {
-    o = o || {};
-    var W = 1080, H = 1350, cx = W / 2;
-    var ctx = prepare(canvas, W, H);
-    ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
+  // אווטאר עגול עם טבעת קרם. בלי תמונה - עיגול קרם ריק.
+  function circleImg(ctx, img, cx, cy, r, ring) {
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.closePath();
+    ctx.shadowColor = 'rgba(13,18,44,.18)'; ctx.shadowBlur = 16; ctx.shadowOffsetY = 5;
+    ctx.fillStyle = C.soft; ctx.fill();
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.closePath(); ctx.clip();
+    if (img) {
+      var iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+      var s = Math.max(2 * r / iw, 2 * r / ih);
+      ctx.drawImage(img, cx - iw * s / 2, cy - ih * s / 2, iw * s, ih * s);
+    }
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = ring || 'rgba(248,245,238,.95)'; ctx.lineWidth = Math.max(3, r * 0.09); ctx.stroke();
+  }
 
-    cornerRibbon(ctx, W, 0.8);
-    bottomBands(ctx, W, H, 1214);
+  // שלוש נקודות ״מקלידה...״ בסגול, דועכות
+  function typingDots(ctx, cx, cy, r, gap, color) {
+    [1, 0.62, 0.32].forEach(function (a, i) {
+      ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = color || C.purple;
+      ctx.beginPath(); ctx.arc(cx + (i - 1) * gap, cy, r, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    });
+  }
 
-    // לוגו
-    var logo = placeCenter(ctx, o.logoImg, cx, 78, 300, 200);
-    var y = logo.y + (logo.h || 160) + 70;
+  // בועה: מלבן מעוגל, הפינה התחתונה בצד הדוברת חדה יותר
+  function bubbleShape(ctx, x, y, w, h, side, r, fill, shadow, border) {
+    var k = Math.round(r * 0.28);
+    roundRect(ctx, x, y, w, h, side === 'right' ? [r, r, k, r] : [r, r, r, k]);
+    ctx.save();
+    if (shadow) { ctx.shadowColor = 'rgba(13,18,44,' + shadow + ')'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 14; }
+    ctx.fillStyle = fill; ctx.fill();
+    ctx.restore();
+    if (border) { ctx.strokeStyle = border; ctx.lineWidth = 2; ctx.stroke(); }
+  }
 
-    // כותרת קטנה, ונקודה כתומה אחת כמו הנקודה של ה-שׁ
+  // כותרת קטנה עם נקודה כתומה (כמו הנקודה של ה-שׁ), ומתחתיה שורת המסע. מחזיר את התחתית.
+  function titleBlock(ctx, o, cx, y) {
     var title = o.title || 'תובנה מהמסע שלי';
     text(ctx, title, cx, y, 700, 44, C.purple, 'center', 1);
     ctx.save(); ctx.font = font(700, 44);
     var tw = ctx.measureText(title).width; ctx.restore();
     ctx.fillStyle = C.orange;
     ctx.beginPath(); ctx.arc(cx + tw / 2 + 24, y - 15, 8, 0, Math.PI * 2); ctx.fill();
+    if (o.journey) { text(ctx, o.journey, cx, y + 54, 600, 32, C.ink, 'center', 0.62); return y + 64; }
+    return y + 12;
+  }
 
-    // איפה היא בדרך: ״שבוע 2 בממגנטת״ - כדי שיהיה ברור שזו תובנה מתוך מסע
-    if (o.journey) { text(ctx, o.journey, cx, y + 56, 600, 32, C.ink, 'center', 0.62); y += 40; }
+  function textWidth(ctx, L, weight) {
+    ctx.save(); ctx.font = font(weight, L.size);
+    var w = 0;
+    L.paras.forEach(function (ls) { ls.forEach(function (l) { w = Math.max(w, ctx.measureText(l).width); }); });
+    ctx.restore();
+    return w;
+  }
 
-    // הטקסט
-    var top = y + 64, bottom = 990;
+  function drawDeco(ctx, img, x, y, rot, mw, mh) {
+    if (!img) return;
+    ctx.save();
+    ctx.translate(x, y); ctx.rotate(rot);
+    ctx.shadowColor = 'rgba(13,18,44,.18)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 8;
+    placeCenter(ctx, img, 0, -mh / 2, mw, mh);
+    ctx.restore();
+  }
+
+  /* גרסה א - ״בועת השיחה״: התובנה יושבת בבועת נייר גדולה (שלה, מימין),
+   * ולידה מציצה המאמנת הדיגיטלית - אווטאר ובועה קטנה ״מקלידה...״. ממגנטת כחותם בתחתית. */
+  function cardA(ctx, o, W, H, cx) {
+    var banner = o.courseBannerImg, y;
+    if (banner) {
+      // באנר ממגנטת בראש הכרטיס (הלוגו כבר בתוכו), והכרטיס ״נחתך״ ממנו באלכסון
+      var hb = bannerHeader(ctx, banner, W, H, 0.035, 0.70, 300, 382);
+      bottomBands(ctx, W, H, 1300);
+      y = titleBlock(ctx, o, cx, hb + 64);
+    } else {
+      cornerRibbon(ctx, W, 0.8);
+      bottomBands(ctx, W, H, 1220);
+      var logo = placeCenter(ctx, o.logoImg, cx, 70, 260, 170);
+      y = titleBlock(ctx, o, cx, logo.y + (logo.h || 150) + 62);
+    }
+
     var paras = cleanText(o.text, o.dropQuestion);
     if (!paras.length) paras = [' '];
-    var L = fitParas(ctx, paras, { w: 830, h: bottom - top, weight: 700, max: 84, min: 34, lh: 1.36, paraGap: 0.5 });
-    var ty = top + Math.max(0, (bottom - top - L.height) / 2) * 0.85;
-    drawParas(ctx, L, cx, ty, C.ink, 700);
+    var hasCoach = !!o.avatarImg;
+    var BX = 96, BWmax = W - 2 * BX, PX = 58, PY = 50;
+    var coachH = hasCoach ? 128 : 0;
+    var areaTop = y + (banner ? 36 : 44), areaBottom = banner ? 1150 : 1060;
+    var L = fitParas(ctx, paras, { w: BWmax - 2 * PX, h: areaBottom - areaTop - coachH - 2 * PY, weight: 700, max: 78, min: 32, lh: 1.34, paraGap: 0.5 });
+    var tW = textWidth(ctx, L, 700);
+    var bw = Math.min(BWmax, Math.max(tW + 2 * PX, 560)), bh = L.height + 2 * PY;
+    var groupH = bh + coachH;
+    var by = areaTop + Math.max(0, (areaBottom - areaTop - groupH) / 2) * 0.8;
+    var bx = cx - bw / 2;
+    bubbleShape(ctx, bx, by, bw, bh, 'right', 54, C.soft, 0.16, 'rgba(13,18,44,.05)');
+    drawParas(ctx, L, cx, by + PY, C.ink, 700);
 
-    // אלמנט מהמאגר, אם נשלח
-    if (o.decoImg) {
-      ctx.save();
-      ctx.translate(150, 1150); ctx.rotate(-0.12);
-      ctx.shadowColor = 'rgba(13,18,44,.18)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 8;
-      placeCenter(ctx, o.decoImg, 0, -80, 190, 160);
+    if (hasCoach) {
+      // המאמנת: אווטאר משמאל, מתחת לבועה, ובועה קטנה ״מקלידה...״
+      var ar = 50, ax = bx + ar + 6, ay = by + bh + 26 + ar;
+      circleImg(ctx, o.avatarImg, ax, ay, ar);
+      ctx.fillStyle = C.orange; ctx.beginPath(); ctx.arc(ax + ar * 0.72, ay + ar * 0.72, 9, 0, Math.PI * 2); ctx.fill();
+      var tx = ax + ar + 20, tw2 = 112, th = 62, ty2 = ay - ar + 2;
+      bubbleShape(ctx, tx, ty2, tw2, th, 'left', 30, C.soft, 0.10, 'rgba(13,18,44,.07)');
+      typingDots(ctx, tx + tw2 / 2, ty2 + th / 2, 7.5, 24);
+      ctx.save(); ctx.direction = 'rtl'; ctx.textAlign = 'left'; ctx.font = font(700, 30); ctx.fillStyle = C.purple;
+      ctx.fillText('המאמנת הדיגיטלית', tx + 4, ay + ar - 6);
       ctx.restore();
     }
 
-    // שורת תחתית, על המשטח החלק של היריעה העליונה
-    text(ctx, o.footer || 'מתוך ההתכתבות שלי עם המאמנת הדיגיטלית · אשה ללא מאמץ', cx, 1290, 600, 32, C.purple, 'center', 0.5);
-    canvas.__layout = { size: L.size, lines: L.paras.reduce(function (n, p) { return n + p.length; }, 0), truncated: !!L.truncated, textTop: ty, textBottom: ty + L.height };
+    // אלמנט מהמאגר - בצד ימין למטה, כדי לא להתנגש במאמנת
+    drawDeco(ctx, o.decoImg, W - 150, banner ? 1200 : 1130, 0.12, 170, 145);
+
+    // ממגנטת - חותם על המשטח החלק של היריעה העליונה (רק כשאין באנר: הבאנר כבר אומר ממגנטת)
+    if (banner) { if (o.footer) text(ctx, o.footer, cx, 1310, 600, 32, C.purple, 'center', 0.5); }
+    else if (o.courseLogoImg) placeCenter(ctx, o.courseLogoImg, cx, 1258, 250, 54);
+    else if (o.footer) text(ctx, o.footer, cx, 1290, 600, 32, C.purple, 'center', 0.5);
+    return { L: L, top: by + PY, bottom: by + PY + L.height, bubble: [bx, by, bw, bh] };
+  }
+
+  /* גרסה ב - ״מסך השיחה״: חותם משותף למעלה (אשה ללא מאמץ + ממגנטת), ומתחת מסך שיחה
+   * עם המאמנת הדיגיטלית - כותרת כחול לילה עם האווטאר, והתובנה בבועה הסגולה שלה, כמו בבוטית. */
+  function cardB(ctx, o, W, H, cx) {
+    bottomBands(ctx, W, H, 1236);
+    // יריעת נייר עליונה רחבה במקום רצועת הפינה, כדי שיהיה מקום לשני הלוגואים
+    sheet(ctx, wave(-40, W + 40, function (x) { return 300 + Math.sin(x / W * Math.PI * 1.1 + 2.4) * 26 - 30 * (x / W); }, 24), [[W + 40, -40], [-40, -40]], C.deep, 0.0);
+    ctx.save();
+    ctx.beginPath(); smoothPath(ctx, wave(-40, W + 40, function (x) { return 286 + Math.sin(x / W * Math.PI * 1.1 + 2.4) * 26 - 30 * (x / W); }, 24), true);
+    ctx.lineTo(W + 40, -40); ctx.lineTo(-40, -40); ctx.closePath();
+    ctx.shadowColor = 'rgba(13,18,44,.14)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 8;
+    ctx.fillStyle = C.soft; ctx.fill();
+    ctx.restore();
+
+    // חותם משותף: הלוגו הראשי מימין, ממגנטת משמאל, ונקודה כתומה ביניהם
+    var hasCourse = !!o.courseLogoImg;
+    var lr = { x: 0, y: 0, w: 0, h: 0 };
+    if (o.courseBannerImg) {
+      // באנר ממגנטת כגלויה מונחת באלכסון משמאל, והלוגו הראשי מימין
+      lr = placeCenter(ctx, o.logoImg, 830, 62, 220, 150);
+      bannerCard(ctx, o.courseBannerImg, 320, 160, 420, -0.05);
+    } else if (hasCourse) {
+      lr = placeCenter(ctx, o.logoImg, 712, 58, 230, 160);
+      var midY = lr.y + (lr.h || 150) * 0.56;
+      ctx.fillStyle = C.orange; ctx.beginPath(); ctx.arc(lr.x - 46, midY, 8, 0, Math.PI * 2); ctx.fill();
+      var cb = inkBox(o.courseLogoImg), cs = Math.min(290 / cb.w, 60 / cb.h);
+      placeCenter(ctx, o.courseLogoImg, lr.x - 92 - cb.w * cs / 2, midY - cb.h * cs / 2, 290, 60);
+    } else {
+      lr = placeCenter(ctx, o.logoImg, cx, 58, 250, 165);
+    }
+
+    var y = titleBlock(ctx, o, cx, 362);
+
+    // מסך השיחה
+    var FX = 92, FW = W - 2 * FX, HEAD = 124, PAD = 36;
+    var areaTop = y + 34, areaBottom = 1190;
+    var paras = cleanText(o.text, o.dropQuestion);
+    if (!paras.length) paras = [' '];
+    var hasCoach = !!o.avatarImg;
+    var replyH = 66, QPX = 42, QPY = 34;
+    var qMaxH = areaBottom - areaTop - HEAD - 2 * PAD - replyH - 30 - 2 * QPY;
+    var L = fitParas(ctx, paras, { w: FW - 2 * PAD - 2 * QPX - 10, h: qMaxH, weight: 700, max: 66, min: 28, lh: 1.36, paraGap: 0.5 });
+    var tW = textWidth(ctx, L, 700);
+    var qw = tW + 2 * QPX, qh = L.height + 2 * QPY;
+    var FH = HEAD + PAD + qh + 26 + replyH + PAD;
+    var FY = areaTop + Math.max(0, (areaBottom - areaTop - FH) / 2) * 0.7;
+
+    ctx.save();
+    ctx.translate(cx, FY + FH / 2); ctx.rotate(-0.012); ctx.translate(-cx, -(FY + FH / 2));
+    roundRect(ctx, FX, FY, FW, FH, 50);
+    ctx.save();
+    ctx.shadowColor = 'rgba(13,18,44,.20)'; ctx.shadowBlur = 50; ctx.shadowOffsetY = 18;
+    ctx.fillStyle = C.soft; ctx.fill();
+    ctx.restore();
+    ctx.save(); ctx.clip();
+    ctx.fillStyle = C.ink; ctx.fillRect(FX, FY, FW, HEAD);
+    var avR = 40, avX = FX + FW - PAD - avR, avY = FY + HEAD / 2;
+    var nameX = hasCoach ? avX - avR - 22 : FX + FW - PAD;
+    if (hasCoach) {
+      circleImg(ctx, o.avatarImg, avX, avY, avR);
+      ctx.fillStyle = C.orange; ctx.beginPath(); ctx.arc(avX - avR * 0.72, avY + avR * 0.72, 9, 0, Math.PI * 2); ctx.fill();
+    }
+    text(ctx, 'המאמנת הדיגיטלית', nameX, avY + 13, 700, 38, C.cream, 'right');
+
+    // התובנה: הבועה שלה, מימין, סגול
+    var qy = FY + HEAD + PAD, qx = FX + FW - PAD - qw;
+    bubbleShape(ctx, qx, qy, qw, qh, 'right', 40, C.purple, 0.12);
+    drawParas(ctx, L, qx + qw - QPX, qy + QPY, C.cream, 700, 'right');
+
+    // המאמנת ״מקלידה...״ - משמאל
+    var ry = qy + qh + 26, rr = 26, rx = FX + PAD;
+    if (hasCoach) { circleImg(ctx, o.avatarImg, rx + rr, ry + replyH - rr, rr); rx += 2 * rr + 14; }
+    bubbleShape(ctx, rx, ry, 124, replyH, 'left', 32, C.cream, 0, 'rgba(13,18,44,.09)');
+    typingDots(ctx, rx + 62, ry + replyH / 2, 8, 26);
+    ctx.restore();
+    ctx.restore();
+
+    drawDeco(ctx, o.decoImg, 150, 1180, -0.12, 180, 150);
+    if (o.footer) text(ctx, o.footer, cx, 1300, 600, 32, C.purple, 'center', 0.5);
+    return { L: L, top: qy + QPY, bottom: qy + QPY + L.height, frame: [FX, FY, FW, FH] };
+  }
+
+  function drawIshaCard(canvas, o) {
+    o = o || {};
+    var W = 1080, H = 1350, cx = W / 2;
+    var ctx = prepare(canvas, W, H);
+    ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
+    var R = (o.variant === 'b' ? cardB : cardA)(ctx, o, W, H, cx);
+    var L = R.L;
+    canvas.__layout = { variant: o.variant === 'b' ? 'b' : 'a', size: L.size, lines: L.paras.reduce(function (n, p) { return n + p.length; }, 0), truncated: !!L.truncated, textTop: R.top, textBottom: R.bottom, bubble: R.bubble, frame: R.frame };
     return canvas;
   }
 
@@ -351,7 +571,9 @@
   global.IshaDesign = {
     C: C, font: font, ready: ready, loadImg: loadImg, cleanText: cleanText,
     wrapBalanced: wrapBalanced, fitParas: fitParas, drawParas: drawParas, text: text,
-    sheet: sheet, wave: wave, bottomBands: bottomBands, cornerRibbon: cornerRibbon,
-    inkBox: inkBox, placeCenter: placeCenter, roundRect: roundRect, prepare: prepare
+    sheet: sheet, wave: wave, smoothPath: smoothPath, bottomBands: bottomBands, cornerRibbon: cornerRibbon,
+    inkBox: inkBox, placeCenter: placeCenter, roundRect: roundRect, prepare: prepare,
+    circleImg: circleImg, typingDots: typingDots, bubbleShape: bubbleShape,
+    bannerHeader: bannerHeader, bannerCard: bannerCard
   };
 })(window);
