@@ -11,9 +11,10 @@
     quote   - מה שהתלמידה כתבה (בועה סגולה, מימין). בלי שם ובלי תמונה שלה.
     botLine - לא חובה. תשובה קצרה של הבוטית (בועת קרם, משמאל).
     footer  - לא חובה. ברירת מחדל: אין. הלוגו למעלה כבר אומר ״אשה ללא מאמץ״, אז התחתית נשארת אוויר.
-    course  - לא חובה. 'magnetit' = הבאנר של ממגנטת (img/course-banner.jpg) כגלויה מונחת באלכסון
-              משמאל למעלה, והלוגו הראשי מימין - באותה שפה של כרטיס ב. בלי course - כמו קודם.
-              אפשר גם ?course=magnetit בכתובת (גובר על מה שבנתונים), גם במסלול ?id=&s=.
+    course  - לא חובה. 'magnetit' = הבאנר של ממגנטת (img/course-banner.jpg), 'yodaat' = הבאנר של יודעת
+              (img/course-banner-yodaat.jpg), כגלויה מונחת באלכסון משמאל למעלה, והלוגו הראשי מימין -
+              באותה שפה של כרטיס ב. בלי course - כמו קודם.
+              אפשר גם ?course=magnetit או ?course=yodaat בכתובת (גובר על מה שבנתונים), גם במסלול ?id=&s=.
   בלי פרמטר - נתוני דוגמה.
   יצירת קישור:  'story.html?d=' + IshaStory.encode({title:'...', quote:'...'})
   צריך לצידו: isha-card.js, fonts/, img/logo.png, img/coach-avatar.jpg
@@ -113,13 +114,16 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
     return L;
   }
 
+  // באנר הקורס לפי course
+  var BANNERS = { magnetit: 'img/course-banner.jpg', yodaat: 'img/course-banner-yodaat.jpg' };
+
   function drawIshaStory(canvas, data, imgs) {
     var W = 1080, H = 1920, cx = W / 2;
     var ctx = D.prepare(canvas, W, H);
     ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
-    var banner = data.course === 'magnetit' ? imgs.banner : null, y;
+    var banner = BANNERS[data.course] ? imgs.banner : null, y;
     if (banner) {
-      // כמו כרטיס ב: יריעת נייר עליונה, הלוגו הראשי מימין, ובאנר ממגנטת כגלויה מונחת באלכסון משמאל
+      // כמו כרטיס ב: יריעת נייר עליונה, הלוגו הראשי מימין, ובאנר הקורס (ממגנטת או יודעת) כגלויה מונחת באלכסון משמאל
       D.bottomBands(ctx, W, H, data.footer ? 1850 : 1915);
       var topEdge = function (x) { return 440 + Math.sin(x / W * Math.PI * 1.1 + 2.4) * 26 - 34 * (x / W); };
       D.sheet(ctx, D.wave(-40, W + 40, function (x) { return topEdge(x) + 14; }, 24), [[W + 40, -40], [-40, -40]], C.deep, 0.0);
@@ -254,7 +258,7 @@ body{min-height:100dvh;display:flex;flex-direction:column;align-items:center;gap
     .then(function (r) {
       if (!r[3]) return;
       // הבאנר נטען רק כשצריך אותו
-      return (r[3].course === 'magnetit' ? D.loadImg('img/course-banner.jpg') : Promise.resolve(null))
+      return (BANNERS[r[3].course] ? D.loadImg(BANNERS[r[3].course]) : Promise.resolve(null))
         .then(function (banner) { r.push(banner); return r; });
     })
     .then(function (r) {
