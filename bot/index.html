@@ -79,6 +79,16 @@ header{position:relative; border-bottom:1px solid var(--line)}
   background:var(--purple); color:var(--cream); font-weight:600; display:none;
 }
 #codeNote{font-size:12.5px; opacity:.65; margin:9px 20px 0}
+.listen{--p:0%; position:relative; z-index:2; display:inline-flex; align-items:center; gap:9px; min-height:44px; margin:12px 0 0; padding:8px 16px; width:auto; height:auto;
+  background:linear-gradient(to left, rgba(166,47,125,.18) var(--p), #fff var(--p)); color:var(--purple);
+  border:1.5px solid var(--purple); border-radius:999px; font:inherit; font-size:15px; font-weight:600; line-height:1.2; cursor:pointer}
+.listen:hover{background:linear-gradient(to left, rgba(166,47,125,.18) var(--p), #fff var(--p)); color:var(--purple)}
+.listen .ic{fill:var(--orange); flex-shrink:0}
+.listen .pa{display:none}
+.listen[aria-pressed="true"] .pl{display:none}
+.listen[aria-pressed="true"] .pa{display:inline}
+.listen .len{font-weight:400; font-size:13.5px; opacity:.72}
+body.chatting .listen{display:none}
 #gate{margin:10px 20px 0; padding:14px 16px; background:var(--cream-soft); border-radius:14px; line-height:1.55}
 #gate h2{font-size:17px; margin:0 0 6px; color:var(--purple)}
 #gate p{margin:0 0 8px; font-size:14px}
@@ -240,6 +250,11 @@ button.saveIns:hover:not(:disabled){transform:none; background:none}
   <div class="hero">
     <h1>המאמנת האישית שלך</h1>
     <p>אשה ללא מאמץ · ממגנטת ויודעת</p>
+    <button type="button" class="listen" id="listen" aria-pressed="false">
+      <svg class="ic" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path class="pl" d="M4 2l11 7-11 7z"/><path class="pa" d="M4 2h3.6v14H4zM10.4 2H14v14h-3.6z"/></svg>
+      <span class="lbl">הקשיבי לשושי</span><span class="len" id="listenLen">40 שניות</span>
+    </button>
+    <audio id="greet" src="https://shoshizelikovith.com/bot/design/audio/shoshi-open.mp3" preload="none"></audio>
   </div>
   <div id="whoBar">
     <input id="who" type="hidden">
@@ -370,6 +385,18 @@ document.getElementById('idClear').addEventListener('click',()=>{
 });
 
 let doneAll=false, lessonNow=null;
+
+/* הקלטת הפתיחה בקול של שושי: רק בלחיצה, ונעצרת כשהשיחה מתחילה */
+function stopGreet(){ const a=document.getElementById('greet'); if(a && !a.paused) a.pause(); }
+(function(){
+  const a=document.getElementById('greet'), l=document.getElementById('listen');
+  if(!a||!l) return;
+  l.addEventListener('click',()=>{ if(a.paused) a.play(); else a.pause(); });
+  a.addEventListener('play',()=>l.setAttribute('aria-pressed','true'));
+  a.addEventListener('pause',()=>l.setAttribute('aria-pressed','false'));
+  a.addEventListener('timeupdate',()=>{ if(a.duration) l.style.setProperty('--p',(a.currentTime/a.duration*100)+'%'); });
+  a.addEventListener('ended',()=>{ a.currentTime=0; l.style.setProperty('--p','0%'); });
+})();
 
 /* ---- כניסה בקוד למייל (11.2026). האסימון נשמר במכשיר לחודשיים. ---- */
 let legacy=false;
@@ -657,6 +684,7 @@ form.addEventListener('submit',async e=>{
   const who=whoEl.value.trim();
   const mail=mailEl.value.trim().toLowerCase();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){ mailEl.focus(); mailEl.style.outline='2px solid var(--pink)'; setTimeout(()=>mailEl.style.outline='',1600); return; }
+  stopGreet();
   if(!legacy && !getTok()){ gateShow(); gMsg.textContent='רגע לפני ששולחות, צריך קוד כניסה מהמייל.'; return; }
 
   add(q,'me');
@@ -773,6 +801,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-135150';</script>
+<script>var BOT_BUILD='BOTCHAN-140644';</script>
 </body>
 </html>
