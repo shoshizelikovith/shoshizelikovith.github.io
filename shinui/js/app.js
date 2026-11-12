@@ -293,12 +293,6 @@ function renderOpen(day, isToday = false) {
   const draw = () => {
     const ach = hasAchievement() ? card(`<div class="ct">${T.achievementTop} ${helpBtn('achievement')}</div><p class="ach">${esc(F().achievement)}</p>${F().achievement_date ? `<p class="hint">${esc(T.achievementDate)}: ${esc(shortDate(F().achievement_date))}</p>` : ''}`, 'flat') : '';
     shell(`${isToday ? banners() : ''}${hd(dayLabel(day), isToday ? T.goodMorning(firstName()) : T.openDayTitle)}
-    ${ach}
-    ${base ? card(`<div class="ct">${T.keyActionToday} ${tag(1)} ${helpBtn('key_action')}</div><p class="hint">${T.keyActionHint}</p>
-      ${ta('key_action', m.key_action, T.keyActionPh, 2)}
-      <div class="row2" style="margin-top:8px">${inp('key_amount', m.key_amount, T.keyAmount)}${inp('key_when', m.key_when, T.keyWhen)}</div>`, '', 'key') : ''}
-    ${base ? card(`<div class="ct">${T.stepsTitle} ${tag(0)} ${helpBtn('steps')}</div><p class="hint">${T.stepsHint}</p>
-      <div class="steps">${[0, 1, 2].map((i) => `<div class="stp"><b aria-hidden="true">${i + 1}</b>${inp(`steps.${i}.text`, m.steps[i].text, T.stepPh(i + 1))}</div>`).join('')}</div>`) : ''}
     ${card(`<small class="over">${T.beingSub}</small><div class="ct">${T.beingTitle} ${tag(1)} ${helpBtn('being')}</div>
       ${openMain ? `<p class="hint">${T.beingsPickHint}</p>${beingChips('bmain', (b) => b === m.being)}${inp('being', m.being, T.beingPlaceholder)}`
         : `<div class="chips"><button type="button" class="on" disabled>${esc(m.being)}</button><button type="button" class="more" id="chg">${T.beingsChange}</button></div>`}`, '', 'being')}
@@ -310,6 +304,12 @@ function renderOpen(day, isToday = false) {
     ${card(`<div class="ct">${T.beingSign} ${tag(0)} ${helpBtn('being_sign')}</div><p class="hint">${T.beingSignHint}</p>
       ${ta('being_sign', m.being_sign, T.writeHere, 2)}
       <details class="qs"><summary>${T.beingSignExamplesTitle}</summary><ul>${T.beingSignExamples.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>`)}
+    ${base ? ach : ''}
+    ${base ? card(`<div class="ct">${T.keyActionToday} ${tag(1)} ${helpBtn('key_action')}</div><p class="hint">${T.keyActionHint}</p>
+      ${ta('key_action', m.key_action, T.keyActionPh, 2)}
+      <div class="row2" style="margin-top:8px">${inp('key_amount', m.key_amount, T.keyAmount)}${inp('key_when', m.key_when, T.keyWhen)}</div>`, '', 'key') : ''}
+    ${base ? card(`<div class="ct">${T.stepsTitle} ${tag(0)} ${helpBtn('steps')}</div><p class="hint">${T.stepsHint}</p>
+      <div class="steps">${[0, 1, 2].map((i) => `<div class="stp"><b aria-hidden="true">${i + 1}</b>${inp(`steps.${i}.text`, m.steps[i].text, T.stepPh(i + 1))}</div>`).join('')}</div>`) : ''}
     ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
       <p class="q">${T.mayDerail}</p>${ta('may_derail', m.may_derail)}
       <p class="q">${T.recover}</p>${ta('recover', m.recover)}
@@ -369,20 +369,21 @@ function renderClose(day) {
   m.sub_presence = [0, 1, 2, 3].map((i) => (d.sub_presence || [])[i] ?? null);
   const steps = m.steps.map((x, i) => [x, i]).filter(([x]) => filled(x.text));
   const deepCount = Object.values(m.deep).filter(filled).length;
+  const full = fullMode(); // ההתבוננות העמוקה ושאלות הפעולה רק ביומן המלא (שושי 12.11)
   shell(`${hd(dayLabel(day) + ' · ' + T.closeDayLabel, T.closeDayTitle)}
     ${card(`<div class="ct">${esc(T.presenceQ(d.being))} ${tag(1)} ${helpBtn('presence')}</div>${scale('presence', m.presence, T.presenceQ(d.being))}`, '', 'presence')}
     ${subs.some(Boolean) ? card(`<div class="ct">${T.subPresenceQ} ${tag(1)}</div>
       ${subs.map((s, i) => s ? `<div class="rt"><span>${esc(s)}</span>${scale('sub_presence.' + i, m.sub_presence[i], s)}</div>` : '').join('')}`, '', 'subp') : ''}
-    ${filled(d.key_action) ? card(`<div class="ct">${fullMode() ? T.keyAction : T.keyActionSmall} ${tag(1)}</div>
+    ${filled(d.being_sign) ? card(`<div class="ct">${T.signCloseQ} ${tag(0)}</div><p class="hint">${esc(d.being_sign)}</p>
+      ${seg('sign_status', m.sign_status, Object.entries(T.signStatus))}`) : ''}
+    ${full && filled(d.key_action) ? card(`<div class="ct">${fullMode() ? T.keyAction : T.keyActionSmall} ${tag(1)}</div>
       <p class="hint">${esc([d.key_action, d.key_amount].filter(Boolean).join(' · '))}</p>
       ${seg('key_status', m.key_status, Object.entries(T.keyStatus))}
       ${inp('key_of', m.key_of, T.keyOfPh)}
       <p class="q">${T.keyReflectQ} ${tag(0)}</p>${ta('key_reflect', m.key_reflect, T.keyReflectPh, 2)}`, '', 'keys') : ''}
-    ${steps.length ? card(`<div class="ct">${T.stepsCloseQ} ${tag(0)}</div>
+    ${full && steps.length ? card(`<div class="ct">${T.stepsCloseQ} ${tag(0)}</div>
       ${steps.map(([x, i]) => `<p class="q">${esc(x.text)}</p>${seg(`steps.${i}.status`, x.status, Object.entries(T.stepStatus))}`).join('')}
       <p class="q">${T.stepsReflectQ}</p>${ta('steps_reflect', m.steps_reflect, T.writeHere, 2)}`) : ''}
-    ${filled(d.being_sign) ? card(`<div class="ct">${T.signCloseQ} ${tag(0)}</div><p class="hint">${esc(d.being_sign)}</p>
-      ${seg('sign_status', m.sign_status, Object.entries(T.signStatus))}`) : ''}
     ${card(`<div class="ct">${T.generalTitle}</div>
       <p class="q">${T.dayHowQ} ${tag(0)}</p>${ta('day_how', m.day_how, T.writeHere, 2)}
       <div data-req="insight"><p class="q">${T.insightQ} ${tag(1)} ${helpBtn('insight')}</p>${ta('insight', m.insight, T.writeHere, 3)}</div>
@@ -391,12 +392,12 @@ function renderClose(day) {
       <p class="q">${T.gapQ}</p>${ta('gap_moment', m.gap_moment)}
       <p class="q">${T.extraCloseQ}</p>${ta('extra_close', m.extra_close)}
       <p class="q">${T.openTomorrowQ}</p>${inp('open_tomorrow', m.open_tomorrow, '7:00', 'text', 'inputmode="numeric"')}`)}
-    <section class="card deep"><details ${deepCount ? 'open' : ''}><summary><span class="ct" style="margin:0">${T.deepTitle} ${tag(0)}</span></summary>
+    ${full ? `<section class="card deep"><details ${deepCount ? 'open' : ''}><summary><span class="ct" style="margin:0">${T.deepTitle} ${tag(0)}</span></summary>
       <div class="ct" style="justify-content:flex-start">${helpBtn('deep')}</div>
       <p class="hint">${T.deepIntro}</p>
       ${T.deep.map((g) => `<h3 class="dh">${esc(g.h)}</h3>${g.sub ? `<p class="hint">${esc(g.sub)}</p>` : ''}
         ${g.qs.map(([k, q]) => `${q && k !== 'g0' ? `<p class="q">${esc(q)}</p>` : ''}${ta('deep.' + k, m.deep[k], T.writeHere, 2)}`).join('')}`).join('')}
-    </details></section>
+    </details></section>` : ''}
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${d.closed_at ? T.saveBase : T.closedDay}</button>
     <a class="btn2" href="#/refine/close">${T.howToRefineClose}</a>`, day === today() ? 'today' : '');
@@ -407,7 +408,7 @@ function renderClose(day) {
     const miss = [];
     if (m.presence == null) miss.push('presence');
     if (subs.some((s, i) => s && m.sub_presence[i] == null)) miss.push('subp');
-    if (filled(d.key_action) && !m.key_status) miss.push('keys');
+    if (full && filled(d.key_action) && !m.key_status) miss.push('keys');
     if (!filled(m.insight)) miss.push('insight');
     if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
     api.saveDay(day, { closed_at: D.days[day].closed_at || new Date().toISOString() });
