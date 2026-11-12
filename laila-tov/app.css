@@ -264,3 +264,7 @@ a.card.tonight{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap;font-
 .reco ul{margin:0;padding-inline-start:20px;font-size:17px;line-height:1.45}
 .reco li{margin-bottom:5px}
 .bg-note{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:4px;line-height:1.3}
+.dreams{display:grid;gap:22px;grid-template-columns:1fr}
+@media (min-width:860px){.dreams{grid-template-columns:1fr 1fr}}
+.goal-line{font-size:18px;font-weight:600;margin-top:8px}
+.model{margin-top:6px}

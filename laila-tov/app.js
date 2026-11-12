@@ -110,7 +110,8 @@ function build(D){
     const total = earn.reduce((a,e)=>a+e.amt,0);
     const buys = (D.spent||[]).filter(s=>s.kid===k.id);
     const spent = buys.reduce((a,s)=>a+s.amt,0);
-    const share = D.goal.shares?.[k.id] ?? D.goal.price;
+    const goal = D.goals?.[k.id] || { name:D.goal.name, price:D.goal.shares?.[k.id] ?? D.goal.price, kind:'drone', emoji:'🚁' };
+    const share = goal.price;
     const balance = total - spent;
     let streak = 0;
     const lastN = list[list.length-1];
@@ -118,7 +119,7 @@ function build(D){
     const from = addDays(lastN ? lastN.date : today, -30);
     const recent = list.filter(n => n.date > from);
     const grace = { start: recent.filter(n=>n.graceStart).length, quiet: recent.filter(n=>n.graceQuiet).length };
-    out[k.id] = { kid:k, list, byDate, morning, brushRun, earn, buys, total, spent, balance, share,
+    out[k.id] = { kid:k, goal, list, byDate, morning, brushRun, earn, buys, total, spent, balance, share,
                   toGoal: Math.max(0, share - balance), goalP: Math.min(1, balance/share), streak, grace };
   }
   return out;
@@ -161,24 +162,30 @@ const DRONE = [
   '.....LLLL........LLLL.....'
 ];
 const DRONE_COL = { P:C.taupeL, M:C.charcoal, A:C.taupe, B:C.rust, Y:C.cream, C:C.charcoal, L:C.taupe };
-// כל ילד בונה חצי: הימני לילד הראשון, השמאלי לשני. הרחפן שלם רק כששני החצאים מלאים
-function mosaicSVG(progRight, progLeft, dimLeft, dimRight){
-  const cs = 22, rows = DRONE.length, cols = DRONE[0].length, mid = cols/2;
-  const half = (from, to, p, dim) => {
-    const cells = [];
-    for (let r=rows-1; r>=0; r--) for (let c=to-1; c>=from; c--) if (DRONE[r][c] !== '.') cells.push([r,c,DRONE[r][c]]);
-    const filled = Math.round(cells.length * Math.min(1, p));
-    return cells.map((x,i) => [...x, i < filled, dim]);
-  };
-  const cells = [...half(mid, cols, progRight, dimRight), ...half(0, mid, progLeft, dimLeft)];
-  let s = `<line x1="${mid*cs}" y1="0" x2="${mid*cs}" y2="${rows*cs}" stroke="#D9D1C6" stroke-width="2" stroke-dasharray="5 5"/>`;
-  cells.forEach(([r,c,ch,on,dim]) => {
-    const x = c*cs, y = r*cs, col = on ? DRONE_COL[ch] : C.empty;
-    s += `<g${dim?' opacity=".35"':''}><rect x="${x+1}" y="${y+1}" width="${cs-2}" height="${cs-2}" rx="3" fill="${col}"/>`
-       + `<rect x="${x+1}" y="${y+cs-5}" width="${cs-2}" height="4" rx="2" fill="${on ? shade(col,-.22) : '#E2DBCF'}"/>`
-       + `<circle cx="${x+cs/2}" cy="${y+cs/2-1}" r="5.5" fill="${on ? shade(col,.18) : C.emptyStud}"/></g>`;
+// ---------- מוזאיקת לבנים: כל שקל = לבנה אחת, והדגם נבנה לבנה אחרי לבנה ----------
+const BIKE = [".......................................DDDDDDDDDDD.......", "..................DDDDDDDDD.............D.......DD.......", "..................DDDDDDDDD.............D.......D........", "......................D.................D......DD........", "......................RRRRRRRRRR........D......D.........", "......................R........RRRRRRRRRR................", "........WWWWWWW......RRR...............RRRVVVVVVV........", "......WW.......WW...R..R..............RRRR.......VV......", ".....W...........W.R...R......D......RRV.R.........V.....", "...WW.............RW...R.......D....RRV..RR.........VV...", "...W.............RRW...RR......DD..RRV....R..........V...", "..W..W..........RR..W...R.......D.RRV.....RR..........V..", ".W....W........RR....W..R........RRV......RR...........V.", ".W.....W.......R.....W..R.......RR.V.......R...........V.", "W.......W.....R.......W.RR.....RR.V........RR...........V", "W........W...R........W..R....RR..V.........R...........V", "W.........W.R.........W..RDD.RR...V.........RR..........V", "W.......WW.SRRRWWWWWW.W.DR..RR....V.........RR..........V", "W.........S.S..RRRRRRRRD.RRRRD....V..........R..........V", "W........S.W.S........WRRRRR.D....V.....................V", "W.......SS.W.SS.......WD..R..D....V.....................V", ".W.....WS..W..SW.....W..D...D......V...................V.", ".W....WS...W...SW....W...DDD.......V...................V.", "..W..WS....W....SW..W...............V.................V..", "...W.SS....W....SS.W.................V...............V...", "...WWS.....W.....SWW.................VV.............VV...", "....SW.....W.....WS....................V...........V.....", ".SSSSSSSSSSSSSSSSSSSSS..................VV.......VV......", "........WWWWWWW...........................VVVVVVV........"];
+const BIKE_COL = { S:C.charcoal, R:'#B8322A', W:C.taupe, V:C.taupe, D:C.charcoal };
+const BIKE_ORDER = 'SRWVD';       // מתקן, שלדה, גלגל אחורי, גלגל קדמי, פרטים
+const KINDS = {
+  drone: { rows:DRONE, col:DRONE_COL, label:'רחפן מלבנים',
+    order: cells => cells.slice().sort((a,b) => b[0]-a[0] || b[1]-a[1]) },
+  bike:  { rows:BIKE, col:BIKE_COL, label:'אופניים מלבנים',
+    order: cells => cells.slice().sort((a,b) => BIKE_ORDER.indexOf(a[2])-BIKE_ORDER.indexOf(b[2]) || a[1]-b[1] || b[0]-a[0]) }
+};
+function mosaicSVG(kind, progress){
+  const K = KINDS[kind] || KINDS.drone, R = K.rows, rowsN = R.length, cols = R[0].length;
+  const cs = Math.round(Math.min(22, 660/cols));
+  const cells = [];
+  R.forEach((row,r) => [...row].forEach((ch,c) => { if (ch !== '.') cells.push([r,c,ch]); }));
+  const ordered = K.order(cells), filled = Math.round(ordered.length * Math.min(1, progress));
+  let s = '';
+  ordered.forEach(([r,c,ch], i) => {
+    const x = c*cs, y = r*cs, on = i < filled, col = on ? K.col[ch] : '#E3DCD0', e = Math.max(2, cs*0.2);
+    s += `<rect x="${x+1}" y="${y+1}" width="${cs-2}" height="${cs-2}" rx="${cs>14?3:2}" fill="${col}"/>`
+       + `<rect x="${x+1}" y="${y+cs-1-e}" width="${cs-2}" height="${e}" rx="1.5" fill="${on ? shade(col,-.22) : '#D6CEC1'}"/>`
+       + `<circle cx="${x+cs/2}" cy="${y+cs/2-1}" r="${cs*0.25}" fill="${on ? shade(col,.18) : '#EBE5DA'}"/>`;
   });
-  return `<svg class="mosaic" viewBox="0 0 ${cols*cs} ${rows*cs}" role="img" aria-label="רחפן מלבנים">${s}</svg>`;
+  return { svg:`<svg class="mosaic" viewBox="0 0 ${cols*cs} ${rowsN*cs}" role="img" aria-label="${K.label}">${s}</svg>`, total:ordered.length, filled };
 }
 
 // ---------- state ----------
@@ -186,27 +193,23 @@ let DATA, M, weeks, wi;
 const money = n => n + ' ' + DATA.settings.currency;
 const kidImg = (k, cls='') => `<img class="${cls}" src="${esc(k.img)}" width="${k.w}" height="${k.h}" alt="${esc(k.name)}">`;
 const sampleNote = () => DATA.sample ? `<p class="sample">אלה נתוני דוגמה. הם יוחלפו בנתונים האמיתיים מהדף הראשון שתצלמו.</p>` : '';
-const goalHalfLine = st => st.toGoal ? `עוד <b>${money(st.toGoal)}</b> לחצי שלך ב${esc(DATA.goal.name)}` : `<b>החצי שלך ב${esc(DATA.goal.name)} מוכן!</b>`;
+const goalLine = st => st.toGoal ? `עוד <b>${money(st.toGoal)}</b> ל${esc(st.goal.name)} שלך` : `<b>הגעת! אפשר לקנות את ה${esc(st.goal.name)}</b>`;
+const bricksLine = st => `${Math.min(st.balance, st.share)} לבנים בנויות מתוך ${st.share}`;
 
 // ---------- מי נכנס? ----------
 function viewEntry(){
-  const D = DATA, K = D.kids.map(k => M[k.id]), ready = K.every(k => k.toGoal === 0);
+  const D = DATA, K = D.kids.map(k => M[k.id]);
   let h = sampleNote() + `<h2 class="page-title">מי נכנס?</h2><div class="pick">`;
   for (const st of K) h += `<a class="pick-kid" href="#/${st.kid.id}">
       ${kidImg(st.kid)}<span class="pick-name">${esc(st.kid.name)}</span>
       <span class="pick-money">בכספת ${money(st.balance)}</span></a>`;
   if (D.view === 'parent') h += `<a class="pick-kid mom" href="#/mom"><span class="pick-icon">🔒</span><span class="pick-name">האזור של אמא</span><span class="pick-money">רק בקישור שלך</span></a>`;
-  h += `</div>
-  <section class="card goal">
-    <div class="goal-head"><h2>הרחפן המשותף · ${money(D.goal.price)}</h2>
-      <div class="goal-num">${ready ? 'שניכם הגעתם. אפשר לקנות!' : 'כל אחד בונה את החצי שלו'}</div></div>
-    ${mosaicSVG(K[0].goalP, K[1]?.goalP ?? 0)}
-    <div class="halves">${K.map(k => `<div class="half">
-        <div class="half-top"><b>${esc(k.kid.name)}</b><span>${money(Math.min(k.balance,k.share))} מתוך ${money(k.share)}</span></div>
-        <div class="bar" aria-hidden="true"><i style="width:${(k.goalP*100).toFixed(1)}%"></i></div>
-        <div class="half-left">${k.toGoal ? `עוד <b>${money(k.toGoal)}</b>` : `<b>החצי שלו מוכן</b>`}</div></div>`).join('')}</div>
-    ${!ready && K.some(k=>k.toGoal===0) ? `<p class="wait">${esc(K.find(k=>k.toGoal===0).kid.name)} כבר הגיע לחצי שלו. מחכים ש${esc(K.find(k=>k.toGoal>0).kid.name)} יגיע, ואז קונים יחד.</p>` : ''}
-  </section>`;
+  h += `</div><div class="dreams">${K.map(st => { const m = mosaicSVG(st.goal.kind, st.goalP); return `<section class="card goal">
+    <div class="goal-head"><h2>${st.goal.emoji} ${esc(st.goal.name)} של ${esc(st.kid.name)} · ${money(st.share)}</h2></div>
+    ${m.svg}
+    <div class="bar" aria-hidden="true"><i style="width:${(st.goalP*100).toFixed(1)}%"></i></div>
+    <p class="goal-line">${goalLine(st)} <span class="sub">(${bricksLine(st)})</span></p>
+  </section>`; }).join('')}</div>`;
   return h;
 }
 
@@ -268,7 +271,7 @@ function viewHome(st){
   ${kudos.length ? `<section class="card kudos"><h2>⭐ כל הכבוד!</h2>${kudos.map(t=>`<p>${esc(t)}</p>`).join('')}</section>` : ''}
   ${fb ? `<section class="booklet"><div class="booklet-head"><span class="step">שבוע ${dm(fb.week)}</span><h2>המשוב שלי</h2></div>
     <div class="fb"><p>${esc(fb.feedback)}</p>${fb.next?`<p class="try"><b>האתגר שלי לשבוע הבא:</b> ${esc(fb.next)}</p>`:''}</div></section>` : ''}
-  <a class="card goal-mini" href="#/${k.id}/vault"><span>🚁</span><div><div>${goalHalfLine(st)}</div>
+  <a class="card goal-mini" href="#/${k.id}/vault"><span>${st.goal.emoji}</span><div><div>${goalLine(st)}</div>
     <div class="bar" aria-hidden="true"><i style="width:${(st.goalP*100).toFixed(1)}%"></i></div></div></a>`;
 }
 
@@ -303,13 +306,15 @@ function viewEvening(st){
 function viewVault(st){
   const D = DATA, k = st.kid, idx = D.kids.indexOf(k);
   const K = D.kids.map(x => M[x.id]);
+  const m = mosaicSVG(st.goal.kind, st.goalP);
   return `<h2 class="page-title">הכספת שלי</h2>
   <div class="coin"><span>יש לי</span><b>${money(st.balance)}</b></div>
-  <section class="card goal"><h2>החצי שלי ברחפן</h2>
-    ${mosaicSVG(K[0].goalP, K[1]?.goalP ?? 0, idx===0, idx===1)}
-    <p class="goal-line">${goalHalfLine(st)}</p>
+  <section class="card goal"><h2>${st.goal.emoji} ה${esc(st.goal.name)} שלי</h2>
+    ${m.svg}
+    <p class="goal-line">${goalLine(st)}</p>
     <div class="bar" aria-hidden="true"><i style="width:${(st.goalP*100).toFixed(1)}%"></i></div>
-    <p class="sub">הרחפן עולה ${money(D.goal.price)}. כל אחד אוסף ${money(st.share)}, וקונים רק כששניכם מגיעים.</p></section>
+    <p class="sub"><b>כל שקל הוא לבנה אחת.</b> ${bricksLine(st)}. ה${esc(st.goal.name)} עולה ${money(st.share)}. כשהוא שלם, אפשר לקנות אותו.</p>
+    ${st.goal.model ? `<p class="sub model">הדגם: <bdi>${esc(st.goal.model)}</bdi>${st.goal.pieces ? ` · ${st.goal.pieces.toLocaleString('en')} חלקים` : ''}</p>` : ''}</section>
   <section class="card"><h2>מאיפה הכסף?</h2>
     ${st.earn.length ? `<ul class="ledger">${st.earn.map(e=>`<li><span>${dayName(e.date)} ${dm(e.date)}</span><span>${esc(e.reason)}</span><b>+${money(e.amt)}</b></li>`).join('')}</ul>` : '<p class="sub">עוד אין. הערב המנצח הראשון כבר בדרך.</p>'}</section>
   ${st.buys.length ? `<section class="card"><h2>מה קניתי</h2><ul class="ledger">${st.buys.map(b=>`<li><span>${dm(b.date)}</span><span>${esc(b.what)}</span><b>-${money(b.amt)}</b></li>`).join('')}</ul></section>` : ''}`;
@@ -378,7 +383,7 @@ function viewMom(){
       <tr><td>שבוע רצוף של צחצוח: ${S.brushStreak} בקרים (ראשון עד שישי) ו-${S.brushStreak} ערבים (מוצ״ש עד חמישי). שבת בבוקר לא נספר (הפתעה)</td><td>+${money(S.brushBonus)}</td></tr>
       <tr><td>ערב חריג שאישרת וקבעת לו זמנים</td><td>כמו ערב רגיל</td></tr>
       <tr><td>ליל שישי</td><td>לא נספר</td></tr>
-      <tr><td>${esc(D.goal.name)}: ${D.kids.map(k=>`${esc(k.name)} ${money(M[k.id].share)}`).join(', ')}</td><td>קונים רק כששניהם הגיעו</td></tr>
+      ${D.kids.map(k=>`<tr><td>היעד של ${esc(k.name)}: ${esc(M[k.id].goal.name)}${M[k.id].goal.model ? ` (${esc(M[k.id].goal.model)})` : ''}</td><td>${money(M[k.id].share)}, צבר ${money(M[k.id].balance)}</td></tr>`).join('')}
     </table>
     <p class="sub">בונוסי ההפתעה לא מופיעים לילדים כנוסחה. מי שמשתף תובנה בהתבוננות השבועית מקבל בונוס.</p></div>
     <div class="p-sec"><h3>איך מעדכנים</h3><p>מצלמים את הדף השבועי ושולחים לקלוד. הוא קורא, מעדכן כאן ומחזיר שורה אחת של מה שהבין.</p></div>
