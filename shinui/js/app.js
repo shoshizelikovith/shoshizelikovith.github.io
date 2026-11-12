@@ -42,6 +42,14 @@ const kindOf = () => (P().kind && P().kind !== 'other' ? P().kind : P().self_kin
 
 // ===== הודעה קטנה =====
 let toastT;
+// אייקון לכל לשונית בסרגל התחתון
+const TAB_ICON = { today: 'open', week: 'week', progress: 'data', collection: 'collection', base: 'achievement' };
+// רגע של הצלחה: אייקון שקופץ עם הודעה חמה, בסגירת יום ובסגירה ופתיחה של שבוע
+function celebrate(icon, msg) {
+  const c = document.createElement('div'); c.className = 'cele'; c.setAttribute('role', 'status');
+  c.innerHTML = `<div class="cele-in"><img src="img/icons/${icon}.png" width="120" height="120" alt="" aria-hidden="true"><p>${esc(msg)}</p></div>`;
+  document.body.appendChild(c); setTimeout(() => c.classList.add('out'), 1700); setTimeout(() => c.remove(), 2200);
+}
 function toast(msg) {
   let t = $('.toast'); if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
   t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => (t.hidden = true), 2600);
@@ -52,7 +60,7 @@ api.on((e) => { if (e === 'offline') toast(T.offline); if (e === 'save-error') t
 const logoImg = (cls = 'lg') => `<img class="${cls}" src="img/aro-wide.png" width="1269" height="338" alt="אשה רוצה עושה">`;
 function shell(body, tab, { wide = false } = {}) {
   root.classList.toggle('wide-root', !!wide); // במחשב: הדשבורד רחב, כל השאר בצורת טלפון
-  const tabs = Object.entries(T.tabs).map(([k, v]) => `<a href="#/${k}" class="${tab === k ? 'on' : ''}" ${tab === k ? 'aria-current="page"' : ''}>${v}</a>`).join('');
+  const tabs = Object.entries(T.tabs).map(([k, v]) => `<a href="#/${k}" class="${tab === k ? 'on' : ''}" ${tab === k ? 'aria-current="page"' : ''}><img class="tab-ico" src="img/icons/${TAB_ICON[k]}.png" width="30" height="30" alt="" aria-hidden="true">${v}</a>`).join('');
   root.innerHTML = `
     <div class="tabs"><nav aria-label="ניווט">${tabs}</nav></div>
     <main class="app${wide ? ' wide' : ''}">
@@ -73,7 +81,8 @@ function shell(body, tab, { wide = false } = {}) {
     const h = $('h1', root); if (h) { h.tabIndex = -1; h.style.outline = 'none'; h.focus({ preventScroll: true }); }
   }
 }
-const hd = (small, title) => `<header class="hd">${small ? `<small>${esc(small)}</small>` : ''}<h1>${esc(title)}</h1></header>`;
+// כותרת מסך, עם אייקון נייר שמבדיל בין המסכים (12.11, לאישור שושי)
+const hd = (small, title, icon = '') => `<header class="hd${icon ? ' has-ico' : ''}"><div class="hd-tx">${small ? `<small>${esc(small)}</small>` : ''}<h1>${esc(title)}</h1></div>${icon ? `<img class="hd-ico" src="img/icons/${icon}.png" width="84" height="84" alt="" aria-hidden="true">` : ''}</header>`;
 const tag = (req) => `<span class="tag ${req ? 'm' : 'o'}">${req ? T.required : T.optional}</span>`;
 // כפתור ״מה זה?״ ליד כל חלק. מופיע רק כשיש לחלק כרטיס הסבר
 const helpRow = (k) => (T.help[k] ? `<div class="hrow">${helpBtn(k)}</div>` : '');
@@ -261,7 +270,7 @@ function renderToday() {
   const t = today(); const d = D.days[t] || {};
   if (!d.opened_at) return renderOpen(t, true);
   if (!d.closed_at) {
-    shell(`${banners()}${hd(dayLabel(t), T.dayOpenedTitle)}
+    shell(`${banners()}${hd(dayLabel(t), T.dayOpenedTitle, 'open')}
       ${card(`<p class="ach">${esc(T.noteToday)} ${esc(d.being)}.</p>
         ${(d.sub_beings || []).filter(Boolean).length ? `<p class="hint">${esc(d.sub_beings.filter(Boolean).join(' · '))}</p>` : ''}
         ${filled(d.key_action) ? `<p class="q">${fullMode() ? T.keyAction : T.keyActionSmall}</p><p class="it">${esc([d.key_action, d.key_amount, d.key_when].filter(Boolean).join(' · '))}</p>` : ''}
@@ -271,7 +280,7 @@ function renderToday() {
       <div class="btnrow"><a class="btn2" href="#/note/${t}">${T.toMorningNote}</a><a class="btn2" href="#/open/${t}">${T.editOpening}</a></div>`, 'today');
     return;
   }
-  shell(`${banners()}${hd(dayLabel(t), T.dayClosedTitle)}
+  shell(`${banners()}${hd(dayLabel(t), T.dayClosedTitle, 'close')}
     ${card(`<p class="q">${T.insightQ}</p><p class="ins">${esc(d.insight)}</p>`)}
     <a class="btn" href="#/sticker/${t}">${T.toSticker}</a>
     <div class="btnrow"><a class="btn2" href="#/close/${t}">${T.editClosing}</a><a class="btn2" href="#/progress">${T.tabs.progress}</a></div>
@@ -292,7 +301,7 @@ function renderOpen(day, isToday = false) {
   let openMain = !m.being, openSub = false;
   const draw = () => {
     const ach = hasAchievement() ? card(`<div class="ct">${T.achievementTop} ${helpBtn('achievement')}</div><p class="ach">${esc(F().achievement)}</p>${F().achievement_date ? `<p class="hint">${esc(T.achievementDate)}: ${esc(shortDate(F().achievement_date))}</p>` : ''}`, 'flat') : '';
-    shell(`${isToday ? banners() : ''}${hd(dayLabel(day), isToday ? T.goodMorning(firstName()) : T.openDayTitle)}
+    shell(`${isToday ? banners() : ''}${hd(dayLabel(day), isToday ? T.goodMorning(firstName()) : T.openDayTitle, 'open')}
     ${card(`<small class="over">${T.beingSub}</small><div class="ct">${T.beingTitle} ${tag(1)} ${helpBtn('being')}</div>
       ${openMain ? `<p class="hint">${T.beingsPickHint}</p>${beingChips('bmain', (b) => b === m.being)}${inp('being', m.being, T.beingPlaceholder)}`
         : `<div class="chips"><button type="button" class="on" disabled>${esc(m.being)}</button><button type="button" class="more" id="chg">${T.beingsChange}</button></div>`}`, '', 'being')}
@@ -314,7 +323,7 @@ function renderOpen(day, isToday = false) {
       <p class="q">${T.mayDerail}</p>${ta('may_derail', m.may_derail)}
       <p class="q">${T.recover}</p>${ta('recover', m.recover)}
       <p class="q">${T.whereNeeded}</p>${ta('where_needed', m.where_needed)}`)}
-    ${card(`<div class="ct">${T.convTitle} ${tag(0)} ${helpBtn('future_talk')}</div>
+    ${card(`<div class="ct"><img class="ct-ico" src="img/icons/future.png" width="34" height="34" alt="" aria-hidden="true">${T.convTitle} ${tag(0)} ${helpBtn('future_talk')}</div>
       <p class="q">${T.convPickQ}</p>${seg('voice', m.voice || 'future', Object.entries(T.convPick))}
       <p class="guide" id="cg">${m.voice === 'god' ? T.convGuideGod : T.convGuideFuture}</p>
       <p class="q" id="cf">${m.voice === 'god' ? T.convFieldGod : T.convFieldFuture}</p><p class="hint">${T.convHint}</p>
@@ -370,7 +379,7 @@ function renderClose(day) {
   const steps = m.steps.map((x, i) => [x, i]).filter(([x]) => filled(x.text));
   const deepCount = Object.values(m.deep).filter(filled).length;
   const full = fullMode(); // ההתבוננות העמוקה ושאלות הפעולה רק ביומן המלא (שושי 12.11)
-  shell(`${hd(dayLabel(day) + ' · ' + T.closeDayLabel, T.closeDayTitle)}
+  shell(`${hd(dayLabel(day) + ' · ' + T.closeDayLabel, T.closeDayTitle, 'close')}
     ${card(`<div class="ct">${esc(T.presenceQ(d.being))} ${tag(1)} ${helpBtn('presence')}</div>${scale('presence', m.presence, T.presenceQ(d.being))}`, '', 'presence')}
     ${subs.some(Boolean) ? card(`<div class="ct">${T.subPresenceQ} ${tag(1)}</div>
       ${subs.map((s, i) => s ? `<div class="rt"><span>${esc(s)}</span>${scale('sub_presence.' + i, m.sub_presence[i], s)}</div>` : '').join('')}`, '', 'subp') : ''}
@@ -392,7 +401,7 @@ function renderClose(day) {
       <p class="q">${T.gapQ}</p>${ta('gap_moment', m.gap_moment)}
       <p class="q">${T.extraCloseQ}</p>${ta('extra_close', m.extra_close)}
       <p class="q">${T.openTomorrowQ}</p>${inp('open_tomorrow', m.open_tomorrow, '7:00', 'text', 'inputmode="numeric"')}`)}
-    ${full ? `<section class="card deep"><details ${deepCount ? 'open' : ''}><summary><span class="ct" style="margin:0">${T.deepTitle} ${tag(0)}</span></summary>
+    ${full ? `<section class="card deep"><details ${deepCount ? 'open' : ''}><summary><span class="ct" style="margin:0"><img class="ct-ico" src="img/icons/reflect.png" width="34" height="34" alt="" aria-hidden="true">${T.deepTitle} ${tag(0)}</span></summary>
       <div class="ct" style="justify-content:flex-start">${helpBtn('deep')}</div>
       <p class="hint">${T.deepIntro}</p>
       ${T.deep.map((g) => `<h3 class="dh">${esc(g.h)}</h3>${g.sub ? `<p class="hint">${esc(g.sub)}</p>` : ''}
@@ -412,7 +421,7 @@ function renderClose(day) {
     if (!filled(m.insight)) miss.push('insight');
     if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
     api.saveDay(day, { closed_at: D.days[day].closed_at || new Date().toISOString() });
-    toast(T.dayClosedToast);
+    celebrate('close', T.dayClosedToast);
     go('#/today');
   });
 }
@@ -421,7 +430,7 @@ function renderClose(day) {
 async function renderNote(day) {
   const d = D.days[day]; if (!d || !d.opened_at) return go('#/today');
   let full = false, wall = false;
-  shell(`${hd(T.noteSub, T.noteTitle)}${helpRow('morning_note')}
+  shell(`${hd(T.noteSub, T.noteTitle, 'open')}${helpRow('morning_note')}
     <div class="seg" role="radiogroup" id="kind"><button type="button" class="on" role="radio" aria-checked="true" data-v="0">${T.noteShort}</button><button type="button" role="radio" aria-checked="false" data-v="1">${T.noteFull}</button>${filled(d.win_belief) ? `<button type="button" role="radio" aria-checked="false" data-v="2">${T.noteWall}</button>` : ''}</div>
     <p class="hint" id="wh" hidden>${T.wallpaperHint}</p>
     <div class="preview" id="pv" aria-live="polite"></div>
@@ -441,7 +450,7 @@ async function renderNote(day) {
 async function renderSticker(day) {
   const d = D.days[day]; if (!d || !filled(d.insight)) return go('#/today');
   let withName = true;
-  shell(`${hd(T.stickerSub, T.stickerTitle)}${helpRow('sticker')}
+  shell(`${hd(T.stickerSub, T.stickerTitle, 'reflect')}${helpRow('sticker')}
     <div class="seg" id="nm" role="radiogroup" aria-label="שם בסטיקר"><button type="button" role="radio" aria-checked="true" class="on" data-v="1">${T.withName}</button><button type="button" role="radio" aria-checked="false" data-v="0">${T.noName}</button></div>
     <div class="preview" id="pv"></div>
     <button class="btn" id="save">${T.saveImage}</button>
@@ -463,7 +472,7 @@ function renderWeek() {
   const dow = new Date().getDay();
   // סגירת השבוע הקודם, אם נפתח ולא נסגר
   const prevOpen = pw && pw.opened_at && !pw.closed_at;
-  let body = `${hd(T.weekNum(weekNumber(ws)), w.opened_at ? T.weekOpened : T.weekOpenTitle)}`;
+  let body = `${hd(T.weekNum(weekNumber(ws)), w.opened_at ? T.weekOpened : T.weekOpenTitle, 'week')}`;
   if (!hasBase()) body += `<div class="banner">${T.needBaseWeek} <a class="lnk" href="#/base">${T.baseGo}</a></div>`;
   if (prevOpen) body += `<div class="banner soft"><b>${T.prevWeekOpen}</b><a class="lnk" href="#/week/close?${prevWs}">${T.weekCloseTitle}</a></div>`;
   if (w.opened_at) {
@@ -489,7 +498,7 @@ function renderWeekOpen() {
   const onceRow = (h, i) => `<div class="rowi">${i ? `<button type="button" class="x" data-del="onetime.${i}" aria-label="להסיר">×</button>` : ''}
       <div class="row3" style="grid-template-columns:2fr 1fr">${inp(`onetime.${i}.text`, h.text, T.onceText)}${inp(`onetime.${i}.day`, h.day, T.onceDay)}</div></div>`;
   const draw = () => {
-    shell(`${hd(T.weekNum(weekNumber(ws)), T.weekOpenTitle)}${helpRow('week_note')}
+    shell(`${hd(T.weekNum(weekNumber(ws)), T.weekOpenTitle, 'week')}${helpRow('week_note')}
       ${!hasBase() ? `<div class="banner">${T.needBaseWeek} <a class="lnk" href="#/base">${T.baseGo}</a></div>` : ''}
       ${card(`<div class="ct">${T.weekResult} ${tag(1)}</div><p class="hint">${T.weekResultHint}</p>${ta('result', m.result, '', 2)}
         ${hasAchievement() ? `<p class="hint" style="margin-top:8px"><b>${T.achievementCard}:</b> ${esc(F().achievement)}</p>` : ''}`, '', 'result')}
@@ -516,7 +525,7 @@ function renderWeekOpen() {
       if (!m.onetime.some((h) => filled(h.text) && filled(h.day))) miss.push('once');
       if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
       api.saveWeek(ws, { opened_at: (D.weeks[ws] || {}).opened_at || new Date().toISOString() });
-      toast(T.weekOpenedToast); go('#/week');
+      celebrate('week', T.weekOpenedToast); go('#/week');
     });
   };
   draw();
@@ -552,10 +561,10 @@ function renderWeekClose() {
   const q = (location.hash.split('?')[1] || '');
   const ws = /^\d{4}-\d\d-\d\d$/.test(q) ? q : weekStart(today());
   const m = { ...(D.weeks[ws] || {}) };
-  shell(`${hd(T.weekNum(weekNumber(ws)), T.weekCloseTitle)}${helpRow('debrief')}
+  shell(`${hd(T.weekNum(weekNumber(ws)), T.weekCloseTitle, 'debrief')}${helpRow('debrief')}
     <p class="hint">${T.sumIntro}</p>
     ${D.weeks[ws] && D.weeks[ws].opened_at ? card(`<div class="ct">${T.planTitle}</div>${weekPlanHtml(D.weeks[ws])}`, 'flat') : ''}
-    ${card(`<div class="ct">${T.sumTitle}</div>${weekSummaryHtml(ws)}`, 'flat')}
+    ${card(`<div class="ct"><img class="ct-ico" src="img/icons/data.png" width="34" height="34" alt="" aria-hidden="true">${T.sumTitle}</div>${weekSummaryHtml(ws)}`, 'flat')}
     <p class="hint">${T.weekNoClose}</p>
     ${card(`<div class="ct">${T.progressQ} ${tag(1)}</div>
       ${hasAchievement() ? `<p class="hint">${esc(F().achievement)}</p>` : ''}
@@ -580,7 +589,7 @@ function renderWeekClose() {
     ['heart', 'eyes', 'hands'].forEach((k) => { if (!filled(m[k])) miss.push(k); });
     if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
     api.saveWeek(ws, { closed_at: (D.weeks[ws] || {}).closed_at || new Date().toISOString() });
-    toast(T.weekClosedToast);
+    celebrate('debrief', T.weekClosedToast);
     // ״ומכאן לפתק החדש״: אם סגרה את השבוע הנוכחי בסופו, הפתק הבא נפתח ביום ראשון
     go(ws === weekStart(today()) ? '#/week' : '#/week/open');
   });
@@ -631,7 +640,7 @@ function renderProgress() {
   const pct = last ? D.weeks[last].progress_pct : null;
   const ad = F().achievement_date;
   const ins = dataInsight(s);
-  shell(`${hd(T.weekNum(weekNumber(s.ws)), T.progressTitle)}
+  shell(`${hd(T.weekNum(weekNumber(s.ws)), T.progressTitle, 'data')}
     ${card(`<div class="ct">${T.openedClosedWeek}</div><p class="kpi">${s.both} <small>${T.ofDays(s.both).replace(/^\d+ /, '')}</small></p>
       <div class="week" role="img" aria-label="${T.openedClosedWeek}: ${s.both}">${s.wk.map((x, i) => `<span class="${x.k === t ? 't' : ''}"><i class="${x.d.opened_at && x.d.closed_at ? 'f' : x.d.opened_at ? 'h' : ''}"></i>${T.days[i]}</span>`).join('')}</div>
       ${s.openOnly ? `<p class="hint">${T.openedNotClosed(T.dayNames[parse(s.openOnly.k).getDay()])} <a class="lnk" href="#/close/${s.openOnly.k}">${T.closeNow}</a></p>` : ''}`)}
@@ -663,13 +672,22 @@ function collectionItems() {
   });
   return items.sort((a, b) => (a.sort < b.sort ? 1 : -1));
 }
+// כרטיסי האוסף המאוירים: לכל סוג צבע, אייקון נייר ומירכאה גדולה (12.11)
+// לכל אייקון תפקיד אחד (שושי 12.11): גילוי = התבוננות, מילים שנותנות כוח = השיחה עם האני העתידית, תחקיר = תחקיר. לסטיקר אין אייקון משלו
+const COLL_ICON = { insight: 'reflect', belief: 'future', debrief: 'debrief' };
+const collCard = (x) => `<article class="ccard k-${x.kind}">
+  <div class="ccard-top">${COLL_ICON[x.kind] ? `<img class="ccard-ico" src="img/icons/${COLL_ICON[x.kind]}.png" width="44" height="44" alt="" aria-hidden="true">` : ''}
+    <span class="ccard-kind">${T.collectionKinds[x.kind]}</span><span class="ccard-when">${esc(x.when)}</span></div>
+  <p class="ccard-tx">${esc(x.text)}</p>
+  ${x.link ? `<a class="lnk" href="${x.link}">${T.openSticker}</a>` : ''}
+</article>`;
 function renderCollection(filter = 'all', query = '') {
   const items = collectionItems();
   const show = items.filter((x) => (filter === 'all' || x.kind === filter || x.also === filter) && (!query || x.text.includes(query)));
-  shell(`${hd(T.collectionSub, T.collectionTitle)}
-    <div class="chips" id="flt">${Object.entries(T.collectionFilters).map(([k, v]) => `<button type="button" class="${k === filter ? 'on' : ''}" data-f="${k}">${v}</button>`).join('')}</div>
+  shell(`${hd(T.collectionSub, T.collectionTitle, 'collection')}
+    <div class="chips cflt" id="flt">${Object.entries(T.collectionFilters).map(([k, v]) => `<button type="button" class="${k === filter ? 'on' : ''}" data-f="${k}">${COLL_ICON[k] ? `<img src="img/icons/${COLL_ICON[k]}.png" width="22" height="22" alt="" aria-hidden="true">` : ''}${v}</button>`).join('')}</div>
     ${items.length > 6 ? `<input class="search" type="search" id="sq" placeholder="${T.searchPh}" value="${esc(query)}" aria-label="${T.searchPh}">` : ''}
-    ${show.length ? show.map((x) => card(`<p class="it"><small>${T.collectionKinds[x.kind]} · ${esc(x.when)}</small>${esc(x.text)}</p>${x.link ? `<a class="lnk" href="${x.link}">${T.openSticker}</a>` : ''}`)).join('') : `<p class="hint">${T.collectionEmpty}</p>`}`, 'collection');
+    ${show.length ? `<div class="cgrid">${show.map((x) => collCard(x)).join('')}</div>` : `<div class="cempty"><img src="img/icons/collection.png" width="120" height="120" alt="" aria-hidden="true"><p class="hint">${T.collectionEmpty}</p></div>`}`, 'collection');
   $('#flt').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) renderCollection(b.dataset.f, $('#sq')?.value || ''); });
   const sq = $('#sq'); if (sq) { sq.addEventListener('input', () => { const v = sq.value; clearTimeout(sq._t); sq._t = setTimeout(() => { renderCollection(filter, v); const n = $('#sq'); n.focus(); n.setSelectionRange(v.length, v.length); }, 300); }); }
 }
@@ -688,7 +706,7 @@ function renderBase() {
   const habits = (f.plan_habits || []).filter((h) => filled(h.text)); const once = (f.plan_once || []).filter((h) => filled(h.text));
   shell(`${hd(firstName(), T.baseTitle)}
     ${missing.length === 1 ? `<div class="banner"><b>${T.missingOneTitle}</b>${T.baseMissingOne(T.baseParts[missing[0][0]])}</div>` : missing.length ? `<div class="banner">${T.baseMissingMany}</div>` : `<div class="banner soft">${T.baseFull}</div>`}
-    ${card(parts.map(([k, ok]) => `<a class="check" href="#/base/${k}"><span>${T.baseParts[k]}</span><i role="img" class="${ok ? 'ok' : 'no'}" aria-label="${ok ? 'מלא' : 'חסר'}"></i></a>`).join(''))}
+    ${card(parts.map(([k, ok]) => `<a class="check" href="#/base/${k}"><img class="ct-ico" src="img/icons/${k}.png" width="34" height="34" alt="" aria-hidden="true"><span>${T.baseParts[k]}</span><i role="img" class="${ok ? 'ok' : 'no'}" aria-label="${ok ? 'מלא' : 'חסר'}"></i></a>`).join(''))}
     ${hasAchievement() ? card(`<div class="ct">${T.achievementLabel}</div><p class="ach">${esc(f.achievement)}</p>
       <div class="chips" style="margin-top:10px">${Object.entries(T.achievementChecks).map(([k, v]) => `<button type="button" disabled class="${(f.achievement_checks || {})[k] ? 'on' : ''}">${v}</button>`).join('')}</div>
       <a class="lnk" href="#/base/achievement">${T.edit}</a>`) : ''}
@@ -721,7 +739,7 @@ function renderBasePart(part) {
     }
     if (part === 'channels') body = `<p class="hint">${T.channelsHint} ${helpBtn('channels')}</p>` + Object.entries(T.channels).map(([k, c]) => card(`<div class="ct">${c.name}</div><p class="hint">${c.q}</p>
         <div class="row3" style="grid-template-columns:1fr 3fr">${inp(`channels.${k}.score`, (m.channels[k] || {}).score, '1-10', 'number', 'min="1" max="10" inputmode="numeric"')}${inp(`channels.${k}.note`, (m.channels[k] || {}).note, T.channelNotePh)}</div>`)).join('') + lessonLinks('channels');
-    shell(`${hd(T.baseTitle, T.baseParts[part] || '')}${body}
+    shell(`${hd(T.baseTitle, T.baseParts[part] || '', ['future', 'achievement', 'plan', 'channels'].includes(part) ? part : '')}${body}
       <button class="btn" id="done">${T.saveBase}</button><a class="btn2" href="#/base">${T.backBase}</a>`, 'base');
     const flushNow = bindForm(m, save);
     $$('[data-add]').forEach((b) => b.addEventListener('click', () => { flushNow(); const k = b.dataset.add; m[k].push({}); draw(); $(`[data-k="${k}.${m[k].length - 1}.text"]`)?.focus(); }));
@@ -744,7 +762,7 @@ function renderRefine(tab) {
 // ===== הגדרות =====
 function renderSettings() {
   const p = P();
-  shell(`${hd('', T.settingsTitle)}
+  shell(`${hd('', T.settingsTitle, 'settings')}
     ${card(`<label class="q" for="nm">${T.myName}</label><input id="nm" type="text" value="${esc(p.full_name)}">`)}
     ${card(`<div class="ct">${p.share_journal ? T.shareStatusOn : T.shareStatusOff}</div><button class="btn2" id="sh">${p.share_journal ? T.shareToggleOn : T.shareToggleOff}</button>`)}
     ${card(`<div class="ct">${T.levelSettingsTitle}</div>${seg('level', levelOf(), [['being', T.levelBeing], ['full', T.levelFull]])}<p class="hint" id="lvh">${levelOf() === 'full' ? T.levelFullSub : T.levelBeingSub}</p><p class="hint">${T.levelSettingsHint}</p>`)}
@@ -762,7 +780,7 @@ function renderSettings() {
 // ===== משוב בהתנסות =====
 function renderFeedback() {
   const m = {};
-  shell(`${hd('', T.feedbackTitle)}
+  shell(`${hd('', T.feedbackTitle, 'feedback')}
     ${T.feedbackQs.map((q, i) => card(`<p class="q">${q}</p>${ta('q' + i, '', T.writeHere, 3)}`)).join('')}
     <button class="btn" id="send">${T.feedbackSend}</button><button class="btn2" id="later">${T.feedbackLater}</button>`, 'today');
   bindForm(m, () => {});
@@ -780,7 +798,7 @@ function renderOffer() {
   sessionStorage.setItem('offerSeen', today());
   const link = CONFIG.OFFER_LINK[kindOf()] || CONFIG.OFFER_LINK.graduate;
   const dl = CONFIG.OFFER_DEADLINE && CONFIG.OFFER_DEADLINE >= today() ? shortDate(CONFIG.OFFER_DEADLINE) : '';
-  shell(`${hd('', T.offerTitle)}
+  shell(`${hd('', T.offerTitle, 'club')}
     ${card(`<p class="ins">${T.offerSub}</p>
       ${dl ? `<p class="q" style="margin-top:12px">${T.offerDeadline(dl)}</p>` : ''}
       ${link ? `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">${T.offerCta}</a>` : ''}`)}

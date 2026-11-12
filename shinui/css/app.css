@@ -263,3 +263,57 @@ details.qs ul li{margin-bottom:6px}
   body:has(#app:not(.wide-root)) .modal .sheet{max-width:430px}
   body:has(#app:not(.wide-root)) .toast{bottom:calc(50vh - min(460px,50vh - 24px) + 90px)}
 }
+
+/* ===== אייקוני נייר בכותרות המסכים (12.11) ===== */
+.hd.has-ico{display:flex;align-items:center;gap:12px}
+.hd .hd-tx{flex:1;min-width:0}
+.hd-ico{width:84px;height:84px;object-fit:contain;flex:none;filter:drop-shadow(0 6px 8px rgba(13,18,44,.14));animation:icoIn .45s ease-out both}
+.ct-ico{width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-inline-end:6px;flex:none}
+@keyframes icoIn{from{opacity:0;transform:translateY(6px) scale(.92)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.hd-ico{animation:none}}
+@media (max-width:360px){.hd-ico{width:68px;height:68px}}
+
+/* ===== כרטיסי האוסף המאוירים (12.11) ===== */
+.cflt button{display:inline-flex;align-items:center;gap:6px}
+.cflt button img{width:22px;height:22px;object-fit:contain}
+.cgrid{display:grid;gap:14px;margin-top:6px}
+.ccard{--k:var(--mag);position:relative;overflow:hidden;background:var(--paper);border-radius:22px;padding:16px 18px 18px;box-shadow:var(--sh);border-inline-start:7px solid var(--k)}
+.ccard::before{content:'״';position:absolute;inset-inline-end:14px;bottom:-34px;font-size:150px;line-height:1;font-weight:800;color:var(--k);opacity:.08;pointer-events:none}
+.ccard::after{content:'';position:absolute;inset-inline-end:-26px;top:-26px;width:88px;height:88px;border-radius:50%;background:var(--k);opacity:.07}
+.ccard-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;position:relative;z-index:1}
+.ccard-ico{width:44px;height:44px;object-fit:contain;flex:none;filter:drop-shadow(0 3px 4px rgba(13,18,44,.14))}
+.ccard-kind{font-size:14px;font-weight:800;color:var(--k);letter-spacing:.2px}
+.ccard-when{margin-inline-start:auto;font-size:14px;opacity:.6}
+.ccard-tx{font-size:19px;line-height:1.55;font-weight:600;position:relative;z-index:1;white-space:pre-wrap}
+.ccard .lnk{position:relative;z-index:1;display:inline-block;margin-top:8px}
+.ccard.k-insight{--k:var(--mag)}
+.ccard.k-belief{--k:var(--plum)}
+.ccard.k-debrief{--k:var(--navy)}
+.ccard.k-sticker{--k:var(--orange)}
+.cempty{text-align:center;padding:24px 8px}
+.cempty img{width:120px;height:120px;object-fit:contain;opacity:.9;margin:0 auto 8px;display:block}
+/* מילים שנותנות כוח: כרטיס מלא בשזיף, כמו פתק השראה */
+.ccard.k-belief{background:var(--plum);color:#FBF7F1;border-inline-start-color:var(--mag)}
+.ccard.k-belief .ccard-kind{color:#FBF7F1}
+.ccard.k-belief .ccard-when{color:#FBF7F1;opacity:.75}
+.ccard.k-belief::before{color:#FBF7F1;opacity:.14}
+.ccard.k-belief::after{background:var(--mag);opacity:.35}
+.ccard.k-belief .ccard-tx{font-size:20px}
+.ccard.k-belief .ccard-ico{filter:drop-shadow(0 3px 6px rgba(0,0,0,.25))}
+
+/* ===== אייקונים בסרגל הלשוניות ורגע הצלחה (12.11) ===== */
+.tabs a::before{display:none}
+.tab-ico{width:30px;height:30px;object-fit:contain;opacity:.55;filter:grayscale(.35);transition:transform .2s,opacity .2s,filter .2s}
+.tabs a.on .tab-ico{opacity:1;filter:none;transform:translateY(-2px) scale(1.08)}
+.tabs a.on{color:var(--plum)}
+.cele{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(242,238,227,.55);z-index:60;pointer-events:none;transition:opacity .45s}
+.cele.out{opacity:0}
+.cele-in{background:var(--paper);border-radius:28px;padding:22px 26px 18px;text-align:center;box-shadow:var(--sh);max-width:300px;animation:celeIn .5s cubic-bezier(.2,1.4,.4,1) both}
+.cele-in img{width:120px;height:120px;object-fit:contain;display:block;margin:0 auto 6px;animation:celeBob 1.4s ease-in-out .5s infinite alternate}
+.cele-in p{font-size:19px;font-weight:700;color:var(--navy)}
+@keyframes celeIn{from{opacity:0;transform:scale(.7) translateY(20px)}to{opacity:1;transform:none}}
+@keyframes celeBob{to{transform:translateY(-6px) rotate(-3deg)}}
+@media (prefers-reduced-motion:reduce){.cele-in,.cele-in img{animation:none}}
+.check .ct-ico{margin:0}
+.check{gap:10px}
+.check span{flex:1}
