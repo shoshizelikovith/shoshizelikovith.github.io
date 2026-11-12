@@ -467,10 +467,7 @@ function renderWeek() {
   if (!hasBase()) body += `<div class="banner">${T.needBaseWeek} <a class="lnk" href="#/base">${T.baseGo}</a></div>`;
   if (prevOpen) body += `<div class="banner soft"><b>${T.prevWeekOpen}</b><a class="lnk" href="#/week/close?${prevWs}">${T.weekCloseTitle}</a></div>`;
   if (w.opened_at) {
-    body += card(`<p class="q">${T.weekResult}</p><p class="ach">${esc(w.result)}</p>
-      ${(w.habits || []).filter((h) => filled(h.text)).length ? `<p class="q">${T.weekHabits}</p>${w.habits.filter((h) => filled(h.text)).map((h) => `<p class="it">${esc([h.text, h.amount, h.freq && h.freq + ' ' + T.times, h.days].filter(Boolean).join(' · '))}</p>`).join('')}` : ''}
-      ${(w.onetime || []).filter((h) => filled(h.text)).length ? `<p class="q">${T.weekOnce}</p>${w.onetime.filter((h) => filled(h.text)).map((h) => `<p class="it">${esc([h.day, h.text].filter(Boolean).join(' · '))}</p>`).join('')}` : ''}
-      ${w.win_belief ? `<p class="hint" style="margin-top:8px">״${esc(w.win_belief)}״</p>` : ''}`);
+    body += card(weekPlanHtml(w));
     body += w.closed_at
       ? `<div class="banner soft"><b>${T.weekClosed}</b></div><a class="btn2" href="#/week/close?${ws}">${T.weekCloseTitle}</a>`
       : `${dow >= 4 ? `<a class="btn" href="#/week/close?${ws}">${T.weekCloseTitle}</a>` : `<p class="hint">${T.weekCloseWhen}</p><a class="btn2" href="#/week/close?${ws}">${T.weekCloseTitle}</a>`}`;
@@ -525,11 +522,40 @@ function renderWeekOpen() {
   draw();
 }
 
+// פתק המטרות של השבוע (מוצג גם בשבוע וגם בראש התחקיר)
+function weekPlanHtml(w) {
+  return `<p class="q">${T.weekResult}</p><p class="ach">${esc(w.result || '')}</p>
+      ${(w.habits || []).filter((h) => filled(h.text)).length ? `<p class="q">${T.weekHabits}</p>${w.habits.filter((h) => filled(h.text)).map((h) => `<p class="it">${esc([h.text, h.amount, h.freq && h.freq + ' ' + T.times, h.days].filter(Boolean).join(' · '))}</p>`).join('')}` : ''}
+      ${(w.onetime || []).filter((h) => filled(h.text)).length ? `<p class="q">${T.weekOnce}</p>${w.onetime.filter((h) => filled(h.text)).map((h) => `<p class="it">${esc([h.day, h.text].filter(Boolean).join(' · '))}</p>`).join('')}` : ''}
+      ${filled(w.beings) ? `<p class="q">${T.weekBeings}</p><p class="it">${esc(w.beings)}</p>` : ''}
+      ${w.win_belief ? `<p class="hint" style="margin-top:8px">״${esc(w.win_belief)}״</p>` : ''}`;
+}
+// סיכום השבוע מתוך היומן היומי: כדי שהתחקיר יישען על נתונים ולא על הזיכרון (שושי 12.11)
+function weekSummaryHtml(ws) {
+  const days = [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(ws, i)).map((k) => ({ k, d: D.days[k] })).filter((x) => x.d && x.d.opened_at);
+  if (!days.length) return `<p class="hint">${T.sumEmpty}</p>`;
+  const closed = days.filter((x) => x.d.closed_at).length;
+  const keys = days.filter((x) => filled(x.d.key_action));
+  const cnt = (st) => keys.filter((x) => x.d.key_status === st).length;
+  const signs = days.filter((x) => filled(x.d.being_sign));
+  const ins = days.filter((x) => filled(x.d.insight));
+  const lab = (k) => esc(dayLabel(k));
+  return `<p class="it"><b>${T.sumDays(days.length, closed)}</b></p>
+    <p class="q">${T.sumBeings}</p>${days.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.being || '')}${x.d.presence != null ? ` · ${x.d.presence}/5` : ''}</p>`).join('')}
+    ${keys.length ? `<p class="q">${T.sumKey}</p><p class="hint">${T.sumKeyCounts(cnt('done'), cnt('partial'), cnt('no'))}</p>
+      ${keys.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.key_action)}${x.d.key_status ? ` · <b>${esc(T.keyStatus[x.d.key_status])}</b>` : ''}</p>`).join('')}` : ''}
+    ${signs.length ? `<p class="q">${T.sumSigns}</p>${signs.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.being_sign)}${x.d.sign_status ? ` · <b>${esc(T.signStatus[x.d.sign_status])}</b>` : ''}</p>`).join('')}` : ''}
+    ${ins.length ? `<p class="q">${T.sumInsights}</p>${ins.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.insight)}</p>`).join('')}` : ''}`;
+}
+
 function renderWeekClose() {
   const q = (location.hash.split('?')[1] || '');
   const ws = /^\d{4}-\d\d-\d\d$/.test(q) ? q : weekStart(today());
   const m = { ...(D.weeks[ws] || {}) };
   shell(`${hd(T.weekNum(weekNumber(ws)), T.weekCloseTitle)}${helpRow('debrief')}
+    <p class="hint">${T.sumIntro}</p>
+    ${D.weeks[ws] && D.weeks[ws].opened_at ? card(`<div class="ct">${T.planTitle}</div>${weekPlanHtml(D.weeks[ws])}`, 'flat') : ''}
+    ${card(`<div class="ct">${T.sumTitle}</div>${weekSummaryHtml(ws)}`, 'flat')}
     <p class="hint">${T.weekNoClose}</p>
     ${card(`<div class="ct">${T.progressQ} ${tag(1)}</div>
       ${hasAchievement() ? `<p class="hint">${esc(F().achievement)}</p>` : ''}
