@@ -1,5 +1,5 @@
 // שומר את קבצי האפליקציה במכשיר, כדי שתיפתח מהר וגם בלי חיבור. הנתונים עצמם לא עוברים כאן.
-const V = 'ls-v5';
+const V = 'ls-v6';
 const FILES = ['./', 'index.html', 'css/app.css', 'js/app.js', 'js/api.js', 'js/admin.js', 'js/config.js', 'js/content.js', 'js/img.js',
   'img/aro-wide.png', 'img/aro-wide-neg.png', 'img/icon-192.png', 'fonts/assistant-4d5300d9.woff2', 'fonts/assistant-27157e4c.woff2', 'fonts/assistant-188705ea.woff2'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(V).then((c) => c.addAll(FILES))); self.skipWaiting(); });
