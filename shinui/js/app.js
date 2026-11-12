@@ -797,7 +797,7 @@ function renderFeedback() {
 function renderOffer() {
   sessionStorage.setItem('offerSeen', today());
   const link = CONFIG.OFFER_LINK[kindOf()] || CONFIG.OFFER_LINK.graduate;
-  const dl = CONFIG.OFFER_DEADLINE && CONFIG.OFFER_DEADLINE >= today() ? shortDate(CONFIG.OFFER_DEADLINE) : '';
+  const dl = CONFIG.OFFER_DEADLINE && CONFIG.OFFER_DEADLINE >= today() ? `${T.dayNames[parse(CONFIG.OFFER_DEADLINE).getDay()]} ${shortDate(CONFIG.OFFER_DEADLINE)}` : '';
   shell(`${hd('', T.offerTitle, 'club')}
     ${card(`<p class="ins">${T.offerSub}</p>
       ${dl ? `<p class="q" style="margin-top:12px">${T.offerDeadline(dl)}</p>` : ''}
