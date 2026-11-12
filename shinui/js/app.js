@@ -146,8 +146,8 @@ async function render() {
   }
   if (!P().terms_at) return renderTerms();
   const [, r1, r2] = (location.hash || '#/today').split('?')[0].split('/');
-  // אחרי ההתנסות: מסך ההצעה פעם ביום
-  if (offerActive() && r1 !== 'offer' && r1 !== 'settings' && sessionStorage.getItem('offerSeen') !== today()) return go('#/offer');
+  // אחרי ההתנסות הגישה נסגרת: רק מסך ההצעה והגדרות (ליציאה)
+  if (offerActive() && r1 !== 'offer' && r1 !== 'settings') return go('#/offer');
   switch (r1) {
     case 'week': return r2 === 'open' ? renderWeekOpen() : r2 === 'close' ? renderWeekClose() : renderWeek();
     case 'progress': return renderProgress();
@@ -222,8 +222,10 @@ function renderTerms() {
 }
 
 // ===== פסים בראש ״היום״ =====
-function trialLeft() { const e = P().trial_end; if (!e || P().member) return null; return daysBetween(today(), e) + 1; }
-function offerActive() { const left = trialLeft(); return left !== null && left <= 0; }
+// סוף ההתנסות: 7 ימים מההרשמה ולא אחרי 27.11 14:00 (trial_ends_at מהשרת). השרת גם חוסם שמירה וקריאה אחרי הזמן הזה
+function trialEndsMs() { const p = P(); if (p.member || p.is_admin) return null; if (p.trial_ends_at) return Date.parse(p.trial_ends_at); return p.trial_end ? Date.parse(p.trial_end + 'T23:59:59') : null; }
+function trialLeft() { const e = trialEndsMs(); if (e === null) return null; return Math.max(0, Math.ceil((e - Date.now()) / 864e5)); }
+function offerActive() { const e = trialEndsMs(); return e !== null && Date.now() >= e; }
 function banners() {
   const out = []; const t = today();
   const left = trialLeft();
@@ -742,7 +744,7 @@ function renderOffer() {
     ${card(`<p class="ins">${T.offerSub}</p>
       ${dl ? `<p class="q" style="margin-top:12px">${T.offerDeadline(dl)}</p>` : ''}
       ${link ? `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">${T.offerCta}</a>` : ''}`)}
-    <a class="btn2" href="#/today">${T.backToday}</a>`, '');
+    ${offerActive() ? `<a class="btn2" href="#/settings">${T.settingsTitle}</a>` : `<a class="btn2" href="#/today">${T.backToday}</a>`}`, offerActive() ? 'locked' : '');
 }
 
 // ===== התקנה כאפליקציה =====
