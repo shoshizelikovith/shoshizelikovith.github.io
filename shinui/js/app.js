@@ -31,6 +31,9 @@ const filled = (v) => v != null && String(v).trim() !== '';
 const hasAchievement = () => filled(F().achievement);
 const hasPlan = () => (F().plan_once || []).some((x) => filled(x.text)) || (F().plan_habits || []).some((x) => filled(x.text));
 const hasBase = () => hasAchievement() && hasPlan();
+// שתי רמות תרגול (שושי 12.11): ״הוויה״ (כמו שיעורים 6-12) או היומן המלא מול הישג המפתח. היומן המלא פעיל רק כשיש בסיס
+const levelOf = () => P().level || (P().kind === 'graduate' ? 'full' : 'being');
+const fullMode = () => levelOf() === 'full' && hasBase();
 const channelsDone = () => ['physical', 'cognitive', 'spiritual', 'emotional'].every((k) => (F().channels || {})[k] && filled(F().channels[k].score));
 const futureDone = () => filled(F().future_general) || filled(F().future_specific);
 const firstName = () => (P().full_name || '').split(' ')[0];
@@ -144,6 +147,9 @@ async function render() {
     root.innerHTML = `<main class="app"><div class="top">${logoImg()}</div></main>`;
     try { D = await api.load(); } catch (e) { root.innerHTML = `<main class="app"><p class="err">${esc(e.message)}</p><button class="btn" onclick="location.reload()">לנסות שוב</button></main>`; return; }
   }
+  // קישור משיעור: ?level=being או ?level=full
+  const qLevel = new URLSearchParams(location.search).get('level');
+  if ((qLevel === 'being' || qLevel === 'full') && P().level !== qLevel) api.saveProfile({ level: qLevel });
   if (!P().terms_at) return renderTerms();
   const [, r1, r2] = (location.hash || '#/today').split('?')[0].split('/');
   // אחרי ההתנסות הגישה נסגרת: רק מסך ההצעה והגדרות (ליציאה)
@@ -199,12 +205,14 @@ function renderLogin(step = 'email', email = '') {
 
 // ===== תקנון ופרטיות (פעם אחת) =====
 function renderTerms() {
-  const m = { full_name: P().full_name || '', share: null, kind: P().self_kind || (P().kind !== 'other' ? P().kind : null) };
+  const m = { full_name: P().full_name || '', share: null, kind: P().self_kind || (P().kind !== 'other' ? P().kind : null), level: levelOf() };
   root.innerHTML = `<main class="app"><div class="login">${logoImg()}${hd('', T.termsTitle)}
     <section class="card">
       <ul class="lstx">${T.termsLines.map((l) => `<li class="it" style="margin-bottom:8px">${l}</li>`).join('')}</ul>
       <label class="q" for="nm">${T.nameLabel}</label><input id="nm" type="text" autocomplete="name" value="${esc(m.full_name)}">
       <p class="q">${T.kindQ}</p>${seg('kind', m.kind, Object.entries(T.kinds))}
+      <p class="q">${T.levelQ}</p>${seg('level', m.level, [['being', T.levelBeing], ['full', T.levelFull]])}
+      <p class="hint" id="lvh">${m.level === 'full' ? T.levelFullSub : T.levelBeingSub}</p>
       <p class="q">${T.shareQ}</p>${seg('share', null, [['yes', T.shareYes], ['no', T.shareNo]])}
       <p class="hint">${T.shareNote}</p>
       <label class="agree"><input type="checkbox" id="ag"> ${T.termsAgree}</label>
@@ -213,11 +221,12 @@ function renderTerms() {
       <button class="btn" id="go">${T.enter}</button>
     </section></div></main>`;
   bindForm(m, () => {});
+  $('[data-seg="level"]').addEventListener('pick', (e) => { $('#lvh').textContent = e.detail === 'full' ? T.levelFullSub : T.levelBeingSub; });
   $('#go').addEventListener('click', () => {
     const er = $('#er');
     if (!$('#ag').checked) { er.textContent = T.mustAgree; er.hidden = false; return; }
-    api.saveProfile({ full_name: $('#nm').value.trim(), share_journal: m.share === 'yes', self_kind: m.kind || null, terms_at: new Date().toISOString() });
-    go('#/base');
+    api.saveProfile({ full_name: $('#nm').value.trim(), share_journal: m.share === 'yes', self_kind: m.kind || null, level: m.level || 'being', terms_at: new Date().toISOString() });
+    go(m.level === 'full' ? '#/base' : '#/today');
   });
 }
 
@@ -238,7 +247,8 @@ function banners() {
   if (yd && yd.opened_at && !yd.closed_at && new Date().getHours() < 14)
     out.push(`<div class="banner">${T.closeYesterday} <a class="lnk" href="#/close/${y}">${T.closeYesterdayCta}</a></div>`);
   if (hasAchievement() && F().achievement_date && F().achievement_date < t) out.push(`<div class="banner">${T.achievementPassedBanner} <a class="lnk" href="#/base/achievement">${T.achievementPassedCta}</a></div>`);
-  if (!hasBase()) out.push(`<div class="banner"><b>${T.baseTitle}</b>${T.needBaseBanner} <a class="lnk" href="#/base">${T.baseGo}</a></div>`);
+  if (levelOf() === 'being') { if (hasBase()) out.push(`<div class="banner soft">${T.levelUpBanner} <a class="lnk" href="#/settings">${T.levelUpCta}</a></div>`); }
+  else if (!hasBase()) out.push(`<div class="banner"><b>${T.baseTitle}</b>${T.needBaseBanner} <a class="lnk" href="#/base">${T.baseGo}</a></div>`);
   else {
     const w = D.weeks[weekStart(t)];
     if (!w || !w.opened_at) out.push(`<div class="banner soft">${T.weekNoteReminder} <a class="lnk" href="#/week/open">${T.weekNoteCta}</a></div>`);
@@ -254,7 +264,7 @@ function renderToday() {
     shell(`${banners()}${hd(dayLabel(t), T.dayOpenedTitle)}
       ${card(`<p class="ach">${esc(T.noteToday)} ${esc(d.being)}.</p>
         ${(d.sub_beings || []).filter(Boolean).length ? `<p class="hint">${esc(d.sub_beings.filter(Boolean).join(' · '))}</p>` : ''}
-        ${filled(d.key_action) ? `<p class="q">${hasBase() ? T.keyAction : T.keyActionSmall}</p><p class="it">${esc([d.key_action, d.key_amount, d.key_when].filter(Boolean).join(' · '))}</p>` : ''}
+        ${filled(d.key_action) ? `<p class="q">${fullMode() ? T.keyAction : T.keyActionSmall}</p><p class="it">${esc([d.key_action, d.key_amount, d.key_when].filter(Boolean).join(' · '))}</p>` : ''}
         ${d.win_belief ? `<p class="hint" style="margin-top:8px">״${esc(d.win_belief)}״</p>` : ''}`)}
       <p class="hint">${T.dayOpenedSub}</p>
       <a class="btn" href="#/close/${t}">${T.toClose}</a>
@@ -278,7 +288,7 @@ function renderOpen(day, isToday = false) {
   const m = { being: '', sub_beings: ['', '', '', ''], steps: [{}, {}, {}], ...(D.days[day] || {}) };
   if (!m.sub_beings || m.sub_beings.length < 4) m.sub_beings = [...(m.sub_beings || []), '', '', '', ''].slice(0, 4);
   m.steps = [0, 1, 2].map((i) => ({ ...((m.steps || [])[i] || {}) }));
-  const base = hasBase();
+  const base = fullMode();
   let openMain = !m.being, openSub = false;
   const draw = () => {
     const ach = hasAchievement() ? card(`<div class="ct">${T.achievementTop} ${helpBtn('achievement')}</div><p class="ach">${esc(F().achievement)}</p>${F().achievement_date ? `<p class="hint">${esc(T.achievementDate)}: ${esc(shortDate(F().achievement_date))}</p>` : ''}`, 'flat') : '';
@@ -363,7 +373,7 @@ function renderClose(day) {
     ${card(`<div class="ct">${esc(T.presenceQ(d.being))} ${tag(1)} ${helpBtn('presence')}</div>${scale('presence', m.presence, T.presenceQ(d.being))}`, '', 'presence')}
     ${subs.some(Boolean) ? card(`<div class="ct">${T.subPresenceQ} ${tag(1)}</div>
       ${subs.map((s, i) => s ? `<div class="rt"><span>${esc(s)}</span>${scale('sub_presence.' + i, m.sub_presence[i], s)}</div>` : '').join('')}`, '', 'subp') : ''}
-    ${filled(d.key_action) ? card(`<div class="ct">${hasBase() ? T.keyAction : T.keyActionSmall} ${tag(1)}</div>
+    ${filled(d.key_action) ? card(`<div class="ct">${fullMode() ? T.keyAction : T.keyActionSmall} ${tag(1)}</div>
       <p class="hint">${esc([d.key_action, d.key_amount].filter(Boolean).join(' · '))}</p>
       ${seg('key_status', m.key_status, Object.entries(T.keyStatus))}
       ${inp('key_of', m.key_of, T.keyOfPh)}
@@ -418,7 +428,7 @@ async function renderNote(day) {
     <button class="btn2" id="share">${T.shareImage}</button>
     <a class="btn2" href="#/today">${T.backToday}</a>`, 'today');
   let cv;
-  const draw = async () => { cv = wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture }) : await morningNote({ ...d, hasBase: hasBase() }, { full, dateLabel: dayLabel(day) }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
+  const draw = async () => { cv = wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: dayLabel(day) }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
   await draw();
   $('#kind').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; full = b.dataset.v === '1'; wall = b.dataset.v === '2'; $('#wh').hidden = !wall; $$('#kind button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
   const fname = () => `${wall ? 'שומר-מסך' : 'פתק-בוקר'}-${day}.png`;
@@ -710,12 +720,15 @@ function renderSettings() {
   shell(`${hd('', T.settingsTitle)}
     ${card(`<label class="q" for="nm">${T.myName}</label><input id="nm" type="text" value="${esc(p.full_name)}">`)}
     ${card(`<div class="ct">${p.share_journal ? T.shareStatusOn : T.shareStatusOff}</div><button class="btn2" id="sh">${p.share_journal ? T.shareToggleOn : T.shareToggleOff}</button>`)}
+    ${card(`<div class="ct">${T.levelSettingsTitle}</div>${seg('level', levelOf(), [['being', T.levelBeing], ['full', T.levelFull]])}<p class="hint" id="lvh">${levelOf() === 'full' ? T.levelFullSub : T.levelBeingSub}</p><p class="hint">${T.levelSettingsHint}</p>`)}
     ${card(`<div class="ct">${T.installTitle}</div><p class="hint">${T.installIos}</p><p class="hint">${T.installAndroid}</p>`)}
     ${p.is_admin ? `<a class="btn dark" href="#/admin">${T.adminLink}</a>` : ''}
     <button class="btn2" id="out">${T.logout}</button>
     <p class="hint" style="text-align:center">${esc(p.email || '')}</p>`, '');
   let t; $('#nm').addEventListener('input', (e) => { clearTimeout(t); t = setTimeout(() => api.saveProfile({ full_name: e.target.value.trim() }), 700); });
   $('#sh').addEventListener('click', () => { api.saveProfile({ share_journal: !p.share_journal }); toast(T.saved); renderSettings(); });
+  const lv = { level: levelOf() }; bindForm(lv, () => {});
+  $('[data-seg="level"]').addEventListener('pick', (e) => { api.saveProfile({ level: e.detail }); $('#lvh').textContent = e.detail === 'full' ? T.levelFullSub : T.levelBeingSub; toast(T.saved); });
   $('#out').addEventListener('click', async () => { await api.logout(); D = null; go('#/'); });
 }
 
