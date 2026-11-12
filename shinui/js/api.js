@@ -82,7 +82,8 @@ async function flush() {
       } else if (op.kind === 'insert') {
         await http(`/rest/v1/${op.table}`, { method: 'POST', body: op.row, prefer: 'return=minimal' });
       }
-      queue.shift();
+      // מוחקים בדיוק את הפעולה שנשלחה. אם בינתיים נכנסה פעולה חדשה לאותו מפתח (למשל סגירת יום מיד אחרי שמירה), היא נשארת בתור ונשלחת (תיקון 12.11)
+      const at = queue.indexOf(op); if (at >= 0) queue.splice(at, 1);
       LS.set(K.queue, queue);
     }
     emit('synced');
