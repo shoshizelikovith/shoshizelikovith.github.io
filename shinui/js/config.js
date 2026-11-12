@@ -9,8 +9,8 @@ export const CONFIG = {
   ZOOM_WHEN: 'יום ראשון · 10:15',   // שושי 12.11: השידור ביום ראשון ב-10:15 בבוקר. אם משתנה - לעדכן כאן וגם במצגת
   RECORDINGS_LINK: '',    // תיקיית ההקלטות
   TERMS_LINK: '',
-  OFFER_DEADLINE: '',     // התאריך האחרון למחיר המוזל, אחד לכולן, בפורמט 2026-11-29         // דף התקנון והפרטיות
-  OFFER_LINK: { graduate: '', club: '', other: '' },  // דפי התשלום בקארדקום, לפי סוג
+  OFFER_DEADLINE: '2026-11-27',  // המחיר המיוחד עד 27.11 בשעה 14:00 (צ׳קליסט ההשקה)
+  OFFER_LINK: { graduate: 'https://shoshizelikovith.com/moadon/', club: 'https://shoshizelikovith.com/moadon/haverot/', other: 'https://shoshizelikovith.com/moadon/' },  // דפי ההצעה (צ׳אט ההשקה 12.11). כפתורי קארדקום בתוך הדפים
 
   // לוגו על פתק הבוקר והסטיקר. כשהלוגו של ״לשחק את השינוי״ יאושר, מחליפים כאן את שני הקבצים
   NOTE_LOGO: 'img/aro-wide.png',
