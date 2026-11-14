@@ -126,7 +126,7 @@ const arts = {};
 export async function quoteCard(words, { kind = 'insight', label = '', name = '', dateLabel = '', bg = 'navy', art = '' } = {}) {
   await ready();
   const th = TH(bg, 'navy');
-  art = art || (kind === 'morning' ? (CONFIG.MORNING_ART || 'img/note/art-morning.png') : (CONFIG.NOTE_ART || 'img/note/art-book.png'));
+  art = art || (kind === 'morning' ? (CONFIG.MORNING_ART || 'img/note/art-morning-window.png') : (CONFIG.NOTE_ART || 'img/note/art-book.png'));
   if (!(art in arts)) arts[art] = await loadImg(art);
   const pic = arts[art];
   const W = 1080, H = 1350, P = 90, maxW = W - P * 2 - 40;
