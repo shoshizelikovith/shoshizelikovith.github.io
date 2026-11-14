@@ -130,6 +130,11 @@ const inp = (k, v, ph = '', type = 'text', extra = '') => `<input type="${type}"
 const ta = (k, v, ph = T.writeHere, rows = 2) => `<textarea data-k="${k}" rows="${rows}" placeholder="${esc(ph)}">${esc(v)}</textarea>`;
 const seg = (k, v, opts) => `<div class="seg" role="radiogroup" data-seg="${k}">${opts.map(([val, lab]) => `<button type="button" role="radio" aria-checked="${v === val}" class="${v === val ? 'on' : ''}" data-v="${esc(val)}">${esc(lab)}</button>`).join('')}</div>`;
 const scale = (k, v, label) => `<div class="scale" role="radiogroup" aria-label="${esc(label || '')}" data-seg="${k}" data-num="1">${[0, 1, 2, 3, 4, 5].map((n) => `<button type="button" role="radio" aria-checked="${v === n}" class="${v === n ? 'on' : ''}" data-v="${n}">${n}</button>`).join('')}</div>`;
+// בחירת שעה מרשימה, כל רבע שעה (בטלפון נפתח גלגל בחירה). ערך ישן כמו 0830 מוצג כ-8:30
+const normTime = (v) => { const s = String(v || '').trim(); const m = s.match(/^(\d{1,2})[:.]?(\d{2})$/); return m && +m[1] < 24 && +m[2] < 60 ? `${+m[1]}:${m[2]}` : s; };
+const TIMES = Array.from({ length: (24 - 5) * 4 }, (_, i) => { const t = 5 * 60 + i * 15; return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; });
+const timeSel = (k, v) => { const cur = normTime(v); const opts = cur && !TIMES.includes(cur) ? [cur, ...TIMES] : TIMES;
+  return `<select data-k="${k}" class="tsel" aria-label="${esc(T.openTomorrowQ)}"><option value="">${T.pickTime}</option>${opts.map((t) => `<option value="${t}"${t === cur ? ' selected' : ''}>${t}</option>`).join('')}</select>`; };
 const card = (inner, cls = '', key = '') => `<section class="card ${cls}" ${key ? `data-req="${key}"` : ''}>${inner}</section>`;
 
 // קישור שדות למודל. path כמו "sub_beings.2" או "habits.0.text"
@@ -177,6 +182,9 @@ async function render() {
   if ((qLevel === 'being' || qLevel === 'full') && P().level !== qLevel) api.saveProfile({ level: qLevel });
   if (!P().terms_at) return renderTerms();
   const [, r1, r2] = (location.hash || '#/today').split('?')[0].split('/');
+  // המסך האחרון שבו היא עבדה (פתיחה, סגירה, פתק שבועי, תחקיר), כדי שמסכי הדיוק יחזירו אליו
+  const work = r1 === 'open' ? 'open' : r1 === 'close' ? 'close' : r1 === 'week' && r2 === 'open' ? 'weekOpen' : r1 === 'week' && r2 === 'close' ? 'debrief' : (r1 === 'today' || !r1) && !(D.days[today()] || {}).opened_at ? 'open' : null;
+  if (work) { try { sessionStorage.setItem('ls-work', JSON.stringify([location.hash || '#/today', work])); } catch {} }
   // אחרי ההתנסות הגישה נסגרת: רק מסך ההצעה והגדרות (ליציאה)
   if (offerActive() && r1 !== 'offer' && r1 !== 'settings') return go('#/offer');
   switch (r1) {
@@ -391,7 +399,7 @@ function renderClose(day) {
   const d = D.days[day] || {};
   if (!d.opened_at) { toast(T.openFirst); return go('#/open/' + day); }
   if (!d.closed_at && !canStillClose(day)) { toast(T.closeTooLate); return go('#/today'); }
-  if (!d.closed_at) api.saveDay(day, { close_started_at: new Date().toISOString() }); // מתחילים למדוד מהכניסה האחרונה למסך
+  if (!d.closed_at && (!d.close_started_at || Date.now() - Date.parse(d.close_started_at) > 3 * 3600e3)) api.saveDay(day, { close_started_at: new Date().toISOString() }); // מודדים מהכניסה הראשונה בישיבה
   const subs = (d.sub_beings || []).map((s) => s || '');
   const m = { sub_presence: [], ...d, deep: { ...(d.deep || {}) }, steps: (d.steps || []).map((x) => ({ ...x })) };
   m.sub_presence = [0, 1, 2, 3].map((i) => (d.sub_presence || [])[i] ?? null);
@@ -416,20 +424,26 @@ function renderClose(day) {
       <p class="q">${T.dayHowQ} ${tag(0)}</p>${ta('day_how', m.day_how, T.writeHere, 2)}
       <div data-req="insight"><p class="q">${T.insightQ} ${tag(1)} ${helpBtn('insight')}</p>${ta('insight', m.insight, T.writeHere, 3)}</div>
       <p class="q">${T.thanksQ} ${tag(0)}</p>${ta('thanks', m.thanks)}`)}
+    ${card(`<div class="ct"><span><img class="ct-ico" src="img/icons/reflect.png" width="34" height="34" alt="" aria-hidden="true">${T.outTitle}</span> ${tag(0)} ${helpBtn('out')}</div>
+      ${T.outSub ? `<p class="hint">${T.outSub}</p>` : ''}
+      <p class="q">${T.outSitQ}</p>${ta('out_situation', m.out_situation, T.outSitPh, 2)}
+      <p class="q">${T.outInnerQ}</p>${ta('out_inner', m.out_inner, T.outInnerPh, 2)}
+      <p class="q">${T.backHelpQ}</p>${ta('back_help', m.back_help, T.backHelpPh, 2)}`, 'outc')}
     ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
-      <p class="q">${T.gapQ}</p>${ta('gap_moment', m.gap_moment)}
-      <p class="q">${T.extraCloseQ}</p>${ta('extra_close', m.extra_close)}
-      <p class="q">${T.openTomorrowQ}</p>${inp('open_tomorrow', m.open_tomorrow, '7:00', 'text', 'inputmode="numeric"')}`)}
-    ${full ? `<section class="card deep"><details ${deepCount ? 'open' : ''}><summary><span class="ct" style="margin:0"><img class="ct-ico" src="img/icons/reflect.png" width="34" height="34" alt="" aria-hidden="true">${T.deepTitle} ${tag(0)}</span></summary>
-      <div class="ct" style="justify-content:flex-start">${helpBtn('deep')}</div>
+      ${filled(m.gap_moment) ? `<p class="q">${T.gapQ}</p>${ta('gap_moment', m.gap_moment)}` : ''}
+      ${filled(m.extra_close) ? `<p class="q">${T.extraCloseQ}</p>${ta('extra_close', m.extra_close)}` : ''}
+      <p class="q">${T.openTomorrowQ}</p>${timeSel('open_tomorrow', m.open_tomorrow)}`)}
+    <section class="chs" aria-labelledby="chst">
+      <div class="ct chs-h"><span id="chst"><img class="ct-ico" src="img/icons/channels.png" width="34" height="34" alt="" aria-hidden="true">${T.deepTitle}</span> ${tag(0)} ${helpBtn('deep')}</div>
       <p class="hint">${T.deepIntro}</p>
-      ${T.deep.map((g) => `<h3 class="dh">${esc(g.h)}</h3>${g.sub ? `<p class="hint">${esc(g.sub)}</p>` : ''}
-        ${g.qs.map(([k, q]) => `${q && k !== 'g0' ? `<p class="q">${esc(q)}</p>` : ''}${ta('deep.' + k, m.deep[k], T.writeHere, 2)}`).join('')}`).join('')}
-    </details></section>` : ''}
+      ${T.deep.map((g) => { const has = g.qs.some(([k]) => filled(m.deep[k])); return `<details class="card chcard"${has ? ' open' : ''}><summary>${esc(g.h)}</summary>
+        ${g.sub ? `<p class="hint">${esc(g.sub)}</p>` : ''}
+        ${g.qs.map(([k, q]) => `${q && k !== 'g0' ? `<p class="q">${esc(q)}</p>` : ''}${ta('deep.' + k, m.deep[k], T.writeHere, 2)}`).join('')}</details>`; }).join('')}
+    </section>
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${d.closed_at ? T.saveBase : T.closedDay}</button>
     <a class="btn2" href="#/refine/close">${T.howToRefineClose}</a>`, day === today() ? 'today' : '');
-  const save = (x) => api.saveDay(day, { presence: x.presence, sub_presence: x.sub_presence, key_status: x.key_status, key_of: x.key_of, key_reflect: x.key_reflect, steps: x.steps, steps_reflect: x.steps_reflect, day_how: x.day_how, sign_status: x.sign_status || null, insight: x.insight, gap_moment: x.gap_moment, thanks: x.thanks, extra_close: x.extra_close, open_tomorrow: x.open_tomorrow, deep: x.deep });
+  const save = (x) => api.saveDay(day, { presence: x.presence, sub_presence: x.sub_presence, key_status: x.key_status, key_of: x.key_of, key_reflect: x.key_reflect, steps: x.steps, steps_reflect: x.steps_reflect, day_how: x.day_how, sign_status: x.sign_status || null, insight: x.insight, gap_moment: x.gap_moment, out_situation: x.out_situation, out_inner: x.out_inner, back_help: x.back_help, thanks: x.thanks, extra_close: x.extra_close, open_tomorrow: x.open_tomorrow, deep: x.deep });
   const flushNow = bindForm(m, save);
   $('#done').addEventListener('click', () => {
     flushNow();
@@ -439,9 +453,10 @@ function renderClose(day) {
     if (full && filled(d.key_action) && !m.key_status) miss.push('keys');
     if (!filled(m.insight)) miss.push('insight');
     if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
+    const first = !D.days[day].closed_at;
     api.saveDay(day, { closed_at: D.days[day].closed_at || new Date().toISOString() });
     celebrate('close', T.dayClosedToast);
-    go('#/today');
+    go(first ? '#/sticker/' + day : '#/today');
   });
 }
 
@@ -487,7 +502,8 @@ async function renderSticker(day) {
     <div class="preview" id="pv"></div>
     <button class="btn" id="save">${T.saveImage}</button>
     <button class="btn2" id="share">${T.shareImageGroup}</button>
-    <p class="hint" style="text-align:center">${T.stickerSaved}</p>`, 'today');
+    <p class="hint" style="text-align:center">${T.stickerSaved}</p>
+    <a class="btn2" href="#/today">${T.backToday}</a>`, 'today');
   let cv;
   const draw = async () => { cv = await sticker(d.insight, { name: withName ? firstName() : '', dateLabel: hebShort(day), bg }); cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', d.insight); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; pv.appendChild(cv); };
   await draw();
@@ -636,7 +652,7 @@ function stats() {
   const openOnly = wk.filter((x) => x.d.opened_at && !x.d.closed_at && x.k < t && canStillClose(x.k)).pop();
   const keyDone = wk.filter((x) => x.d.key_status === 'done').length;
   const keyTotal = wk.filter((x) => x.d.key_status).length;
-  const OPT = ['where_needed', 'may_derail', 'recover', 'win_belief', 'being_sign', 'key_reflect', 'day_how', 'gap_moment', 'thanks', 'extra_close', 'open_tomorrow'];
+  const OPT = ['where_needed', 'may_derail', 'recover', 'win_belief', 'being_sign', 'key_reflect', 'day_how', 'out_inner', 'thanks', 'back_help', 'open_tomorrow'];
   const opened = wk.filter((x) => x.d.opened_at);
   const depth = opened.length ? Math.round(100 * opened.reduce((a, x) => a + OPT.filter((k) => filled(x.d[k])).length / OPT.length, 0) / opened.length) : null;
   const all = Object.values(D.days);
@@ -710,6 +726,7 @@ function collectionItems() {
   Object.entries(D.days).forEach(([k, d]) => {
     if (filled(d.insight)) items.push({ kind: d.sticker ? 'sticker' : 'insight', also: d.sticker ? 'insight' : null, text: d.insight, when: shortDate(k), sort: k, link: d.sticker ? '#/sticker/' + k : null });
     if (filled(d.win_belief)) items.push({ kind: 'belief', text: d.win_belief, when: shortDate(k), sort: k });
+    if (filled(d.out_situation) || filled(d.out_inner) || filled(d.back_help)) items.push({ kind: 'bank', parts: [d.out_situation, d.out_inner, d.back_help], text: [d.out_situation, d.out_inner, d.back_help].filter(Boolean).join(' '), when: shortDate(k), sort: k + 'b' });
   });
   Object.entries(D.weeks).forEach(([k, w]) => {
     if (filled(w.hands) && w.closed_at) items.push({ kind: 'debrief', text: w.hands, when: T.weekNum(weekNumber(k)), sort: k + 'z' });
@@ -723,7 +740,7 @@ const COLL_ICON = { insight: 'reflect', belief: 'future', debrief: 'debrief' };
 const collCard = (x) => `<article class="ccard k-${x.kind}">
   <div class="ccard-top">${COLL_ICON[x.kind] ? `<img class="ccard-ico" src="img/icons/${COLL_ICON[x.kind]}.png" width="44" height="44" alt="" aria-hidden="true">` : ''}
     <span class="ccard-kind">${T.collectionKinds[x.kind]}</span><span class="ccard-when">${esc(x.when)}</span></div>
-  <p class="ccard-tx">${esc(x.text)}</p>
+  ${x.parts ? `<dl class="ccard-bank">${x.parts.map((p, i) => filled(p) ? `<dt>${esc(T.bankLabels[i])}</dt><dd>${esc(p)}</dd>` : '').join('')}</dl>` : `<p class="ccard-tx">${esc(x.text)}</p>`}
   ${x.link ? `<a class="lnk" href="${x.link}">${T.openSticker}</a>` : ''}
 </article>`;
 function renderCollection(filter = 'all', query = '') {
@@ -798,10 +815,13 @@ function renderBasePart(part) {
 
 // ===== איך לדייק =====
 function renderRefine(tab) {
+  let back = ['#/today', ''];
+  try { back = JSON.parse(sessionStorage.getItem('ls-work')) || back; } catch {}
+  const backBtn = `<a class="btn" href="${esc(back[0])}">${T.backTo[back[1]] || T.backToday}</a>`;
   shell(`${hd(T.refineSub, T.refineTitle)}
     <div class="chips">${Object.entries(T.refineTabs).map(([k, v]) => `<a class="btn2" style="width:auto;margin:0;${k === tab ? 'background:var(--plum);color:var(--cream)' : ''}" href="#/refine/${k}">${v}</a>`).join('')}</div>
     ${(T.refine[tab] || []).map((x) => card(`<p class="it"><small>${esc(x.l)}</small>${esc(x.t)}</p>`)).join('')}
-    <button class="btn2" onclick="history.back()">${T.back}</button>`, 'today');
+    ${backBtn}`, 'today');
 }
 
 // ===== הגדרות =====

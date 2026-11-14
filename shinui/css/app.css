@@ -335,3 +335,23 @@ details.qs ul li{margin-bottom:6px}
 
 /* ארבע אפשרויות בפתק הבוקר: שתיים בשורה */
 .seg.four{display:grid;grid-template-columns:1fr 1fr}
+
+/* בנק ההוויה באוסף */
+.ccard-bank{margin:6px 0 0}
+.ccard-bank dt{font-size:14px;font-weight:700;color:var(--plum);margin-top:8px}
+.ccard-bank dd{margin:2px 0 0;font-size:17px;line-height:1.5}
+/* בחירת שעה */
+.tsel{width:100%;min-height:48px;font:inherit;font-size:17px;border:0;border-radius:14px;background:var(--fld);padding:0 14px;color:inherit;-webkit-appearance:none;appearance:none}
+
+/* תשאול לפי ערוצים: כרטיס נפתח לכל חלק */
+.chs{margin:6px 0 14px}
+.chs-h{margin-bottom:4px}
+.chcard{padding:0}
+.chcard>summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:700;font-size:18px;display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.chcard>summary::-webkit-details-marker{display:none}
+.chcard>summary::after{content:'+';font-size:24px;color:var(--plum);font-weight:700}
+.chcard[open]>summary::after{content:'−'}
+.chcard[open]{padding:0 18px 16px}
+.chcard[open]>summary{padding:16px 0}
+.outc .ct>span,.chs-h>span{display:inline-flex;align-items:center;gap:8px}
+.tsel{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%23A62F7D' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 16px center}
