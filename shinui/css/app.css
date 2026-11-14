@@ -332,3 +332,6 @@ details.qs ul li{margin-bottom:6px}
 .insp img{display:block;margin:-38px auto 6px;width:40px;height:40px;background:#F2EEE3;border-radius:50%;padding:4px;box-sizing:content-box}
 .insp blockquote{margin:0;font-size:19px;line-height:1.5;font-weight:700;border:0;padding:0;color:inherit;background:none}
 .insp figcaption{margin-top:8px;font-size:14px;opacity:.85}
+
+/* ארבע אפשרויות בפתק הבוקר: שתיים בשורה */
+.seg.four{display:grid;grid-template-columns:1fr 1fr}

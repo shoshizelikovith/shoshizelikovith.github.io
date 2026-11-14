@@ -16,7 +16,7 @@ export const CONFIG = {
   NOTE_LOGO: 'img/aro-wide.png',
   NOTE_LOGO_NEG: 'img/aro-wide-neg.png',
   NOTE_ART: 'img/note/art-book.png', // האיור הקבוע בפתק התובנה
-  NOTE_FOOTER: 'a',       // איך החתימה מופיעה בפתק התובנה: a / b / c
+  MORNING_ART: 'img/note/art-morning-envelope.png', // האיור הקבוע בפתק השראת הבוקר
   NOTE_SIGNATURE: 'שושי זליקוביץ׳',
   NOTE_APP_NAME: 'לשחק את השינוי',
   NOTE_CREDIT: '',        // שורת קרדיט קטנה מתחת ללוגו בפתק, למשל ״אימון מנטלי עם שושי זליקוביץ׳״

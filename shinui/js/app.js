@@ -2,7 +2,7 @@
 import { api } from './api.js';
 import { T } from './content.js';
 import { CONFIG } from './config.js';
-import { morningNote, sticker, wallpaper, saveCanvas } from './img.js';
+import { morningNote, sticker, wallpaper, quoteCard, saveCanvas } from './img.js';
 import { renderAdmin } from './admin.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -457,9 +457,9 @@ function wireBg(k, onPick) {
 // ===== פתק בוקר =====
 async function renderNote(day) {
   const d = D.days[day]; if (!d || !d.opened_at) return go('#/today');
-  let full = false, wall = false, bg = getBg('note', 'cream');
+  let full = false, wall = false, insp = false, bg = getBg('note', 'cream');
   shell(`${hd(T.noteSub, T.noteTitle, 'open')}${helpRow('morning_note')}
-    <div class="seg" role="radiogroup" id="kind"><button type="button" class="on" role="radio" aria-checked="true" data-v="0">${T.noteShort}</button><button type="button" role="radio" aria-checked="false" data-v="1">${T.noteFull}</button>${filled(d.win_belief) ? `<button type="button" role="radio" aria-checked="false" data-v="2">${T.noteWall}</button>` : ''}</div>
+    <div class="seg${filled(d.win_belief) ? ' four' : ''}" role="radiogroup" id="kind"><button type="button" class="on" role="radio" aria-checked="true" data-v="0">${T.noteShort}</button><button type="button" role="radio" aria-checked="false" data-v="1">${T.noteFull}</button>${filled(d.win_belief) ? `<button type="button" role="radio" aria-checked="false" data-v="3">${T.noteMorning}</button><button type="button" role="radio" aria-checked="false" data-v="2">${T.noteWall}</button>` : ''}</div>
     <p class="hint" id="wh" hidden>${T.wallpaperHint}</p>
     ${bgPicker(bg)}
     <div class="preview" id="pv" aria-live="polite"></div>
@@ -467,11 +467,11 @@ async function renderNote(day) {
     <button class="btn2" id="share">${T.shareImage}</button>
     <a class="btn2" href="#/today">${T.backToday}</a>`, 'today');
   let cv;
-  const draw = async () => { cv = wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture, bg }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: dayLabel(day), bg }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
+  const draw = async () => { cv = insp ? await quoteCard(d.win_belief, { kind: 'morning', label: T.morningLabel, name: firstName(), dateLabel: hebShort(day), bg }) : wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture, bg }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: dayLabel(day), bg }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
   await draw();
   wireBg('note', async (v) => { bg = v; await draw(); });
-  $('#kind').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; full = b.dataset.v === '1'; wall = b.dataset.v === '2'; $('#wh').hidden = !wall; $$('#kind button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
-  const fname = () => `${wall ? 'שומר-מסך' : 'פתק-בוקר'}-${day}.png`;
+  $('#kind').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; full = b.dataset.v === '1'; wall = b.dataset.v === '2'; insp = b.dataset.v === '3'; $('#wh').hidden = !wall; $$('#kind button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
+  const fname = () => `${wall ? 'שומר-מסך' : insp ? 'השראת-הבוקר' : 'פתק-בוקר'}-${day}.png`;
   $('#save').addEventListener('click', async () => { if ((await saveCanvas(cv, fname())) !== 'cancel') toast(T.saved); });
   $('#share').addEventListener('click', () => saveCanvas(cv, fname(), true));
 }

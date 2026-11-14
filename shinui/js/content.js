@@ -429,6 +429,8 @@ export const T = {
   wallHeadFuture: "האני העתידית שלי אומרת לי",
   wallHeadGod: "מה שמעתי הבוקר",
   noteWall: 'שומר מסך',
+  noteMorning: 'השראת הבוקר',
+  morningLabel: 'השראת הבוקר שלי',
 
   // סגירת יום, התבוננות קצרה
   keyReflectQ: "התבוננות קצרה על פעולת המפתח",
