@@ -16,7 +16,16 @@ const parse = (s) => { const [y, m, d] = s.split('-').map(Number); return new Da
 const addDays = (s, n) => { const d = parse(s); d.setDate(d.getDate() + n); return iso(d); };
 const today = () => iso(new Date());
 const weekStart = (s) => { const d = parse(s); d.setDate(d.getDate() - d.getDay()); return iso(d); };
-const dayLabel = (s) => { const d = parse(s); return `יום ${T.dayNames[d.getDay()]} · ${d.getDate()}.${d.getMonth() + 1}`; };
+// תאריך עברי: ה׳ בכסלו. הספרות באותיות, החודש מהלוח העברי של הדפדפן
+const GEM = (n) => { const o = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'], t = ['', 'י', 'כ', 'ל']; const s = n === 15 ? 'טו' : n === 16 ? 'טז' : t[Math.floor(n / 10)] + o[n % 10]; return s.length > 1 ? s.slice(0, -1) + '״' + s.slice(-1) : s + '׳'; };
+let HEB; try { HEB = new Intl.DateTimeFormat('he-u-ca-hebrew', { day: 'numeric', month: 'long' }); } catch { HEB = null; }
+const hebDate = (s) => { try { const p = HEB.formatToParts(parse(s)); const dv = p.find((x) => x.type === 'day').value; const n = parseInt(dv, 10); return `${isNaN(n) ? dv : GEM(n)} ב${p.find((x) => x.type === 'month').value}`; } catch { return ''; } };
+const dayLabel = (s) => { const d = parse(s); const h = hebDate(s); return `יום ${T.dayNames[d.getDay()]} · ${h ? h + ' · ' : ''}${d.getDate()}.${d.getMonth() + 1}`; };
+const hebShort = (s) => { const h = hebDate(s); return h ? `${h} · ${shortDate(s)}` : shortDate(s); };
+// סגירת יום: אפשר עד חצות של היום שאחריו (למשל יום שישי נסגר עד סוף מוצאי שבת)
+const closeDeadline = (day) => parse(addDays(day, 2)).getTime();
+const canStillClose = (day) => Date.now() < closeDeadline(day);
+const closedLate = (d) => !!d.closed_at && iso(new Date(d.closed_at)) > d.day;
 const shortDate = (s) => { const d = parse(s); return `${d.getDate()}.${d.getMonth() + 1}`; };
 const hhmm = (ts) => { if (!ts) return ''; const d = new Date(ts); return `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`; };
 const minutesOf = (ts) => { const d = new Date(ts); return d.getHours() * 60 + d.getMinutes(); };
@@ -87,6 +96,12 @@ const tag = (req) => `<span class="tag ${req ? 'm' : 'o'}">${req ? T.required : 
 // כפתור ״מה זה?״ ליד כל חלק. מופיע רק כשיש לחלק כרטיס הסבר
 const helpRow = (k) => (T.help[k] ? `<div class="hrow">${helpBtn(k)}</div>` : '');
 const helpBtn = (k) => (T.help[k] ? `<button type="button" class="help" data-help="${k}" aria-haspopup="dialog">${T.helpOpen}</button>` : '');
+// ציטוט מתחלף: בכל פתיחה של כרטיס הסבר הציטוט הבא בתור
+function inspireHtml() {
+  const list = T.inspire || []; if (!list.length) return '';
+  let i = 0; try { i = (+localStorage.getItem('ls-insp') || 0) % list.length; localStorage.setItem('ls-insp', i + 1); } catch { i = Math.floor(Math.random() * list.length); }
+  return `<figure class="insp"><img src="img/icons/reflect.png" width="40" height="40" alt="" aria-hidden="true"><blockquote>״${esc(list[i])}״</blockquote><figcaption>${esc(T.inspireBy)}</figcaption></figure>`;
+}
 function openHelp(k) {
   const h = T.help[k]; if (!h) return;
   const video = (CONFIG.HELP_VIDEOS || {})[k];
@@ -100,6 +115,7 @@ function openHelp(k) {
     ${h.how ? `<p class="hq">${T.helpHow}</p><p>${esc(h.how)}</p>` : ''}
     ${h.quote ? `<blockquote>${esc(h.quote)}${h.quoteSrc ? `<small>${esc(h.quoteSrc.replace(/,?\s*\d{1,2}:\d\d(:\d\d)?/g, ''))}</small>` : ''}</blockquote>` : ''}
     ${video ? `<a class="btn2" href="${esc(video)}" target="_blank" rel="noopener">${T.helpVideo}</a>` : ''}
+    ${inspireHtml()}
     <button class="btn" type="button" id="hback">${T.helpBack}</button></div>`;
   const close = () => { document.removeEventListener('keydown', onKey); m.remove(); opener?.focus?.({ preventScroll: true }); };
   const onKey = (e) => { if (e.key === 'Escape') close(); };
@@ -253,8 +269,8 @@ function banners() {
   if (P().trial_start && left !== null && left > 0 && daysBetween(P().trial_start, t) >= 4 && st !== 'sent' && st !== 'later:' + t)
     out.push(`<div class="banner soft"><b>${T.feedbackTitle}</b><a class="lnk" href="#/feedback">${T.feedbackOpen}</a></div>`);
   const y = addDays(t, -1); const yd = D.days[y];
-  if (yd && yd.opened_at && !yd.closed_at && new Date().getHours() < 14)
-    out.push(`<div class="banner">${T.closeYesterday} <a class="lnk" href="#/close/${y}">${T.closeYesterdayCta}</a></div>`);
+  if (yd && yd.opened_at && !yd.closed_at && canStillClose(y)) { const yn = T.dayNames[parse(y).getDay()];
+    out.push(`<div class="banner">${T.closeYesterday(yn)} <a class="lnk" href="#/close/${y}">${T.closeYesterdayCta(yn)}</a></div>`); }
   if (hasAchievement() && F().achievement_date && F().achievement_date < t) out.push(`<div class="banner">${T.achievementPassedBanner} <a class="lnk" href="#/base/achievement">${T.achievementPassedCta}</a></div>`);
   if (levelOf() === 'being') { if (hasBase()) out.push(`<div class="banner soft">${T.levelUpBanner} <a class="lnk" href="#/settings">${T.levelUpCta}</a></div>`); }
   else if (!hasBase()) out.push(`<div class="banner"><b>${T.baseTitle}</b>${T.needBaseBanner} <a class="lnk" href="#/base">${T.baseGo}</a></div>`);
@@ -373,6 +389,8 @@ function renderOpen(day, isToday = false) {
 function renderClose(day) {
   const d = D.days[day] || {};
   if (!d.opened_at) { toast(T.openFirst); return go('#/open/' + day); }
+  if (!d.closed_at && !canStillClose(day)) { toast(T.closeTooLate); return go('#/today'); }
+  if (!d.closed_at) api.saveDay(day, { close_started_at: new Date().toISOString() }); // מתחילים למדוד מהכניסה האחרונה למסך
   const subs = (d.sub_beings || []).map((s) => s || '');
   const m = { sub_presence: [], ...d, deep: { ...(d.deep || {}) }, steps: (d.steps || []).map((x) => ({ ...x })) };
   m.sub_presence = [0, 1, 2, 3].map((i) => (d.sub_presence || [])[i] ?? null);
@@ -426,20 +444,32 @@ function renderClose(day) {
   });
 }
 
+// ===== בחירת צבע רקע לפתקים. נשמר במכשיר =====
+const BGS = [['cream', 'קרם', '#F2EEE3'], ['pink', 'ורוד', '#DF1767'], ['navy', 'כחול', '#0D122C'], ['plum', 'סגול', '#A62F7D']];
+const getBg = (k, def) => { try { return localStorage.getItem('ls-bg-' + k) || def; } catch { return def; } };
+const setBg = (k, v) => { try { localStorage.setItem('ls-bg-' + k, v); } catch {} };
+const bgPicker = (cur) => `<div class="bgs" role="radiogroup" aria-label="${T.bgPick}"><span>${T.bgPick}</span>${BGS.map(([v, l, c]) => `<button type="button" role="radio" aria-checked="${v === cur}" class="${v === cur ? 'on' : ''}" data-bg="${v}" style="--c:${c}"><i aria-hidden="true"></i><b>${l}</b></button>`).join('')}</div>`;
+function wireBg(k, onPick) {
+  $('.bgs').addEventListener('click', async (e) => { const b = e.target.closest('[data-bg]'); if (!b) return; setBg(k, b.dataset.bg);
+    $$('.bgs [data-bg]').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await onPick(b.dataset.bg); });
+}
+
 // ===== פתק בוקר =====
 async function renderNote(day) {
   const d = D.days[day]; if (!d || !d.opened_at) return go('#/today');
-  let full = false, wall = false;
+  let full = false, wall = false, bg = getBg('note', 'cream');
   shell(`${hd(T.noteSub, T.noteTitle, 'open')}${helpRow('morning_note')}
     <div class="seg" role="radiogroup" id="kind"><button type="button" class="on" role="radio" aria-checked="true" data-v="0">${T.noteShort}</button><button type="button" role="radio" aria-checked="false" data-v="1">${T.noteFull}</button>${filled(d.win_belief) ? `<button type="button" role="radio" aria-checked="false" data-v="2">${T.noteWall}</button>` : ''}</div>
     <p class="hint" id="wh" hidden>${T.wallpaperHint}</p>
+    ${bgPicker(bg)}
     <div class="preview" id="pv" aria-live="polite"></div>
     <button class="btn" id="save">${T.saveImage}</button>
     <button class="btn2" id="share">${T.shareImage}</button>
     <a class="btn2" href="#/today">${T.backToday}</a>`, 'today');
   let cv;
-  const draw = async () => { cv = wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: dayLabel(day) }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
+  const draw = async () => { cv = wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture, bg }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: dayLabel(day), bg }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
   await draw();
+  wireBg('note', async (v) => { bg = v; await draw(); });
   $('#kind').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; full = b.dataset.v === '1'; wall = b.dataset.v === '2'; $('#wh').hidden = !wall; $$('#kind button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
   const fname = () => `${wall ? 'שומר-מסך' : 'פתק-בוקר'}-${day}.png`;
   $('#save').addEventListener('click', async () => { if ((await saveCanvas(cv, fname())) !== 'cancel') toast(T.saved); });
@@ -449,17 +479,19 @@ async function renderNote(day) {
 // ===== סטיקר תובנה =====
 async function renderSticker(day) {
   const d = D.days[day]; if (!d || !filled(d.insight)) return go('#/today');
-  let withName = true;
+  let withName = true, bg = getBg('sticker', 'navy');
   shell(`${hd(T.stickerSub, T.stickerTitle, 'reflect')}${helpRow('sticker')}
     <div class="seg" id="nm" role="radiogroup" aria-label="שם בסטיקר"><button type="button" role="radio" aria-checked="true" class="on" data-v="1">${T.withName}</button><button type="button" role="radio" aria-checked="false" data-v="0">${T.noName}</button></div>
+    ${bgPicker(bg)}
     <div class="preview" id="pv"></div>
     <button class="btn" id="save">${T.saveImage}</button>
     <button class="btn2" id="share">${T.shareImageGroup}</button>
     <p class="hint" style="text-align:center">${T.stickerSaved}</p>`, 'today');
   let cv;
-  const draw = async () => { cv = await sticker(d.insight, { name: withName ? firstName() : '', dateLabel: shortDate(day) }); cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', d.insight); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; pv.appendChild(cv); };
+  const draw = async () => { cv = await sticker(d.insight, { name: withName ? firstName() : '', dateLabel: hebShort(day), bg }); cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', d.insight); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; pv.appendChild(cv); };
   await draw();
   if (!d.sticker) api.saveDay(day, { sticker: true });
+  wireBg('sticker', async (v) => { bg = v; await draw(); });
   $('#nm').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; withName = b.dataset.v === '1'; $$('#nm button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
   $('#save').addEventListener('click', async () => { if ((await saveCanvas(cv, `גילוי-${day}.png`)) !== 'cancel') toast(T.saved); });
   $('#share').addEventListener('click', () => saveCanvas(cv, `גילוי-${day}.png`, true));
@@ -600,7 +632,7 @@ function stats() {
   const t = today(); const ws = weekStart(t);
   const wk = [0, 1, 2, 3, 4, 5, 6].map((i) => { const k = addDays(ws, i); return { k, d: D.days[k] || {} }; });
   const both = wk.filter((x) => x.d.opened_at && x.d.closed_at).length;
-  const openOnly = wk.filter((x) => x.d.opened_at && !x.d.closed_at && x.k < t).pop();
+  const openOnly = wk.filter((x) => x.d.opened_at && !x.d.closed_at && x.k < t && canStillClose(x.k)).pop();
   const keyDone = wk.filter((x) => x.d.key_status === 'done').length;
   const keyTotal = wk.filter((x) => x.d.key_status).length;
   const OPT = ['where_needed', 'may_derail', 'recover', 'win_belief', 'being_sign', 'key_reflect', 'day_how', 'gap_moment', 'thanks', 'extra_close', 'open_tomorrow'];
@@ -614,7 +646,15 @@ function stats() {
   const closeAvg = avg(recent.filter((d) => d.closed_at).map((d) => minutesOf(d.closed_at)));
   // רצף ימים שנפתחו ונסגרו
   let streak = 0; for (let k = D.days[t]?.closed_at ? t : addDays(t, -1); D.days[k]?.opened_at && D.days[k]?.closed_at; k = addDays(k, -1)) streak++;
-  return { ws, wk, both, openOnly, keyDone, keyTotal, depth, observations, openAvg, closeAvg, streak, recent };
+  // כמה זמן לוקחת סגירת היום, ומה חריג
+  const closes = Object.keys(D.days).filter((k) => k > addDays(t, -14) && D.days[k].closed_at).sort().map((k) => {
+    const d = D.days[k]; const m = d.close_started_at ? (Date.parse(d.closed_at) - Date.parse(d.close_started_at)) / 6e4 : null;
+    return { k, late: closedLate({ ...d, day: k }), min: m != null && m > 0 && m < 360 ? Math.max(1, Math.round(m)) : null, at: d.closed_at };
+  });
+  const fills = closes.filter((c) => c.min != null).map((c) => c.min);
+  const fillAvg = fills.length ? Math.round(avg(fills)) : null;
+  const odd = closes.filter((c) => c.late || (fillAvg != null && c.min != null && fills.length >= 3 && c.min > Math.max(fillAvg * 2, fillAvg + 15)));
+  return { ws, wk, both, openOnly, keyDone, keyTotal, depth, observations, openAvg, closeAvg, streak, recent, closes, fillAvg, odd };
 }
 function dataInsight(s) {
   const days = Object.entries(D.days).filter(([, d]) => d.opened_at && d.key_status).slice(-28);
@@ -654,6 +694,10 @@ function renderProgress() {
       ${card(`<p class="mini">${s.openAvg != null ? fmtMin(s.openAvg) : '-'}</p><span class="lbl">${T.avgOpenLbl(s.closeAvg != null ? fmtMin(s.closeAvg) : '')}</span>`)}
     </div>
     ${card(`<div class="ct">${T.dataShows}</div><p class="ins">${esc(ins || T.noDataYet)}</p>`)}
+    ${s.closes.length ? card(`<div class="ct">${T.closeTimeTitle}</div>
+      <p class="it">${s.fillAvg != null ? esc(T.closeTimeAvg(s.fillAvg)) : ''}</p>
+      <p class="hint">${esc(T.closeTimeLate(s.closes.filter((c) => c.late).length, s.closes.length))}</p>
+      ${s.odd.length ? `<p class="q">${T.closeTimeOdd}</p>${s.odd.map((c) => `<p class="hint">${esc(dayLabel(c.k))} · ${esc(c.late ? T.closedNextDay(T.dayNames[new Date(c.at).getDay()], hhmm(c.at)) : T.closeMinutes(c.min))}</p>`).join('')}` : ''}`) : ''}
     ${card(`<div class="ct">${T.nextLive}</div><p class="it">${esc(CONFIG.ZOOM_WHEN)}</p>
       <div class="lessons">${CONFIG.ZOOM_LINK ? `<a class="clip" href="${esc(CONFIG.ZOOM_LINK)}" target="_blank" rel="noopener"><i></i>${T.toZoom}</a>` : ''}
       ${CONFIG.RECORDINGS_LINK ? `<a class="clip" href="${esc(CONFIG.RECORDINGS_LINK)}" target="_blank" rel="noopener"><i></i>${T.recordings}</a>` : ''}</div>`)}`, 'progress');

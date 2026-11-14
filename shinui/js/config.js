@@ -15,6 +15,10 @@ export const CONFIG = {
   // לוגו על פתק הבוקר והסטיקר. כשהלוגו של ״לשחק את השינוי״ יאושר, מחליפים כאן את שני הקבצים
   NOTE_LOGO: 'img/aro-wide.png',
   NOTE_LOGO_NEG: 'img/aro-wide-neg.png',
+  NOTE_ART: 'img/note/art-book.png', // האיור הקבוע בפתק התובנה
+  NOTE_FOOTER: 'a',       // איך החתימה מופיעה בפתק התובנה: a / b / c
+  NOTE_SIGNATURE: 'שושי זליקוביץ׳',
+  NOTE_APP_NAME: 'לשחק את השינוי',
   NOTE_CREDIT: '',        // שורת קרדיט קטנה מתחת ללוגו בפתק, למשל ״אימון מנטלי עם שושי זליקוביץ׳״
 
   // סרטון קצר לכל כרטיס הסבר (לפי המפתח, למשל key_action). ריק = בלי כפתור סרטון

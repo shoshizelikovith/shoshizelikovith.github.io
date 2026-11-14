@@ -2,6 +2,14 @@
 import { CONFIG } from './config.js';
 const C = { navy: '#0D122C', mag: '#DF1767', plum: '#A62F7D', orange: '#F36E21', cream: '#F2EEE3' };
 const F = (w, s) => `${w} ${s}px Assistant, sans-serif`;
+// ארבעה רקעים לבחירה. בכל רקע: צבע טקסט, צבע הדגשה, שלוש נקודות, ואיזה לוגו
+export const THEMES = {
+  cream: { bg: C.cream, ink: C.navy, soft: 'rgba(13,18,44,.72)', acc: C.plum, dots: [C.mag, C.plum, C.orange], neg: false, line: 'rgba(13,18,44,.10)', frame: 'rgba(166,47,125,.35)' },
+  pink: { bg: C.mag, ink: C.cream, soft: 'rgba(242,238,227,.85)', acc: C.cream, dots: [C.cream, C.plum, C.orange], neg: true, line: 'rgba(242,238,227,.25)', frame: 'rgba(242,238,227,.45)' },
+  navy: { bg: C.navy, ink: C.cream, soft: 'rgba(242,238,227,.8)', acc: '#F08AB5', dots: [C.mag, C.plum, C.orange], neg: true, line: 'rgba(242,238,227,.18)', frame: 'rgba(242,238,227,.35)' },
+  plum: { bg: C.plum, ink: C.cream, soft: 'rgba(242,238,227,.85)', acc: C.cream, dots: [C.mag, C.cream, C.orange], neg: true, line: 'rgba(242,238,227,.25)', frame: 'rgba(242,238,227,.45)' },
+};
+const TH = (k, def) => THEMES[k] || THEMES[def];
 
 let logo, logoNeg;
 function loadImg(src) { return new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; }); }
@@ -24,7 +32,8 @@ function text(ctx, s, x, y, font, color) { ctx.font = font; ctx.fillStyle = colo
 function round(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
 
 // פתק בוקר 1080x1350 (מתאים לגלריה ולסטטוס). קצר: הוויה, פעולת מפתח, אמונה. מלא: גם הוויות משנה ומה יעזור.
-export async function morningNote(d, { full = false, dateLabel = '' } = {}) {
+export async function morningNote(d, { full = false, dateLabel = '', bg = 'cream' } = {}) {
+  const th = TH(bg, 'cream');
   await ready();
   const W = 1080, P = 96, maxW = W - P * 2;
   const cv = document.createElement('canvas'); const ctx = cv.getContext('2d');
@@ -55,73 +64,101 @@ export async function morningNote(d, { full = false, dateLabel = '' } = {}) {
   const H = Math.max(1350, Math.ceil(h));
   cv.width = W; cv.height = H;
   ctx.direction = 'rtl'; ctx.textAlign = 'right';
-  ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
   // שלוש נקודות המותג
-  [C.mag, C.plum, C.orange].forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(P + 14 + i * 40, P + 10, 13, 0, 7); ctx.fill(); });
+  th.dots.forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(P + 14 + i * 40, P + 10, 13, 0, 7); ctx.fill(); });
   const R = W - P;
   const off = Math.max(0, (H - h) / 2);
   ctx.translate(0, off);
   for (const b of lay) {
-    if (b.k === 'date') text(ctx, b.lines[0], R, b.y0 + 30, F(700, 38), 'rgba(13,18,44,.7)');
-    else if (b.k === 'h') b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 96 + i * b.lh, F(700, 104), C.navy));
+    if (b.k === 'date') text(ctx, b.lines[0], R, b.y0 + 30, F(700, 38), th.soft);
+    else if (b.k === 'h') b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 96 + i * b.lh, F(700, 104), th.ink));
     else if (b.k === 'row') {
-      text(ctx, b.l, R, b.y0 - 6, F(700, 34), C.plum);
-      b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 44 + i * b.lh, F(600, 46), C.navy));
+      text(ctx, b.l, R, b.y0 - 6, F(700, 34), th.acc);
+      b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 44 + i * b.lh, F(600, 46), th.ink));
     } else {
-      ctx.fillStyle = 'rgba(13,18,44,.10)'; ctx.fillRect(P, b.y0 - 34, maxW, 4);
-      b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 50 + i * b.lh, F(700, 52), C.navy));
+      ctx.fillStyle = th.line; ctx.fillRect(P, b.y0 - 34, maxW, 4);
+      b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 50 + i * b.lh, F(700, 52), th.ink));
     }
   }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   const credit = CONFIG.NOTE_CREDIT || '';
-  if (logo) { const lw = 300, lh = lw * logo.height / logo.width; ctx.drawImage(logo, R - lw, H - P - lh - (credit ? 44 : 0), lw, lh); }
-  if (credit) text(ctx, credit, R, H - P, F(600, 28), 'rgba(13,18,44,.75)');
+  const lg = th.neg ? logoNeg : logo;
+  if (lg) { const lw = 300, lh = lw * lg.height / lg.width; ctx.drawImage(lg, R - lw, H - P - lh - (credit ? 44 : 0), lw, lh); }
+  if (credit) text(ctx, credit, R, H - P, F(600, 28), th.soft);
   return cv;
 }
 
 // שומר מסך לטלפון 1080x1920: המילים מהשיחה של הבוקר. הטקסט מתחת לאזור השעון
-export async function wallpaper(words, { head = '' } = {}) {
+export async function wallpaper(words, { head = '', bg = 'cream' } = {}) {
+  const th = TH(bg, 'cream');
   await ready();
   const W = 1080, H = 1920, P = 110, maxW = W - P * 2;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d'); ctx.direction = 'rtl'; ctx.textAlign = 'center';
-  ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
   // מסגרת דקה ונקודות המותג
-  ctx.strokeStyle = 'rgba(166,47,125,.35)'; ctx.lineWidth = 3; round(ctx, 60, 60, W - 120, H - 120, 48); ctx.stroke();
+  ctx.strokeStyle = th.frame; ctx.lineWidth = 3; round(ctx, 60, 60, W - 120, H - 120, 48); ctx.stroke();
   const top = 640, bottom = H - 360;
   let size = 64, lines;
   for (; size >= 36; size -= 2) { ctx.font = F(700, size); lines = wrap(ctx, words, maxW); if (lines.length * size * 1.45 <= bottom - top - 120) break; }
   const lh = size * 1.45, total = lines.length * lh + (head ? 110 : 0);
   let y = top + Math.max(0, (bottom - top - total) / 2);
   if (head) {
-    [C.mag, C.plum, C.orange].forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(W / 2 + (i - 1) * 36, y, 11, 0, 7); ctx.fill(); });
-    text(ctx, head, W / 2, y + 66, F(700, 38), C.plum); y += 110;
+    th.dots.forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(W / 2 + (i - 1) * 36, y, 11, 0, 7); ctx.fill(); });
+    text(ctx, head, W / 2, y + 66, F(700, 38), th.acc); y += 110;
   }
-  lines.forEach((l) => { text(ctx, l, W / 2, y + size, F(700, size), C.navy); y += lh; });
+  lines.forEach((l) => { text(ctx, l, W / 2, y + size, F(700, size), th.ink); y += lh; });
   ctx.textAlign = 'right';
-  if (logo) { const lw = 260, lhh = lw * logo.height / logo.width; ctx.drawImage(logo, (W - lw) / 2, H - 200 - lhh, lw, lhh); }
+  const lg = th.neg ? logoNeg : logo;
+  if (lg) { const lw = 260, lhh = lw * lg.height / lg.width; ctx.drawImage(lg, (W - lw) / 2, H - 200 - lhh, lw, lhh); }
   return cv;
 }
 
-// סטיקר תובנה 1080x1080
-export async function sticker(insight, { name = '', dateLabel = '' } = {}) {
+// פתק תובנה 1080x1350: איור קבוע למעלה, התובנה במרכז, השם והתאריך, ולמטה החתימה של שושי.
+// footer: a - לוגו במרכז ושם מתחת · b - לוגו בצד ושם בצד השני · c - שורת חתימה אחת
+const arts = {};
+export async function sticker(insight, { name = '', dateLabel = '', bg = 'navy', art = CONFIG.NOTE_ART || 'img/note/art-book.png', footer = CONFIG.NOTE_FOOTER || 'a' } = {}) {
   await ready();
-  const W = 1080, P = 90, maxW = W - P * 2;
-  const cv = document.createElement('canvas'); cv.width = W; cv.height = W;
-  const ctx = cv.getContext('2d'); ctx.direction = 'rtl'; ctx.textAlign = 'right';
-  ctx.fillStyle = C.navy; ctx.fillRect(0, 0, W, W);
-  [C.mag, C.plum, C.orange].forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(W - P - 14 - i * 40, P + 10, 13, 0, 7); ctx.fill(); });
-  // גודל טקסט שנכנס
-  let size = 84, lines;
-  for (; size >= 44; size -= 4) { ctx.font = F(700, size); lines = wrap(ctx, insight, maxW); if (lines.length * size * 1.22 < W - P * 2 - 220) break; }
-  const lh = size * 1.22; const total = lines.length * lh;
-  let y = (W - total) / 2 + size * .8 - 20;
-  lines.forEach((l) => { text(ctx, l, W - P, y, F(700, size), C.cream); y += lh; });
-  const foot = [name, dateLabel].filter(Boolean).join(' · ');
-  if (foot) text(ctx, foot, W - P, W - P, F(600, 34), C.cream);
-  const credit = CONFIG.NOTE_CREDIT || '';
-  if (logoNeg) { const lw = 260, lhh = lw * logoNeg.height / logoNeg.width; ctx.drawImage(logoNeg, P, W - P - lhh + 8 - (credit ? 40 : 0), lw, lhh); }
-  if (credit) { ctx.textAlign = 'left'; text(ctx, credit, P, W - P + 4, F(600, 24), 'rgba(242,238,227,.8)'); ctx.textAlign = 'right'; }
+  const th = TH(bg, 'navy');
+  if (!(art in arts)) arts[art] = await loadImg(art);
+  const pic = arts[art];
+  const W = 1080, H = 1350, P = 90, maxW = W - P * 2;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d'); ctx.direction = 'rtl'; ctx.textAlign = 'center';
+  ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = th.frame; ctx.lineWidth = 3; round(ctx, 44, 44, W - 88, H - 88, 44); ctx.stroke();
+  // מודדים קודם את הטקסט, ואז ממרכזים את כל הקבוצה (איור, תובנה, שם) בשטח שמעל החתימה
+  const rr = 175, areaTop = 90, areaBot = H - 270;
+  let size = 76, lines;
+  for (; size >= 40; size -= 2) { ctx.font = F(700, size); lines = wrap(ctx, insight, maxW); if (rr * 2 + 70 + lines.length * size * 1.3 + 90 <= areaBot - areaTop) break; }
+  const lh = size * 1.3;
+  const who = [name, dateLabel].filter(Boolean).join(' · ');
+  const groupH = rr * 2 + 64 + lines.length * lh + (who ? 70 : 0);
+  const g0 = areaTop + Math.max(0, (areaBot - areaTop - groupH) / 2);
+  const cx = W / 2, cy = g0 + rr;
+  // האיור, על עיגול נייר בהיר כדי שיבלוט בכל רקע
+  ctx.fillStyle = bg === 'cream' ? 'rgba(166,47,125,.10)' : C.cream;
+  ctx.beginPath(); ctx.arc(cx, cy, rr, 0, 7); ctx.fill();
+  if (pic) { const pw = 280, ph = pw * pic.height / pic.width; ctx.drawImage(pic, cx - pw / 2, cy - ph / 2 + 6, pw, ph); }
+  let y = cy + rr + 64 + size * .85;
+  lines.forEach((l) => { text(ctx, l, cx, y, F(700, size), th.ink); y += lh; });
+  if (who) text(ctx, who, cx, y + 26, F(600, 34), th.soft);
+  // חתימה
+  const lg = th.neg ? logoNeg : logo;
+  const sig = CONFIG.NOTE_SIGNATURE || 'שושי זליקוביץ׳';
+  const app = CONFIG.NOTE_APP_NAME || 'לשחק את השינוי';
+  ctx.fillStyle = th.line; ctx.fillRect(P + 40, H - 250, maxW - 80, 3);
+  if (footer === 'b') {
+    if (lg) { const lw = 250, lhh = lw * lg.height / lg.width; ctx.drawImage(lg, W - P - lw, H - 150 - lhh / 2, lw, lhh); }
+    ctx.textAlign = 'left'; text(ctx, app, P, H - 160, F(700, 32), th.acc); text(ctx, 'עם ' + sig, P, H - 116, F(600, 30), th.soft);
+  } else if (footer === 'c') {
+    text(ctx, `${app} · ${sig}`, cx, H - 150, F(700, 32), th.acc);
+    if (lg) { const lw = 200, lhh = lw * lg.height / lg.width; ctx.drawImage(lg, cx - lw / 2, H - 125, lw, lhh); }
+  } else {
+    if (lg) { const lw = 330, lhh = lw * lg.height / lg.width; ctx.drawImage(lg, cx - lw / 2, H - 222, lw, lhh); }
+    text(ctx, sig, cx, H - 84, F(600, 30), th.soft);
+  }
   return cv;
 }
 

@@ -271,7 +271,7 @@ function demoOverview() {
       trial_end: null, created_at: new Date(today - (20 + i) * 864e5).toISOString(),
       achievement: ach, achievement_date: null, plan_count: ach ? 5 : 0, foundation_parts: parts,
       last_open: null, days_since_open: dso === null ? 12 : Math.max(dso, 0) + (i === 2 ? 4 : 0) + (i === 5 ? 3 : 0),
-      days_since_join: 20 + i, week_open: wo, week_close: wc, depth,
+      days_since_join: 20 + i, week_open: wo, week_close: wc, depth, close_fill_min: 5 + i, late_close: i === 3 ? 1 : 0,
       key_done: wc.filter(Boolean).length, key_total: wo.filter(Boolean).length, low_sub: low,
     };
   });

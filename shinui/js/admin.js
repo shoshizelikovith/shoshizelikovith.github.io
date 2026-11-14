@@ -33,9 +33,10 @@ export async function renderAdmin({ root, api, esc, shell, toast }) {
   const table = () => {
     const list = filter === 'touch' ? needTouch : filter === 'nobase' ? rows.filter(noBase) : rows;
     if (!list.length) return `<p class="hint">אין כאן אף אחת כרגע.</p>`;
-    return `<div class="scrollx"><table class="tbl"><thead><tr><th>שם</th><th>השבוע</th><th>פעולות מפתח</th><th>עומק</th><th>הישג מפתח</th><th>בסיס</th><th>יומן</th><th>סוג</th></tr></thead><tbody>
+    return `<div class="scrollx"><table class="tbl"><thead><tr><th>שם</th><th>השבוע</th><th>פעולות מפתח</th><th>עומק</th><th>סגירה</th><th>הישג מפתח</th><th>בסיס</th><th>יומן</th><th>סוג</th></tr></thead><tbody>
       ${list.map((r) => `<tr class="click" data-id="${esc(r.id)}" tabindex="0"><td>${esc(r.full_name || r.email)}</td><td>${dots(r)}</td>
         <td>${r.key_total ? `${r.key_done}/${r.key_total}` : '-'}</td><td>${r.depth != null ? r.depth + '%' : '-'}</td>
+        <td>${r.close_fill_min != null ? r.close_fill_min + ' דק׳' : '-'}${r.late_close ? ` <span class="pill w">${r.late_close === 1 ? 'פעם אחת למחרת' : r.late_close + ' פעמים למחרת'}</span>` : ''}</td>
         <td>${r.achievement ? esc(r.achievement.length > 34 ? r.achievement.slice(0, 34) + '…' : r.achievement) : '<span class="pill w">חסר הישג</span>'}</td>
         <td>${r.foundation_parts === 4 ? 'מלא' : `${r.foundation_parts || 0} מתוך 4`}</td>
         <td><span class="pill">${r.share_journal ? 'משותף' : 'פרטי'}</span></td>
