@@ -258,7 +258,8 @@ function renderTerms() {
 // ===== פסים בראש ״היום״ =====
 // סוף ההתנסות: 7 ימים מההרשמה ולא אחרי 27.11 14:00 (trial_ends_at מהשרת). השרת גם חוסם שמירה וקריאה אחרי הזמן הזה
 function trialEndsMs() { const p = P(); if (p.member || p.is_admin) return null; if (p.trial_ends_at) return Date.parse(p.trial_ends_at); return p.trial_end ? Date.parse(p.trial_end + 'T23:59:59') : null; }
-function trialLeft() { const e = trialEndsMs(); if (e === null) return null; return Math.max(0, Math.ceil((e - Date.now()) / 864e5)); }
+// ימים שנשארו לפי תאריך (כולל היום). ההתנסות נגמרת בסוף היום השביעי, אז היום הראשון הוא בונוס ולא נספר מעבר ל-7
+function trialLeft() { const e = trialEndsMs(); if (e === null) return null; if (Date.now() >= e) return 0; return Math.min(7, daysBetween(today(), iso(new Date(e - 1000))) + 1); }
 function offerActive() { const e = trialEndsMs(); return e !== null && Date.now() >= e; }
 function banners() {
   const out = []; const t = today();
