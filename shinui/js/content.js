@@ -222,7 +222,7 @@ export const T = {
   weekHabits: 'הרגל שחוזר',
   weekHabitsHint: 'לפחות אחד',
   weekOnce: 'פעולה חד פעמית, עם יום',
-  weekOnceHint: 'לפחות אחת',
+  weekOnceHint: 'אם יש כזו השבוע',
   habitText: 'מה', habitAmount: 'כמה', habitFreq: 'כמה פעמים', habitDays: 'באילו ימים',
   onceText: 'מה', onceDay: 'יום',
   addRow: '+ להוסיף עוד',
