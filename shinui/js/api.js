@@ -213,15 +213,15 @@ export const api = {
   },
   saveFoundation(obj) {
     cache.foundation = { ...cache.foundation, ...obj }; saveCache();
-    if (LIVE) enqueue({ key: 'foundation', kind: 'upsert', table: 'foundation', conflict: 'user_id', row: { ...cache.foundation, user_id: session.user.id } });
+    if (LIVE) enqueue({ key: 'foundation', kind: 'upsert', table: 'foundation', conflict: 'user_id', row: { ...(queue.find((q) => q.key === 'foundation') || {}).row, ...obj, user_id: session.user.id } });
   },
   saveDay(day, obj) {
     cache.days[day] = { ...(cache.days[day] || {}), ...obj, day }; saveCache();
-    if (LIVE) enqueue({ key: 'day:' + day, kind: 'upsert', table: 'days', conflict: 'user_id,day', row: { ...cache.days[day], user_id: session.user.id } });
+    if (LIVE) enqueue({ key: 'day:' + day, kind: 'upsert', table: 'days', conflict: 'user_id,day', row: { ...(queue.find((q) => q.key === 'day:' + day) || {}).row, ...obj, day, user_id: session.user.id } }); // רק השדות שהשתנו, כדי לא לדרוס שינוי ממכשיר אחר
   },
   saveWeek(ws, obj) {
     cache.weeks[ws] = { ...(cache.weeks[ws] || {}), ...obj, week_start: ws }; saveCache();
-    if (LIVE) enqueue({ key: 'week:' + ws, kind: 'upsert', table: 'weeks', conflict: 'user_id,week_start', row: { ...cache.weeks[ws], user_id: session.user.id } });
+    if (LIVE) enqueue({ key: 'week:' + ws, kind: 'upsert', table: 'weeks', conflict: 'user_id,week_start', row: { ...(queue.find((q) => q.key === 'week:' + ws) || {}).row, ...obj, week_start: ws, user_id: session.user.id } });
   },
   feedbackState() { return LS.get('ls.fb', null); },          // null | 'sent' | 'later:<תאריך>'
   setFeedbackState(v) { LS.set('ls.fb', v); },

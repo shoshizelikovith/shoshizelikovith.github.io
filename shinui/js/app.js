@@ -174,7 +174,7 @@ async function render() {
     const th = new URLSearchParams(location.hash.slice(1)).get('th');
     if (th && api.live) { history.replaceState(null, '', location.pathname + '#/today'); return renderTapIn(th); }
     if (/error_code=|error=/.test(location.hash + location.search)) { linkErr = true; history.replaceState(null, '', location.pathname + '#/today'); }
-    else if (await api.fromLink()) D = null;
+    else if (await api.fromLink()) { D = null; setUnlocked(true); }
   }
   const user = api.user();
   root.classList.remove('wide-root');
@@ -187,6 +187,7 @@ async function render() {
   // קישור משיעור: ?level=being או ?level=full
   const qLevel = new URLSearchParams(location.search).get('level');
   if ((qLevel === 'being' || qLevel === 'full') && P().level !== qLevel) api.saveProfile({ level: qLevel });
+  if (P().pin_hash && !isUnlocked()) return renderLock();
   if (!P().terms_at) return renderTerms();
   const [, r1, r2] = (location.hash || '#/today').split('?')[0].split('/');
   // המסך האחרון שבו היא עבדה (פתיחה, סגירה, פתק שבועי, תחקיר), כדי שמסכי הדיוק יחזירו אליו
@@ -204,13 +205,58 @@ async function render() {
     case 'close': return renderClose(r2 || today());
     case 'open': return renderOpen(r2 || today());
     case 'refine': return renderRefine(r2 || 'open');
-    case 'settings': return renderSettings();
+    case 'settings': return r2 === 'pin' ? renderPinSet() : renderSettings();
     case 'feedback': return renderFeedback();
     case 'offer': return renderOffer();
     case 'admin': return P().is_admin ? renderAdmin({ root, api, T, esc, shell, toast, CONFIG }) : go('#/today');
     default: return renderToday();
   }
 }
+
+// ===== קוד נעילה (רשות). נשמר כגיבוב בפרופיל, ולכן חל בטלפון, במחשב ובכל מכשיר =====
+const pinHash = async (pin) => { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode((api.user() || {}).id + ':' + pin)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, '0')).join(''); };
+const isUnlocked = () => { try { return sessionStorage.getItem('ls-unlocked') === '1'; } catch { return true; } };
+const setUnlocked = (v) => { try { if (v) sessionStorage.setItem('ls-unlocked', '1'); else sessionStorage.removeItem('ls-unlocked'); } catch {} };
+function renderLock() {
+  root.innerHTML = `<main class="app"><div class="login">${logoImg()}${hd(T.loginSub, T.lockTitle)}
+    <form id="f" class="card" novalidate><label class="q" for="pin">${T.lockHint}</label>
+      <input id="pin" class="code" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" dir="ltr">
+      <p class="err" id="er" role="alert" hidden></p><button class="btn" type="submit">${T.enter}</button>
+      <button class="lnk" type="button" id="forgot">${T.lockForgot}</button></form></div></main>`;
+  setTimeout(() => $('#pin')?.focus(), 50);
+  $('#f').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (await pinHash($('#pin').value.trim()) === P().pin_hash) { setUnlocked(true); render(); }
+    else { const er = $('#er'); er.textContent = T.lockWrong; er.hidden = false; $('#pin').value = ''; $('#pin').focus(); }
+  });
+  $('#forgot').addEventListener('click', async () => { if (!confirm(T.lockForgotHint)) return; await api.logout(); setUnlocked(false); D = null; go('#/'); });
+}
+// הגדרת קוד: פעמיים, לאישור
+function renderPinSet(step = 1, first = '') {
+  shell(`${hd('', T.pinTitle, 'settings')}
+    <form id="pf" class="card" novalidate><label class="q" for="np">${step === 1 ? T.pinNew : T.pinAgain}</label>
+      <input id="np" class="code" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="off" maxlength="6" dir="ltr">
+      <p class="err" id="er" role="alert" hidden></p><button class="btn" type="submit">${T.pinNext}</button></form>
+    <a class="btn2" href="#/settings">${T.back}</a>`, '');
+  setTimeout(() => $('#np')?.focus(), 50);
+  $('#pf').addEventListener('submit', async (e) => {
+    e.preventDefault(); const v = $('#np').value.trim(); const er = $('#er');
+    if (!/^\d{4,6}$/.test(v)) { er.textContent = T.pinDigits; er.hidden = false; return; }
+    if (step === 1) return renderPinSet(2, v);
+    if (v !== first) { toast(T.pinMismatch); return renderPinSet(1); }
+    api.saveProfile({ pin_hash: await pinHash(v) }); setUnlocked(true); toast(T.pinSaved); go('#/settings');
+  });
+}
+// חוזרים לאפליקציה אחרי זמן: נועלים שוב (אם יש קוד), וטוענים מחדש את מה שנשמר במכשיר אחר
+let hiddenAt = 0;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { hiddenAt = Date.now(); try { window.onpagehide && window.onpagehide(); } catch {} return; }
+  if (!hiddenAt || !api.user()) return;
+  const away = Date.now() - hiddenAt; hiddenAt = 0;
+  if (away > 3 * 60e3 && D && P().pin_hash) setUnlocked(false);
+  if (away > 30e3) { D = null; render(); }
+  else if (D && P().pin_hash && !isUnlocked()) render();
+});
 
 // ===== כניסה =====
 // מסך ״לחצי כדי להיכנס״ אחרי הכפתור במייל
@@ -220,7 +266,7 @@ function renderTapIn(th) {
     <button class="btn" type="button" id="tapin">${T.tapInBtn}</button></div></div></main>`;
   $('#tapin').addEventListener('click', async (e) => {
     e.target.disabled = true;
-    try { await api.verifyHash(th); D = null; render(); }
+    try { await api.verifyHash(th); D = null; setUnlocked(true); render(); }
     catch { renderLogin('email', '', T.linkExpired); }
   });
 }
@@ -249,7 +295,7 @@ function renderLogin(step = 'email', email = '', note = '') {
         const em = $('#em').value.trim(); if (!/^\S+@\S+\.\S+$/.test(em)) throw new Error(T.badEmail);
         await api.sendCode(em); renderLogin('code', em); setTimeout(() => $('#cd')?.focus(), 50);
       } else {
-        await api.verify(email, $('#cd').value || '000000'); D = null; go('#/today');
+        await api.verify(email, $('#cd').value || '000000'); D = null; setUnlocked(true); go('#/today');
       }
     } catch (x) { er.textContent = step === 'code' ? T.badCode : x.code === 'not_invited' ? T.notInvited : x.message === T.badEmail ? T.badEmail : T.genericError; er.hidden = false; b.disabled = false; }
   });
@@ -333,7 +379,7 @@ function renderToday() {
 
 // ===== פתיחת יום =====
 // כפתורי הוויות: כל הרשימה מהיומן, ובסוף הוויות שהיא כתבה בעצמה
-const allBeings = () => [...new Set([...T.beingsAll, ...(P().beings || [])].filter(Boolean))];
+const allBeings = () => [...new Set([...T.beingsAll, ...(P().beings || [])].filter(Boolean))].sort((a, b) => a.localeCompare(b, 'he')); // לפי א-ב (שושי 15.11)
 const beingChips = (id, isOn) => `<div class="chips bgrid" id="${id}">${allBeings().map((b) => `<button type="button" aria-pressed="${isOn(b)}" class="${isOn(b) ? 'on' : ''}" data-b="${esc(b)}">${esc(b)}</button>`).join('')}</div>`;
 function renderOpen(day, isToday = false) {
   const prev = Object.keys(D.days).filter((k) => k < day && D.days[k].being).sort().pop();
@@ -502,7 +548,7 @@ async function renderNote(day) {
     <button class="btn2" id="share">${T.shareImage}</button>
     <a class="btn2" href="#/today">${T.backToday}</a>`, 'today');
   let cv;
-  const draw = async () => { cv = insp ? await quoteCard(d.win_belief, { kind: 'morning', label: T.morningLabel, head: d.voice === 'god' ? T.convHeadGod : T.convHeadFuture, name: firstName(), dateLabel: hebShort(day), bg }) : wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture, bg }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: hebShort(day), bg }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
+  const draw = async () => { cv = insp ? await quoteCard(d.win_belief, { kind: 'morning', label: T.morningLabel, name: firstName(), dateLabel: hebShort(day), bg }) : wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture, bg }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: hebShort(day), bg }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
   await draw();
   wireBg('note', async (v) => { bg = v; await draw(); });
   $('#kind').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; full = b.dataset.v === '1'; wall = b.dataset.v === '2'; insp = b.dataset.v === '3'; $('#wh').hidden = !wall; $$('#kind button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
@@ -572,7 +618,7 @@ function renderWeekOpen() {
         ${hasAchievement() ? `<p class="hint" style="margin-top:8px"><b>${T.achievementCard}:</b> ${esc(F().achievement)}</p>` : ''}`, '', 'result')}
       ${card(`<div class="ct">${T.weekHabits} ${tag(1)} <span class="hint" style="margin:0">${T.weekHabitsHint}</span></div>
         <div class="rows">${m.habits.map(habitRow).join('')}</div><button type="button" class="more" data-add="habits">${T.addRow}</button>`, '', 'habits')}
-      ${card(`<div class="ct">${T.weekOnce} ${tag(1)} <span class="hint" style="margin:0">${T.weekOnceHint}</span></div>
+      ${card(`<div class="ct">${T.weekOnce} ${tag(0)} <span class="hint" style="margin:0">${T.weekOnceHint}</span></div>
         <div class="rows">${m.onetime.map(onceRow).join('')}</div><button type="button" class="more" data-add="onetime">${T.addRow}</button>`, '', 'once')}
       ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
         <p class="q">${T.winBeliefWeek}</p>${ta('win_belief', m.win_belief)}
@@ -590,7 +636,6 @@ function renderWeekOpen() {
       const miss = [];
       if (!filled(m.result)) miss.push('result');
       if (!m.habits.some((h) => filled(h.text))) miss.push('habits');
-      if (!m.onetime.some((h) => filled(h.text) && filled(h.day))) miss.push('once');
       if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
       api.saveWeek(ws, { opened_at: (D.weeks[ws] || {}).opened_at || new Date().toISOString() });
       celebrate('week', T.weekOpenedToast); go('#/week');
@@ -850,6 +895,8 @@ function renderSettings() {
     ${card(`<label class="q" for="nm">${T.myName}</label><input id="nm" type="text" value="${esc(p.full_name)}">`)}
     ${card(`<div class="ct">${p.share_journal ? T.shareStatusOn : T.shareStatusOff}</div><button class="btn2" id="sh">${p.share_journal ? T.shareToggleOn : T.shareToggleOff}</button>`)}
     ${card(`<div class="ct">${T.levelSettingsTitle}</div>${seg('level', levelOf(), [['being', T.levelBeing], ['full', T.levelFull]])}<p class="hint" id="lvh">${levelOf() === 'full' ? T.levelFullSub : T.levelBeingSub}</p><p class="hint">${T.levelSettingsHint}</p>`)}
+    ${card(`<div class="ct">${T.pinTitle} ${tag(0)}</div><p class="hint">${p.pin_hash ? T.pinOnHint : T.pinOffHint}</p>
+      <div class="btnrow"><a class="btn2" href="#/settings/pin">${p.pin_hash ? T.pinChange : T.pinSet}</a>${p.pin_hash ? `<button class="btn2" id="pinoff">${T.pinRemove}</button>` : ''}</div>`)}
     ${card(`<div class="ct">${T.installTitle}</div><p class="hint">${T.installIos}</p><p class="hint">${T.installAndroid}</p>`)}
     ${p.is_admin ? `<a class="btn dark" href="#/admin">${T.adminLink}</a>` : ''}
     <button class="btn2" id="out">${T.logout}</button>
@@ -858,7 +905,8 @@ function renderSettings() {
   $('#sh').addEventListener('click', () => { api.saveProfile({ share_journal: !p.share_journal }); toast(T.saved); renderSettings(); });
   const lv = { level: levelOf() }; bindForm(lv, () => {});
   $('[data-seg="level"]').addEventListener('pick', (e) => { api.saveProfile({ level: e.detail }); $('#lvh').textContent = e.detail === 'full' ? T.levelFullSub : T.levelBeingSub; toast(T.saved); });
-  $('#out').addEventListener('click', async () => { await api.logout(); D = null; go('#/'); });
+  $('#pinoff')?.addEventListener('click', () => { if (!confirm(T.pinRemoveQ)) return; api.saveProfile({ pin_hash: null }); toast(T.pinRemoved); renderSettings(); });
+  $('#out').addEventListener('click', async () => { await api.logout(); setUnlocked(false); D = null; go('#/'); });
 }
 
 // ===== משוב בהתנסות =====
