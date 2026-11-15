@@ -447,6 +447,8 @@ export const T = {
   noteWall: 'שומר מסך',
   noteMorning: 'השראת הבוקר',
   morningLabel: 'השראת הבוקר שלי',
+  convHeadFuture: 'האני העתידית שלי ישבה לידי ואמרה',
+  convHeadGod: 'דיברתי עם השם, וזה מה שעלה לי',
 
   // סגירת יום, התבוננות קצרה
   keyReflectQ: "התבוננות קצרה על פעולת המפתח",

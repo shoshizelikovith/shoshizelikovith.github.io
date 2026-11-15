@@ -31,61 +31,70 @@ function wrap(ctx, text, maxW) {
 function text(ctx, s, x, y, font, color) { ctx.font = font; ctx.fillStyle = color; ctx.fillText(s, x, y); }
 function round(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); }
 
-// פתק בוקר 1080x1350 (מתאים לגלריה ולסטטוס). קצר: הוויה, פעולת מפתח, אמונה. מלא: גם הוויות משנה ומה יעזור.
-export async function morningNote(d, { full = false, dateLabel = '', bg = 'cream' } = {}) {
+// פתק פתיחת היום 1080x1350 (מתארך בגרסה המלאה): תווית, תאריך, איור החלון, ״היום אני״ וההוויה, פעולת המפתח, המשפט, חתימה. עיצוב 15.11
+export async function morningNote(d, { full = false, dateLabel = '', bg = 'cream', art = true } = {}) {
   const th = TH(bg, 'cream');
   await ready();
-  const W = 1080, P = 96, maxW = W - P * 2;
+  const W = 1080, P = 90, maxW = W - P * 2 - 60, cx = W / 2;
+  const pic = art ? await loadImg(CONFIG.MORNING_ART || 'img/note/art-morning-window.png') : null;
   const cv = document.createElement('canvas'); const ctx = cv.getContext('2d');
-  // מדידה ראשונה לגובה
-  const blocks = [];
-  blocks.push({ k: 'date', t: dateLabel });
-  blocks.push({ k: 'h', t: d.being || '' });
-  if (full && (d.sub_beings || []).filter(Boolean).length) blocks.push({ k: 'row', l: 'בארבע הוויות משנה', t: d.sub_beings.filter(Boolean).join(' · ') });
-  if (d.key_action) blocks.push({ k: 'row', l: d.hasBase === false ? 'הפעולה שלי' : 'פעולת המפתח', t: [d.key_action, d.key_amount, d.key_when].filter(Boolean).join(' · ') });
+  ctx.direction = 'rtl'; ctx.textAlign = 'center';
+  // בלוקים
+  const rows = [];
+  if (full && (d.sub_beings || []).filter(Boolean).length) rows.push(['בארבע הוויות משנה', d.sub_beings.filter(Boolean).join(' · ')]);
   const st = (d.steps || []).map((x) => x && x.text).filter(Boolean);
-  if (full && st.length) blocks.push({ k: 'row', l: 'מה צריך לקרות כדי שזה יקרה', t: st.join(' · ') });
-  if (full && d.being_sign) blocks.push({ k: 'row', l: 'הסימן שלי להוויה', t: d.being_sign });
-  if (full && d.where_needed) blocks.push({ k: 'row', l: 'איפה ההוויה תידרש', t: d.where_needed });
-  if (full && d.recover) blocks.push({ k: 'row', l: 'מה יעזור לי להתאושש', t: d.recover });
-  if (d.win_belief) blocks.push({ k: 'bel', t: '״' + d.win_belief + '״' });
-
-  ctx.direction = 'rtl'; ctx.textAlign = 'right';
-  let h = P;
-  const lay = blocks.map((b) => {
-    let lines, lh, gap;
-    if (b.k === 'date') { ctx.font = F(700, 38); lines = [b.t]; lh = 50; gap = 10; }
-    else if (b.k === 'h') { ctx.font = F(700, 104); lines = wrap(ctx, 'היום אני ' + b.t + '.', maxW); lh = 112; gap = 30; }
-    else if (b.k === 'row') { ctx.font = F(600, 46); lines = wrap(ctx, b.t, maxW); lh = 60; gap = 34; h += 46; }
-    else { ctx.font = F(700, 52); lines = wrap(ctx, b.t, maxW); lh = 68; gap = 40; h += 40; }
-    const y0 = h; h += lines.length * lh + gap; return { ...b, lines, lh, y0 };
-  });
-  h += 150 + P;
-  const H = Math.max(1350, Math.ceil(h));
-  cv.width = W; cv.height = H;
-  ctx.direction = 'rtl'; ctx.textAlign = 'right';
-  ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
-  // שלוש נקודות המותג
-  th.dots.forEach((c, i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(P + 14 + i * 40, P + 10, 13, 0, 7); ctx.fill(); });
-  const R = W - P;
-  const off = Math.max(0, (H - h) / 2);
-  ctx.translate(0, off);
-  for (const b of lay) {
-    if (b.k === 'date') text(ctx, b.lines[0], R, b.y0 + 30, F(700, 38), th.soft);
-    else if (b.k === 'h') b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 96 + i * b.lh, F(700, 104), th.ink));
-    else if (b.k === 'row') {
-      text(ctx, b.l, R, b.y0 - 6, F(700, 34), th.acc);
-      b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 44 + i * b.lh, F(600, 46), th.ink));
-    } else {
-      ctx.fillStyle = th.line; ctx.fillRect(P, b.y0 - 34, maxW, 4);
-      b.lines.forEach((l, i) => text(ctx, l, R, b.y0 + 50 + i * b.lh, F(700, 52), th.ink));
-    }
+  if (full && st.length) rows.push(['מה צריך לקרות כדי שזה יקרה', st.join(' · ')]);
+  if (full && d.being_sign) rows.push(['הסימן שלי להוויה', d.being_sign]);
+  if (full && d.where_needed) rows.push(['איפה ההוויה תידרש', d.where_needed]);
+  if (full && d.recover) rows.push(['מה יעזור לי להתאושש', d.recover]);
+  // מדידה
+  const L = [];
+  const add = (kind, t, font, lh, gapBefore = 0) => { ctx.font = font; const lines = kind === 'one' ? [t] : wrap(ctx, t, maxW); L.push({ lines, font, lh, gapBefore, kind }); };
+  const artH = pic ? 150 + 26 : 0;
+  add('one', 'היום אני', F(600, 40), 52, 0);
+  add('w', d.being || '', F(700, 92), 100, 6);
+  if (d.key_action) {
+    add('lab', d.hasBase === false ? 'הפעולה שלי' : 'פעולת המפתח', F(700, 32), 44, 56);
+    add('w', d.key_action, F(600, 46), 60, 4);
+    const sub = [d.key_amount, d.key_when].filter(Boolean).join(' · ');
+    if (sub) add('sub', sub, F(400, 36), 48, 2);
   }
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const credit = CONFIG.NOTE_CREDIT || '';
+  rows.forEach(([l, t]) => { add('lab', l, F(700, 30), 42, 34); add('w', t, F(500, 40), 54, 2); });
+  if (d.win_belief) { add('glyph', '”', '700 170px Georgia, "Times New Roman", serif', 64, 44); add('bel', '״' + d.win_belief + '״', F(700, 54), 70, 18); }
+  const body = artH + L.reduce((s, b) => s + b.gapBefore + b.lines.length * b.lh, 0);
+  const top = 190, footer = 250;
+  const H = Math.max(1350, Math.ceil(top + body + 80 + footer));
+  cv.width = W; cv.height = H;
+  ctx.direction = 'rtl'; ctx.textAlign = 'center';
+  ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = th.frame; ctx.lineWidth = 3; round(ctx, 44, 44, W - 88, H - 88, 44); ctx.stroke();
+  // למעלה: תווית מימין, תאריך משמאל
+  const label = 'פתיחת היום שלי';
+  const [pb, pi] = PILL[bg] || PILL.cream;
+  ctx.font = F(700, 34); const lw = ctx.measureText(label).width + 56;
+  ctx.fillStyle = pb; round(ctx, W - P - lw, 92, lw, 64, 32); ctx.fill();
+  text(ctx, label, W - P - lw / 2, 136, F(700, 34), pi);
+  if (dateLabel) { ctx.textAlign = 'left'; text(ctx, dateLabel, P, 136, F(600, 32), th.soft); ctx.textAlign = 'center'; }
+  // תוכן ממורכז בין התווית לחתימה
+  let y = top + Math.max(0, (H - footer - top - body) / 2);
+  if (pic) {
+    const rr = 75; ctx.fillStyle = bg === 'cream' ? 'rgba(166,47,125,.10)' : C.cream;
+    ctx.beginPath(); ctx.arc(cx, y + rr, rr, 0, 7); ctx.fill();
+    const pw = 120, ph = pw * pic.height / pic.width; ctx.drawImage(pic, cx - pw / 2, y + rr - ph / 2 + 2, pw, ph);
+    y += artH;
+  }
+  for (const b of L) {
+    y += b.gapBefore;
+    const col = b.kind === 'lab' || b.kind === 'glyph' ? th.acc : b.kind === 'sub' || b.kind === 'one' ? th.soft : th.ink;
+    b.lines.forEach((l) => { y += b.lh; text(ctx, l, cx, b.kind === 'glyph' ? y + 70 : y - b.lh * .22, b.font, col); });
+  }
+  // חתימה כמו בפתק התובנה
   const lg = th.neg ? logoNeg : logo;
-  if (lg) { const lw = 300, lh = lw * lg.height / lg.width; ctx.drawImage(lg, R - lw, H - P - lh - (credit ? 44 : 0), lw, lh); }
-  if (credit) text(ctx, credit, R, H - P, F(600, 28), th.soft);
+  ctx.fillStyle = th.line; ctx.fillRect(P + 20, H - 225, W - P * 2 - 40, 3);
+  if (lg) { const w2 = 290, h2 = w2 * lg.height / lg.width; ctx.drawImage(lg, W - P - 10 - w2, H - 150 - h2 / 2, w2, h2); }
+  ctx.textAlign = 'left';
+  text(ctx, CONFIG.NOTE_APP_NAME || 'לשחק את השינוי', P + 10, H - 158, F(700, 36), th.acc);
+  text(ctx, 'עם ' + (CONFIG.NOTE_SIGNATURE || 'שושי זליקוביץ׳'), P + 10, H - 112, F(600, 30), th.soft);
   return cv;
 }
 
@@ -123,15 +132,22 @@ const PILL = { cream: [C.plum, C.cream], pink: [C.cream, C.mag], navy: [C.mag, C
 // פתק ציטוט 1080x1350: תווית בצד, תאריך, איור קבוע, סימן ציטוט, המשפט במרכאות, השם, ולמטה החתימה.
 // kind: insight (תובנת ההתבוננות, סגירת יום) או morning (המילים משיחת הבוקר)
 const arts = {};
-export async function quoteCard(words, { kind = 'insight', label = '', name = '', dateLabel = '', bg = 'navy', art = '' } = {}) {
+export async function quoteCard(words, { kind = 'insight', label = '', name = '', dateLabel = '', bg = 'navy', art = '', head = '' } = {}) {
   await ready();
   const th = TH(bg, 'navy');
   art = art || (kind === 'morning' ? (CONFIG.MORNING_ART || 'img/note/art-morning-window.png') : (CONFIG.NOTE_ART || 'img/note/art-book.png'));
   if (!(art in arts)) arts[art] = await loadImg(art);
   const pic = arts[art];
-  const W = 1080, H = 1350, P = 90, maxW = W - P * 2 - 40;
-  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const W = 1080, P = 90, maxW = W - P * 2 - 40;
+  const cv = document.createElement('canvas'); cv.width = W;
   const ctx = cv.getContext('2d'); ctx.direction = 'rtl';
+  // מדידה לפני הציור: פסקה ארוכה מאריכה את הפתק
+  const rr = head ? 110 : 135, headH = head ? 76 : 0, q0 = String(words || '').trim();
+  let size = 64, lines;
+  for (; size >= 40; size -= 2) { ctx.font = F(700, size); lines = wrapKeep(ctx, q0, maxW); if (rr * 2 + 150 + headH + lines.length * size * 1.32 + 70 <= 1350 - 250 - 190) break; }
+  if (size < 40) { size = 40; ctx.font = F(700, size); lines = wrapKeep(ctx, q0, maxW); }
+  const H = Math.max(1350, Math.ceil(190 + rr * 2 + 150 + headH + lines.length * size * 1.32 + (name ? 64 : 0) + 60 + 250));
+  cv.height = H; ctx.direction = 'rtl';
   ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
   ctx.strokeStyle = th.frame; ctx.lineWidth = 3; round(ctx, 44, 44, W - 88, H - 88, 44); ctx.stroke();
   // למעלה: התווית מימין, התאריך משמאל
@@ -142,22 +158,21 @@ export async function quoteCard(words, { kind = 'insight', label = '', name = ''
   if (dateLabel) { ctx.textAlign = 'left'; ctx.direction = 'rtl'; text(ctx, dateLabel, P, 136, F(600, 32), th.soft); }
   ctx.textAlign = 'center';
   // מודדים את המשפט ומרכזים איור, סימן ציטוט, משפט ושם בשטח שבין התווית לחתימה
-  const rr = 135, areaTop = 190, areaBot = H - 250;
-  const q = String(words || '').trim();
-  let size = 64, lines;
-  for (; size >= 30; size -= 2) { ctx.font = F(700, size); lines = wrapKeep(ctx, q, maxW); if (rr * 2 + 150 + lines.length * size * 1.32 + 70 <= areaBot - areaTop) break; }
+  const areaTop = 190, areaBot = H - 250;
   // מרכאות: פותחות בתחילת השורה הראשונה, סוגרות בסוף האחרונה
   lines[0] = '״' + lines[0]; lines[lines.length - 1] = lines[lines.length - 1] + '״';
   const lh = size * 1.32;
-  const groupH = rr * 2 + 150 + lines.length * lh + (name ? 64 : 0);
+  const groupH = rr * 2 + 150 + headH + lines.length * lh + (name ? 64 : 0);
   const g0 = areaTop + Math.max(0, (areaBot - areaTop - groupH) / 2);
   const cx = W / 2, cy = g0 + rr;
   ctx.fillStyle = bg === 'cream' ? 'rgba(166,47,125,.10)' : C.cream;
   ctx.beginPath(); ctx.arc(cx, cy, rr, 0, 7); ctx.fill();
-  if (pic) { const pw = 220, ph = pw * pic.height / pic.width; ctx.drawImage(pic, cx - pw / 2, cy - ph / 2 + 4, pw, ph); }
+  if (pic) { const pw = rr * 1.63, ph = pw * pic.height / pic.width; ctx.drawImage(pic, cx - pw / 2, cy - ph / 2 + 4, pw, ph); }
+  // כותרת: מאיפה המילים (למשל מהשיחה עם האני העתידית)
+  if (head) text(ctx, head, cx, cy + rr + 62, F(700, 40), th.acc);
   // סימן ציטוט גדול
-  text(ctx, '”', cx, cy + rr + 172, '700 190px Georgia, "Times New Roman", serif', th.acc);
-  let y = cy + rr + 150 + size * .85;
+  text(ctx, '”', cx, cy + rr + 172 + headH, '700 190px Georgia, "Times New Roman", serif', th.acc);
+  let y = cy + rr + 150 + headH + size * .85;
   lines.forEach((l) => { text(ctx, l, cx, y, F(700, size), th.ink); y += lh; });
   if (name) text(ctx, name, cx, y + 20, F(700, 36), th.acc);
   // חתימה: הלוגו מצד אחד, ״לשחק את השינוי עם שושי זליקוביץ׳״ מהצד השני

@@ -502,7 +502,7 @@ async function renderNote(day) {
     <button class="btn2" id="share">${T.shareImage}</button>
     <a class="btn2" href="#/today">${T.backToday}</a>`, 'today');
   let cv;
-  const draw = async () => { cv = insp ? await quoteCard(d.win_belief, { kind: 'morning', label: T.morningLabel, name: firstName(), dateLabel: hebShort(day), bg }) : wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture, bg }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: dayLabel(day), bg }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
+  const draw = async () => { cv = insp ? await quoteCard(d.win_belief, { kind: 'morning', label: T.morningLabel, head: d.voice === 'god' ? T.convHeadGod : T.convHeadFuture, name: firstName(), dateLabel: hebShort(day), bg }) : wall ? await wallpaper(d.win_belief, { head: d.voice === 'god' ? T.wallHeadGod : T.wallHeadFuture, bg }) : await morningNote({ ...d, hasBase: fullMode() }, { full, dateLabel: hebShort(day), bg }); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.noteTitle); pv.appendChild(cv); };
   await draw();
   wireBg('note', async (v) => { bg = v; await draw(); });
   $('#kind').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; full = b.dataset.v === '1'; wall = b.dataset.v === '2'; insp = b.dataset.v === '3'; $('#wh').hidden = !wall; $$('#kind button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
