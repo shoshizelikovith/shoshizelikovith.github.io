@@ -17,6 +17,12 @@
   h1{ font-size:27px; font-weight:700; color:var(--purple); margin:0 0 10px }
   p{ margin:0; opacity:.7; font-size:16px }
 </style>
+<script>
+  // קישור כניסה ממייל של ״לשחק את השינוי״ שנחת בדף הבית: מעבירים לאפליקציה עם כל מה שבכתובת
+  (function(){ var h = location.hash || '', q = location.search || '';
+    if (/access_token=|error_code=|error=|type=(magiclink|recovery|signup|invite)/.test(h + q) || /[?&]code=/.test(q))
+      location.replace('/shinui/' + q + h); })();
+</script>
 </head>
 <body>
   <div>
