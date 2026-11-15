@@ -167,12 +167,17 @@ function markMissing(list) {
 function go(h) { if (location.hash === h) render(); else location.hash = h; }
 window.addEventListener('hashchange', render);
 
-let linkChecked = false;
+let linkChecked = false, linkErr = false;
 async function render() {
-  if (!linkChecked) { linkChecked = true; if (await api.fromLink()) D = null; }
+  if (!linkChecked) {
+    linkChecked = true;
+    if (/error_code=|error=/.test(location.hash + location.search)) { linkErr = true; history.replaceState(null, '', location.pathname + '#/today'); }
+    else if (await api.fromLink()) D = null;
+  }
   const user = api.user();
   root.classList.remove('wide-root');
-  if (!user) return renderLogin();
+  if (!user) { const n = linkErr; linkErr = false; return renderLogin('email', '', n ? T.linkExpired : ''); }
+  linkErr = false;
   if (!D) {
     root.innerHTML = `<main class="app"><div class="top">${logoImg()}</div></main>`;
     try { D = await api.load(); } catch (e) { root.innerHTML = `<main class="app"><p class="err">${esc(e.message)}</p><button class="btn" onclick="location.reload()">לנסות שוב</button></main>`; return; }
@@ -206,11 +211,12 @@ async function render() {
 }
 
 // ===== כניסה =====
-function renderLogin(step = 'email', email = '') {
+function renderLogin(step = 'email', email = '', note = '') {
   root.innerHTML = `<main class="app"><div class="login">
     ${logoImg()}
     ${hd(T.loginSub, T.loginTitle)}
     ${api.live ? '' : `<div class="banner demo">${T.demoBanner}</div>`}
+    ${note ? `<div class="banner" role="alert">${note}</div>` : ''}
     <form id="f" class="card" novalidate>
       ${step === 'email'
         ? `<label class="q" for="em">${T.emailLabel}</label><input id="em" type="email" inputmode="email" autocomplete="email" dir="ltr" value="${esc(email)}" required>
