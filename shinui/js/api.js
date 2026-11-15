@@ -140,6 +140,15 @@ export const api = {
     return true;
   },
 
+  // הכפתור במייל מביא ל-#th=... והכניסה קורית רק כשהיא לוחצת, כדי שסורקי מייל לא ״ישתמשו״ בקוד
+  async verifyHash(th) {
+    let last;
+    for (const type of ['email', 'magiclink', 'signup']) {
+      try { const d = await http('/auth/v1/verify', { method: 'POST', auth: false, body: { type, token_hash: th } }); keepSession(d); return true; } catch (e) { last = e; }
+    }
+    throw last;
+  },
+
   async verify(email, code) {
     email = email.trim().toLowerCase();
     if (!LIVE) {

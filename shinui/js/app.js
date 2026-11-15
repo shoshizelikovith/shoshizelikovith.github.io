@@ -171,6 +171,8 @@ let linkChecked = false, linkErr = false;
 async function render() {
   if (!linkChecked) {
     linkChecked = true;
+    const th = new URLSearchParams(location.hash.slice(1)).get('th');
+    if (th && api.live) { history.replaceState(null, '', location.pathname + '#/today'); return renderTapIn(th); }
     if (/error_code=|error=/.test(location.hash + location.search)) { linkErr = true; history.replaceState(null, '', location.pathname + '#/today'); }
     else if (await api.fromLink()) D = null;
   }
@@ -211,6 +213,17 @@ async function render() {
 }
 
 // ===== כניסה =====
+// מסך ״לחצי כדי להיכנס״ אחרי הכפתור במייל
+function renderTapIn(th) {
+  root.innerHTML = `<main class="app"><div class="login">${logoImg()}${hd(T.loginSub, T.tapInTitle)}
+    <div class="card"><p class="hint">${T.tapInHint}</p><p class="err" id="er" role="alert" hidden></p>
+    <button class="btn" type="button" id="tapin">${T.tapInBtn}</button></div></div></main>`;
+  $('#tapin').addEventListener('click', async (e) => {
+    e.target.disabled = true;
+    try { await api.verifyHash(th); D = null; render(); }
+    catch { renderLogin('email', '', T.linkExpired); }
+  });
+}
 function renderLogin(step = 'email', email = '', note = '') {
   root.innerHTML = `<main class="app"><div class="login">
     ${logoImg()}
