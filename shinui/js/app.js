@@ -836,7 +836,7 @@ function renderBase() {
     ${hasAchievement() ? card(`<div class="ct">${T.achievementLabel}</div><p class="ach">${esc(f.achievement)}</p>
       <div class="chips" style="margin-top:10px">${Object.entries(T.achievementChecks).map(([k, v]) => `<button type="button" disabled class="${(f.achievement_checks || {})[k] ? 'on' : ''}">${v}</button>`).join('')}</div>
       <a class="lnk" href="#/base/achievement">${T.edit}</a>`) : ''}
-    ${hasPlan() ? card(`<div class="ct">${T.planTitle}</div>
+    ${hasPlan() ? card(`<div class="ct">${T.basePlanTitle}</div>
       ${habits.map((h) => `<p class="it">${esc([h.text, h.amount, h.freq && h.freq + ' ' + T.times, h.days].filter(Boolean).join(' · '))}</p>`).join('')}
       ${once.map((h) => `<p class="it">${esc([h.date && shortDate(h.date), h.text].filter(Boolean).join(' · '))}</p>`).join('')}
       <a class="lnk" href="#/base/plan">${T.edit}</a>`) : ''}`, 'base');
