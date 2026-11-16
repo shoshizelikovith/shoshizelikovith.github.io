@@ -493,6 +493,7 @@ function renderClose(day) {
       ${T.outSub ? `<p class="hint">${T.outSub}</p>` : ''}
       <p class="q">${T.outSitQ}</p>${ta('out_situation', m.out_situation, T.outSitPh, 2)}
       <p class="q">${T.outInnerQ}</p>${ta('out_inner', m.out_inner, T.outInnerPh, 2)}
+      <p class="q">${T.outThoughtQ}</p>${ta('out_thought', m.out_thought, T.outThoughtPh, 2)}
       <p class="q">${T.backHelpQ}</p>${ta('back_help', m.back_help, T.backHelpPh, 2)}`, 'outc')}
     ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
       ${filled(m.gap_moment) ? `<p class="q">${T.gapQ}</p>${ta('gap_moment', m.gap_moment)}` : ''}
@@ -508,7 +509,7 @@ function renderClose(day) {
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${d.closed_at ? T.saveBase : T.closedDay}</button>
     <a class="btn2" href="#/refine/close">${T.howToRefineClose}</a>`, day === today() ? 'today' : '');
-  const save = (x) => api.saveDay(day, { presence: x.presence, sub_presence: x.sub_presence, key_status: x.key_status, key_of: x.key_of, key_reflect: x.key_reflect, steps: x.steps, steps_reflect: x.steps_reflect, day_how: x.day_how, sign_status: x.sign_status || null, insight: x.insight, gap_moment: x.gap_moment, out_situation: x.out_situation, out_inner: x.out_inner, back_help: x.back_help, thanks: x.thanks, extra_close: x.extra_close, open_tomorrow: x.open_tomorrow, deep: x.deep });
+  const save = (x) => api.saveDay(day, { presence: x.presence, sub_presence: x.sub_presence, key_status: x.key_status, key_of: x.key_of, key_reflect: x.key_reflect, steps: x.steps, steps_reflect: x.steps_reflect, day_how: x.day_how, sign_status: x.sign_status || null, insight: x.insight, gap_moment: x.gap_moment, out_situation: x.out_situation, out_inner: x.out_inner, out_thought: x.out_thought, back_help: x.back_help, thanks: x.thanks, extra_close: x.extra_close, open_tomorrow: x.open_tomorrow, deep: x.deep });
   const flushNow = bindForm(m, save);
   $('#done').addEventListener('click', () => {
     flushNow();
@@ -716,7 +717,7 @@ function stats() {
   const openOnly = wk.filter((x) => x.d.opened_at && !x.d.closed_at && x.k < t && canStillClose(x.k)).pop();
   const keyDone = wk.filter((x) => x.d.key_status === 'done').length;
   const keyTotal = wk.filter((x) => x.d.key_status).length;
-  const OPT = ['where_needed', 'may_derail', 'recover', 'win_belief', 'being_sign', 'key_reflect', 'day_how', 'out_inner', 'thanks', 'back_help', 'open_tomorrow'];
+  const OPT = ['where_needed', 'may_derail', 'recover', 'win_belief', 'being_sign', 'key_reflect', 'day_how', 'out_inner', 'out_thought', 'thanks', 'back_help', 'open_tomorrow'];
   const opened = wk.filter((x) => x.d.opened_at);
   const depth = opened.length ? Math.round(100 * opened.reduce((a, x) => a + OPT.filter((k) => filled(x.d[k])).length / OPT.length, 0) / opened.length) : null;
   const all = Object.values(D.days);
@@ -790,7 +791,7 @@ function collectionItems() {
   Object.entries(D.days).forEach(([k, d]) => {
     if (filled(d.insight)) items.push({ kind: d.sticker ? 'sticker' : 'insight', also: d.sticker ? 'insight' : null, text: d.insight, when: shortDate(k), sort: k, link: d.sticker ? '#/sticker/' + k : null });
     if (filled(d.win_belief)) items.push({ kind: 'belief', text: d.win_belief, when: shortDate(k), sort: k });
-    if (filled(d.out_situation) || filled(d.out_inner) || filled(d.back_help)) items.push({ kind: 'bank', parts: [d.out_situation, d.out_inner, d.back_help], text: [d.out_situation, d.out_inner, d.back_help].filter(Boolean).join(' '), when: shortDate(k), sort: k + 'b' });
+    if (filled(d.out_situation) || filled(d.out_inner) || filled(d.out_thought) || filled(d.back_help)) items.push({ kind: 'bank', parts: [d.out_situation, d.out_inner, d.out_thought, d.back_help], text: [d.out_situation, d.out_inner, d.out_thought, d.back_help].filter(Boolean).join(' '), when: shortDate(k), sort: k + 'b' });
   });
   Object.entries(D.weeks).forEach(([k, w]) => {
     if (filled(w.hands) && w.closed_at) items.push({ kind: 'debrief', text: w.hands, when: T.weekNum(weekNumber(k)), sort: k + 'z' });
