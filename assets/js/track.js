@@ -115,6 +115,8 @@
   */
   function track(step, extra) {
     if (disabled) return false;
+    // בדיקות מקומיות לא נרשמות בגיליון המשפך
+    if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return false;
     extra = extra || {};
     var force = !!extra.force;
     if (!force && wasSent(step)) return false;

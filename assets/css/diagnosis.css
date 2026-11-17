@@ -1,0 +1,548 @@
+/* דף האבחון: נחיתה, שאלות, הרשמה, תוצאה והצעה */
+.noscript{padding:30px 24px;text-align:center;font-weight:700}
+.in-flow .site-tabs{display:none}
+
+h1,h2{letter-spacing:-.02em;line-height:1.1;font-weight:800}
+
+/* ---------- נחיתה ---------- */
+.hero{display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:48px;padding:56px 0 40px}
+.hero h1{font-size:clamp(38px,4.6vw,60px);margin-bottom:22px}
+.hero .turn{font-size:23px;line-height:1.45;margin-bottom:26px;max-width:31em}
+.offer-title{font-size:clamp(28px,3vw,38px);color:var(--purple);margin-bottom:10px}
+.hero .lead{font-size:20px;margin-bottom:24px;max-width:31em}
+.meta{list-style:none;padding:0;margin:22px 0 0;display:flex;flex-wrap:wrap;gap:8px 0;font-size:16px;font-weight:700;color:var(--purple)}
+.meta li+li::before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--orange);margin:0 12px;vertical-align:middle}
+.hero-art{border-radius:8px 52px;overflow:hidden;box-shadow:0 23px 52px rgba(13,18,44,.12)}
+.hero-art img{width:100%;aspect-ratio:1672/941;object-fit:cover}
+
+.block{padding:84px 0}
+.block h2{font-size:clamp(34px,4vw,50px);margin-bottom:24px;text-wrap:balance}
+.block p{margin-bottom:18px;font-size:21px;line-height:1.55;max-width:31em}
+.ruled{border-top:1px solid var(--line)}
+.center{text-align:center}
+.center p{margin-inline:auto}
+.callout{font-size:26px!important;font-weight:800;color:var(--purple);border-inline-start:5px solid var(--orange);padding-inline-start:22px;margin:26px 0!important;line-height:1.3!important}
+.anchor{font-size:25px!important;font-weight:800;color:var(--purple);line-height:1.3!important}
+.focus .btn,.results .btn,.trust .btn{margin-top:14px}
+.checks{list-style:none;padding:0;margin:0 0 26px}
+.checks li{position:relative;padding:12px 34px 12px 0;border-bottom:1px solid var(--line);font-size:21px;font-weight:700}
+.checks li::before{content:"";position:absolute;right:4px;top:50%;width:11px;height:11px;margin-top:-5px;border-radius:50%;background:var(--pink)}
+.trust .sub{color:var(--purple);font-weight:800;font-size:23px!important}
+.trust h2{margin-bottom:6px}
+
+/* ---------- שאלות ---------- */
+.panel{width:min(680px,100% - 40px);margin:0 auto;padding:34px 0 60px}
+.progress{height:6px;border-radius:99px;background:rgba(13,18,44,.12);overflow:hidden;margin-bottom:26px}
+.progress span{display:block;height:100%;width:0;background:var(--pink);border-radius:99px;transition:width .35s}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px;font-size:15px}
+.back{min-height:44px;display:inline-flex;align-items:center}
+.q{font-size:clamp(30px,4.6vw,46px);line-height:1.15;margin-bottom:14px;outline:none}
+.q-help{color:var(--soft);font-size:17px;line-height:1.5;margin-bottom:26px}
+.options{display:grid;gap:12px}
+.opt{display:flex;justify-content:space-between;align-items:center;gap:20px;text-align:right;
+  width:100%;cursor:pointer;background:transparent;border:1.5px solid rgba(13,18,44,.28);
+  border-radius:9px 24px;padding:18px 20px;min-height:64px;font-size:18px;font-weight:700;line-height:1.4;
+  transition:border-color .15s,transform .15s,box-shadow .15s}
+.opt i{flex:none;color:var(--pink);font-size:24px;font-style:normal}
+.opt:focus-visible{border-color:var(--pink);transform:translateX(-4px);box-shadow:5px 5px 0 var(--orange)}
+.opt:active{background:rgba(223,23,103,.06)}
+
+/* ---------- הרשמה ---------- */
+.signup-grid{display:grid;grid-template-columns:1fr .85fr;gap:48px;align-items:start;margin-top:8px}
+.panel.signup{width:min(1040px,100% - 40px)}
+.signup h2{font-size:clamp(36px,4.6vw,54px);margin-bottom:16px;outline:none}
+.signup h2 span{color:var(--pink)}
+.intro{font-size:19px;margin-bottom:22px;max-width:31em}
+.signup-art{border-radius:8px 44px;overflow:hidden;box-shadow:0 23px 52px rgba(13,18,44,.12);position:sticky;top:24px}
+.signup-art img{width:100%;aspect-ratio:900/698;object-fit:cover}
+.field{margin-bottom:18px}
+.field label{display:block;font-weight:800;margin-bottom:6px}
+.field .opt-note{font-weight:600;color:var(--soft)}
+.field input:not([type=checkbox]){width:100%;min-height:54px;background:transparent;border:1.5px solid rgba(13,18,44,.35);border-radius:12px;padding:12px 16px;font-size:18px}
+.field input:not([type=checkbox])::placeholder{color:rgba(13,18,44,.66)}
+.field input:not([type=checkbox]):focus{border-color:var(--pink);outline:0;box-shadow:0 0 0 4px rgba(223,23,103,.18)}
+.field input[aria-invalid=true]{border-color:var(--pink);border-width:2px}
+.help{display:block;margin-top:6px;font-size:15px;color:var(--soft)}
+.err{display:block;color:var(--purple);font-weight:800;font-size:16px;margin-top:4px;min-height:0}
+.err:empty{display:none}
+.consent .check{display:flex;gap:12px;align-items:flex-start;min-height:44px;font-weight:600;font-size:16px;line-height:1.5;cursor:pointer}
+.consent input{flex:none;width:24px;height:24px;margin-top:2px;accent-color:var(--pink)}
+.form-err{color:var(--pink);font-weight:800;margin-bottom:12px}
+.signup .btn{margin-top:6px}
+
+/* ---------- תוצאה ---------- */
+.result{padding:46px 0 20px}
+.result h1{font-size:clamp(36px,5.2vw,60px);margin-bottom:26px;outline:none}
+.result h1 span{color:var(--pink)}
+.style-art{width:min(440px,100%);margin:0 auto 30px;border-radius:8px 44px;overflow:hidden;box-shadow:0 23px 52px rgba(13,18,44,.12)}
+.style-art img{width:100%;aspect-ratio:1}
+.result-text p{font-size:22px;line-height:1.55;margin-bottom:16px;max-width:31em}
+.result-text p:first-child{font-size:26px;font-weight:800;color:var(--purple)}
+
+.gift{margin-top:50px;padding-top:46px;border-top:1px solid var(--line);text-align:center}
+.gift h2{font-size:clamp(30px,4vw,42px);margin-bottom:14px}
+.gift>p{font-size:20px;max-width:620px;margin:0 auto 26px;text-align:right}
+.video-shell{width:min(380px,100%);aspect-ratio:9/16;margin:0 auto;border-radius:8px 32px;overflow:hidden;background:var(--navy);box-shadow:8px 8px 0 var(--orange)}
+.video-shell{position:relative}
+.video-shell iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:transparent}
+.video-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:var(--navy);color:var(--cream)}
+.video-ph p{font-size:20px;font-weight:700}
+.play{width:78px;height:78px;border-radius:50%;background:var(--pink);position:relative}
+.play::after{content:"";position:absolute;top:50%;left:50%;margin:-14px 0 0 -9px;border-style:solid;border-width:14px 0 14px 24px;border-color:transparent transparent transparent var(--cream)}
+
+.offer{margin-top:64px;padding:48px 40px;border:1px solid rgba(13,18,44,.2);border-radius:8px 52px;box-shadow:0 23px 52px rgba(13,18,44,.1)}
+.offer h2{font-size:clamp(30px,4vw,42px);margin-bottom:14px;text-wrap:balance}
+.offer-logo{width:190px;height:auto;margin:6px 0 16px}
+.offer-copy p{font-size:20px;line-height:1.55;margin-bottom:14px;max-width:31em}
+.offer-copy p+p{font-weight:800}
+.price{text-align:center;margin-top:30px;padding-top:28px;border-top:1px solid var(--line)}
+.price-top{font-weight:700;margin-bottom:6px}
+.price-now{line-height:.9;color:var(--pink);font-weight:800}
+.price-now .num{font-size:88px;letter-spacing:-.05em}
+.price-now .cur{font-size:34px}
+.price-was{margin:12px 0}
+.price-was del{color:rgba(13,18,44,.6);font-size:21px}
+.trust-line{color:var(--purple);font-size:18px;font-weight:700;margin:6px 0 18px}
+.price .btn{text-align:right}
+.after-pay{font-size:15px;line-height:1.5;margin-top:18px}
+.more{margin-top:14px;font-size:17px;font-weight:700}
+.more a{color:var(--purple);display:inline-flex;align-items:center;min-height:44px}
+.restart{text-align:center;margin-top:40px}
+
+.test-flag{position:fixed;bottom:0;right:0;left:0;background:var(--purple);color:var(--cream);text-align:center;font-size:14px;padding:6px 12px;z-index:40;margin:0}
+
+@media (width<=800px){
+  .hero{grid-template-columns:1fr;gap:28px;padding:34px 0 24px}
+  .hero-copy{order:1}.hero-art{order:2;border-radius:8px 36px}
+  .hero .turn{font-size:20px}
+  .block{padding:60px 0}
+  .block p{font-size:19px}
+  .callout{font-size:22px!important}
+  .anchor{font-size:22px!important}
+  .signup-grid{grid-template-columns:1fr;gap:28px}
+  .signup-art{order:2}
+  .panel{width:min(600px,100% - 40px);padding-top:22px}
+  .opt{font-size:17px;padding:16px;gap:14px}
+  .result{padding-top:30px}
+  .result-text p{font-size:20px}
+  .result-text p:first-child{font-size:23px}
+  .offer{padding:34px 20px;border-radius:8px 36px}
+  .offer-copy p{font-size:19px}
+  .price-now .num{font-size:76px}
+  .gift>p{font-size:19px;max-width:31em}
+}
+@media (prefers-reduced-motion:reduce){
+  .opt,.progress span{transition:none!important}
+}
+
+/* ===== שיפורי חוויה 20.10 ===== */
+
+/* ארבעת הסגנונות מתחת לכפתור הראשון */
+.styles-strip{list-style:none;padding:0;margin:28px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.styles-strip li{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:16px;font-weight:800;line-height:1.25}
+.styles-strip img{width:100%;max-width:132px;aspect-ratio:1;object-fit:cover;border-radius:6px 22px;box-shadow:0 8px 18px rgba(13,18,44,.12);background:var(--cream)}
+.hero h1{text-wrap:balance}
+
+/* בזמן השאלות וההרשמה: כותרת נמוכה, והלוגו לא לחיץ כדי שלא יאבדו תשובות */
+.in-flow .site-header{min-height:52px}
+.in-flow .brand img{height:36px}
+.in-flow .brand{pointer-events:none}
+
+/* הרשמה: כרטיס ״התוצאה שלך מוכנה״ עם תמונת הסגנון בטשטוש */
+.signup h2{font-size:clamp(36px,3.8vw,46px)}
+.ready-card{position:sticky;top:24px;border-radius:8px 44px;overflow:hidden;box-shadow:0 23px 52px rgba(13,18,44,.12);background:var(--cream)}
+.ready-img{aspect-ratio:1;overflow:hidden}
+.ready-img img{width:100%;height:100%;object-fit:cover;filter:blur(26px) saturate(1.1);transform:scale(1.25)}
+.ready-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;
+  background:rgba(242,238,227,.94);color:var(--navy);font-size:26px;font-weight:800;line-height:1.2;
+  padding:14px 26px;border-radius:7px 24px;box-shadow:0 10px 26px rgba(13,18,44,.12)}
+
+/* תוצאה: הסרטונים שלך במגנטית */
+.my-path{margin:26px 0 0;padding-top:24px;border-top:1px solid var(--line)}
+.my-path h3{font-size:26px;font-weight:800;line-height:1.2;color:var(--purple);margin:0 0 14px}
+.path-list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.path-list li{display:flex;align-items:flex-start;gap:14px;font-size:19px;font-weight:700;line-height:1.4}
+.step-num{flex:none;display:grid;place-items:center;width:36px;height:36px;margin-top:-3px;border-radius:50%;
+  border:2px solid var(--purple);color:var(--purple);font-size:17px;font-weight:800;line-height:1}
+
+/* פס כפתור צף (מובייל בלבד) */
+.sticky-cta{display:none}
+
+/* נחיתה ב-1000 ומעלה: איור ההירו כרקע, הטקסט מימין */
+@media (width>=1000px){
+  /* האיור מעוגן לשמאל-למטה ברוחב שבו הדמות נשארת משמאל לטקסט; מעליו הרקע ממשיך את גווני האיור */
+  .hero{display:block;position:relative;isolation:isolate;margin-top:28px;padding:60px 60px 54px;border-radius:8px 52px;
+    background:linear-gradient(to right,#DCC2AC,#E2CAB3 20%,#E5CEB9 45%,#E8D2BE 70%,#E9D4C1);box-shadow:0 23px 52px rgba(13,18,44,.12)}
+  .hero-art{position:absolute;inset:0;z-index:-1;border-radius:8px 52px;box-shadow:none;overflow:hidden}
+  .hero-art img{position:absolute;left:0;bottom:0;width:105%;max-width:none;height:auto;aspect-ratio:1672/941;
+    -webkit-mask-image:linear-gradient(to bottom,transparent,#000 24%);mask-image:linear-gradient(to bottom,transparent,#000 24%)}
+  .hero-copy{width:min(540px,50%)}
+  .hero .meta{font-size:19px} /* סגול על רקע האיור: בגודל 19 מודגש הוא ״טקסט גדול״ ועובר את סף 3:1 */
+
+  /* תוצאה: טקסט מימין, סרטון משמאל */
+  .result .wrap.r-wrap{width:min(1120px,100% - 48px)}
+  .r-top{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:64px;align-items:start}
+  .r-top .gift{margin-top:0;padding-top:0;border-top:0;text-align:right;position:sticky;top:24px}
+  .r-top .gift>p{margin:0 0 22px;font-size:19px}
+  .r-top .style-art{width:min(300px,100%);margin:0 0 28px}
+  .result .offer{max-width:760px;margin-inline:auto}
+}
+
+@media (width<=800px){
+  .styles-strip{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:24px}
+  .styles-strip li{flex-direction:row;gap:10px;text-align:right;font-size:15px}
+  .styles-strip img{width:56px;flex:none;border-radius:5px 16px}
+  .hero-art img{aspect-ratio:4/3;object-position:left center}
+
+  .q{font-size:26px}
+  .q-help{font-size:15px;margin-bottom:14px}
+  .q-meta,.progress{margin-bottom:14px}
+  .opt{padding:12px 14px}
+  /* כל ארבע התשובות גלויות בלי גלילה ב-375x667 */
+  .panel{padding-top:8px}
+  .progress{margin-bottom:12px}
+  .q{margin-bottom:8px;line-height:1.12}
+  .q-help{line-height:1.4}
+  .options{gap:8px}
+  .opt{font-size:16px;line-height:1.35;min-height:52px;padding:11px 14px}
+
+  /* הרשמה: כפתור השליחה מעל הקפל ב-375x812. הכרטיס הופך לתווית קטנה בשורת ה״חזרה״ */
+  .panel.signup{position:relative}
+  .signup h2{font-size:31px;margin-bottom:12px}
+  .intro{font-size:17px;margin-bottom:16px}
+  .field{margin-bottom:14px}
+  .field label{margin-bottom:4px}
+  .field input:not([type=checkbox]){min-height:50px}
+  .ready-card{position:absolute;top:12px;left:0;display:flex;align-items:center;gap:8px;height:44px;
+    padding:4px 14px 4px 5px;border-radius:99px;box-shadow:0 6px 16px rgba(13,18,44,.12)}
+  .ready-img{width:36px;height:36px;flex:none;border-radius:50%}
+  .ready-img img{filter:blur(4px) saturate(1.1);transform:scale(1.3)}
+  .ready-label{position:static;transform:none;background:none;box-shadow:none;padding:0;font-size:15px;border-radius:0}
+
+  .style-art{width:min(240px,70%)}
+
+  .sticky-cta{display:block;position:fixed;right:0;left:0;bottom:0;z-index:30;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(242,238,227,.97);
+    border-top:1px solid var(--line);box-shadow:0 -10px 24px rgba(13,18,44,.08);
+    transform:translateY(110%);visibility:hidden;transition:transform .25s,visibility .25s}
+  .sticky-cta.show{transform:none;visibility:visible}
+  .sticky-cta .btn{font-size:19px;text-wrap:balance;padding:12px 16px;min-height:52px;gap:12px;box-shadow:4px 4px 0 var(--orange)}
+  body.on-result{padding-bottom:108px}
+  .path-list li{font-size:18px}
+  .my-path h3{font-size:23px}
+}
+@media (prefers-reduced-motion:reduce){
+  .sticky-cta{transition:none!important}
+}
+
+/* ===== שפת העיצוב של ״אשה ללא מאמץ״ (20.10) ===== */
+/* טיפוגרפיה: משקל 700 ומרווח נשימה כמו בדף המכירה. השאלות וההרשמה נשארות צפופות בגלל הקפל בטלפון */
+h1,h2{font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.q,.signup h2{line-height:1.12}
+.block p{line-height:1.75}
+.result-text p,.offer-copy p,.gift>p{line-height:1.7}
+.callout,.anchor{font-weight:700}
+.ruled{border-top:0}
+
+/* משפט הנחיתה - כמו .land: כרטיס קרם עם פס ורוד בימין */
+.callout{background:var(--cream);border-inline-start:5px solid var(--pink);border-radius:0 16px 16px 0;
+  box-shadow:var(--soft-shadow);padding:18px 22px 18px 18px!important}
+
+/* איורים ותמונות: פינות 20 וצל רך, בלי צל כתום קשיח */
+.hero-art{border-radius:20px;box-shadow:var(--photo-shadow)}
+.styles-strip img{border-radius:14px;box-shadow:var(--soft-shadow)}
+.style-art{border-radius:20px;box-shadow:var(--photo-shadow)}
+.video-shell{border-radius:20px;box-shadow:var(--photo-shadow)}
+.ready-card{border-radius:24px;box-shadow:var(--photo-shadow)}
+
+/* תשובות באבחון - כרטיסי קרם כמו השאלות בדף המכירה */
+.opt{background:var(--cream);border:1px solid rgba(13,18,44,.14);border-radius:16px;box-shadow:var(--soft-shadow)}
+.opt i{color:var(--purple)}
+.opt:focus-visible{border-color:var(--pink);transform:none;box-shadow:0 0 0 1.5px var(--pink) inset,var(--soft-shadow)}
+/* במגע ה-hover נתקע במקום הלחיצה ונראה כמו תשובה שכבר נבחרה בשאלה הבאה, ולכן רק עם עכבר */
+@media (hover:hover){.opt:hover{border-color:var(--pink);box-shadow:0 0 0 1.5px var(--pink) inset,var(--soft-shadow)}}
+.opt:active{background:rgba(223,23,103,.05)}
+.field input:not([type=checkbox]){background:var(--cream)}
+
+/* מספרי הסרטונים - עיגול מלא כמו .stage .num */
+.step-num{background:var(--purple);color:var(--cream);border:0}
+
+/* קופסת ההצעה - כמו .offer.light: מסגרת סגולה פנימית וצל רך */
+.offer{border:0;border-radius:24px;box-shadow:0 0 0 2.5px var(--purple) inset,0 18px 34px -20px rgba(13,18,44,.55)}
+.price{border-top:1px solid rgba(13,18,44,.14)}
+.sticky-cta .btn{box-shadow:0 8px 18px -12px rgba(13,18,44,.55)}
+
+/* פתיחה ב-1000 ומעלה: האיור החדש על קרם, אז גם הכרטיס קרם */
+@media (width>=1000px){
+  .hero{background:var(--cream);border-radius:24px;box-shadow:var(--photo-shadow)}
+  .hero-art{border-radius:24px;box-shadow:none}
+}
+
+/* ״אני שושי זליקוביץ׳״ - תמונה בעמודה צפה, כמו ״שאלות״ בדף המכירה (.faqgrid/.faqpic) */
+.trust-grid{display:grid;gap:26px;grid-template-columns:1fr;align-items:start}
+.trust-pic img{width:100%;height:auto;display:block;border-radius:20px;box-shadow:var(--photo-shadow)}
+@media (width>=900px){
+  .wrap.trust-grid{width:min(1080px,100% - 48px);grid-template-columns:300px minmax(0,1fr);gap:40px}
+  .trust-pic{position:sticky;top:24px}
+}
+@media (width<900px){.trust-pic{width:100%;max-width:280px;margin-inline:auto}}
+
+@media (width<=800px){
+  .callout{padding:16px 17px!important}
+  .offer{border-radius:20px}
+  .hero-art{border-radius:18px}
+}
+
+/* ===== הערות שושי 20.10 ===== */
+
+/* הכותרת הראשית: תמונה מרונדרת באלמוני (רישיון דסקטופ, לא webfont) */
+.hero h1.hero-title{margin-bottom:26px}
+.hero-title img{width:460px;max-width:100%;height:auto}
+@media (width<=800px){
+  .hero h1.hero-title{margin-bottom:20px}
+  .hero-title img{width:min(340px,100%)}
+}
+
+
+/* מקטע ״צופן המשיכה״: כותרת גדולה, טקסט מימין והדמיית החוברת משמאל */
+.focus{padding:72px 0}
+.focus-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;align-items:center}
+.focus-copy h2{font-size:clamp(38px,4.4vw,56px);line-height:1.15;margin-bottom:26px;text-wrap:balance}
+.focus-copy h2 span{color:var(--pink);white-space:nowrap}
+.focus-copy p{font-size:22px}
+.focus-art{margin:0}
+.focus-art img{width:100%;height:auto;
+  /* קצוות נמוגים: הקרם של התמונה נבלע ברקע הדף בלי מלבן גם במסך עם ניהול צבע שונה */
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 2.5%,#000 97.5%,transparent),linear-gradient(to bottom,transparent,#000 2.5%,#000 97.5%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to right,transparent,#000 2.5%,#000 97.5%,transparent),linear-gradient(to bottom,transparent,#000 2.5%,#000 97.5%,transparent);
+  mask-composite:intersect}
+@media (width<=899px){
+  .focus{padding:56px 0}
+  .focus-grid{grid-template-columns:1fr;gap:0}
+  .focus-copy{display:contents}
+  .focus-copy h2{order:1;font-size:clamp(32px,8.6vw,40px);margin-bottom:8px}
+  .focus-art{order:2;margin:0 -8px 18px}
+  .focus-copy p{order:3;font-size:20px}
+  .focus-copy .btn{order:4}
+}
+
+/* ===== תמונת הפתיחה 3.11: נגמרת בקרם ומשתלבת בדף, בלי כרטיס, צל או גבולות ===== */
+.hero{background:none;box-shadow:none;border-radius:0}
+.hero-art{border-radius:0;box-shadow:none;overflow:visible}
+.hero-art img{display:block;width:100%;height:auto;aspect-ratio:1536/1024;object-fit:cover;-webkit-mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);mask-composite:intersect;border-radius:0}
+@media (width>=1000px){
+  .hero{display:block;position:relative;isolation:isolate;margin-top:8px;padding:44px 0 40px;min-height:640px;border-radius:0;background:none;box-shadow:none}
+  .hero-art{position:absolute;inset:auto auto 0 -20px;z-index:-1;width:78%;border-radius:0;overflow:visible}
+  .hero-art img{position:static;width:100%;max-width:none;height:auto;aspect-ratio:1536/1024;-webkit-mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent),linear-gradient(to bottom,transparent,#000 4%,#000 96%,transparent);mask-composite:intersect}
+  .hero-copy{width:min(540px,50%)}
+}
+@media (width<=999px){
+  .hero-art{margin-inline:-20px;overflow:hidden}
+  .hero-art img{width:100%;max-width:none;aspect-ratio:5/4;object-position:14% center}
+}
+
+/* ===== ארבעת הסגנונות 3.11: איורים שלמים שזורמים על הקרם, בלי כרטיסים ובלי חיתוך ===== */
+.styles-flow{list-style:none;margin:34px auto 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;align-items:end}
+.styles-flow li{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.styles-flow img{width:100%;max-width:210px;height:auto;display:block}
+.styles-flow span{font-size:18px;font-weight:700;line-height:1.25;color:var(--navy)}
+.hero .btn{font-size:22px;padding:18px 34px}
+@media (width<=800px){
+  .styles-flow{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 16px}
+  .styles-flow img{max-width:130px}
+  .hero .btn{font-size:20px;padding:17px 18px;width:100%}
+}
+
+/* ===== טקסט חדש 3.11 ===== */
+.block strong,.hero .turn strong,.focus-copy strong,.checks strong,.trust-copy strong,.not-one strong,.q-intro strong,.brave strong{color:var(--purple);font-weight:800}
+.block h2 strong{color:inherit;font-weight:inherit}
+.lines{margin-bottom:22px}
+.lines p{margin-bottom:10px}
+.discovery h2 strong{color:var(--purple)}
+.styles-flow span{font-weight:600}
+.q-intro{margin:0 0 20px;padding:14px 18px;background:var(--cream);box-shadow:var(--soft-shadow);border-radius:16px;font-size:17px;line-height:1.5}
+.q-intro p{margin:0 0 6px}
+.q-intro p:last-child{margin-bottom:0}
+.q-intro-t{font-size:20px;font-weight:800;color:var(--purple)}
+.brave{font-size:19px;line-height:1.4;margin:-8px 0 12px}
+.not-one{margin:30px 0 8px;padding:22px 24px;background:var(--cream);box-shadow:var(--soft-shadow);border-radius:18px}
+.not-one p{font-size:19px;line-height:1.55;margin:0 0 12px}
+.not-one p:last-child{margin-bottom:0}
+.not-one-t{font-weight:800;color:var(--purple);font-size:21px!important}
+.closing{margin:34px auto 0;max-width:760px;text-align:center}
+.closing p{font-size:20px;line-height:1.5;margin:0 0 6px}
+.closing p.strong{font-weight:800;color:var(--purple)}
+@media (width<=800px){
+  .q-intro{padding:11px 14px;font-size:15.5px;line-height:1.4;margin-bottom:14px}
+  .q-intro-t{font-size:17px}
+  .brave{font-size:17px;margin:-6px 0 10px}
+  .not-one{padding:18px;margin-top:24px}
+  .not-one p{font-size:18px}
+}
+
+/* נוסח החוברת 4.11: הפתיחה ארוכה יותר, אז היא נשארת טקסט רגיל והמילים החשובות מודגשות */
+.result-text p:first-child{font-size:22px;font-weight:inherit;color:inherit}
+@media (width<=800px){.result-text p:first-child{font-size:20px}}
+.result-text strong{color:var(--purple);font-weight:800}
+
+/* מסך התוצאה, 4.11: כותרת קטנה, שם גדול, איור בצד בלי כרטיס. מיני דף מכירה בקופסת ההצעה */
+.r-head{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:20px;align-items:center;margin-bottom:26px}
+.r-head .kicker{margin-bottom:10px}
+.result h1{margin-bottom:0}
+.result h1 small{display:block;font-size:21px;font-weight:700;line-height:1.3;color:var(--navy);margin-bottom:8px}
+.result h1 span{display:block;font-size:clamp(42px,5vw,60px);line-height:1.05}
+.r-head .style-art,.r-top .r-head .style-art{width:100%;margin:0;border-radius:0;box-shadow:none;overflow:visible}
+.r-head .style-art img{width:100%;height:auto;aspect-ratio:1}
+.made-for{font-size:24px;font-weight:800;color:var(--purple);margin:26px 0 8px}
+.offer .offer-logo{width:min(340px,100%);margin:0 0 22px}
+.gets{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:22px 24px}
+.gets li{display:grid;grid-template-columns:62px minmax(0,1fr);gap:14px;align-items:start;font-size:17px;line-height:1.4}
+.gets img{width:62px;height:62px;object-fit:contain}
+.gets strong{display:block;font-size:19px;font-weight:800;line-height:1.25;color:var(--navy);margin-bottom:3px}
+.btn-ghost,.btn.btn-ghost{background:transparent;color:var(--purple);border:1.5px solid var(--purple);box-shadow:none;margin-top:14px}
+.btn-ghost:hover{background:rgba(166,47,125,.06)}
+.fine{font-size:14px;line-height:1.45;color:var(--soft);margin-top:18px;text-align:right}
+@media (max-width:800px){
+  .r-head{grid-template-columns:minmax(0,1fr) 128px;gap:10px;align-items:end}
+  .r-head .kicker{font-size:14px;white-space:nowrap}
+  .r-head .kicker::before{width:16px;margin-inline-end:7px}
+  .result h1 small{font-size:17px}
+  .result h1 span{font-size:36px}
+  .gets{grid-template-columns:1fr;gap:18px}
+  .gets li{grid-template-columns:54px minmax(0,1fr)}
+  .gets img{width:54px;height:54px}
+  .offer .offer-logo{width:min(280px,100%)}
+}
+
+/* איור קטן לכל שאלה, בצד השמאלי הריק. מחוץ לזרימה של הדף, ולכן לא מזיז את הטקסט. רק במחשב רחב. */
+.q-art{display:none}
+@media (min-width:1240px){
+  #screen-quiz{position:relative}
+  .q-art:not([hidden]){display:block;position:absolute;top:96px;left:-240px;width:220px;height:220px;pointer-events:none;user-select:none}
+}
+
+/* בלי משפט עזרה נשאר אותו רווח בין הכותרת לתשובות */
+.q-help:empty{display:block}
+/* הסרטון גבוה מחלון נמוך, ודביק הוא היה נחתך בתחתית */
+@media (width>=1000px) and (height<890px){.r-top .gift{position:static}}
+
+/* ===== חוויה: תנועה ואישיות (4.11) ===== */
+h1,h2,h3{text-wrap:balance}
+p,li{text-wrap:pretty}
+.opt,.btn{-webkit-tap-highlight-color:transparent}
+.btn .arr{display:inline-block;transition:transform .2s}
+@media (hover:hover){.btn:hover .arr{transform:translateX(-5px)}}
+
+/* בחירת תשובה */
+.opt{transition:border-color .15s,transform .15s,box-shadow .15s,background-color .18s,color .18s,opacity .2s}
+.opt.picked{background:var(--pink);border-color:var(--pink);color:var(--cream);transform:scale(.99)}
+.opt.picked i{color:var(--cream)}
+.leaving .opt:not(.picked){opacity:.35}
+
+/* שאלה נכנסת: מהצד שאליו קוראים בעברית, ובזו אחר זו */
+@keyframes qIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+@keyframes artIn{from{opacity:0;transform:scale(.92) rotate(-2deg)}to{opacity:1;transform:none}}
+.enter .q,.enter .q-help,.enter .opt{animation:qIn .38s cubic-bezier(.2,.7,.2,1) both}
+.enter .q-help{animation-delay:.05s}
+.enter .opt:nth-child(1){animation-delay:.08s}
+.enter .opt:nth-child(2){animation-delay:.13s}
+.enter .opt:nth-child(3){animation-delay:.18s}
+.enter .opt:nth-child(4){animation-delay:.23s}
+.enter .q-art{animation:artIn .55s cubic-bezier(.2,.7,.2,1) both}
+
+/* עלייה עדינה בגלילה */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.7,.2,1)}
+.rv.rv-in{opacity:1;transform:none}
+body.__editing .rv{opacity:1!important;transform:none!important;transition:none!important}
+
+/* רגע הגילוי */
+.reveal{position:fixed;inset:0;z-index:60;background:var(--cream);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;cursor:pointer;transition:opacity .4s}
+.reveal img{width:min(320px,70vw);height:auto;filter:blur(26px) saturate(1.1);transform:scale(1.06);transition:filter 1.25s cubic-bezier(.3,.6,.3,1),transform 1.25s cubic-bezier(.3,.6,.3,1)}
+.reveal p{margin:0;font-size:clamp(24px,5vw,34px);font-weight:800;color:var(--purple);text-align:center;opacity:0;transform:translateY(10px);transition:opacity .5s .55s,transform .5s .55s}
+.reveal.on img{filter:none;transform:none}
+.reveal.on p{opacity:1;transform:none}
+.reveal.out{opacity:0;pointer-events:none}
+
+/* התוצאה שלה */
+.r-hello{font-size:clamp(22px,3vw,28px);font-weight:800;color:var(--navy);line-height:1.2;margin:0 0 2px}
+.r-mirror{margin:22px 0 22px;padding:14px 18px;border-right:4px solid var(--pink);border-radius:4px 14px 14px 4px;background:var(--cream);box-shadow:var(--soft-shadow)}
+.r-mirror-l{display:block;font-size:14px;font-weight:700;color:var(--purple);margin-bottom:4px}
+.r-mirror-t{display:block;font-size:18px;font-weight:700;line-height:1.45;color:var(--navy)}
+.r-mix{margin:4px 0 16px}
+.r-mix-t{font-weight:800;color:var(--navy)!important;margin:0 0 10px!important;font-size:17px!important}
+.r-mix-row{display:grid;grid-template-columns:minmax(0,9.5em) 1fr;align-items:center;gap:10px;margin-bottom:8px;font-size:15px;font-weight:700}
+.r-mix-tr{display:block;height:13px;background:rgba(13,18,44,.06);border-radius:7px;overflow:hidden}
+.r-mix-b{display:block;height:100%;width:var(--w);border-radius:7px;box-shadow:0 1px 2px rgba(13,18,44,.22)}
+.r-mix:not(.in) .r-mix-b{width:0}
+.r-mix.in .r-mix-b{transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.r-mix-b.c0{background:var(--pink)}
+.r-mix-b.c1,.r-mix-b.c2,.r-mix-b.c3{background:var(--navy)}
+
+/* רגע איסוף התשובות, לפני ההרשמה */
+.reveal.gather img,.reveal.gather.on img{filter:blur(26px) saturate(1.1);transform:scale(1.06)}
+.reveal.gather p{opacity:1;transform:none;transition:none;font-size:clamp(21px,4.4vw,28px)}
+.reveal.gather.ready p{color:var(--pink)}
+.gather-bar{display:block;width:min(260px,62vw);height:8px;border-radius:5px;background:rgba(13,18,44,.1);overflow:hidden}
+.gather-bar i{display:block;height:100%;width:0;border-radius:5px;background:var(--pink);transition:width 1.25s cubic-bezier(.3,.6,.3,1)}
+.reveal.gather.on .gather-bar i{width:100%}
+
+/* ===== 17.11: צופן המשיכה בפתיחה, הכוח הנשי, המשפט הגדול, הטלפונים, ארבעת הסגנונות ===== */
+.offer-kicker{font-size:19px;font-weight:700;color:var(--navy);margin:0 0 2px}
+.offer-title{font-size:clamp(36px,4vw,50px);line-height:1.1;color:var(--pink);margin-bottom:8px}
+.hero .lead{margin-bottom:22px}
+
+.effort h2{font-size:clamp(34px,4vw,48px);line-height:1.2}
+.effort-split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:center;width:min(1000px,100% - 48px);margin:6px auto 18px}
+.effort-copy p{font-size:21px}
+.effort-copy .power-line{font-size:clamp(26px,2.6vw,32px);line-height:1.3;font-weight:800;color:var(--purple);margin:4px 0 18px}
+.effort-art{margin:0}
+.effort-art img{width:100%;max-width:400px;height:auto;display:block;margin-inline:auto;
+  -webkit-mask-image:radial-gradient(ellipse 70% 72% at 50% 50%,#000 62%,transparent 100%);
+  mask-image:radial-gradient(ellipse 70% 72% at 50% 50%,#000 62%,transparent 100%)}
+
+.key-line{padding:60px 0 22px}
+.big-statement{font-size:clamp(40px,5.4vw,66px)!important;line-height:1.12!important;font-weight:800;color:var(--navy);margin:0 0 18px;text-wrap:balance}
+.big-statement strong{color:var(--pink)!important}
+.big-sub{font-size:clamp(23px,2.4vw,29px)!important;line-height:1.4!important;color:var(--navy);margin:0}
+.big-sub b{color:var(--purple)}
+.key-line + .focus{padding-top:34px}
+
+.phones{position:relative;display:flex;justify-content:center;align-items:center;padding:20px 0;min-height:500px}
+.phone{background:var(--navy);padding:7px;border-radius:30px;box-shadow:0 22px 46px rgba(13,18,44,.22);overflow:hidden;flex:none}
+.phone img{display:block;width:100%;height:auto;border-radius:24px}
+.ph-main{width:46%;position:relative;z-index:2}
+.ph-side{width:37%;opacity:.97}
+.ph-r{margin-left:-11%;transform:rotate(5deg) translateY(18px)}
+.ph-l{margin-right:-11%;transform:rotate(-5deg) translateY(18px)}
+
+.styles-flow{align-items:start}
+.styles-flow span{font-size:17px;line-height:1.35;max-width:13em}
+.styles-flow span strong{display:block;font-size:20px;margin-top:2px}
+.styles-note{margin:34px auto 0;max-width:30em;font-size:21px;line-height:1.55}
+
+.privacy-note{font-size:14px;color:var(--soft);margin:10px 0 0;text-align:center}
+.privacy-note a{color:var(--purple)}
+
+@media (width<=899px){
+  .effort-split{grid-template-columns:1fr;gap:6px;width:calc(100% - 40px)}
+  .effort-art{order:-1}
+  .effort-art img{max-width:260px}
+  .effort-copy p{font-size:19px}
+  .key-line{padding:46px 0 10px}
+  .phones{min-height:0;padding:10px 0 24px}
+  .phone{padding:5px;border-radius:22px}
+  .phone img{border-radius:18px}
+}
+@media (width<=800px){
+  .offer-kicker{font-size:17px}
+  .styles-flow span{font-size:16px}
+  .styles-flow span strong{font-size:18px}
+  .styles-note{font-size:19px;margin-top:26px}
+}
+.effort-art img{-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 70%,transparent 100%)}
+@media (width<=800px){
+  .hero .meta li:nth-child(3){flex-basis:100%}
+  .hero .meta li:nth-child(3)::before{display:none}
+}
+.effort-art img{-webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 96%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent),linear-gradient(to bottom,transparent,#000 9%,#000 96%,transparent);mask-composite:intersect}
