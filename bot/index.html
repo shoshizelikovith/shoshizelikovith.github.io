@@ -346,7 +346,7 @@ function save(){
   try{
     localStorage.setItem(shelf(), JSON.stringify({
       t: Date.now(), tag: tag.textContent||'', course: courseLabel,
-      items: history.slice(-40)
+      items: history.slice(-400)
     }));
   }catch(e){}
 }
@@ -470,7 +470,7 @@ async function loadHistory(){
     }catch(e){}
   }else{
     if(!getTok()){ gateShow(); return; }
-    d=await post({event:'hist', token:getTok(), n:40}, 25000);
+    d=await post({event:'hist', token:getTok(), n:400}, 30000);
     if(d && d.auth==='need'){ setTok(''); gateShow('expired'); return; }
     gateHide();
   }
@@ -701,7 +701,7 @@ form.addEventListener('submit',async e=>{
   row.appendChild(img); row.appendChild(dots);
   chat.appendChild(row); chat.scrollTop=chat.scrollHeight;
 
-  const payload={who,mail,token:getTok(),q,history:history.slice(0,-1),
+  const payload={who,mail,token:getTok(),q,history:history.slice(-61,-1),
       private:document.querySelector('input[name=priv]:checked').value==='1'};
 
   const j=await callAsk(payload);
@@ -801,6 +801,6 @@ async function callAsk(payload){
   return null;
 }
 </script>
-<script>var BOT_BUILD='BOTCHAN-140644';</script>
+<script>var BOT_BUILD='BOTCHAN-130001';</script>
 </body>
 </html>
