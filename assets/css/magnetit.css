@@ -1,0 +1,524 @@
+/* דף ההצעה של מגנטית (נבנה מחדש על בסיס הדף הקיים: אותו תוכן, אותו סדר, אותה שפה) */
+.mn{font-size:20px}
+.mnWrap{width:min(1120px,100% - 48px);margin-inline:auto}
+.mnWrap.narrow{width:min(760px,100% - 48px)}
+.mnSection{padding:102px 0;position:relative}
+.mnSection p{margin:0 0 20px}
+:where(.mnSection) p{max-width:31em}
+.mn h1,.mn h2{letter-spacing:-.03em;font-weight:800;line-height:1.08}
+.mn h1,.mnSection h2{font-size:clamp(40px,4.15vw,62px);margin:0 0 22px}
+.mnKicker{color:var(--purple);margin:0 0 15px!important;font-size:19px;font-weight:700}
+.mnKicker::before{content:"";display:inline-block;vertical-align:middle;width:35px;height:3px;border-radius:20px;background:var(--orange);margin-inline-end:11px}
+
+/* כפתורים */
+.mnButton{display:inline-flex;align-items:center;justify-content:space-between;gap:30px;margin-top:14px;
+  padding:15px 23px;min-height:56px;font-size:20px;font-weight:800;line-height:1.2;text-decoration:none;
+  border:1px solid var(--navy);border-radius:7px 24px;transition:transform .2s}
+.mnButton:hover{transform:translateY(-2px)}
+.mnPurchase{background:var(--pink);color:var(--cream);border-color:var(--pink);box-shadow:7px 7px 0 var(--orange)}
+
+/* פתיחה */
+.mnHero{position:relative;isolation:isolate;min-height:900px}
+.mnHeroArt,.mnReleaseArt{-webkit-mask-image:linear-gradient(to bottom,#000 78%,transparent);mask-image:linear-gradient(to bottom,#000 78%,transparent)}
+.mnHeroArt{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover;object-position:left center}
+.mnHeroCopy{width:min(560px,46vw);margin-inline-start:max(5vw,50% - 560px);margin-inline-end:auto;padding:62px 0 76px}
+.mnHero h1 strong{color:var(--pink);display:inline-block}
+.mnHero h1 em{font-style:normal;text-decoration:underline;text-decoration-color:var(--orange);text-underline-offset:5px;text-decoration-thickness:3px}
+.mnHero p{margin:0 0 14px}
+.mnHeroLead{font-size:23px;line-height:1.43;max-width:31em}
+.mnHeroQuestion{color:var(--purple);font-size:26px;font-weight:800;margin-top:22px!important}
+.mnRight{font-size:25px}
+.mnHeroHighlight{color:var(--pink);margin-top:5px;font-size:27px;line-height:1.22;display:inline-block}
+.mnHeroHighlight.small{color:var(--purple);font-size:24px}
+.mnIntroSection{border-bottom:1px solid var(--line);padding:72px 0 86px}
+.mnHeroMagnetitTitle{letter-spacing:-.03em;margin:0 0 5px!important;font-size:clamp(40px,4.6vw,62px);font-weight:900;line-height:1.04}
+.mnIntroLogo{width:300px;max-width:100%;height:auto;margin:-6px 0 12px}
+.mnIntro{font-size:23px;line-height:1.45;max-width:650px}
+
+/* כאב */
+.mnPain h2{max-width:690px;font-size:clamp(36px,4.2vw,56px)}
+.mnInlineEmphasis{color:var(--purple);font-size:24px}
+.mnBubbles{display:grid;grid-template-columns:1fr 1fr;gap:17px;margin:42px 0}
+.mnBubbles span{display:block;border:1px solid var(--purple);border-radius:31px 7px;padding:20px 23px;font-size:22px;font-weight:700;line-height:1.25;box-shadow:0 10px 24px rgba(13,18,44,.05)}
+.mnBubbles span:nth-child(2),.mnBubbles span:nth-child(3){border-color:var(--pink);border-radius:7px 31px}
+.mnBubbles span:nth-child(2){transform:translateX(-14px)}
+.mnBubbles span:nth-child(3){transform:translateX(14px)}
+.mnEmphasis{color:var(--purple);font-size:clamp(32px,3.6vw,50px);font-weight:800;line-height:1.12;margin-top:34px!important;letter-spacing:-.025em}
+
+/* למה */
+.mnWhy{padding-bottom:55px}
+.mnTwoCol{display:grid;grid-template-columns:1fr .94fr;align-items:center;gap:55px}
+.mnTwoCol h2{font-size:clamp(36px,3.8vw,56px)}
+.mnWoman{min-height:560px;position:relative;overflow:hidden;border-radius:8px 52px}
+.mnWoman img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:10% center}
+.mnLineAccent{color:var(--purple);font-size:24px}
+.mnPromise{padding-top:62px}
+.mnPromise .narrow{border-inline-start:5px solid var(--orange);padding-inline-start:35px}
+.mnCentered{font-size:23px;line-height:1.55}
+.mnPromise h2{color:var(--pink);margin-top:37px;font-size:clamp(38px,4vw,58px)}
+.mnBelief{font-size:25px;line-height:1.6}
+.mnBelief strong:first-child{color:var(--purple)}
+.mnBelief strong:last-child{color:var(--pink);margin-top:10px;font-size:clamp(28px,3vw,42px);line-height:1.14;display:inline-block}
+
+/* מוצר */
+.mnProduct{text-align:center}
+.mnProduct .narrow{max-width:790px}
+.mnProduct p{text-align:right}
+.mnProduct h2{margin-bottom:5px}
+.mnProductLogo{width:min(400px,100%);height:auto;margin:0 auto 14px}
+.mnProduct .mnProductEarlyCta{width:min(440px,100%);display:flex;margin:0 auto 36px}
+.mnMomentList{border-inline-start:2px solid var(--orange);padding-inline-start:20px;font-size:22px;line-height:1.65}
+.mnNewWay{font-size:23px;line-height:1.55}
+.mnNewWay strong{color:var(--purple)}
+
+/* עדויות */
+.mnTestimonialRail{display:grid;align-items:start;gap:22px;width:min(980px,100% - 48px);margin:56px auto 0}
+.mnTestimonialRail.railTwo{grid-template-columns:1fr 1fr}
+.mnTestimonialRail.railOne{grid-template-columns:min(560px,100%);justify-content:center}
+.mnTestimonial{background:var(--cream);border-top:3px solid var(--pink);padding:10px;box-shadow:0 15px 28px rgba(13,18,44,.08)}
+.mnTestimonial:nth-child(2n){border-top-color:var(--purple)}
+.mnTestimonial img{width:100%;height:auto}
+
+/* שחרור מאמץ */
+.mnRelease{padding:0}
+.mnReleaseWrap{display:grid;grid-template-columns:1.15fr .85fr;align-items:stretch}
+.mnReleaseCopy{padding:96px 0 98px;margin-inline-start:max(5vw,50% - 560px);margin-inline-end:24px;max-width:560px}
+.mnReleaseArt{width:100%;height:auto;aspect-ratio:560/534;align-self:center;object-fit:cover;object-position:0 center}
+.mnRelease h2{color:var(--purple)}
+.mnLines{border-block:1px solid var(--line);margin:34px 0;padding:22px 0;font-size:26px;font-weight:700}
+.mnLines p{margin:7px 0}
+.mnReleaseLead{font-size:25px;line-height:1.42}
+.mnSometimes{font-size:23px;line-height:1.7}
+.mnReleaseEnd{font-size:22px;line-height:1.65}
+
+/* מה מחכה / איך מתחילים */
+.mnBenefits{padding-bottom:92px}
+.mnBenefits h2{max-width:740px}
+.mnBenefitGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:45px 0}
+.mnBenefitGrid article{border-bottom:1px solid rgba(13,18,44,.2);min-height:270px;padding:5px 10px 15px}
+.mnIcon{display:grid;place-items:center;width:110px;height:100px;margin-bottom:14px}
+.mnIcon img{width:auto;max-width:100%;height:94px;object-fit:contain}
+.mnBenefitGrid h3{color:var(--purple);margin:0 0 10px;font-size:27px;line-height:1.22;text-wrap:balance}
+.mnBenefitGrid p{font-size:18px;line-height:1.45;margin:0}
+.mnBenefits .mnLargerButton{width:min(440px,100%);margin:28px auto 0;display:flex;padding:18px 28px;font-size:22px}
+.mnChange{border-block:1px solid var(--line)}
+.mnPracticeLabel{color:var(--purple);font-size:25px;font-weight:800;margin-top:32px!important}
+.mnPracticeList{border-inline-start:2px solid var(--orange);margin:20px 0;padding-inline-start:24px}
+.mnPracticeList p{margin:0 0 13px;padding-inline-start:16px;position:relative}
+.mnPracticeList p::before{content:"•";color:var(--pink);font-weight:800;position:absolute;inset-inline-start:0}
+
+/* הצטרפות */
+.mnJoin{padding-top:70px;padding-bottom:45px}
+.mnJoinTop{margin:0}
+.mnJoinVisual{margin:0 0 30px;overflow:hidden}
+.mnJoinVisual img{width:100%;height:auto;transform:scaleX(-1)}
+.mnJoinCopy{max-width:760px;margin:0 auto}
+.mnJoinCopy h2{font-size:clamp(36px,4vw,56px);margin:0 0 22px}
+.mnJoinLogo{width:230px;height:auto;margin:0 0 6px}
+.mnJoinCopy h3{color:var(--purple);margin:15px 0;font-size:29px;line-height:1.22}
+.mnJoinCopy ul{margin:0;padding:0;list-style:none}
+.mnJoinCopy li{margin-bottom:10px;padding-inline-start:22px;position:relative}
+.mnJoinCopy li::before{content:"";position:absolute;inset-inline-start:0;top:.55em;width:8px;height:8px;border-radius:100%;background:var(--orange)}
+.mnJoin .mnPrice{text-align:center;border:1px solid rgba(13,18,44,.16);border-radius:8px 52px;width:min(760px,100% - 30px);margin:40px auto 0;padding:40px 40px 46px;box-shadow:0 23px 52px rgba(13,18,44,.08)}
+.mnPrice>p{font-weight:700;margin:0 0 6px}
+#join{scroll-margin-top:24px}
+.mnPrice strong{display:block;color:var(--pink);font-size:88px;line-height:.9;letter-spacing:-.06em}
+.mnPrice strong small{font-size:34px}
+.mnPrice del{display:block;color:rgba(13,18,44,.62);margin:15px 0;font-size:21px}
+.mnTrust{color:var(--purple);font-size:18px;margin:17px 0!important}
+.mnJoin .mnPrice .wide{display:flex;max-width:510px;margin:14px auto 0;padding:19px 18px;font-size:20px}
+.mnPrice>small{display:block;margin-top:18px;font-size:16px;line-height:1.5}
+
+/* שאלות */
+.mnFAQ h2{margin-bottom:8px}
+.mnFAQ .mnKicker{margin-bottom:26px!important}
+.mnFAQ details{border-bottom:1px solid rgba(13,18,44,.2)}
+.mnFAQ summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 0;font-size:26px;font-weight:700;list-style:none;min-height:56px}
+.mnFAQ summary::-webkit-details-marker{display:none}
+.mnFAQ summary i{flex:none;width:22px;height:22px;position:relative}
+.mnFAQ summary i::before,.mnFAQ summary i::after{content:"";position:absolute;inset:10px 0 auto;height:2px;background:var(--pink)}
+.mnFAQ summary i::after{transition:transform .2s;transform:rotate(90deg)}
+.mnFAQ details[open] summary i::after{transform:rotate(0)}
+.mnFAQ details p{max-width:31em;padding:0 0 20px;margin:0;font-size:20px;white-space:pre-line}
+
+/* איך מתחילים */
+.mnStart{border-block:1px solid var(--line)}
+.mnStartGrid{display:grid;grid-template-columns:1.25fr .75fr;align-items:start;gap:72px}
+.mnStartGrid h2{font-size:clamp(36px,4vw,56px)}
+.mnStartIntro{font-size:24px;font-weight:800}
+.mnStartSteps{border-top:1px solid rgba(13,18,44,.2)}
+.mnStartSteps article{display:grid;grid-template-columns:86px 1fr;align-items:center;gap:18px;padding:21px 0;border-bottom:1px solid rgba(13,18,44,.2)}
+.mnStartSteps img{width:74px;height:74px;object-fit:contain}
+.mnStartSteps p{margin:0;font-size:21px;line-height:1.4}
+.mnFine{font-size:16px;line-height:1.45;margin-top:18px!important}
+.mnAsideTestimonials{display:grid;gap:18px}
+.mnStart .mnStartCta{width:min(528px,100% - 40px);margin:40px auto 0;padding:18px 28px;font-size:24px;display:flex}
+.mnStartBottomTestimonial{margin-top:34px}
+
+/* על שושי + סיום */
+.mnAbout{padding-bottom:90px}
+.mnAboutGrid{display:grid;grid-template-columns:1.32fr .68fr;align-items:center;gap:68px}
+.mnAboutCopy h2{font-size:clamp(38px,4.2vw,58px)}
+.mnAboutLead{font-weight:800}
+.mnAboutMagnetit{font-size:23px;font-weight:800;line-height:1.55}
+.mnAboutPhoto{width:100%;height:auto;max-height:630px;object-fit:cover;object-position:center top;border-radius:7px 42px;box-shadow:12px 12px 0 var(--orange)}
+.mnClosing{text-align:center;padding-top:90px}
+.mnClosing h2{font-size:clamp(38px,4.8vw,64px)}
+.mnClosing p{max-width:700px;margin-inline:auto}
+.mnClosingLead{color:var(--purple);text-wrap:balance;font-size:30px;font-weight:800;margin-top:32px!important}
+.mnClosingLines{font-size:24px;font-weight:700;line-height:1.5}
+.mnClosing .mnButton{margin-top:10px}
+
+/* סיום */
+.mnDisclaimer{border-top:1px solid var(--line);padding:47px 0;font-size:15px;line-height:1.5;margin-top:30px}
+.mnDisclaimer .mnWrap{max-width:850px}
+.mnDisclaimer p{max-width:31em}
+.mnFooterBrand{display:flex;justify-content:center;align-items:center;gap:38px;margin:36px 0 22px}
+.mnFooterBrand img:first-child{width:180px;height:auto}
+.mnFooterBrand img:last-child{width:auto;height:70px}
+.mnCopyright{text-align:center;font-size:14px;margin:0}
+.mnLegal{display:flex;justify-content:center;flex-wrap:wrap;gap:4px 22px;margin:0 0 10px;font-size:15px;font-weight:700}
+.mnLegal a{color:var(--purple);display:inline-flex;align-items:center;min-height:44px;padding-inline:6px}
+
+/* ===== שיפורי חוויה 20.10 ===== */
+/* כפתורי עוגן: משני (מסגרת ורודה, רקע שקוף). הוורוד המלא עם הצל הכתום נשאר לכפתורי התשלום */
+.mnSecondary{background:transparent;color:var(--navy);border:2px solid var(--pink);box-shadow:none}
+.mnSecondary span{color:var(--pink)}
+.mnSecondary:hover{background:rgba(223,23,103,.06)}
+/* רצועת ״יצא לך״ - רק כשיש תוצאת אבחון */
+.mnForYou{background:rgba(13,18,44,.045);border-bottom:1px solid var(--line);padding:30px 0 32px}
+.mnForYouTitle{font-size:22px;font-weight:700;line-height:1.4;margin:0 0 14px}
+.mnForYouTitle strong{color:var(--purple);font-weight:800}
+.mnStepList{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.mnStepList li{display:flex;align-items:flex-start;gap:12px;font-size:18px;font-weight:700;line-height:1.4}
+.mnStepNum{flex:none;display:grid;place-items:center;width:32px;height:32px;margin-top:-3px;border-radius:50%;border:2px solid var(--purple);color:var(--purple);font-size:16px;font-weight:800;line-height:1}
+
+@media (width<=1100px) and (width>800px){.mnHero{display:flex;flex-direction:column;min-height:0}.mnHeroArt{position:relative;order:2;height:420px;object-position:18% center}.mnHeroCopy{order:1;width:min(560px,100% - 48px);margin:0 auto;padding:44px 0 20px}}
+@media (width<=800px){
+  .mn{font-size:18px}
+  .mnWrap,.mnWrap.narrow{width:calc(100% - 40px)}
+  .mnSection{padding:70px 0}
+  .mnSection h2,.mn h1{font-size:clamp(36px,9.5vw,46px)}
+  .mnButton{width:100%;padding:15px 18px;font-size:19px}
+  .mnHero{display:flex;flex-direction:column;min-height:0}
+  .mnHeroArt{position:relative;order:2;height:340px;object-position:18% center}
+  .mnHeroCopy{order:1;width:calc(100% - 40px);margin:0 auto;padding:44px 0 20px}
+  .mnHeroLead{font-size:20px}.mnHeroQuestion,.mnRight{font-size:22px}.mnHeroHighlight{font-size:24px}.mnHeroHighlight.small{font-size:21px}
+  .mnIntroSection{padding:55px 0 66px}
+  .mnIntroLogo{width:240px}
+  .mnIntroSection .mnIntro,.mnIntro{font-size:20px}
+  .mnBubbles{grid-template-columns:1fr;gap:12px;margin:32px 0}
+  .mnBubbles span,.mnBubbles span:nth-child(2),.mnBubbles span:nth-child(3){font-size:20px;transform:none}
+  .mnTwoCol,.mnStartGrid,.mnAboutGrid{grid-template-columns:1fr;gap:34px}
+  .mnWoman{order:-1;min-height:320px;border-radius:8px 36px}
+  .mnCentered{font-size:21px}.mnPromise{padding-top:30px}.mnPromise .narrow{padding-inline-start:21px}
+  .mnBelief{font-size:22px}.mnMomentList,.mnNewWay{font-size:20px}
+  .mnTestimonialRail{width:calc(100% - 40px);margin-top:42px}
+  .mnTestimonialRail.railTwo{grid-template-columns:1fr}
+  .mnTestimonialRail.railOne{grid-template-columns:1fr}
+  .mnTestimonial{padding:7px}
+  .mnReleaseWrap{grid-template-columns:1fr}
+  .mnReleaseArt{order:1;min-height:0;height:300px}
+  .mnReleaseCopy{order:2;margin:0 auto;padding:52px 0 70px;width:calc(100% - 40px)}
+  .mnReleaseLead,.mnSometimes,.mnReleaseEnd{font-size:20px}
+  .mnLines{font-size:23px}
+  .mnStartSteps article{grid-template-columns:67px 1fr;gap:14px}.mnStartSteps img{width:59px;height:59px}.mnStartSteps p{font-size:19px}
+  .mnAsideTestimonials{grid-template-columns:1fr}
+  .mnBenefitGrid{grid-template-columns:1fr;gap:24px;margin-top:35px}
+  .mnBenefitGrid article{display:grid;grid-template-columns:72px 1fr;column-gap:15px;min-height:0;padding-bottom:22px}
+  .mnIcon{width:72px;height:72px;margin-bottom:8px}.mnIcon img{height:72px}
+  .mnBenefitGrid h3{margin-top:0;align-self:center;font-size:23px}.mnBenefitGrid p{grid-column:1 / -1}
+  .mnBenefits .mnLargerButton{font-size:20px}
+  .mnPracticeList{padding-inline-start:18px}
+  .mnJoin{padding-top:50px}
+  .mnJoin .mnPrice{border-radius:6px 34px;width:100%;padding:34px 21px 40px}
+  .mnPrice strong{font-size:76px}
+  .mnJoin .mnPrice .wide{font-size:19px}
+  .mnFAQ summary{font-size:22px}.mnFAQ details p{font-size:18px}
+  .mnAbout{padding-bottom:70px}
+  .mnAboutPhoto{order:-1;width:80%;max-height:344px;margin:0 auto;object-position:center top}
+  .mnAboutMagnetit{font-size:21px}
+  .mnClosing{padding-top:70px}.mnClosingLead{font-size:27px}.mnClosingLines{font-size:21px}
+  .mnDisclaimer{font-size:14px}
+  .mnForYou{padding:24px 0 26px}
+  .mnForYouTitle{font-size:20px}
+  .mnStepList li{font-size:17px}
+  .mnFooterBrand{gap:16px}.mnFooterBrand img:first-child{width:130px}.mnFooterBrand img:last-child{height:56px}
+  .mnStart .mnStartCta{width:calc(100% - 40px);font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){.mnButton{transition:none!important}}
+
+/* ===== שפת העיצוב של ״אשה ללא מאמץ״ (20.10) ===== */
+/* טיפוגרפיה */
+.mn{line-height:1.75}
+.mn h1,.mn h2{font-weight:700;letter-spacing:-.01em;line-height:1.18;text-wrap:balance}
+.mnHeroMagnetitTitle{font-weight:700;letter-spacing:-.01em;line-height:1.18;text-wrap:balance}
+.mnEmphasis{font-weight:700;letter-spacing:-.01em;line-height:1.2}
+
+/* כפתורים - כמו .cta (כתום, טקסט כחול לילה) ו-.cta-ghost (מסגרת סגולה) */
+.mnButton{border-radius:14px;font-weight:700;text-wrap:balance}
+.mnPurchase{background:var(--pink);color:var(--cream);border-color:var(--pink);box-shadow:0 10px 22px -12px rgba(13,18,44,.55)}
+.mnSecondary{border:1.5px solid var(--purple);color:var(--purple);border-radius:14px;box-shadow:none}
+.mnSecondary span{color:var(--purple)}
+.mnSecondary:hover{background:rgba(166,47,125,.06)}
+
+/* מפרידי נייר במקום קווים דקים בין סעיפים */
+.mnIntroSection{border-bottom:0}
+.mnChange,.mnStart{border-block:0}
+.mnChange .mnEmphasis{font-size:clamp(23px,2.4vw,30px);line-height:1.35;text-wrap:balance}
+
+/* ״קולות״ - כמו .cards.voices: כרטיס קרם עם רצועת נייר סגולה דקה בימין, במקום בועה */
+.mnBubbles span,.mnBubbles span:nth-child(2),.mnBubbles span:nth-child(3){position:relative;border:0;border-radius:18px;
+  background:var(--cream);box-shadow:var(--card-shadow);padding:20px 34px 20px 22px;transform:none}
+.mnBubbles span::before{content:"";position:absolute;top:20px;bottom:20px;inset-inline-start:15px;width:3px;border-radius:3px;background:var(--purple)}
+.mnBubbles span:nth-child(2)::before,.mnBubbles span:nth-child(3)::before{background:var(--pink)}
+
+/* פסי הדגשה - כמו .pull ו-.land: ורוד */
+.mnPromise .narrow{border-inline-start-color:var(--pink)}
+.mnMomentList,.mnPracticeList{border-inline-start:3px solid var(--pink)}
+
+/* איורים: פינות 20 */
+.mnWoman{border-radius:0;box-shadow:none}
+
+/* עדויות - כמו .tcard */
+.mnTestimonial,.mnTestimonial:nth-child(2n){border-top:0;padding:0;border-radius:16px;overflow:hidden;box-shadow:var(--card-shadow)}
+
+/* מה מחכה לך - כמו .cards.icons */
+.mnBenefitGrid article{border-bottom:0;background:var(--cream);border-radius:18px;box-shadow:var(--card-shadow);min-height:0;padding:24px 24px 22px}
+.mnBenefitGrid{gap:20px}
+
+/* מחיר - כמו .offer.light */
+.mnJoin .mnPrice{border:0;border-radius:24px;box-shadow:0 0 0 2.5px var(--purple) inset,0 18px 34px -20px rgba(13,18,44,.55)}
+
+/* שאלות - כמו details בדף המכירה: כרטיסי קרם, פלוס סגול */
+.mnFAQ details{border-bottom:0;background:var(--cream);border-radius:16px;box-shadow:var(--soft-shadow);margin-bottom:11px;padding:0 22px}
+.mnFAQ summary{font-size:22px;line-height:1.35}
+.mnFAQ summary i::before,.mnFAQ summary i::after{background:var(--purple)}
+.mnFAQ details p{line-height:1.7}
+
+/* איך מתחילים: השורות בכרטיס אחד */
+.mnStartSteps{border-top:0;background:var(--cream);border-radius:18px;box-shadow:var(--card-shadow);padding:4px 22px}
+.mnStartSteps article:last-child{border-bottom:0}
+
+/* מספרים - עיגול מלא כמו .stage .num */
+.mnStepNum{background:var(--purple);color:var(--cream);border:0}
+.mnForYou{background:var(--cream);box-shadow:var(--soft-shadow);border-bottom:0}
+
+/* נעים מאוד - כמו ״מי אני״ בדף המכירה: תמונה בעמודה של 300 בימין, צפה בגלילה */
+.mnAboutGrid{grid-template-columns:300px minmax(0,1fr);align-items:start;gap:34px}
+.mnAboutPic{order:-1;position:sticky;top:24px}
+.mnAboutPhoto{width:100%;height:auto;max-height:none;border-radius:18px;box-shadow:none;object-fit:initial}
+
+@media (width<=800px){
+  .mnFAQ details{padding:0 18px}
+  .mnFAQ summary{font-size:19px}
+  .mnStartSteps{padding:2px 16px}
+  .mnBenefitGrid article{padding:18px 16px 18px}
+  .mnJoin .mnPrice{border-radius:20px}
+  .mnAboutGrid{grid-template-columns:1fr;gap:26px}
+  .mnAboutPic{position:static}
+  .mnAboutPhoto{width:100%;max-height:none;margin:0}
+}
+
+/* פס רכישה צף בטלפון, כמו בתוצאת האבחון: מופיע מ״מה מחכה לך״ ויורד כשכפתור תשלום על המסך */
+.mnSticky{display:none}
+@media (width<=800px){
+  .mnSticky{display:block;position:fixed;right:0;left:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    background:var(--cream);box-shadow:0 -8px 20px -14px rgba(13,18,44,.5);transform:translateY(110%);visibility:hidden;transition:transform .25s,visibility .25s}
+  .mnSticky.show{transform:none;visibility:visible}
+  .mnSticky .mnButton{margin:0;min-height:52px;padding:12px 16px;gap:12px;font-size:19px}
+}
+@media (prefers-reduced-motion:reduce){.mnSticky{transition:none!important}}
+
+/* ===== נוסח v4 (4.11): הדף הקצר ===== */
+.mnHeroShort{font-size:22px;font-weight:700;color:var(--purple);margin-top:18px!important}
+.mnHero .mnButton{margin-top:6px}
+@media (width>1100px){.mnHero{min-height:760px}}
+.mnMoments{display:grid;gap:14px;margin:26px 0 30px}
+.mnMoments p{position:relative;margin:0;max-width:none;background:var(--cream);border-radius:18px;box-shadow:var(--card-shadow);padding:20px 34px 20px 22px;font-size:22px;font-weight:700;line-height:1.35}
+.mnMoments p::before{content:"";position:absolute;top:20px;bottom:20px;inset-inline-start:15px;width:3px;border-radius:3px;background:var(--pink)}
+.mnTriple{color:var(--pink);font-size:clamp(28px,3.4vw,42px);line-height:1.25;margin:10px 0 0!important}
+.mnPromise .narrow{border-inline-start:0;padding-inline-start:0}
+.mnPromise h2{color:var(--navy);font-size:clamp(30px,3.2vw,44px);line-height:1.25;margin:14px 0 22px}
+.mnProductLead{text-align:center!important;font-size:clamp(26px,3vw,36px);font-weight:700;line-height:1.2;margin:10px 0 6px!important}
+.mnProduct .mnWrap>p{max-width:none}
+.mnProduct .mnJoinCopy{text-align:right;margin:26px 0 22px;background:var(--cream);border-radius:18px;box-shadow:var(--card-shadow);padding:22px 26px 14px}
+.mnProduct .mnJoinCopy h3{margin:0 0 12px;font-size:25px}
+.mnProduct .mnFine{text-align:right;margin:22px auto 0!important;max-width:none}
+.mnJoin .mnPrice{margin-top:26px}
+.mnReleaseText h2{color:var(--purple)}
+.mnCtaRow{display:flex;justify-content:center;margin-top:30px}
+.mnChange h2{font-size:clamp(32px,3.6vw,48px)}
+.mnClosing .mnButton{margin-top:18px}
+@media (width<=800px){
+  .mnMoments p{font-size:20px;padding:18px 30px 18px 18px}
+  .mnHeroShort{font-size:20px}
+  .mnProduct .mnJoinCopy{padding:18px 18px 8px}
+  .mnJoin .mnPrice{width:calc(100% - 40px)}
+}
+
+/* ===== דף מכירה v6 (4.11): הצעה מוקדמת, שתי קוראות ===== */
+.mnQuoteH{color:var(--purple);font-size:clamp(28px,3.2vw,42px)!important;line-height:1.25!important;margin:28px 0 0!important}
+.mnSplit{display:grid;grid-template-columns:1fr;gap:18px}
+.mnSplitText>p:last-child{margin-bottom:0}
+.mnArt{margin:0}
+.mnArt img{width:100%;height:auto}
+.mnAfterSplit{margin-top:22px}
+.mnArtSteps{margin:18px 0 22px}
+.mnArtSteps img{transform:scaleX(-1)}
+.mnWhat{text-align:center}
+.mnWhat .narrow>p,.mnWhat .mnTitles{text-align:right}
+.mnWhat .narrow>p{max-width:none}
+.mnWhat h2{margin-bottom:6px}
+.mnWhat .narrow>p:first-of-type{text-align:center;font-size:clamp(24px,2.8vw,34px);font-weight:700;line-height:1.2;margin:8px 0 2px}
+.mnTitles{list-style:none;margin:6px 0 16px;padding:0;display:grid;gap:10px}
+.mnTitles li{background:var(--cream);border-radius:14px;box-shadow:var(--soft-shadow);padding:13px 18px;font-size:19px;font-weight:700;line-height:1.35}
+.mnLeadLine{font-size:21px;margin:-8px 0 0!important}
+.mnBenefitGrid .mnSpec{color:var(--purple);font-weight:700;margin-bottom:6px}
+.mnBenefits{padding-bottom:40px}
+.mnTOne{width:min(600px,100%);margin:30px auto 0}
+.mnOffer{padding-top:20px;padding-bottom:50px}
+.mnAccess{text-align:center;font-size:21px;line-height:1.45;margin:0 auto 6px!important;max-width:30em}
+.mnPriceItems{font-weight:400!important;font-size:18px;line-height:1.5;margin:0 0 4px!important;color:var(--navy)}
+.mnAfterPay{padding-top:36px;padding-bottom:60px}
+.mnAfter{list-style:none;margin:14px 0 16px;padding:0;display:grid;gap:12px}
+.mnAfter li{display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;font-size:19px;line-height:1.45}
+.mnAfter b{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--purple);color:var(--cream);font-weight:800;line-height:1}
+.mnFAQ details .mnTOne{margin:4px auto 20px}
+.mnFAQ details p{padding-bottom:14px}
+.mnAboutProof{margin-top:28px}
+.mnCloseOffer{background:var(--cream);border-radius:20px;box-shadow:var(--card-shadow);padding:24px 22px;margin:22px auto 0;max-width:640px}
+.mnCloseOffer p{margin:0 auto 10px;max-width:none}
+.mnClosing .mnButton{margin-top:8px}
+@media (width>=900px){
+  .mnSplit{grid-template-columns:1fr 1fr;align-items:center;gap:44px}
+  .mnSplit.artRight .mnSplitText{order:2}
+  .mnSplit.artRight .mnArt{order:1}
+  .mnAfterSplit{margin-top:0}
+  .mnWhy h2,.mnInsight h2,.mnReleaseText h2{font-size:clamp(30px,3vw,42px);line-height:1.2}
+}
+@media (width<=800px){
+  .mnTitles li{font-size:18px;padding:12px 14px}
+  .mnAfter li{font-size:18px}
+  .mnAccess{font-size:19px}
+  .mnLeadLine{font-size:19px}
+  .mnSection h2.mnQuoteH{font-size:26px!important}
+}
+
+/* ===== תיקוני v6 ===== */
+.mnTriple{margin-bottom:22px!important}
+.mnArtSteps img{-webkit-mask-image:radial-gradient(ellipse 60% 62% at 50% 50%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 60% 62% at 50% 50%,#000 62%,transparent 100%)}
+@media (width>=900px){
+  .mnSplit{grid-template-columns:1fr 1.15fr}
+  .mnSplit.artRight{grid-template-columns:1.15fr 1fr}
+  .mnAfterSplit{margin-top:26px}
+}
+
+/* ===== סידור שושי 4.11 ===== */
+.mnCtaRow{display:flex;justify-content:center;margin-top:28px}
+.mnCtaRow .mnButton{margin:0}
+.mnBridge{text-align:center;margin-bottom:34px}
+.mnBridge h2{margin-bottom:6px}
+.mnBridge p{margin:8px auto 2px!important;max-width:none;text-align:center;font-size:clamp(24px,2.8vw,34px);font-weight:700;line-height:1.2}
+.mnBenefits h2{max-width:none}
+.mnLibrary{margin-top:30px}
+.mnLibrary>p{max-width:none}
+.mnOffer .mnFine{margin:18px auto 0!important;max-width:none;text-align:right}
+.mnPrice>small{display:block;margin-top:14px;font-size:16px;line-height:1.5}
+@media (width<=800px){.mnCtaRow{margin-top:22px}.mnBridge{margin-bottom:26px}}
+
+/* ===== תמונת הצעדים גדולה (4.11) ===== */
+.mnLibrary .mnArtSteps{width:min(1120px,100vw - 32px);margin:14px calc(50% - min(560px,50vw - 16px)) 6px}
+.mnChange .mnArt{margin:8px auto 0}
+@media (width<=800px){.mnLibrary .mnArtSteps{width:100vw;margin:14px calc(50% - 50vw) 6px}}
+.mnInsight .mnAfterSplit{margin-top:6px}
+
+/* מסך ראשון: בדיוק בשביל זה נוצרה, לוגו ובולטים, 4.11 */
+.mnHeroMade{margin:22px 0 4px}
+.mnHeroMadeLine{margin:0!important;font-size:24px;font-weight:700;line-height:1.25;color:var(--purple)}
+.mnHeroLogo{display:block;width:210px;height:auto;margin:4px 0 8px;max-width:100%}
+.mnHeroPoints{list-style:none;margin:0;padding:0}
+.mnHeroPoints li{position:relative;padding-inline-start:20px;margin:0 0 6px;font-size:20px;line-height:1.35;font-weight:600}
+.mnHeroPoints li::before{content:"";position:absolute;inset-inline-start:0;top:.52em;width:8px;height:8px;border-radius:50%;background:var(--pink)}
+@media (width<=800px){.mnHeroMadeLine{font-size:22px}.mnHeroLogo{width:180px}.mnHeroPoints li{font-size:18px}}
+
+/* איור המסך הראשון, הרדיפה ברחובות, 4.11 */
+.mnHeroArt{-webkit-mask-image:none;mask-image:none;inset:auto;left:0;top:50%;transform:translateY(-50%);width:calc(50% + 260px);height:auto;object-fit:contain}
+@media (width<=1100px){.mnHeroArt{position:relative;top:auto;transform:none;width:100%;height:auto;object-position:center}}
+
+/* מסך ראשון: כותרת רחבה למעלה, איור צר לאורך מתחתיה, הטקסט צף לצדו, 5.11 */
+.mnHero{display:grid;grid-template-columns:minmax(0,1fr);min-height:0;width:min(1120px,100% - 40px);margin-inline:auto;padding:40px 0 16px}
+.mnHeroCopy{display:contents}
+.mnHero h1{order:1;margin:0 0 18px;text-align:center;font-size:clamp(30px,4.3vw,50px);line-height:1.22}
+.mnHeroArt,.mnWhy .mnArt img{-webkit-mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 97%,transparent);mask-image:linear-gradient(to right,transparent,#000 4%,#000 96%,transparent),linear-gradient(to bottom,transparent,#000 3%,#000 97%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
+.mnHeroArt{order:2;position:relative;z-index:0;inset:auto;transform:none;justify-self:center;width:min(100%,520px);height:auto;margin:0 0 16px}
+.mnHeroSide{order:3}
+@media (width>1100px){
+  .mnHero{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);column-gap:36px;padding:44px 0 24px}
+  .mnHero h1{grid-column:1/-1;grid-row:1;margin-bottom:26px}
+  .mnHeroSide{grid-column:1;grid-row:2;position:sticky;top:24px;align-self:start;padding-top:24px}
+  .mnHeroArt{grid-column:2;grid-row:2;width:100%;margin:0}
+  .mnHeroLead{font-size:25px}
+  .mnHeroMadeLine{font-size:27px}
+  .mnHeroLogo{width:250px}
+  .mnHeroPoints li{font-size:22px}
+}
+
+/* את מתאמצת, נכון: איור גדול לאורך כמו קאבר, הטקסט לצדו, 5.11 */
+.mnWhy .mnArt{justify-self:center;width:100%}
+.mnWhy .mnAfterSplit>p:first-child{text-align:center;font-size:36px;font-weight:800;line-height:1.2;color:var(--purple);margin:44px 0 26px}
+@media (width<=800px){.mnWhy .mnArt{order:-1}}
+@media (width>800px){
+  .mnWhy .mnSplit{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}
+  .mnWhy .mnSplitText h2{font-size:clamp(30px,3.3vw,40px);text-wrap:balance}
+  .mnWhy .mnSplitText p{font-size:22px;line-height:1.5}
+}
+@media (width>1000px){
+  .mnWhy{padding-top:24px}
+  .mnWhy .mnSplit{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+}
+
+/* כותרת המסך הראשון כתמונה בקאראוון, כמו באבחון, לכל הרוחב, 5.11 */
+.mnHeroTitle picture,.mnHeroTitle img{display:block;width:100%;height:auto}
+.mnHero h1.mnHeroTitle{margin-bottom:24px}
+@media (width>1100px){.mnHero h1.mnHeroTitle{margin-bottom:30px}}
+
+/* איור הכוח לאורך, גדול כמו ב״את מתאמצת״, 5.11 */
+@media (width>1000px){.mnInsight .mnSplit{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:center}}
+
+/* 17.11: כותרת המסך הראשון באלמוני, בטור הטקסט מימין ומקבילה לאיור */
+.mnHeroTitle img{display:block;width:100%;height:auto}
+@media (width>1100px){
+  .mnHero{grid-template-rows:auto 1fr}
+  .mnHero h1.mnHeroTitle{grid-column:1;grid-row:1;margin:6px 0 26px}
+  .mnHeroSide{grid-column:1;grid-row:2;position:static;padding-top:0}
+  .mnHeroArt{grid-column:2;grid-row:1/3;align-self:start}
+}
+
+/* 17.11: הכוח הנשי הממגנט, טקסט מימין ואיור לצדו */
+.mnPowerLead{font-size:22px;line-height:1.6}
+.mnPowerLead b{color:var(--purple);font-size:1.2em}
+.mnPowerQ{margin-top:26px!important;line-height:1.45}
+.mnBigQ{font-size:1.45em;line-height:1.25;display:block;margin:4px 0;text-wrap:balance}
+.mnPinkQ{color:var(--pink);font-size:1.2em;display:block;text-wrap:balance}
+.mnPinkQ b{font-size:1.15em}
+@media (width<=800px){.mnMagnet .mnArt{order:-1}}
+@media (width>1000px){.mnMagnet{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}}
+
+/* 17.11: על מה מדברים הסרטונים, 8 קוביות ושער 21 הצעדים */
+.mnTopics h2{text-align:center}
+.mnTopicsLead{text-align:center;font-size:21px;max-width:none!important;margin:0 auto 28px!important}
+.mnTopicGrid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin:0 0 44px}
+@media (width>800px){.mnTopicGrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}}
+.mnTopic{background:#FAF7F0;border-radius:18px;padding:22px 24px 18px;border-inline-start:4px solid var(--pink);box-shadow:0 14px 28px -20px rgba(13,18,44,.4)}
+.mnTopicText{font-size:19px;line-height:1.5;margin:0 0 12px!important;max-width:none!important}
+.mnTopicText b{display:block;color:var(--purple);font-size:1.08em;margin-bottom:6px}
+.mnTopicTags{display:flex;flex-wrap:wrap;gap:6px;margin:0!important}
+.mnTopicTags span{font-size:15px;font-weight:700;color:var(--purple);background:rgba(166,47,125,.09);border-radius:30px;padding:3px 12px}
+.mnStepsLine{font-size:clamp(25px,2.6vw,34px);line-height:1.32;font-weight:600;max-width:none!important}
+.mnStepsLine b{color:var(--pink);font-size:1.25em}
+@media (width<=800px){.mnStepsSplit .mnArt{order:-1}}
+@media (width>1000px){.mnStepsSplit{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center}}
+.mnStepClose{margin-top:22px!important}
+.mnStepClose b{color:var(--purple);font-size:1.15em}
+
