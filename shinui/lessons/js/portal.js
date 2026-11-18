@@ -315,6 +315,8 @@ async function boot() {
   if (st === 'login') return viewLogin('start', '', store.loginError() === 'not_invited' ? T.notInvitedGoogle : store.loginError() ? T.netError : '');
   if (st === 'terms') return viewGate(T.firstTime, T.firstTimeSub, T.firstTimeBtn);
   if (st === 'noaccess') return viewGate(T.noAccess, T.noAccessSub);
+  // נכנסה מהכפתור שבמייל: מציעים לבחור סיסמה לפעם הבאה (אפשר ״לא עכשיו״)
+  if (store.justLinked()) return viewLogin('setpw', store.me().email || '');
   // הסרטונים והחומרים מגיעים מהמסד רק אחרי בדיקת הגישה
   const media = await store.media();
   if (!media) return viewGate(T.netError, '');

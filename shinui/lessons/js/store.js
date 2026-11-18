@@ -18,6 +18,8 @@ let me = null;
 let prog = LS.get(KP, {});
 let remote = false;
 let loginErr = '';
+let linked = false;
+const PORTAL_URL = 'https://shoshizelikovith.com/shinui/lessons/';
 const P = (n) => (prog[n] = prog[n] || { opens: 0, seconds: 0, pct: 0, pos: 0, watched: false });
 const save = () => LS.set(KP, prog);
 
@@ -48,6 +50,12 @@ export const store = {
     if (/error=|error_description=/.test(location.hash + location.search)) {
       const q = new URLSearchParams((location.hash || '').replace(/^#/, '') + '&' + location.search.slice(1));
       loginErr = /database error|not_invited|saving new user/i.test(q.get('error_description') || '') ? 'not_invited' : 'error';
+      history.replaceState(null, '', location.pathname);
+    }
+    // הכפתור ״כניסה עכשיו״ במייל הקוד של הפורטל מביא לכאן עם #th=...
+    const th = new URLSearchParams((location.hash || '').replace(/^#/, '')).get('th');
+    if (th) {
+      try { await api.verifyHash(th); linked = true; } catch { loginErr = 'link'; }
       history.replaceState(null, '', location.pathname);
     }
     await api.fromLink();
@@ -83,7 +91,22 @@ export const store = {
     } catch { return null; }
   },
   loginError() { return loginErr; },
-  sendCode(email) { return api.sendCode(email); },
+  justLinked() { const v = linked; linked = false; return v; },
+  // הקוד נשלח עם redirect_to של הפורטל, כדי שהמייל יגיד ״פורטל אשה רוצה עושה״ ולא ״לשחק את השינוי״
+  // (תבנית המייל ב-Supabase בודקת את .RedirectTo). אותה כתובת בדיוק כמו בתבנית.
+  async sendCode(email) {
+    if (DEMO) return true;
+    email = email.trim().toLowerCase();
+    const r = await fetch(`${CONFIG.SUPABASE_URL}/auth/v1/otp?redirect_to=${encodeURIComponent(PORTAL_URL)}`, {
+      method: 'POST', headers: { apikey: CONFIG.SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, create_user: true }),
+    });
+    if (!r.ok) {
+      const t = await r.text();
+      const e = new Error('otp'); e.code = /database error|not_invited|saving new user/i.test(t) ? 'not_invited' : 'net'; throw e;
+    }
+    return true;
+  },
   verify(email, code) { return api.verify(email, code); },
 
   // כניסה עם גוגל: רק מי שהמייל שלה בגוגל רשום אצלנו (המסד מסרב ליצור משתמשת שלא ברשימה)
