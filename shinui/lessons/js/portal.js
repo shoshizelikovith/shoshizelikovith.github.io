@@ -77,12 +77,38 @@ function viewList() {
   </main>`;
 }
 
+// שני מקורות לאותו סרטון: וימאו (ברירת מחדל, עם נתוני צפייה ופרקים), ודרייב למי שוימאו חסום אצלה (שושי, 18.11)
+const vimeoSrc = (v) => `https://player.vimeo.com/video/${v}${v.includes('?') ? '&' : '?'}dnt=1&title=0&byline=0&portrait=0`;
+const driveView = (id) => `https://drive.google.com/file/d/${id}/view`;
+let mode = 'vimeo';
 function player(l) {
+  if (PCONFIG.SHOW_MEDIA && mode === 'drive' && l.drive) {
+    return `<div class="player"><iframe id="dp" src="${esc(`https://drive.google.com/file/d/${l.drive}/preview`)}" allow="autoplay; fullscreen" allowfullscreen title="${esc(l.title)}"></iframe></div>`;
+  }
   if (PCONFIG.SHOW_MEDIA && l.vimeo) {
-    const src = `https://player.vimeo.com/video/${l.vimeo}${l.vimeo.includes('?') ? '&' : '?'}dnt=1&title=0&byline=0&portrait=0`;
-    return `<div class="player"><iframe id="vp" src="${esc(src)}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(l.title)}"></iframe></div>`;
+    return `<div class="player"><iframe id="vp" src="${esc(vimeoSrc(l.vimeo))}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(l.title)}"></iframe></div>`;
   }
   return `<div class="player ph"><span class="ph-in">${IC.play}<span>${esc(T.videoSoon)}</span></span></div>`;
+}
+
+function altRow(l) {
+  if (!PCONFIG.SHOW_MEDIA || !l.drive) return '';
+  return `<div class="alt">
+    <button class="alt-sw" type="button" data-mode>${esc(mode === 'drive' ? T.backToVimeo : T.viaDrive)}</button>
+    <a class="alt-dl" data-kind="drive" href="${esc(driveView(l.drive))}" target="_blank" rel="noopener">${esc(T.driveDownload)}</a>
+  </div>${mode === 'drive' ? `<p class="alt-note">${esc(T.driveNote)}</p>` : ''}`;
+}
+
+const mmss = (t) => { t = Math.floor(t); const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), x = String(t % 60).padStart(2, '0'); return h ? `${h}:${String(m).padStart(2, '0')}:${x}` : `${m}:${x}`; };
+function chapters(list, part) {
+  if (!PCONFIG.SHOW_MEDIA || !Array.isArray(list) || !list.length) return '';
+  return `<section class="chaps"${part ? ' data-part="2"' : ''}>
+    <h2 class="h2">${esc(part ? T.chaptersPart2 : T.chaptersTitle)}</h2>
+    ${part ? '' : `<p class="chaps-sub">${esc(T.chaptersSub)}</p>`}
+    <ol class="chap-list">${list.map((c) => `<li><button type="button" class="chap" data-t="${Math.floor(c.t)}">
+      <span class="chap-t" dir="ltr">${mmss(c.t)}</span><span class="chap-x"><b>${esc(c.title)}</b>${c.sub ? `<small>${esc(c.sub)}</small>` : ''}</span>
+    </button></li>`).join('')}</ol>
+  </section>`;
 }
 
 function dlCard(kind, href) {
@@ -128,9 +154,11 @@ function viewLesson(n) {
         <span class="over">${esc(T.lessonOver(n, dm(l.date)))} · ${esc(s.name)}</span>
         <h1>${esc(l.title)}</h1>
       </div>
-      <div class="screen"><div class="screen-in">${player(l)}${l.part2 && PCONFIG.SHOW_MEDIA ? `<div class="part2"><span class="over">${esc(l.part2.label)}</span><div class="player"><iframe src="${esc(`https://player.vimeo.com/video/${l.part2.vimeo}&dnt=1&title=0&byline=0&portrait=0`)}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(l.part2.label)}"></iframe></div></div>` : ''}</div></div>
+      <div class="screen"><div class="screen-in"><div id="pl">${player(l)}</div>${altRow(l)}${l.part2 && PCONFIG.SHOW_MEDIA ? `<div class="part2"><span class="over">${esc(l.part2.label)}</span><div class="player"><iframe id="vp2" src="${esc(vimeoSrc(l.part2.vimeo))}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(l.part2.label)}"></iframe></div>${l.part2.drive ? `<div class="alt"><a class="alt-dl" data-kind="drive" href="${esc(driveView(l.part2.drive))}" target="_blank" rel="noopener">${esc(T.driveDownload)}</a></div>` : ''}</div>` : ''}</div></div>
       <div class="wrap below">
         <div id="watch">${watchRow(n)}</div>
+        ${chapters(l.chapters)}
+        ${l.part2 ? chapters(l.part2.chapters, 2) : ''}
         <div class="cols">
           <section class="dls">
             <h2 class="h2">${esc(T.downloads)}</h2>
@@ -149,7 +177,37 @@ function viewLesson(n) {
   store.opened(n);
   root.querySelector('.below').addEventListener('click', (e) => { const a = e.target.closest('a[data-kind]'); if (a) store.click(n, a.dataset.kind); });
   bindWatch(n);
+  bindMedia(l);
   watchVimeo(n);
+}
+
+// מעבר וימאו/דרייב, ופרקים: לחיצה על פרק קופצת לזמן בסרטון (בדרייב אי אפשר לקפוץ, אז חוזרים לוימאו)
+function bindMedia(l) {
+  const sc = root.querySelector('.screen-in');
+  const redraw = (at) => {
+    $('#pl').innerHTML = player(l);
+    const a = sc.querySelector(':scope > .alt'); const note = sc.querySelector(':scope > .alt-note');
+    if (note) note.remove();
+    if (a) a.outerHTML = altRow(l);
+    sc.querySelector(':scope > .alt [data-mode]')?.addEventListener('click', toggle);
+    watchVimeo(l.n, at);
+  };
+  const toggle = () => { mode = mode === 'drive' ? 'vimeo' : 'drive'; if (mode === 'drive') store.click(l.n, 'drive_play'); redraw(); };
+  sc.querySelector(':scope > .alt [data-mode]')?.addEventListener('click', toggle);
+  sc.addEventListener('click', (e) => { const a = e.target.closest('a[data-kind]'); if (a) store.click(l.n, a.dataset.kind); });
+  root.querySelectorAll('.chaps').forEach((box) => box.addEventListener('click', (e) => {
+    const b = e.target.closest('.chap'); if (!b) return;
+    const t = +b.dataset.t;
+    store.click(l.n, 'chapter');
+    if (box.dataset.part) { seek(document.getElementById('vp2'), t); document.getElementById('vp2').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (mode === 'drive') { mode = 'vimeo'; redraw(t); } else seek(document.getElementById('vp'), t);
+    $('#pl').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
+}
+function seek(f, t) {
+  if (!f || !f.contentWindow) return;
+  const send = (m) => f.contentWindow.postMessage(JSON.stringify(m), 'https://player.vimeo.com');
+  send({ method: 'setCurrentTime', value: t }); send({ method: 'play' });
 }
 
 function bindWatch(n) {
@@ -166,7 +224,7 @@ function bindWatch(n) {
 // נתוני צפייה מהנגן (Vimeo player API דרך postMessage): זמן צפייה בפועל, אחוז, איפה עצרה, וסימון ״צפיתי״ ב-90%.
 // ובפתיחה חוזרת - ממשיכים מאיפה שעצרה.
 let vimeoOff = null;
-function watchVimeo(n) {
+function watchVimeo(n, startAt) {
   if (vimeoOff) vimeoOff();
   vimeoOff = null;
   const f = document.getElementById('vp');
@@ -181,7 +239,8 @@ function watchVimeo(n) {
     if (d.event === 'ready') {
       ['timeupdate', 'ended', 'pause'].forEach((v) => send({ method: 'addEventListener', value: v }));
       const at = store.position(n);
-      if (at > 30 && !store.isWatched(n)) send({ method: 'setCurrentTime', value: at - 5 });
+      if (startAt != null) { send({ method: 'setCurrentTime', value: startAt }); send({ method: 'play' }); }
+      else if (at > 30 && !store.isWatched(n)) send({ method: 'setCurrentTime', value: at - 5 });
     }
     if (d.event === 'timeupdate' && d.data) {
       const t = d.data.seconds;
@@ -305,6 +364,7 @@ function viewGate(title, sub, btn) {
 function go(h) { location.hash = h; }
 function route() {
   if (vimeoOff) { vimeoOff(); vimeoOff = null; }
+  mode = 'vimeo';
   const m = location.hash.match(/^#\/l\/(\d+)/);
   if (m) viewLesson(+m[1]); else if (location.hash.startsWith('#/admin')) viewAdmin(); else viewList();
   window.scrollTo(0, 0);
@@ -322,6 +382,7 @@ async function boot() {
   if (!media) return viewGate(T.netError, '');
   media.forEach((m) => { const l = lesson(m.n); if (!l) return;
     l.vimeo = m.vimeo || ''; l.workbook = m.workbook || ''; l.summary = m.summary || ''; l.part2 = m.part2 || null;
+    l.drive = m.drive_video || ''; l.chapters = m.chapters || null;
     if (l.slides !== null) l.slides = m.slides || ''; });
   window.onhashchange = route;
   route();

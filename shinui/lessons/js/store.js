@@ -87,7 +87,7 @@ export const store = {
   async media() {
     try {
       if (DEMO) return await (await fetch('data/media.json', { cache: 'no-store' })).json();
-      return await rest('/rest/v1/portal_lessons?select=n,vimeo,workbook,slides,summary,part2&order=n');
+      return await rest('/rest/v1/portal_lessons?select=n,vimeo,workbook,slides,summary,part2,drive_video,chapters&order=n');
     } catch { return null; }
   },
   loginError() { return loginErr; },
