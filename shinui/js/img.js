@@ -184,6 +184,53 @@ export async function quoteCard(words, { kind = 'insight', label = '', name = ''
   text(ctx, 'עם ' + (CONFIG.NOTE_SIGNATURE || 'שושי זליקוביץ׳'), P + 10, H - 112, F(600, 30), th.soft);
   return cv;
 }
+// פתק ״מתנות מההתבוננות שלי היום״: גילוי להיות איתו וחיזוק ללכת איתו, בפתק אחד (ניסוי 18.11)
+export async function giftNote(blocksIn, { label = 'מתנות מההתבוננות שלי היום', name = '', dateLabel = '', bg = 'navy' } = {}) {
+  await ready();
+  const th = TH(bg, 'navy');
+  const art = CONFIG.NOTE_ART || 'img/note/art-book.png';
+  if (!(art in arts)) arts[art] = await loadImg(art);
+  const pic = arts[art];
+  const W = 1080, P = 90, maxW = W - P * 2 - 40, cx = W / 2;
+  const cv = document.createElement('canvas'); cv.width = W;
+  const ctx = cv.getContext('2d'); ctx.direction = 'rtl';
+  const blocks = blocksIn.filter(([, t]) => String(t || '').trim());
+  const rr = 95, headH = 66, gap = 80;
+  let size = 56, sets, groupH;
+  const measure = () => { ctx.font = F(700, size); sets = blocks.map(([, t]) => wrapKeep(ctx, t, maxW)); return rr * 2 + 50 + sets.reduce((s, ls) => s + headH + ls.length * size * 1.32, 0) + gap * (blocks.length - 1) + (name ? 70 : 0); };
+  for (; size >= 38; size -= 2) { groupH = measure(); if (groupH <= 1350 - 250 - 190 - 40) break; }
+  if (size < 38) { size = 38; groupH = measure(); }
+  const H = Math.max(1350, Math.ceil(190 + groupH + 60 + 250));
+  cv.height = H; ctx.direction = 'rtl';
+  ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = th.frame; ctx.lineWidth = 3; round(ctx, 44, 44, W - 88, H - 88, 44); ctx.stroke();
+  const [pb, pi] = PILL[bg] || PILL.navy;
+  ctx.font = F(700, 34); const lw = ctx.measureText(label).width + 56;
+  ctx.fillStyle = pb; round(ctx, W - P - lw, 92, lw, 64, 32); ctx.fill();
+  ctx.textAlign = 'center'; text(ctx, label, W - P - lw / 2, 136, F(700, 34), pi);
+  if (dateLabel) { ctx.textAlign = 'left'; text(ctx, dateLabel, P, 136, F(600, 32), th.soft); }
+  ctx.textAlign = 'center';
+  const areaTop = 190, areaBot = H - 250;
+  let y = areaTop + Math.max(0, (areaBot - areaTop - groupH) / 2);
+  ctx.fillStyle = bg === 'cream' ? 'rgba(166,47,125,.10)' : C.cream;
+  ctx.beginPath(); ctx.arc(cx, y + rr, rr, 0, 7); ctx.fill();
+  if (pic) { const pw = rr * 1.63, ph = pw * pic.height / pic.width; ctx.drawImage(pic, cx - pw / 2, y + rr - ph / 2 + 4, pw, ph); }
+  y += rr * 2 + 50;
+  const lh = size * 1.32;
+  blocks.forEach(([h], i) => {
+    if (i) { th.dots.forEach((c, k) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(cx + (k - 1) * 30, y + gap / 2, 8, 0, 7); ctx.fill(); }); y += gap; }
+    text(ctx, h, cx, y + 46, F(700, 40), th.acc); y += headH;
+    sets[i].forEach((l) => { y += lh; text(ctx, l, cx, y - lh * .22, F(700, size), th.ink); });
+  });
+  if (name) text(ctx, name, cx, y + 56, F(700, 36), th.acc);
+  const lg = th.neg ? logoNeg : logo;
+  ctx.fillStyle = th.line; ctx.fillRect(P + 20, H - 225, W - P * 2 - 40, 3);
+  if (lg) { const w2 = 290, h2 = w2 * lg.height / lg.width; ctx.drawImage(lg, W - P - 10 - w2, H - 150 - h2 / 2, w2, h2); }
+  ctx.textAlign = 'left';
+  text(ctx, CONFIG.NOTE_APP_NAME || 'לשחק את השינוי', P + 10, H - 158, F(700, 36), th.acc);
+  text(ctx, 'עם ' + (CONFIG.NOTE_SIGNATURE || 'שושי זליקוביץ׳'), P + 10, H - 112, F(600, 30), th.soft);
+  return cv;
+}
 export const sticker = (insight, o = {}) => quoteCard(insight, { kind: 'insight', label: 'תובנת ההתבוננות שלי', ...o });
 
 // שמירה או שיתוף

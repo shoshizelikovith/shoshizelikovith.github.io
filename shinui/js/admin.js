@@ -120,7 +120,7 @@ export async function renderAdmin({ root, api, esc, shell, toast }) {
     const journal = u.days === undefined ? `<p class="hint">היומן פרטי. היא לא בחרה לשתף.</p>`
       : (u.days || []).length ? u.days.slice(0, 14).map((d) => `<section class="card flat"><p class="it"><small>${esc(d.day)} · ${esc(d.being || '')}${d.presence != null ? ' · נוכחות ' + d.presence : ''}</small>
           ${esc(d.key_action || '')}${d.key_status ? ` (${{ done: 'בוצע', partial: 'חלקית', no: 'לא' }[d.key_status]})` : ''}</p>
-          ${d.insight ? `<p class="hint" style="margin-top:4px"><b>גילוי:</b> ${esc(d.insight)}</p>` : ''}</section>`).join('') : '<p class="hint">עוד אין ימים ביומן.</p>';
+          ${d.insight ? `<p class="hint" style="margin-top:4px"><b>גילוי:</b> ${esc(d.insight)}</p>` : ''}${d.hug_find ? `<p class="hint" style="margin-top:4px"><b>גילוי להיות איתו:</b> ${esc(d.hug_find)}</p>` : ''}${d.strength_find ? `<p class="hint" style="margin-top:4px"><b>חיזוק ללכת איתו:</b> ${esc(d.strength_find)}</p>` : ''}</section>`).join('') : '<p class="hint">עוד אין ימים ביומן.</p>';
     m.querySelector('.sheet').innerHTML = `<button class="close" aria-label="סגירה">×</button><h2 style="font-size:24px">${esc(r.full_name || r.email)}</h2>
       <p class="hint">${esc(r.email || '')}</p>
       <section class="card"><div class="ct">הישג מפתח</div><p class="it">${esc(f.achievement || 'חסר')}${f.achievement_date ? ` · עד ${esc(f.achievement_date)}` : ''}</p></section>

@@ -360,3 +360,20 @@ details.qs ul li{margin-bottom:6px}
 .wtbl th{font-size:14px;font-weight:600;color:var(--navy);text-align:start;padding:6px 4px;border-bottom:1px solid rgba(0,0,0,.08)}
 .wtbl td{padding:7px 4px;border-bottom:1px solid rgba(0,0,0,.05)}
 .wtbl td:not(:first-child),.wtbl th:not(:first-child){text-align:center;width:22%}
+
+/* ההוויה שלה בתוך שאלה: בוורוד, כדי שתבלוט מול הסגולים (שושי 18.11) */
+.bword{color:#DF1767;font-weight:800}
+
+/* מסלול מלא בסגירה: כותרת החלק וכפתור התשאול (18.11) */
+.sech{margin:22px 4px 8px;font-weight:800;font-size:19px;color:var(--plum,#A62F7D)}
+.deepbox>summary{list-style:none;cursor:pointer;font-weight:700;font-size:18px;display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:44px}
+.deepbox>summary::-webkit-details-marker{display:none}
+.deepbox>summary>span{display:inline-flex;align-items:center;gap:8px}
+.deepbox>summary::after{content:'+';font-size:24px;color:var(--plum,#A62F7D);font-weight:700}
+.deepbox[open]>summary::after{content:'−'}
+.deepbox .chcard{box-shadow:none;border:1px solid rgba(166,47,125,.18)}
+.deepbox>summary>span{flex-wrap:wrap}
+.deepbox .dsub{display:block;flex-basis:100%;font-weight:400;font-size:15px;opacity:.8;margin-inline-start:42px}
+.deepbox .dhead{margin:18px 0 6px;color:var(--plum,#A62F7D)}
+.deepbox>summary>span{display:grid;grid-template-columns:34px 1fr;column-gap:10px;align-items:center}
+.deepbox .dsub{grid-column:2;margin:2px 0 0}

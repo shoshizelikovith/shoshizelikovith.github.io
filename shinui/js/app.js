@@ -2,7 +2,7 @@
 import { api } from './api.js';
 import { T } from './content.js';
 import { CONFIG } from './config.js';
-import { morningNote, sticker, wallpaper, quoteCard, saveCanvas } from './img.js';
+import { morningNote, sticker, wallpaper, quoteCard, giftNote, saveCanvas } from './img.js';
 import { renderAdmin } from './admin.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -135,6 +135,7 @@ const normTime = (v) => { const s = String(v || '').trim(); const m = s.match(/^
 const TIMES = Array.from({ length: (24 - 5) * 4 }, (_, i) => { const t = 5 * 60 + i * 15; return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; });
 const timeSel = (k, v, label = T.openTomorrowQ) => { const cur = normTime(v); const opts = cur && !TIMES.includes(cur) ? [cur, ...TIMES] : TIMES;
   return `<select data-k="${k}" class="tsel" aria-label="${esc(label)}"><option value="">${T.pickTime}</option>${opts.map((t) => `<option value="${t}"${t === cur ? ' selected' : ''}>${t}</option>`).join('')}</select>`; };
+const hb = (fn, b) => { const k = '\u0001'; return `<span>${filled(b) ? esc(fn(k)).replace(k, `<b class="bword">${esc(String(b).trim())}</b>`) : esc(fn(b))}</span>`; }; // ההוויה שלה מודגשת בוורוד בתוך השאלה (שושי 18.11)
 const card = (inner, cls = '', key = '') => `<section class="card ${cls}" ${key ? `data-req="${key}"` : ''}>${inner}</section>`;
 
 // קישור שדות למודל. path כמו "sub_beings.2" או "habits.0.text"
@@ -372,8 +373,8 @@ function renderToday() {
     return;
   }
   shell(`${banners()}${hd(dayLabel(t), T.dayClosedTitle, 'close')}
-    ${card(`<p class="q">${T.insightQ}</p><p class="ins">${esc(d.insight)}</p>`)}
-    <a class="btn" href="#/sticker/${t}">${T.toSticker}</a>
+    ${filled(d.hug_find) || filled(d.strength_find) ? card(`${filled(d.hug_find) ? `<p class="q">${T.giftHugHead}</p><p class="ins">${esc(d.hug_find)}</p>` : ''}${filled(d.strength_find) ? `<p class="q">${T.giftStrHead}</p><p class="ins">${esc(d.strength_find)}</p>` : ''}`) : filled(d.insight) ? card(`<p class="q">${T.insightQ}</p><p class="ins">${esc(d.insight)}</p>`) : filled(d.day_how) ? card(`<p class="q">${T.helloQ}</p><p class="ins">${esc(d.day_how)}</p>`) : ''}
+    ${filled(d.hug_find) || filled(d.strength_find) || filled(d.insight) ? `<a class="btn" href="#/sticker/${t}">${filled(d.hug_find) || filled(d.strength_find) ? T.toGifts : T.toSticker}</a>` : ''}
     <div class="btnrow"><a class="btn2" href="#/close/${t}">${T.editClosing}</a><a class="btn2" href="#/progress">${T.tabs.progress}</a></div>
     ${card(`<p class="it" style="text-align:center">${T.dayClosedQuote}<small style="color:inherit;font-weight:400">${T.dayClosedQuoteBy}</small></p>`, 'flat')}`, 'today');
 }
@@ -392,37 +393,36 @@ function renderOpen(day, isToday = false) {
   let openMain = !m.being, openSub = false;
   const draw = () => {
     const ach = hasAchievement() ? card(`<div class="ct">${T.achievementTop} ${helpBtn('achievement')}</div><p class="ach">${esc(F().achievement)}</p>${F().achievement_date ? `<p class="hint">${esc(T.achievementDate)}: ${esc(shortDate(F().achievement_date))}</p>` : ''}`, 'flat') : '';
-    shell(`${isToday ? banners() : ''}${hd(dayLabel(day), isToday ? T.goodMorning(firstName()) : T.openDayTitle, 'open')}
+    shell(`${isToday ? banners() : ''}${hd(dayLabel(day), isToday || day === today() ? T.goodMorning(firstName()) : T.openDayTitle, 'open')}
     ${card(`<small class="over">${T.beingSub}</small><div class="ct">${T.beingTitle} ${tag(1)} ${helpBtn('being')}</div>
       ${openMain ? `<p class="hint">${T.beingsPickHint}</p>${beingChips('bmain', (b) => b === m.being)}${inp('being', m.being, T.beingPlaceholder)}`
         : `<div class="chips"><button type="button" class="on" disabled>${esc(m.being)}</button><button type="button" class="more" id="chg">${T.beingsChange}</button></div>`}`, '', 'being')}
-    ${card(`<div class="ct"><span id="bm">${esc(T.beingMeaning(m.being))}</span> ${tag(1)} ${helpBtn('sub_beings')}</div><p class="hint">${T.subBeingsHint}</p>
+    ${card(`<div class="ct"><span id="bm">${hb(T.beingMeaning, m.being)}</span> ${tag(1)} ${helpBtn('sub_beings')}</div><p class="hint">${T.subBeingsHint}</p>
       ${pd.sub_beings && pd.being === m.being && !m.sub_beings.some(Boolean) ? `<button type="button" class="more" id="lastsub">${T.useLastSub}</button>` : ''}
       <div class="row2">${[0, 1, 2, 3].map((i) => inp('sub_beings.' + i, m.sub_beings[i], T.subBeingPh(i + 1))).join('')}</div>
       <button type="button" class="more" id="subtog" aria-expanded="${openSub}">${openSub ? T.beingsHide : T.beingsShowAll}</button>
       ${openSub ? beingChips('bsub', (b) => m.sub_beings.includes(b)) : ''}`, '', 'sub')}
-    ${card(`<div class="ct"><span id="bw">${esc(T.whyTodayQ(m.being))}</span> ${tag(1)} ${helpBtn('why_today')}</div><p class="hint">${T.whyTodayHint}</p>
+    ${card(`<div class="ct"><span id="bw">${hb(T.whyTodayQ, m.being)}</span> ${tag(1)} ${helpBtn('why_today')}</div><p class="hint">${T.whyTodayHint}</p>
       ${inp('why_today', m.why_today, T.whyTodayPh)}`, '', 'why')}
     ${card(`<div class="ct">${T.beingSign} ${tag(1)} ${helpBtn('being_sign')}</div><p class="hint">${T.beingSignHint}</p>
       ${ta('being_sign', m.being_sign, T.writeHere, 2)}
       <details class="qs"><summary>${T.beingSignExamplesTitle}</summary><ul>${T.beingSignExamples.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>`, '', 'sign')}
-    ${card(`<div class="ct"><span id="bwh">${esc(T.whereNeeded(m.being))}</span> ${tag(0)}</div><p class="hint">${T.whereNeededHint}</p>${ta('where_needed', m.where_needed, T.writeHere, 2)}`)}
+    ${card(`<div class="ct"><span id="bwh">${hb(T.whereNeeded, m.being)}</span> ${tag(0)}</div><p class="hint">${T.whereNeededHint}</p>${ta('where_needed', m.where_needed, T.writeHere, 2)}`)}
     ${base ? ach : ''}
     ${base ? card(`<div class="ct">${T.keyActionToday} ${tag(1)} ${helpBtn('key_action')}</div><p class="hint">${T.keyActionHint}</p>
       ${ta('key_action', m.key_action, T.keyActionPh, 2)}
       <div class="row2" style="margin-top:8px">${inp('key_amount', m.key_amount, T.keyAmount)}${inp('key_when', m.key_when, T.keyWhen)}</div>`, '', 'key') : ''}
     ${base ? card(`<div class="ct">${T.stepsTitle} ${tag(0)} ${helpBtn('steps')}</div><p class="hint">${T.stepsHint}</p>
       <div class="steps">${[0, 1, 2].map((i) => `<div class="stp"><b aria-hidden="true">${i + 1}</b>${inp(`steps.${i}.text`, m.steps[i].text, T.stepPh(i + 1))}</div>`).join('')}</div>`) : ''}
-    ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
-      <p class="q"><span id="bmd">${esc(T.mayDerail(m.being))}</span> ${helpBtn('may_derail')}</p><p class="hint">${T.mayDerailHint}</p>${ta('may_derail', m.may_derail, T.mayDerailPh, 2)}
-      <p class="q">${T.recover}</p><p class="hint">${T.recoverHint}</p>${ta('recover', m.recover, T.writeHere, 2)}
-      ${helpsBank(day)}`)}
+    ${card(`<div class="ct"><span id="bmd">${hb(T.mayDerail, m.being)}</span> ${tag(1)} ${helpBtn('may_derail')}</div><p class="hint">${T.mayDerailHint}</p>${ta('may_derail', m.may_derail, T.mayDerailPh, 2)}`, '', 'derail')}
+    ${card(`<div class="ct">${T.recover} ${tag(1)}</div><p class="hint">${T.recoverHint}</p>${ta('recover', m.recover, T.writeHere, 2)}
+      ${helpsBank(day)}`, '', 'recover')}
     ${card(`<div class="ct"><img class="ct-ico" src="img/icons/future.png" width="34" height="34" alt="" aria-hidden="true">${T.convTitle} ${tag(0)} ${helpBtn('future_talk')}</div>
       <p class="q">${T.convPickQ}</p>${seg('voice', m.voice || 'future', Object.entries(T.convPick))}
       <p class="guide" id="cg">${m.voice === 'god' ? T.convGuideGod : T.convGuideFuture}</p>
-      <p class="q" id="cf">${m.voice === 'god' ? T.convFieldGod : T.convFieldFuture}</p><p class="hint">${T.convHint}</p>
+      <p class="q" id="cf">${m.voice === 'god' ? T.convFieldGod : T.convFieldFuture}</p><p class="hint">${T.convHint} ${T.convNoteHint}</p>
       ${ta('win_belief', m.win_belief, T.writeHere, 5)}`, 'conv')}
-    ${card(`<div class="ct">${T.closePlanQ} ${tag(0)}</div><p class="hint">${T.closePlanHint}</p>${timeSel('close_plan', m.close_plan, T.closePlanQ)}`)}
+    ${card(`<div class="ct">${T.closePlanQ} ${tag(1)}</div><p class="hint">${T.closePlanHint}</p>${timeSel('close_plan', m.close_plan, T.closePlanQ)}`, '', 'closeplan')}
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${m.opened_at ? T.saveBase : T.openedDay}</button>
     <a class="btn2" href="#/refine/open">${T.howToRefine}</a>`, isToday ? 'today' : '');
@@ -432,7 +432,7 @@ function renderOpen(day, isToday = false) {
   const wire = () => {
     const flushNow = bindForm(m, save);
     const beingInput = $('[data-k="being"]');
-    beingInput?.addEventListener('input', () => { $('#bm').textContent = T.beingMeaning(m.being); $('#bw').textContent = T.whyTodayQ(m.being); $('#bwh').textContent = T.whereNeeded(m.being); $('#bmd').textContent = T.mayDerail(m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
+    beingInput?.addEventListener('input', () => { $('#bm').innerHTML = hb(T.beingMeaning, m.being); $('#bw').innerHTML = hb(T.whyTodayQ, m.being); $('#bwh').innerHTML = hb(T.whereNeeded, m.being); $('#bmd').innerHTML = hb(T.mayDerail, m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
     $('#bmain')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; flushNow(); m.being = b.dataset.b; openMain = false; save(m); draw(); $('[data-req="sub"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
     $('#chg')?.addEventListener('click', () => { flushNow(); openMain = true; draw(); $('[data-req="being"]')?.scrollIntoView({ block: 'center' }); });
     $('#subtog').addEventListener('click', () => { flushNow(); openSub = !openSub; draw(); $('#subtog')?.focus({ preventScroll: true }); });
@@ -453,6 +453,9 @@ function renderOpen(day, isToday = false) {
       if (m.sub_beings.filter(filled).length < 4) miss.push('sub');
       if (!filled(m.why_today)) miss.push('why'); // חובה, שורה אחת (שושי 18.11)
       if (!filled(m.being_sign)) miss.push('sign'); // הסימן חובה (שושי 18.11)
+      if (!filled(m.may_derail)) miss.push('derail'); // חובה (שושי 18.11)
+      if (!filled(m.recover)) miss.push('recover');
+      if (!filled(m.close_plan)) miss.push('closeplan'); // נכנס לעמידה במילה
       if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
       const first = !D.days[day].opened_at;
       api.saveDay(day, { opened_at: D.days[day].opened_at || new Date().toISOString() });
@@ -478,58 +481,63 @@ function renderClose(day) {
   const steps = m.steps.map((x, i) => [x, i]).filter(([x]) => filled(x.text));
   const deepCount = Object.values(m.deep).filter(filled).length;
   const full = fullMode(); // ההתבוננות העמוקה ושאלות הפעולה רק ביומן המלא (שושי 12.11)
-  shell(`${hd(dayLabel(day) + ' · ' + T.closeDayLabel, T.closeDayTitle, 'close')}
-    ${card(`<div class="ct">${esc(T.presenceQ(d.being))} ${tag(1)} ${helpBtn('presence')}</div>${scale('presence', m.presence, T.presenceQ(d.being))}`, '', 'presence')}
-    ${subs.some(Boolean) ? card(`<div class="ct">${T.subPresenceQ} ${tag(1)}</div>
+  shell(`${hd(dayLabel(day) + ' · ' + T.closeDayLabel, T.goodEvening(firstName()), 'close')}
+    ${card(`<div class="ct">${T.helloQ} ${tag(1)}</div><p class="hint">${T.helloHint}</p>${ta('day_how', m.day_how, T.writeHere, 2)}`, '', 'hello')}
+    ${card(`<div class="ct">${hb(T.presenceQ2, d.being)} ${tag(1)} ${helpBtn('presence')}</div>${scale('presence', m.presence, T.presenceQ2(d.being))}`, '', 'presence')}
+    ${subs.some(Boolean) ? card(`<div class="ct">${T.subPresenceQ2} ${tag(1)}</div>
       ${subs.map((s, i) => s ? `<div class="rt"><span>${esc(s)}</span>${scale('sub_presence.' + i, m.sub_presence[i], s)}</div>` : '').join('')}`, '', 'subp') : ''}
-    ${filled(d.being_sign) ? card(`<div class="ct">${T.signCloseQ} ${tag(0)}</div><p class="hint">${esc(d.being_sign)}</p>
-      ${seg('sign_status', m.sign_status, Object.entries(T.signStatus))}`) : ''}
-    ${full && filled(d.key_action) ? card(`<div class="ct">${fullMode() ? T.keyAction : T.keyActionSmall} ${tag(1)}</div>
-      <p class="hint">${esc([d.key_action, d.key_amount].filter(Boolean).join(' · '))}</p>
-      ${seg('key_status', m.key_status, Object.entries(T.keyStatus))}
-      ${inp('key_of', m.key_of, T.keyOfPh)}
-      <p class="q">${T.keyReflectQ} ${tag(0)}</p>${ta('key_reflect', m.key_reflect, T.keyReflectPh, 2)}`, '', 'keys') : ''}
-    ${full && steps.length ? card(`<div class="ct">${T.stepsCloseQ} ${tag(0)}</div>
-      ${steps.map(([x, i]) => `<p class="q">${esc(x.text)}</p>${seg(`steps.${i}.status`, x.status, Object.entries(T.stepStatus))}`).join('')}
+    ${card(`<div class="ct">${hb(T.foundQ, d.being)} ${tag(1)}</div>${ta('being_found', m.being_found, T.foundPh, 2)}`, '', 'found')}
+    ${card(`<div class="ct"><span><img class="ct-ico" src="img/icons/reflect.png" width="34" height="34" alt="" aria-hidden="true">${T.out2Title}</span> ${tag(1)} ${helpBtn('out')}</div>
+      <p class="q">${T.out2SitQ}</p>${ta('out_situation', m.out_situation, T.outSitPh, 2)}
+      <p class="q">${T.out2InnerQ}</p>${ta('out_inner', m.out_inner, T.outInnerPh, 2)}
+      <p class="q">${T.out2ThoughtQ}</p>${ta('out_thought', m.out_thought, T.outThoughtPh, 2)}
+      <p class="q">${T.out2BackQ}</p>${ta('back_help', m.back_help, T.backHelpPh, 2)}`, 'outc', 'out')}
+    ${filled(d.being_sign) ? card(`<div class="ct">${hb(T.signCloseQ2, d.being)} ${tag(1)}</div><p class="it">${esc(d.being_sign)}</p>
+      <p class="q">${T.signMarkQ}</p>${seg('sign_status', m.sign_status, Object.entries(T.signStatus2))}`, '', 'signc') : ''}
+    ${full && (filled(d.key_action) || steps.length) ? `<p class="sech">${T.actTitle}</p>` : ''}
+    ${full && filled(d.key_action) ? card(`<div class="ct">${T.actKeyTitle} ${tag(1)}</div>
+      <p class="it">${esc([d.key_action, d.key_amount].filter(Boolean).join(' · '))}</p>
+      <p class="q">${T.actKeyMark}</p>${seg('key_status', m.key_status, Object.entries(T.actKeyStatus))}
+      <div id="kof"${m.key_status === 'partial' ? '' : ' hidden'}><p class="q">${T.actKeyOfQ}</p>${inp('key_of', m.key_of, T.keyOfPh)}</div>
+      <p class="q">${T.actKeyReflectQ} ${tag(0)}</p>${ta('key_reflect', m.key_reflect, T.writeHere, 2)}`, '', 'keys') : ''}
+    ${full && steps.length ? card(`<div class="ct">${T.actStepsQ} ${tag(0)}</div>
+      ${steps.map(([x, i]) => `<p class="q">${esc(x.text)}</p>${seg(`steps.${i}.status`, x.status, Object.entries(T.actStepStatus))}`).join('')}
       <p class="q">${T.stepsReflectQ}</p>${ta('steps_reflect', m.steps_reflect, T.writeHere, 2)}`) : ''}
-    ${card(`<div class="ct">${T.thanksQ} ${tag(0)}</div><p class="hint">${T.thanksHint}</p>${ta('thanks', m.thanks, T.writeHere, 2)}`)}
-    ${card(`<div class="ct">${T.generalTitle}</div>
-      <p class="q">${T.dayHowQ} ${tag(0)}</p>${ta('day_how', m.day_how, T.writeHere, 2)}
-      <div data-req="insight"><p class="q">${T.insightQ} ${tag(1)} ${helpBtn('insight')}</p>${ta('insight', m.insight, T.writeHere, 3)}</div>`)}
-    ${card(`<div class="ct"><span><img class="ct-ico" src="img/icons/reflect.png" width="34" height="34" alt="" aria-hidden="true">${T.outTitle}</span> ${tag(0)} ${helpBtn('out')}</div>
-      ${T.outSub ? `<p class="hint">${T.outSub}</p>` : ''}
-      <p class="q">${T.outSitQ}</p>${ta('out_situation', m.out_situation, T.outSitPh, 2)}
-      <p class="q">${T.outInnerQ}</p>${ta('out_inner', m.out_inner, T.outInnerPh, 2)}
-      <p class="q">${T.outThoughtQ}</p>${ta('out_thought', m.out_thought, T.outThoughtPh, 2)}
-      <p class="q">${T.backHelpQ}</p>${ta('back_help', m.back_help, T.backHelpPh, 2)}`, 'outc')}
-    ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
-      ${filled(m.gap_moment) ? `<p class="q">${T.gapQ}</p>${ta('gap_moment', m.gap_moment)}` : ''}
-      ${filled(m.extra_close) ? `<p class="q">${T.extraCloseQ}</p>${ta('extra_close', m.extra_close)}` : ''}
-      <p class="q">${T.openTomorrowQ}</p>${timeSel('open_tomorrow', m.open_tomorrow)}`)}
-    <section class="chs" aria-labelledby="chst">
-      <div class="ct chs-h"><span id="chst"><img class="ct-ico" src="img/icons/channels.png" width="34" height="34" alt="" aria-hidden="true">${T.deepTitle}</span> ${tag(0)} ${helpBtn('deep')}</div>
-      <p class="hint">${T.deepIntro}</p>
-      ${T.deep.map((g) => { const has = g.qs.some(([k]) => filled(m.deep[k])); return `<details class="card chcard"${has ? ' open' : ''}><summary>${esc(g.h)}</summary>
+    ${full ? `<details class="card deepbox"${T.deep2.some((g) => g.qs.some(([k]) => filled(m.deep[k]))) ? ' open' : ''}><summary><span><img class="ct-ico" src="img/icons/channels.png" width="34" height="34" alt="" aria-hidden="true">${T.deep2Btn}<small class="dsub">${T.deep2BtnSub}</small></span></summary>
+      <p class="hint">${T.deep2Intro} ${helpBtn('deep')}</p>
+      ${T.deep2.map((g) => { const has = g.qs.some(([k]) => filled(m.deep[k])); return `${g.before ? `<p class="q dhead">${g.before}</p>` : ''}<details class="card chcard"${has ? ' open' : ''}><summary>${esc(g.h)}</summary>
         ${g.sub ? `<p class="hint">${esc(g.sub)}</p>` : ''}
-        ${g.qs.map(([k, q]) => `${q && k !== 'g0' ? `<p class="q">${esc(q)}</p>` : ''}${ta('deep.' + k, m.deep[k], T.writeHere, 2)}`).join('')}</details>`; }).join('')}
-    </section>
+        ${g.qs.map(([k, q, h]) => `${q && k !== 'g0' ? `<p class="q">${esc(q)}</p>` : ''}${h ? `<p class="hint">${esc(h)}</p>` : ''}${ta('deep.' + k, m.deep[k], T.writeHere, 2)}`).join('')}</details>`; }).join('')}
+    </details>` : ''}
+    <p class="sech">${T.thanksHead}</p>
+    ${card(`<div class="ct">${T.thanksQ2} ${tag(0)}</div><p class="hint">${T.thanksHint2}</p>${ta('thanks', m.thanks, T.writeHere, 2)}`)}
+    ${card(`<div class="ct">${T.openTomorrowQ2} ${tag(1)}</div>${timeSel('open_tomorrow', m.open_tomorrow, T.openTomorrowQ2)}`, '', 'tomorrow')}
+    <p class="sech">${T.giftsTitle} ${tag(0)}</p>
+    ${card(`<p class="hint">${T.giftsHint}</p>
+      <p class="q">${T.hugQ} ${helpBtn('hug_find')}</p>${ta('hug_find', m.hug_find, T.writeHere, 2)}
+      <p class="q">${T.strengthQ} ${helpBtn('strength_find')}</p>${ta('strength_find', m.strength_find, T.writeHere, 2)}`)}
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${d.closed_at ? T.saveBase : T.closedDay}</button>
     <a class="btn2" href="#/refine/close">${T.howToRefineClose}</a>`, day === today() ? 'today' : '');
-  const save = (x) => api.saveDay(day, { presence: x.presence, sub_presence: x.sub_presence, key_status: x.key_status, key_of: x.key_of, key_reflect: x.key_reflect, steps: x.steps, steps_reflect: x.steps_reflect, day_how: x.day_how, sign_status: x.sign_status || null, insight: x.insight, gap_moment: x.gap_moment, out_situation: x.out_situation, out_inner: x.out_inner, out_thought: x.out_thought, back_help: x.back_help, thanks: x.thanks, extra_close: x.extra_close, open_tomorrow: x.open_tomorrow, deep: x.deep });
+  const save = (x) => api.saveDay(day, { presence: x.presence, sub_presence: x.sub_presence, key_status: x.key_status, key_of: x.key_of, key_reflect: x.key_reflect, steps: x.steps, steps_reflect: x.steps_reflect, day_how: x.day_how, sign_status: x.sign_status || null, insight: x.insight, gap_moment: x.gap_moment, out_situation: x.out_situation, out_inner: x.out_inner, out_thought: x.out_thought, back_help: x.back_help, thanks: x.thanks, extra_close: x.extra_close, open_tomorrow: x.open_tomorrow, deep: x.deep, being_found: x.being_found, hug_find: x.hug_find, strength_find: x.strength_find });
   const flushNow = bindForm(m, save);
+  $('[data-seg="key_status"]')?.addEventListener('pick', (e) => { const k = $('#kof'); if (k) k.hidden = e.detail !== 'partial'; }); // ״כמה מתוך״ רק אחרי ״חלקית״
   $('#done').addEventListener('click', () => {
     flushNow();
     const miss = [];
+    if (!filled(m.day_how)) miss.push('hello');
     if (m.presence == null) miss.push('presence');
     if (subs.some((s, i) => s && m.sub_presence[i] == null)) miss.push('subp');
     if (full && filled(d.key_action) && !m.key_status) miss.push('keys');
-    if (!filled(m.insight)) miss.push('insight');
+    if (!filled(m.being_found)) miss.push('found');
+    if (m.presence !== 5 && !(filled(m.out_situation) && filled(m.out_inner) && filled(m.out_thought))) miss.push('out');
+    if (filled(d.being_sign) && !m.sign_status) miss.push('signc');
+    if (!filled(m.open_tomorrow)) miss.push('tomorrow');
     if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
     const first = !D.days[day].closed_at;
     api.saveDay(day, { closed_at: D.days[day].closed_at || new Date().toISOString() });
     celebrate('close', T.dayClosedToast);
-    go(first ? '#/sticker/' + day : '#/today');
+    go(first && (filled(m.hug_find) || filled(m.strength_find)) ? '#/sticker/' + day : '#/today');
   });
 }
 
@@ -566,7 +574,38 @@ async function renderNote(day) {
 }
 
 // ===== סטיקר תובנה =====
+async function renderGifts(day) {
+  const d = D.days[day];
+  const has = { both: filled(d.hug_find) && filled(d.strength_find), hug: filled(d.hug_find), str: filled(d.strength_find) };
+  const opts = [['both', T.giftBoth], ['hug', T.giftHugOnly], ['str', T.giftStrOnly]].filter(([k]) => has[k]);
+  let which = opts[0][0], withName = true, bg = getBg('sticker', 'navy');
+  shell(`${hd(T.giftsNoteSub, T.giftsNoteTitle, 'reflect')}
+    ${opts.length > 1 ? `<div class="seg" id="gk" role="radiogroup" aria-label="${T.giftsNoteTitle}">${opts.map(([v, l], i) => `<button type="button" role="radio" aria-checked="${!i}" class="${i ? '' : 'on'}" data-v="${v}">${l}</button>`).join('')}</div>` : ''}
+    <div class="seg" id="nm" role="radiogroup" aria-label="שם בפתק"><button type="button" role="radio" aria-checked="true" class="on" data-v="1">${T.withName}</button><button type="button" role="radio" aria-checked="false" data-v="0">${T.noName}</button></div>
+    ${bgPicker(bg)}
+    <div class="preview" id="pv"></div>
+    <button class="btn" id="save">${T.saveImage}</button>
+    <button class="btn2" id="share">${T.shareImageGroup}</button>
+    <a class="btn2" href="#/today">${T.backToday}</a>`, 'today');
+  let cv;
+  const o = () => ({ name: withName ? firstName() : '', dateLabel: hebShort(day), bg });
+  const draw = async () => {
+    cv = which === 'both' ? await giftNote([[T.giftHugHead, d.hug_find], [T.giftStrHead, d.strength_find]], { label: T.giftsNoteTitle, ...o() })
+      : await quoteCard(which === 'hug' ? d.hug_find : d.strength_find, { kind: 'insight', label: T.giftsNoteTitle, head: which === 'hug' ? T.giftHugHead : T.giftStrHead, ...o() });
+    cv.setAttribute('role', 'img'); cv.setAttribute('aria-label', T.giftsNoteTitle); const pv = $('#pv'); if (!pv) return; pv.innerHTML = ''; pv.appendChild(cv);
+  };
+  await draw();
+  if (!d.sticker) api.saveDay(day, { sticker: true });
+  wireBg('sticker', async (v) => { bg = v; await draw(); });
+  const pick = (id, f) => $(id)?.addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; f(b.dataset.v); $$(id + ' button').forEach((x) => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); await draw(); });
+  pick('#gk', (v) => { which = v; });
+  pick('#nm', (v) => { withName = v === '1'; });
+  $('#save').addEventListener('click', async () => { if ((await saveCanvas(cv, `מתנות-${day}.png`)) !== 'cancel') toast(T.saved); });
+  $('#share').addEventListener('click', () => saveCanvas(cv, `מתנות-${day}.png`, true));
+}
+
 async function renderSticker(day) {
+  const d0 = D.days[day]; if (d0 && (filled(d0.hug_find) || filled(d0.strength_find))) return renderGifts(day);
   const d = D.days[day]; if (!d || !filled(d.insight)) return go('#/today');
   let withName = true, bg = getBg('sticker', 'navy');
   shell(`${hd(T.stickerSub, T.stickerTitle, 'reflect')}${helpRow('sticker')}
@@ -668,14 +707,15 @@ function weekSummaryHtml(ws) {
   const keys = days.filter((x) => filled(x.d.key_action));
   const cnt = (st) => keys.filter((x) => x.d.key_status === st).length;
   const signs = days.filter((x) => filled(x.d.being_sign));
-  const ins = days.filter((x) => filled(x.d.insight));
+  const insTx = (d) => [d.insight, d.hug_find, d.strength_find].filter(filled).join(' · ');
+  const ins = days.filter((x) => insTx(x.d));
   const lab = (k) => esc(dayLabel(k));
   return `<p class="it"><b>${T.sumDays(days.length, closed)}</b></p>
     <p class="q">${T.sumBeings}</p>${days.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.being || '')}${x.d.presence != null ? ` · ${x.d.presence}/5` : ''}</p>`).join('')}
     ${keys.length ? `<p class="q">${T.sumKey}</p><p class="hint">${T.sumKeyCounts(cnt('done'), cnt('partial'), cnt('no'))}</p>
       ${keys.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.key_action)}${x.d.key_status ? ` · <b>${esc(T.keyStatus[x.d.key_status])}</b>` : ''}</p>`).join('')}` : ''}
     ${signs.length ? `<p class="q">${T.sumSigns}</p>${signs.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.being_sign)}${x.d.sign_status ? ` · <b>${esc(T.signStatus[x.d.sign_status])}</b>` : ''}</p>`).join('')}` : ''}
-    ${ins.length ? `<p class="q">${T.sumInsights}</p>${ins.map((x) => `<p class="it">${lab(x.k)} · ${esc(x.d.insight)}</p>`).join('')}` : ''}`;
+    ${ins.length ? `<p class="q">${T.sumInsights}</p>${ins.map((x) => `<p class="it">${lab(x.k)} · ${esc(insTx(x.d))}</p>`).join('')}` : ''}`;
 }
 
 function renderWeekClose() {
@@ -753,7 +793,7 @@ function wordDay(k, d) {
   if (!d || !d.opened_at) return r;
   if (d.closed_at && d.presence != null) r.being = d.presence * 20;
   const sp = (d.sub_presence || []).filter((v) => v != null); if (d.closed_at && sp.length) r.subs = sp.reduce((a, b) => a + b, 0) / sp.length * 20;
-  if (d.sign_status) r.sign = d.sign_status === 'done' ? 100 : 0;
+  if (d.sign_status) r.sign = d.sign_status === 'done' ? 100 : d.sign_status === 'partial' ? 50 : 0;
   if (d.key_status) r.key = { done: 100, partial: 50, no: 0 }[d.key_status];
   const st = (d.steps || []).filter((x) => x && x.status); if (st.length) r.steps = st.reduce((a, x) => a + ({ done: 100, partial: 50, no: 0 }[x.status] ?? 0), 0) / st.length;
   const cp = tmin(normTime(d.close_plan));
@@ -833,6 +873,7 @@ function helpsBank(day) {
 function collectionItems() {
   const items = [];
   Object.entries(D.days).forEach(([k, d]) => {
+    if (filled(d.hug_find) || filled(d.strength_find)) items.push({ kind: d.sticker ? 'sticker' : 'insight', also: d.sticker ? 'insight' : null, parts: [d.hug_find, d.strength_find], labels: [T.giftHugHead.replace(':', ''), T.giftStrHead.replace(':', '')], text: [d.hug_find, d.strength_find].filter(Boolean).join(' '), when: shortDate(k), sort: k, link: d.sticker ? '#/sticker/' + k : null });
     if (filled(d.insight)) items.push({ kind: d.sticker ? 'sticker' : 'insight', also: d.sticker ? 'insight' : null, text: d.insight, when: shortDate(k), sort: k, link: d.sticker ? '#/sticker/' + k : null });
     if (filled(d.win_belief)) items.push({ kind: 'belief', text: d.win_belief, when: shortDate(k), sort: k });
     if (filled(d.out_situation) || filled(d.out_inner) || filled(d.out_thought) || filled(d.back_help)) items.push({ kind: 'bank', parts: [d.out_situation, d.out_inner, d.out_thought, d.back_help], text: [d.out_situation, d.out_inner, d.out_thought, d.back_help].filter(Boolean).join(' '), when: shortDate(k), sort: k + 'b' });
