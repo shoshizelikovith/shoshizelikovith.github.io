@@ -1,8 +1,8 @@
 // פורטל השיעורים של אשה רוצה עושה. שני מסכים: כל השיעורים (#/) ושיעור (#/l/9).
-import { PCONFIG } from './config.js';
-import { T } from './content.js';
-import { LESSONS, STAGES, stageOf, lesson } from './lessons.js';
-import { store } from './store.js';
+import { PCONFIG } from './config.js?v=9e35362a6a';
+import { T } from './content.js?v=9e35362a6a';
+import { LESSONS, STAGES, stageOf, lesson } from './lessons.js?v=9e35362a6a';
+import { store } from './store.js?v=9e35362a6a';
 
 const root = document.getElementById('portal');
 const qs = new URLSearchParams(location.search);
