@@ -492,10 +492,10 @@ function renderClose(day) {
     ${full && steps.length ? card(`<div class="ct">${T.stepsCloseQ} ${tag(0)}</div>
       ${steps.map(([x, i]) => `<p class="q">${esc(x.text)}</p>${seg(`steps.${i}.status`, x.status, Object.entries(T.stepStatus))}`).join('')}
       <p class="q">${T.stepsReflectQ}</p>${ta('steps_reflect', m.steps_reflect, T.writeHere, 2)}`) : ''}
+    ${card(`<div class="ct">${T.thanksQ} ${tag(0)}</div><p class="hint">${T.thanksHint}</p>${ta('thanks', m.thanks, T.writeHere, 2)}`)}
     ${card(`<div class="ct">${T.generalTitle}</div>
       <p class="q">${T.dayHowQ} ${tag(0)}</p>${ta('day_how', m.day_how, T.writeHere, 2)}
-      <div data-req="insight"><p class="q">${T.insightQ} ${tag(1)} ${helpBtn('insight')}</p>${ta('insight', m.insight, T.writeHere, 3)}</div>
-      <p class="q">${T.thanksQ} ${tag(0)}</p>${ta('thanks', m.thanks)}`)}
+      <div data-req="insight"><p class="q">${T.insightQ} ${tag(1)} ${helpBtn('insight')}</p>${ta('insight', m.insight, T.writeHere, 3)}</div>`)}
     ${card(`<div class="ct"><span><img class="ct-ico" src="img/icons/reflect.png" width="34" height="34" alt="" aria-hidden="true">${T.outTitle}</span> ${tag(0)} ${helpBtn('out')}</div>
       ${T.outSub ? `<p class="hint">${T.outSub}</p>` : ''}
       <p class="q">${T.outSitQ}</p>${ta('out_situation', m.out_situation, T.outSitPh, 2)}
