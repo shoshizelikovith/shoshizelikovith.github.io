@@ -263,7 +263,7 @@ a.dl:hover{box-shadow:var(--sh-lift)}
 .alt{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:10px}
 .alt-sw{min-height:44px;padding:0 18px;border-radius:999px;border:2px solid rgba(242,238,227,.55);background:transparent;color:var(--cream);font-weight:700;font-size:16px;font-family:inherit;cursor:pointer}
 .alt-sw:hover{background:rgba(242,238,227,.1)}
-.alt-dl{display:inline-flex;align-items:center;min-height:44px;color:var(--cream);font-weight:700;font-size:16px;text-decoration:underline;text-underline-offset:3px}
+.alt-dl{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:999px;background:var(--cream);color:var(--navy);font-weight:700;font-size:16px}
 .alt-note{color:var(--cream);opacity:.85;font-size:16px;margin-top:6px}
 /* פרקי השיעור */
 .chaps{background:var(--paper);border-radius:24px;padding:18px 16px 10px;margin:0 0 18px;box-shadow:var(--sh)}
