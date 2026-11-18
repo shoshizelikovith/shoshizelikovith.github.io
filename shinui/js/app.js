@@ -406,7 +406,7 @@ function renderOpen(day, isToday = false) {
     ${card(`<div class="ct">${T.beingSign} ${tag(0)} ${helpBtn('being_sign')}</div><p class="hint">${T.beingSignHint}</p>
       ${ta('being_sign', m.being_sign, T.writeHere, 2)}
       <details class="qs"><summary>${T.beingSignExamplesTitle}</summary><ul>${T.beingSignExamples.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>`)}
-    ${card(`<div class="ct">${T.whereNeeded} ${tag(0)}</div>${ta('where_needed', m.where_needed, T.writeHere, 2)}`)}
+    ${card(`<div class="ct"><span id="bwh">${esc(T.whereNeeded(m.being))}</span> ${tag(0)}</div><p class="hint">${T.whereNeededHint}</p>${ta('where_needed', m.where_needed, T.writeHere, 2)}`)}
     ${base ? ach : ''}
     ${base ? card(`<div class="ct">${T.keyActionToday} ${tag(1)} ${helpBtn('key_action')}</div><p class="hint">${T.keyActionHint}</p>
       ${ta('key_action', m.key_action, T.keyActionPh, 2)}
@@ -430,7 +430,7 @@ function renderOpen(day, isToday = false) {
   const wire = () => {
     const flushNow = bindForm(m, save);
     const beingInput = $('[data-k="being"]');
-    beingInput?.addEventListener('input', () => { $('#bm').textContent = T.beingMeaning(m.being); $('#bw').textContent = T.whyTodayQ(m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
+    beingInput?.addEventListener('input', () => { $('#bm').textContent = T.beingMeaning(m.being); $('#bw').textContent = T.whyTodayQ(m.being); $('#bwh').textContent = T.whereNeeded(m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
     $('#bmain')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; flushNow(); m.being = b.dataset.b; openMain = false; save(m); draw(); $('[data-req="sub"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
     $('#chg')?.addEventListener('click', () => { flushNow(); openMain = true; draw(); $('[data-req="being"]')?.scrollIntoView({ block: 'center' }); });
     $('#subtog').addEventListener('click', () => { flushNow(); openSub = !openSub; draw(); $('#subtog')?.focus({ preventScroll: true }); });
