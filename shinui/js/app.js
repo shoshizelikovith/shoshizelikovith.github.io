@@ -363,6 +363,7 @@ function renderToday() {
     shell(`${banners()}${hd(dayLabel(t), T.dayOpenedTitle, 'open')}
       ${card(`<p class="ach">${esc(T.noteToday)} ${esc(d.being)}.</p>
         ${(d.sub_beings || []).filter(Boolean).length ? `<p class="hint">${esc(d.sub_beings.filter(Boolean).join(' · '))}</p>` : ''}
+        ${filled(d.why_today) ? `<p class="it">${esc(d.why_today)}</p>` : ''}
         ${filled(d.key_action) ? `<p class="q">${fullMode() ? T.keyAction : T.keyActionSmall}</p><p class="it">${esc([d.key_action, d.key_amount, d.key_when].filter(Boolean).join(' · '))}</p>` : ''}
         ${d.win_belief ? `<p class="hint" style="margin-top:8px">״${esc(d.win_belief)}״</p>` : ''}`)}
       <p class="hint">${T.dayOpenedSub}</p>
@@ -400,9 +401,12 @@ function renderOpen(day, isToday = false) {
       <div class="row2">${[0, 1, 2, 3].map((i) => inp('sub_beings.' + i, m.sub_beings[i], T.subBeingPh(i + 1))).join('')}</div>
       <button type="button" class="more" id="subtog" aria-expanded="${openSub}">${openSub ? T.beingsHide : T.beingsShowAll}</button>
       ${openSub ? beingChips('bsub', (b) => m.sub_beings.includes(b)) : ''}`, '', 'sub')}
+    ${card(`<div class="ct"><span id="bw">${esc(T.whyTodayQ(m.being))}</span> ${tag(1)} ${helpBtn('why_today')}</div><p class="hint">${T.whyTodayHint}</p>
+      ${inp('why_today', m.why_today, T.whyTodayPh)}`, '', 'why')}
     ${card(`<div class="ct">${T.beingSign} ${tag(0)} ${helpBtn('being_sign')}</div><p class="hint">${T.beingSignHint}</p>
       ${ta('being_sign', m.being_sign, T.writeHere, 2)}
       <details class="qs"><summary>${T.beingSignExamplesTitle}</summary><ul>${T.beingSignExamples.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>`)}
+    ${card(`<div class="ct">${T.whereNeeded} ${tag(0)}</div>${ta('where_needed', m.where_needed, T.writeHere, 2)}`)}
     ${base ? ach : ''}
     ${base ? card(`<div class="ct">${T.keyActionToday} ${tag(1)} ${helpBtn('key_action')}</div><p class="hint">${T.keyActionHint}</p>
       ${ta('key_action', m.key_action, T.keyActionPh, 2)}
@@ -411,8 +415,7 @@ function renderOpen(day, isToday = false) {
       <div class="steps">${[0, 1, 2].map((i) => `<div class="stp"><b aria-hidden="true">${i + 1}</b>${inp(`steps.${i}.text`, m.steps[i].text, T.stepPh(i + 1))}</div>`).join('')}</div>`) : ''}
     ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
       <p class="q">${T.mayDerail}</p>${ta('may_derail', m.may_derail)}
-      <p class="q">${T.recover}</p>${ta('recover', m.recover)}
-      <p class="q">${T.whereNeeded}</p>${ta('where_needed', m.where_needed)}`)}
+      <p class="q">${T.recover}</p>${ta('recover', m.recover)}`)}
     ${card(`<div class="ct"><img class="ct-ico" src="img/icons/future.png" width="34" height="34" alt="" aria-hidden="true">${T.convTitle} ${tag(0)} ${helpBtn('future_talk')}</div>
       <p class="q">${T.convPickQ}</p>${seg('voice', m.voice || 'future', Object.entries(T.convPick))}
       <p class="guide" id="cg">${m.voice === 'god' ? T.convGuideGod : T.convGuideFuture}</p>
@@ -423,11 +426,11 @@ function renderOpen(day, isToday = false) {
     <a class="btn2" href="#/refine/open">${T.howToRefine}</a>`, isToday ? 'today' : '');
     wire();
   };
-  const save = (x) => api.saveDay(day, { being: x.being, sub_beings: x.sub_beings, key_action: x.key_action, key_amount: x.key_amount, key_when: x.key_when, steps: x.steps.some((st) => filled(st.text)) ? x.steps : [], being_sign: x.being_sign, where_needed: x.where_needed, may_derail: x.may_derail, recover: x.recover, win_belief: x.win_belief, voice: x.voice || 'future' });
+  const save = (x) => api.saveDay(day, { being: x.being, sub_beings: x.sub_beings, key_action: x.key_action, key_amount: x.key_amount, key_when: x.key_when, steps: x.steps.some((st) => filled(st.text)) ? x.steps : [], being_sign: x.being_sign, why_today: x.why_today, where_needed: x.where_needed, may_derail: x.may_derail, recover: x.recover, win_belief: x.win_belief, voice: x.voice || 'future' });
   const wire = () => {
     const flushNow = bindForm(m, save);
     const beingInput = $('[data-k="being"]');
-    beingInput?.addEventListener('input', () => { $('#bm').textContent = T.beingMeaning(m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
+    beingInput?.addEventListener('input', () => { $('#bm').textContent = T.beingMeaning(m.being); $('#bw').textContent = T.whyTodayQ(m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
     $('#bmain')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; flushNow(); m.being = b.dataset.b; openMain = false; save(m); draw(); $('[data-req="sub"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
     $('#chg')?.addEventListener('click', () => { flushNow(); openMain = true; draw(); $('[data-req="being"]')?.scrollIntoView({ block: 'center' }); });
     $('#subtog').addEventListener('click', () => { flushNow(); openSub = !openSub; draw(); $('#subtog')?.focus({ preventScroll: true }); });
@@ -446,6 +449,7 @@ function renderOpen(day, isToday = false) {
       if (base && !filled(m.key_action)) miss.push('key');
       if (!filled(m.being)) miss.push('being');
       if (m.sub_beings.filter(filled).length < 4) miss.push('sub');
+      if (!filled(m.why_today)) miss.push('why'); // חובה, שורה אחת (שושי 18.11)
       if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
       const first = !D.days[day].opened_at;
       api.saveDay(day, { opened_at: D.days[day].opened_at || new Date().toISOString() });
