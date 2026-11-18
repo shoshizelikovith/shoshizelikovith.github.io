@@ -382,7 +382,7 @@ async function boot() {
   if (!media) return viewGate(T.netError, '');
   media.forEach((m) => { const l = lesson(m.n); if (!l) return;
     l.vimeo = m.vimeo || ''; l.workbook = m.workbook || ''; l.summary = m.summary || ''; l.part2 = m.part2 || null;
-    l.drive = m.drive_video || ''; l.chapters = m.chapters || null;
+    l.drive = m.gdrive_id || ''; l.chapters = m.chapters || null;
     if (l.slides !== null) l.slides = m.slides || ''; });
   window.onhashchange = route;
   route();
