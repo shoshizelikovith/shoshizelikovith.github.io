@@ -414,7 +414,7 @@ function renderOpen(day, isToday = false) {
     ${base ? card(`<div class="ct">${T.stepsTitle} ${tag(0)} ${helpBtn('steps')}</div><p class="hint">${T.stepsHint}</p>
       <div class="steps">${[0, 1, 2].map((i) => `<div class="stp"><b aria-hidden="true">${i + 1}</b>${inp(`steps.${i}.text`, m.steps[i].text, T.stepPh(i + 1))}</div>`).join('')}</div>`) : ''}
     ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
-      <p class="q">${T.mayDerail}</p>${ta('may_derail', m.may_derail)}
+      <p class="q" id="bmd">${esc(T.mayDerail(m.being))}</p>${ta('may_derail', m.may_derail)}
       <p class="q">${T.recover}</p>${ta('recover', m.recover)}`)}
     ${card(`<div class="ct"><img class="ct-ico" src="img/icons/future.png" width="34" height="34" alt="" aria-hidden="true">${T.convTitle} ${tag(0)} ${helpBtn('future_talk')}</div>
       <p class="q">${T.convPickQ}</p>${seg('voice', m.voice || 'future', Object.entries(T.convPick))}
@@ -430,7 +430,7 @@ function renderOpen(day, isToday = false) {
   const wire = () => {
     const flushNow = bindForm(m, save);
     const beingInput = $('[data-k="being"]');
-    beingInput?.addEventListener('input', () => { $('#bm').textContent = T.beingMeaning(m.being); $('#bw').textContent = T.whyTodayQ(m.being); $('#bwh').textContent = T.whereNeeded(m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
+    beingInput?.addEventListener('input', () => { $('#bm').textContent = T.beingMeaning(m.being); $('#bw').textContent = T.whyTodayQ(m.being); $('#bwh').textContent = T.whereNeeded(m.being); $('#bmd').textContent = T.mayDerail(m.being); $$('#bmain button').forEach((b) => { b.classList.toggle('on', b.dataset.b === m.being); b.setAttribute('aria-pressed', b.dataset.b === m.being); }); });
     $('#bmain')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (!b) return; flushNow(); m.being = b.dataset.b; openMain = false; save(m); draw(); $('[data-req="sub"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); });
     $('#chg')?.addEventListener('click', () => { flushNow(); openMain = true; draw(); $('[data-req="being"]')?.scrollIntoView({ block: 'center' }); });
     $('#subtog').addEventListener('click', () => { flushNow(); openSub = !openSub; draw(); $('#subtog')?.focus({ preventScroll: true }); });
