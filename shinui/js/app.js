@@ -133,8 +133,8 @@ const scale = (k, v, label) => `<div class="scale" role="radiogroup" aria-label=
 // בחירת שעה מרשימה, כל רבע שעה (בטלפון נפתח גלגל בחירה). ערך ישן כמו 0830 מוצג כ-8:30
 const normTime = (v) => { const s = String(v || '').trim(); const m = s.match(/^(\d{1,2})[:.]?(\d{2})$/); return m && +m[1] < 24 && +m[2] < 60 ? `${+m[1]}:${m[2]}` : s; };
 const TIMES = Array.from({ length: (24 - 5) * 4 }, (_, i) => { const t = 5 * 60 + i * 15; return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; });
-const timeSel = (k, v) => { const cur = normTime(v); const opts = cur && !TIMES.includes(cur) ? [cur, ...TIMES] : TIMES;
-  return `<select data-k="${k}" class="tsel" aria-label="${esc(T.openTomorrowQ)}"><option value="">${T.pickTime}</option>${opts.map((t) => `<option value="${t}"${t === cur ? ' selected' : ''}>${t}</option>`).join('')}</select>`; };
+const timeSel = (k, v, label = T.openTomorrowQ) => { const cur = normTime(v); const opts = cur && !TIMES.includes(cur) ? [cur, ...TIMES] : TIMES;
+  return `<select data-k="${k}" class="tsel" aria-label="${esc(label)}"><option value="">${T.pickTime}</option>${opts.map((t) => `<option value="${t}"${t === cur ? ' selected' : ''}>${t}</option>`).join('')}</select>`; };
 const card = (inner, cls = '', key = '') => `<section class="card ${cls}" ${key ? `data-req="${key}"` : ''}>${inner}</section>`;
 
 // קישור שדות למודל. path כמו "sub_beings.2" או "habits.0.text"
@@ -198,7 +198,7 @@ async function render() {
   switch (r1) {
     case 'week': return r2 === 'open' ? renderWeekOpen() : r2 === 'close' ? renderWeekClose() : renderWeek();
     case 'progress': return renderProgress();
-    case 'collection': return renderCollection();
+    case 'collection': return renderCollection(T.collectionFilters[r2] ? r2 : 'all');
     case 'base': return r2 ? renderBasePart(r2) : renderBase();
     case 'note': return renderNote(r2 || today());
     case 'sticker': return renderSticker(r2 || today());
@@ -366,7 +366,7 @@ function renderToday() {
         ${filled(d.why_today) ? `<p class="it">${esc(d.why_today)}</p>` : ''}
         ${filled(d.key_action) ? `<p class="q">${fullMode() ? T.keyAction : T.keyActionSmall}</p><p class="it">${esc([d.key_action, d.key_amount, d.key_when].filter(Boolean).join(' · '))}</p>` : ''}
         ${d.win_belief ? `<p class="hint" style="margin-top:8px">״${esc(d.win_belief)}״</p>` : ''}`)}
-      <p class="hint">${T.dayOpenedSub}</p>
+      <p class="hint">${filled(d.close_plan) ? T.closeAt(normTime(d.close_plan)) : T.dayOpenedSub}</p>
       <a class="btn" href="#/close/${t}">${T.toClose}</a>
       <div class="btnrow"><a class="btn2" href="#/note/${t}">${T.toMorningNote}</a><a class="btn2" href="#/open/${t}">${T.editOpening}</a></div>`, 'today');
     return;
@@ -403,9 +403,9 @@ function renderOpen(day, isToday = false) {
       ${openSub ? beingChips('bsub', (b) => m.sub_beings.includes(b)) : ''}`, '', 'sub')}
     ${card(`<div class="ct"><span id="bw">${esc(T.whyTodayQ(m.being))}</span> ${tag(1)} ${helpBtn('why_today')}</div><p class="hint">${T.whyTodayHint}</p>
       ${inp('why_today', m.why_today, T.whyTodayPh)}`, '', 'why')}
-    ${card(`<div class="ct">${T.beingSign} ${tag(0)} ${helpBtn('being_sign')}</div><p class="hint">${T.beingSignHint}</p>
+    ${card(`<div class="ct">${T.beingSign} ${tag(1)} ${helpBtn('being_sign')}</div><p class="hint">${T.beingSignHint}</p>
       ${ta('being_sign', m.being_sign, T.writeHere, 2)}
-      <details class="qs"><summary>${T.beingSignExamplesTitle}</summary><ul>${T.beingSignExamples.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>`)}
+      <details class="qs"><summary>${T.beingSignExamplesTitle}</summary><ul>${T.beingSignExamples.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></details>`, '', 'sign')}
     ${card(`<div class="ct"><span id="bwh">${esc(T.whereNeeded(m.being))}</span> ${tag(0)}</div><p class="hint">${T.whereNeededHint}</p>${ta('where_needed', m.where_needed, T.writeHere, 2)}`)}
     ${base ? ach : ''}
     ${base ? card(`<div class="ct">${T.keyActionToday} ${tag(1)} ${helpBtn('key_action')}</div><p class="hint">${T.keyActionHint}</p>
@@ -414,19 +414,21 @@ function renderOpen(day, isToday = false) {
     ${base ? card(`<div class="ct">${T.stepsTitle} ${tag(0)} ${helpBtn('steps')}</div><p class="hint">${T.stepsHint}</p>
       <div class="steps">${[0, 1, 2].map((i) => `<div class="stp"><b aria-hidden="true">${i + 1}</b>${inp(`steps.${i}.text`, m.steps[i].text, T.stepPh(i + 1))}</div>`).join('')}</div>`) : ''}
     ${card(`<div class="ct">${T.optionalMore} ${tag(0)}</div>
-      <p class="q" id="bmd">${esc(T.mayDerail(m.being))}</p>${ta('may_derail', m.may_derail)}
-      <p class="q">${T.recover}</p>${ta('recover', m.recover)}`)}
+      <p class="q"><span id="bmd">${esc(T.mayDerail(m.being))}</span> ${helpBtn('may_derail')}</p><p class="hint">${T.mayDerailHint}</p>${ta('may_derail', m.may_derail, T.mayDerailPh, 2)}
+      <p class="q">${T.recover}</p><p class="hint">${T.recoverHint}</p>${ta('recover', m.recover, T.writeHere, 2)}
+      ${helpsBank(day)}`)}
     ${card(`<div class="ct"><img class="ct-ico" src="img/icons/future.png" width="34" height="34" alt="" aria-hidden="true">${T.convTitle} ${tag(0)} ${helpBtn('future_talk')}</div>
       <p class="q">${T.convPickQ}</p>${seg('voice', m.voice || 'future', Object.entries(T.convPick))}
       <p class="guide" id="cg">${m.voice === 'god' ? T.convGuideGod : T.convGuideFuture}</p>
       <p class="q" id="cf">${m.voice === 'god' ? T.convFieldGod : T.convFieldFuture}</p><p class="hint">${T.convHint}</p>
       ${ta('win_belief', m.win_belief, T.writeHere, 5)}`, 'conv')}
+    ${card(`<div class="ct">${T.closePlanQ} ${tag(0)}</div><p class="hint">${T.closePlanHint}</p>${timeSel('close_plan', m.close_plan, T.closePlanQ)}`)}
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${m.opened_at ? T.saveBase : T.openedDay}</button>
     <a class="btn2" href="#/refine/open">${T.howToRefine}</a>`, isToday ? 'today' : '');
     wire();
   };
-  const save = (x) => api.saveDay(day, { being: x.being, sub_beings: x.sub_beings, key_action: x.key_action, key_amount: x.key_amount, key_when: x.key_when, steps: x.steps.some((st) => filled(st.text)) ? x.steps : [], being_sign: x.being_sign, why_today: x.why_today, where_needed: x.where_needed, may_derail: x.may_derail, recover: x.recover, win_belief: x.win_belief, voice: x.voice || 'future' });
+  const save = (x) => api.saveDay(day, { being: x.being, sub_beings: x.sub_beings, key_action: x.key_action, key_amount: x.key_amount, key_when: x.key_when, steps: x.steps.some((st) => filled(st.text)) ? x.steps : [], being_sign: x.being_sign, why_today: x.why_today, where_needed: x.where_needed, may_derail: x.may_derail, recover: x.recover, win_belief: x.win_belief, close_plan: x.close_plan, voice: x.voice || 'future' });
   const wire = () => {
     const flushNow = bindForm(m, save);
     const beingInput = $('[data-k="being"]');
@@ -450,6 +452,7 @@ function renderOpen(day, isToday = false) {
       if (!filled(m.being)) miss.push('being');
       if (m.sub_beings.filter(filled).length < 4) miss.push('sub');
       if (!filled(m.why_today)) miss.push('why'); // חובה, שורה אחת (שושי 18.11)
+      if (!filled(m.being_sign)) miss.push('sign'); // הסימן חובה (שושי 18.11)
       if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
       const first = !D.days[day].opened_at;
       api.saveDay(day, { opened_at: D.days[day].opened_at || new Date().toISOString() });
@@ -742,6 +745,30 @@ function stats() {
   const odd = closes.filter((c) => c.late || (fillAvg != null && c.min != null && fills.length >= 3 && c.min > Math.max(fillAvg * 2, fillAvg + 15)));
   return { ws, wk, both, openOnly, keyDone, keyTotal, depth, observations, openAvg, closeAvg, streak, recent, closes, fillAvg, odd };
 }
+// עמידה במילה (שושי 18.11): לכל יום ולכל סעיף ציון 0-100, ואחוז = ממוצע. אותו חישוב כמו word_scores בשרת
+const WORD_KEYS = ['being', 'subs', 'sign', 'open', 'close', 'key', 'steps'];
+const tmin = (s) => { const m = String(s || '').match(/^(\d{1,2}):(\d{2})$/); return m ? +m[1] * 60 + +m[2] : null; };
+function wordDay(k, d) {
+  const t = today(); const r = {};
+  if (!d || !d.opened_at) return r;
+  if (d.closed_at && d.presence != null) r.being = d.presence * 20;
+  const sp = (d.sub_presence || []).filter((v) => v != null); if (d.closed_at && sp.length) r.subs = sp.reduce((a, b) => a + b, 0) / sp.length * 20;
+  if (d.sign_status) r.sign = d.sign_status === 'done' ? 100 : 0;
+  if (d.key_status) r.key = { done: 100, partial: 50, no: 0 }[d.key_status];
+  const st = (d.steps || []).filter((x) => x && x.status); if (st.length) r.steps = st.reduce((a, x) => a + ({ done: 100, partial: 50, no: 0 }[x.status] ?? 0), 0) / st.length;
+  const cp = tmin(normTime(d.close_plan));
+  if (cp != null) { if (d.closed_at && iso(new Date(d.closed_at)) === k) r.close = minutesOf(d.closed_at) <= cp + 30 ? 100 : 0; else if (d.closed_at || k < t) r.close = 0; }
+  const op = tmin(normTime((D.days[addDays(k, -1)] || {}).open_tomorrow));
+  if (op != null) r.open = iso(new Date(d.opened_at)) === k && minutesOf(d.opened_at) <= op + 30 ? 100 : 0;
+  return r;
+}
+function wordScores(from, to) {
+  const pool = {}; WORD_KEYS.forEach((x) => { pool[x] = []; });
+  Object.keys(D.days).filter((k) => k >= from && k <= to).forEach((k) => { const r = wordDay(k, D.days[k]); Object.entries(r).forEach(([x, v]) => pool[x].push(v)); });
+  const avg = (a) => (a.length ? Math.round(a.reduce((p, q) => p + q, 0) / a.length) : null);
+  const out = { all: avg(Object.values(pool).flat()) }; WORD_KEYS.forEach((x) => { out[x] = avg(pool[x]); });
+  return out;
+}
 function dataInsight(s) {
   const days = Object.entries(D.days).filter(([, d]) => d.opened_at && d.key_status).slice(-28);
   if (days.length >= 4) {
@@ -779,6 +806,10 @@ function renderProgress() {
       ${card(`<p class="mini">${s.observations}</p><span class="lbl">${T.observationsLbl}</span>`)}
       ${card(`<p class="mini">${s.openAvg != null ? fmtMin(s.openAvg) : '-'}</p><span class="lbl">${T.avgOpenLbl(s.closeAvg != null ? fmtMin(s.closeAvg) : '')}</span>`)}
     </div>
+    ${(() => { const w = wordScores(s.ws, t); const a = wordScores('0000', t); return a.all == null ? '' : card(`<div class="ct">${T.wordTitle} ${helpBtn('word')}</div>
+      <p class="kpi">${w.all != null ? w.all + '%' : '-'} <small>${T.wordWeek}</small></p><p class="hint">${T.wordAll(a.all)}</p>
+      <table class="wtbl"><thead><tr><th></th><th>${T.wordColWeek}</th><th>${T.wordColAll}</th></tr></thead><tbody>
+      ${WORD_KEYS.filter((x) => a[x] != null).map((x) => `<tr><td>${T.wordItems[x]}</td><td>${w[x] != null ? w[x] + '%' : '-'}</td><td>${a[x]}%</td></tr>`).join('')}</tbody></table>`); })()}
     ${card(`<div class="ct">${T.dataShows}</div><p class="ins">${esc(ins || T.noDataYet)}</p>`)}
     ${s.closes.length ? card(`<div class="ct">${T.closeTimeTitle}</div>
       <p class="it">${s.fillAvg != null ? esc(T.closeTimeAvg(s.fillAvg)) : ''}</p>
@@ -790,12 +821,22 @@ function renderProgress() {
 }
 
 // ===== אוסף =====
+// מה עזר לי לחזור להוויה: מה שתכננה בבוקר (recover) ומה שעזר בפועל בערב (back_help). שושי 18.11
+const helpsEntries = (before = '9999') => Object.keys(D.days).filter((k) => k < before).sort().reverse()
+  .map((k) => ({ k, d: D.days[k] })).filter((x) => filled(x.d.recover) || filled(x.d.back_help));
+function helpsBank(day) {
+  const list = helpsEntries(day);
+  const lines = [...new Set(list.flatMap((x) => [x.d.back_help, x.d.recover]).filter(filled).map((s) => s.trim()))];
+  return `<details class="qs"><summary>${esc(T.helpsBankTitle(lines.length))}</summary>
+    ${lines.length ? `<ul>${lines.slice(0, 8).map((s) => `<li>${esc(s)}</li>`).join('')}</ul><a class="lnk" href="#/collection/helps">${T.helpsBankAll}</a>` : `<p class="hint">${T.helpsBankEmpty}</p>`}</details>`;
+}
 function collectionItems() {
   const items = [];
   Object.entries(D.days).forEach(([k, d]) => {
     if (filled(d.insight)) items.push({ kind: d.sticker ? 'sticker' : 'insight', also: d.sticker ? 'insight' : null, text: d.insight, when: shortDate(k), sort: k, link: d.sticker ? '#/sticker/' + k : null });
     if (filled(d.win_belief)) items.push({ kind: 'belief', text: d.win_belief, when: shortDate(k), sort: k });
     if (filled(d.out_situation) || filled(d.out_inner) || filled(d.out_thought) || filled(d.back_help)) items.push({ kind: 'bank', parts: [d.out_situation, d.out_inner, d.out_thought, d.back_help], text: [d.out_situation, d.out_inner, d.out_thought, d.back_help].filter(Boolean).join(' '), when: shortDate(k), sort: k + 'b' });
+    if (filled(d.recover) || filled(d.back_help)) items.push({ kind: 'helps', parts: [d.recover, d.back_help], labels: T.helpsLabels, text: [d.recover, d.back_help].filter(Boolean).join(' '), when: shortDate(k), sort: k + 'c' });
   });
   Object.entries(D.weeks).forEach(([k, w]) => {
     if (filled(w.hands) && w.closed_at) items.push({ kind: 'debrief', text: w.hands, when: T.weekNum(weekNumber(k)), sort: k + 'z' });
@@ -809,7 +850,7 @@ const COLL_ICON = { insight: 'reflect', belief: 'future', debrief: 'debrief' };
 const collCard = (x) => `<article class="ccard k-${x.kind}">
   <div class="ccard-top">${COLL_ICON[x.kind] ? `<img class="ccard-ico" src="img/icons/${COLL_ICON[x.kind]}.png" width="44" height="44" alt="" aria-hidden="true">` : ''}
     <span class="ccard-kind">${T.collectionKinds[x.kind]}</span><span class="ccard-when">${esc(x.when)}</span></div>
-  ${x.parts ? `<dl class="ccard-bank">${x.parts.map((p, i) => filled(p) ? `<dt>${esc(T.bankLabels[i])}</dt><dd>${esc(p)}</dd>` : '').join('')}</dl>` : `<p class="ccard-tx">${esc(x.text)}</p>`}
+  ${x.parts ? `<dl class="ccard-bank">${x.parts.map((p, i) => filled(p) ? `<dt>${esc((x.labels || T.bankLabels)[i])}</dt><dd>${esc(p)}</dd>` : '').join('')}</dl>` : `<p class="ccard-tx">${esc(x.text)}</p>`}
   ${x.link ? `<a class="lnk" href="${x.link}">${T.openSticker}</a>` : ''}
 </article>`;
 function renderCollection(filter = 'all', query = '') {

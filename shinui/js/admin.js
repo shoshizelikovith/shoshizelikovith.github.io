@@ -30,12 +30,20 @@ export async function renderAdmin({ root, api, esc, shell, toast }) {
 
   let filter = 'all';
   const dots = (r) => `<span class="wd" role="img" aria-label="${both(r)} ימים פתחה וסגרה">${[0, 1, 2, 3, 4, 5, 6].map((i) => `<i class="${r.week_open?.[i] && r.week_close?.[i] ? 'f' : r.week_open?.[i] ? 'h' : ''}"></i>`).join('')}</span>`;
+  // עמידה במילה (שושי 18.11)
+  const WI = { being: 'ההוויה', subs: 'הוויות המשנה', sign: 'הסימן', open: 'שעת פתיחה', close: 'שעת סגירה', key: 'פעולת המפתח', steps: 'המעשים הקטנים' };
+  const pc = (v) => (v != null ? v + '%' : '-');
+  const gavg = (k, f) => { const v = rows.map((r) => (r[f] || {})[k]).filter((x) => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
+  const wordAll = () => { const ks = ['all', ...Object.keys(WI)]; const has = ks.some((k) => gavg(k, 'word_all') != null); if (!has) return '';
+    return `<section class="card"><div class="ct">עמידה במילה, כולן יחד</div><div class="scrollx"><table class="tbl"><thead><tr><th></th><th>השבוע</th><th>מההתחלה</th></tr></thead><tbody>
+      <tr><td><b>הכל ביחד</b></td><td><b>${pc(gavg('all', 'word_week'))}</b></td><td><b>${pc(gavg('all', 'word_all'))}</b></td></tr>
+      ${Object.entries(WI).filter(([k]) => gavg(k, 'word_all') != null).map(([k, v]) => `<tr><td>${v}</td><td>${pc(gavg(k, 'word_week'))}</td><td>${pc(gavg(k, 'word_all'))}</td></tr>`).join('')}</tbody></table></div></section>`; };
   const table = () => {
     const list = filter === 'touch' ? needTouch : filter === 'nobase' ? rows.filter(noBase) : rows;
     if (!list.length) return `<p class="hint">אין כאן אף אחת כרגע.</p>`;
-    return `<div class="scrollx"><table class="tbl"><thead><tr><th>שם</th><th>השבוע</th><th>פעולות מפתח</th><th>עומק</th><th>סגירה</th><th>הישג מפתח</th><th>בסיס</th><th>יומן</th><th>סוג</th></tr></thead><tbody>
+    return `<div class="scrollx"><table class="tbl"><thead><tr><th>שם</th><th>השבוע</th><th>פעולות מפתח</th><th>במילה</th><th>עומק</th><th>סגירה</th><th>הישג מפתח</th><th>בסיס</th><th>יומן</th><th>סוג</th></tr></thead><tbody>
       ${list.map((r) => `<tr class="click" data-id="${esc(r.id)}" tabindex="0"><td>${esc(r.full_name || r.email)}</td><td>${dots(r)}</td>
-        <td>${r.key_total ? `${r.key_done}/${r.key_total}` : '-'}</td><td>${r.depth != null ? r.depth + '%' : '-'}</td>
+        <td>${r.key_total ? `${r.key_done}/${r.key_total}` : '-'}</td><td>${pc((r.word_week || {}).all)}${(r.word_all || {}).all != null ? ` <span class="hint" style="margin:0">(${r.word_all.all}%)</span>` : ''}</td><td>${r.depth != null ? r.depth + '%' : '-'}</td>
         <td>${r.close_fill_min != null ? r.close_fill_min + ' דק׳' : '-'}${r.late_close ? ` <span class="pill w">${r.late_close === 1 ? 'פעם אחת למחרת' : r.late_close + ' פעמים למחרת'}</span>` : ''}</td>
         <td>${r.achievement ? esc(r.achievement.length > 34 ? r.achievement.slice(0, 34) + '…' : r.achievement) : '<span class="pill w">חסר הישג</span>'}</td>
         <td>${r.foundation_parts === 4 ? 'מלא' : `${r.foundation_parts || 0} מתוך 4`}</td>
@@ -52,6 +60,7 @@ export async function renderAdmin({ root, api, esc, shell, toast }) {
         <section class="card"><p class="mini">${rows.filter(silent).length}</p><span class="lbl">לא פתחו 4 ימים ומעלה</span></section>
         <section class="card"><p class="mini">${rows.filter(noBase).length}</p><span class="lbl">בלי הישג ותוכנית</span></section>
       </div>
+      ${wordAll()}
       <div>
         <section class="card">
           <div class="filters chips" id="flt">
@@ -115,6 +124,9 @@ export async function renderAdmin({ root, api, esc, shell, toast }) {
     m.querySelector('.sheet').innerHTML = `<button class="close" aria-label="סגירה">×</button><h2 style="font-size:24px">${esc(r.full_name || r.email)}</h2>
       <p class="hint">${esc(r.email || '')}</p>
       <section class="card"><div class="ct">הישג מפתח</div><p class="it">${esc(f.achievement || 'חסר')}${f.achievement_date ? ` · עד ${esc(f.achievement_date)}` : ''}</p></section>
+      ${(r.word_all || {}).all != null ? `<section class="card"><div class="ct">עמידה במילה</div><table class="tbl"><thead><tr><th></th><th>השבוע</th><th>מההתחלה</th></tr></thead><tbody>
+        <tr><td><b>הכל ביחד</b></td><td><b>${pc((r.word_week || {}).all)}</b></td><td><b>${pc(r.word_all.all)}</b></td></tr>
+        ${Object.entries(WI).filter(([k]) => r.word_all[k] != null).map(([k, v]) => `<tr><td>${v}</td><td>${pc((r.word_week || {})[k])}</td><td>${pc(r.word_all[k])}</td></tr>`).join('')}</tbody></table></section>` : ''}
       <section class="card"><div class="ct">תוכנית פעולה</div>
         ${[...(f.plan_habits || []), ...(f.plan_once || []), ...(f.plan_support || [])].filter((h) => h && h.text).map((h) => `<p class="it">${esc(line(h))}</p>`).join('') || '<p class="hint">חסרה</p>'}</section>
       <section class="card"><div class="ct">סטטוס</div>
@@ -131,10 +143,10 @@ export async function renderAdmin({ root, api, esc, shell, toast }) {
 }
 
 function exportCsv(rows) {
-  const head = ['שם', 'מייל', 'סוג', 'מצטרפת', 'סוף התנסות', 'ימים שפתחה השבוע', 'ימים שסגרה השבוע', 'ימים מאז פתיחה אחרונה', 'פעולות מפתח שבוצעו', 'עומק %', 'הישג מפתח', 'חלקי בסיס מתוך 4', 'יומן משותף'];
+  const head = ['שם', 'מייל', 'סוג', 'מצטרפת', 'סוף התנסות', 'ימים שפתחה השבוע', 'ימים שסגרה השבוע', 'ימים מאז פתיחה אחרונה', 'פעולות מפתח שבוצעו', 'עמידה במילה השבוע %', 'עמידה במילה מההתחלה %', 'עומק %', 'הישג מפתח', 'חלקי בסיס מתוך 4', 'יומן משותף'];
   const q = (v) => { let s = String(v ?? ''); if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; return `"${s.replace(/"/g, '""')}"`; };
   const lines = rows.map((r) => [r.full_name, r.email, r.kind, r.member ? 'כן' : 'לא', r.trial_end, (r.week_open || []).filter(Boolean).length, (r.week_close || []).filter(Boolean).length,
-    r.days_since_open, r.key_total ? `${r.key_done}/${r.key_total}` : '', r.depth, r.achievement, r.foundation_parts, r.share_journal ? 'כן' : 'לא'].map(q).join(','));
+    r.days_since_open, r.key_total ? `${r.key_done}/${r.key_total}` : '', (r.word_week || {}).all, (r.word_all || {}).all, r.depth, r.achievement, r.foundation_parts, r.share_journal ? 'כן' : 'לא'].map(q).join(','));
   const blob = new Blob(['﻿' + [head.map(q).join(','), ...lines].join('\n')], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `בוגרות-${new Date().toISOString().slice(0, 10)}.csv`;
   document.body.appendChild(a); a.click(); a.remove();
