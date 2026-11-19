@@ -1,8 +1,8 @@
 // פורטל השיעורים של אשה רוצה עושה. שני מסכים: כל השיעורים (#/) ושיעור (#/l/9).
-import { PCONFIG } from './config.js?v=0c08000bd4';
-import { T } from './content.js?v=0c08000bd4';
-import { LESSONS, STAGES, stageOf, lesson } from './lessons.js?v=0c08000bd4';
-import { store } from './store.js?v=0c08000bd4';
+import { PCONFIG } from './config.js?v=d150d73b89';
+import { T } from './content.js?v=d150d73b89';
+import { LESSONS, STAGES, stageOf, lesson } from './lessons.js?v=d150d73b89';
+import { store } from './store.js?v=d150d73b89';
 
 const root = document.getElementById('portal');
 const qs = new URLSearchParams(location.search);
@@ -79,11 +79,11 @@ function viewList() {
 
 // שני מקורות לאותו סרטון: וימאו (ברירת מחדל, עם נתוני צפייה ופרקים), ודרייב למי שוימאו חסום אצלה (שושי, 18.11)
 const vimeoSrc = (v) => `https://player.vimeo.com/video/${v}${v.includes('?') ? '&' : '?'}dnt=1&title=0&byline=0&portrait=0`;
-const driveView = (id) => `https://drive.google.com/file/d/${id}/view`;
+const driveView = (id, t) => `https://drive.google.com/file/d/${id}/view${t ? `?t=${t}` : ''}`;
 let mode = 'vimeo';
-function player(l) {
+function player(l, at) {
   if (PCONFIG.SHOW_MEDIA && mode === 'drive' && l.drive) {
-    return `<div class="player"><iframe id="dp" src="${esc(`https://drive.google.com/file/d/${l.drive}/preview`)}" allow="autoplay; fullscreen" allowfullscreen title="${esc(l.title)}"></iframe></div>`;
+    return `<div class="player"><iframe id="dp" src="${esc(`https://drive.google.com/file/d/${l.drive}/preview${at ? `?t=${at}` : ''}`)}" allow="autoplay; fullscreen" allowfullscreen title="${esc(l.title)}"></iframe></div>`;
   }
   if (PCONFIG.SHOW_MEDIA && l.vimeo) {
     return `<div class="player"><iframe id="vp" src="${esc(vimeoSrc(l.vimeo))}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(l.title)}"></iframe></div>`;
@@ -91,11 +91,11 @@ function player(l) {
   return `<div class="player ph"><span class="ph-in">${IC.play}<span>${esc(T.videoSoon)}</span></span></div>`;
 }
 
-function altRow(l) {
+function altRow(l, at) {
   if (!PCONFIG.SHOW_MEDIA || !l.drive) return '';
   return `<div class="alt">
     <button class="alt-sw" type="button" data-mode>${esc(mode === 'drive' ? T.backToVimeo : T.viaDrive)}</button>
-    <a class="alt-dl" data-kind="drive" href="${esc(driveView(l.drive))}" target="_blank" rel="noopener">${esc(T.driveDownload)}</a>
+    <a class="alt-dl" data-kind="drive" href="${esc(driveView(l.drive, mode === 'drive' ? at : 0))}" target="_blank" rel="noopener">${esc(T.driveDownload)}</a>
   </div>${mode === 'drive' ? `<p class="alt-note">${esc(T.driveNote)}</p>` : ''}`;
 }
 
@@ -185,10 +185,10 @@ function viewLesson(n) {
 function bindMedia(l) {
   const sc = root.querySelector('.screen-in');
   const redraw = (at) => {
-    $('#pl').innerHTML = player(l);
+    $('#pl').innerHTML = player(l, at);
     const a = sc.querySelector(':scope > .alt'); const note = sc.querySelector(':scope > .alt-note');
     if (note) note.remove();
-    if (a) a.outerHTML = altRow(l);
+    if (a) a.outerHTML = altRow(l, at);
     sc.querySelector(':scope > .alt [data-mode]')?.addEventListener('click', toggle);
     watchVimeo(l.n, at);
   };
@@ -200,7 +200,8 @@ function bindMedia(l) {
     const t = +b.dataset.t;
     store.click(l.n, 'chapter');
     if (box.dataset.part) { seek(document.getElementById('vp2'), t); document.getElementById('vp2').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
-    if (mode === 'drive') { mode = 'vimeo'; redraw(t); } else seek(document.getElementById('vp'), t);
+    // בדרייב: הנגן נטען מחדש מהרגע של הפרק, וגם ״לפתוח בדרייב״ נפתח משם (שושי, 19.11)
+    if (mode === 'drive') redraw(t); else seek(document.getElementById('vp'), t);
     $('#pl').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }));
 }
