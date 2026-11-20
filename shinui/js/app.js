@@ -1,7 +1,23 @@
 // לשחק את השינוי - האפליקציה. ניתוב לפי # בכתובת, מסך אחד בכל פעם.
 import { api } from './api.js';
 import { T } from './content.js';
+import { TM } from './content-m.js';
 import { CONFIG } from './config.js';
+
+// לשון פנייה (שושי 20.11): ברירת המחדל נקבה. מי שבחר בהגדרות ״בלשון זכר״ מקבל את TM מעל T, רק אצלו.
+// content-m.js מחזיק רק את המפתחות ששונים בזכר. כל שינוי טקסט ב-content.js צריך גם גרסת זכר שם.
+const TF = { ...T };
+let curG = 'f';
+function applyGender(g) {
+  g = g === 'm' ? 'm' : 'f';
+  if (g === curG) return;
+  for (const k of Object.keys(T)) if (!(k in TF)) delete T[k];
+  for (const k of Object.keys(TF)) T[k] = TF[k];
+  if (g === 'm') Object.assign(T, TM);
+  curG = g;
+  try { localStorage.setItem('ls-g', g); } catch {}
+}
+try { applyGender(localStorage.getItem('ls-g')); } catch {}
 import { morningNote, sticker, wallpaper, quoteCard, giftNote, saveCanvas } from './img.js';
 import { renderAdmin } from './admin.js';
 
@@ -185,6 +201,7 @@ async function render() {
     root.innerHTML = `<main class="app"><div class="top">${logoImg()}</div></main>`;
     try { D = await api.load(); } catch (e) { root.innerHTML = `<main class="app"><p class="err">${esc(e.message)}</p><button class="btn" onclick="location.reload()">לנסות שוב</button></main>`; return; }
   }
+  applyGender(P().gender);
   // קישור משיעור: ?level=being או ?level=full
   const qLevel = new URLSearchParams(location.search).get('level');
   if ((qLevel === 'being' || qLevel === 'full') && P().level !== qLevel) api.saveProfile({ level: qLevel });
@@ -381,7 +398,7 @@ function renderToday() {
 
 // ===== פתיחת יום =====
 // כפתורי הוויות: כל הרשימה מהיומן, ובסוף הוויות שהיא כתבה בעצמה
-const allBeings = () => [...new Set([...T.beingsAll, ...((D.settings || {}).shared_beings || []), ...(P().beings || [])].filter(Boolean))].sort((a, b) => a.localeCompare(b, 'he')); // לפי א-ב (שושי 15.11, תוקן 17.11). כולל כל הוויה ששושי הוסיפה (settings.shared_beings, 16.11)
+const allBeings = () => [...new Set([...T.beingsAll, ...((D.settings || {}).shared_beings || []).map((b) => (T.beingsMasc || {})[b] || b), ...(P().beings || [])].filter(Boolean))].sort((a, b) => a.localeCompare(b, 'he')); // לפי א-ב (שושי 15.11, תוקן 17.11). כולל כל הוויה ששושי הוסיפה (settings.shared_beings, 16.11)
 const beingChips = (id, isOn) => `<div class="chips bgrid" id="${id}">${allBeings().map((b) => `<button type="button" aria-pressed="${isOn(b)}" class="${isOn(b) ? 'on' : ''}" data-b="${esc(b)}">${esc(b)}</button>`).join('')}</div>`;
 function renderOpen(day, isToday = false) {
   const prev = Object.keys(D.days).filter((k) => k < day && D.days[k].being).sort().pop();
@@ -982,6 +999,7 @@ function renderSettings() {
     ${card(`<label class="q" for="nm">${T.myName}</label><input id="nm" type="text" value="${esc(p.full_name)}">`)}
     ${card(`<div class="ct">${p.share_journal ? T.shareStatusOn : T.shareStatusOff}</div><button class="btn2" id="sh">${p.share_journal ? T.shareToggleOn : T.shareToggleOff}</button>`)}
     ${card(`<div class="ct">${T.levelSettingsTitle}</div>${seg('level', levelOf(), [['being', T.levelBeing], ['full', T.levelFull]])}<p class="hint" id="lvh">${levelOf() === 'full' ? T.levelFullSub : T.levelBeingSub}</p><p class="hint">${T.levelSettingsHint}</p>`)}
+    ${card(`<div class="ct">${T.genderTitle}</div>${seg('gender', p.gender === 'm' ? 'm' : 'f', [['f', T.genderF], ['m', T.genderM]])}`)}
     ${card(`<div class="ct">${T.pinTitle} ${tag(0)}</div><p class="hint">${p.pin_hash ? T.pinOnHint : T.pinOffHint}</p>
       <div class="btnrow"><a class="btn2" href="#/settings/pin">${p.pin_hash ? T.pinChange : T.pinSet}</a>${p.pin_hash ? `<button class="btn2" id="pinoff">${T.pinRemove}</button>` : ''}</div>`)}
     ${card(`<div class="ct">${T.installTitle}</div><p class="hint">${T.installIos}</p><p class="hint">${T.installAndroid}</p>`)}
@@ -990,7 +1008,8 @@ function renderSettings() {
     <p class="hint" style="text-align:center">${esc(p.email || '')}</p>`, '');
   let t; $('#nm').addEventListener('input', (e) => { clearTimeout(t); t = setTimeout(() => api.saveProfile({ full_name: e.target.value.trim() }), 700); });
   $('#sh').addEventListener('click', () => { api.saveProfile({ share_journal: !p.share_journal }); toast(T.saved); renderSettings(); });
-  const lv = { level: levelOf() }; bindForm(lv, () => {});
+  const lv = { level: levelOf(), gender: p.gender === 'm' ? 'm' : 'f' }; bindForm(lv, () => {});
+  $('[data-seg="gender"]').addEventListener('pick', (e) => { api.saveProfile({ gender: e.detail }); applyGender(e.detail); renderSettings(); toast(T.saved); });
   $('[data-seg="level"]').addEventListener('pick', (e) => { api.saveProfile({ level: e.detail }); $('#lvh').textContent = e.detail === 'full' ? T.levelFullSub : T.levelBeingSub; toast(T.saved); });
   $('#pinoff')?.addEventListener('click', () => { if (!confirm(T.pinRemoveQ)) return; api.saveProfile({ pin_hash: null }); toast(T.pinRemoved); renderSettings(); });
   $('#out').addEventListener('click', async () => { await api.logout(); setUnlocked(false); D = null; go('#/'); });

@@ -337,6 +337,9 @@ export const T = {
 
   // הגדרות
   settingsTitle: 'הגדרות',
+  genderTitle: 'איך לפנות אלייך?',
+  genderF: 'בלשון נקבה',
+  genderM: 'בלשון זכר',
   shareStatusOn: 'היומן שלך משותף עם שושי',
   shareStatusOff: 'היומן שלך פרטי. שושי רואה רק מספרים ואת הבסיס שלך.',
   shareToggleOn: 'להפסיק לשתף',
