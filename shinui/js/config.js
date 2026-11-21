@@ -10,7 +10,9 @@ export const CONFIG = {
   RECORDINGS_LINK: '',    // תיקיית ההקלטות
   TERMS_LINK: '',
   OFFER_DEADLINE: '2026-11-27',  // המחיר המיוחד עד שישי 27.11 בשעה 12:00 (שושי 12.11)
-  OFFER_LINK: { graduate: 'https://shoshizelikovith.com/moadon/', club: 'https://shoshizelikovith.com/moadon/haverot/', other: 'https://shoshizelikovith.com/moadon/' },  // דפי ההצעה (צ׳אט ההשקה 12.11). כפתורי קארדקום בתוך הדפים
+  OFFER_LINK: { graduate: 'https://shoshizelikovith.com/moadon/#offer', club: 'https://shoshizelikovith.com/moadon/haverot/#offer', other: 'https://shoshizelikovith.com/moadon/#offer' },  // 21.11: ישר לאזור ההצטרפות בדף
+  // הדפים כקובץ, למי שהדף לא נפתח לה (שושי 21.11). נוצרו מהדפים החיים ב-21.11 - לעדכן אם הדף משתנה
+  OFFER_PDF: { graduate: 'pdf/offer-graduates.pdf', club: 'pdf/offer-club.pdf', other: 'pdf/offer-graduates.pdf' },  // דפי ההצעה (צ׳אט ההשקה 12.11). כפתורי קארדקום בתוך הדפים
 
   // לוגו על פתק הבוקר והסטיקר. כשהלוגו של ״לשחק את השינוי״ יאושר, מחליפים כאן את שני הקבצים
   NOTE_LOGO: 'img/aro-wide.png',

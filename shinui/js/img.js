@@ -233,6 +233,61 @@ export async function giftNote(blocksIn, { label = 'מתנות מההתבוננ�
 }
 export const sticker = (insight, o = {}) => quoteCard(insight, { kind: 'insight', label: 'תובנת ההתבוננות שלי', ...o });
 
+// סיכום שבוע ההתנסות כעמודי A4 (1240x1754), מצויר בקוד כמו הפתקים, כי עברית בהמרת HTML מאבדת רווחים (שושי 21.11)
+// sections: [{ head, rows: [[label, value], ...] }]. מחזיר מערך של canvas, עמוד לכל אחד
+export async function journalPages({ title = '', sub = '', sections = [], footer = '' } = {}) {
+  await ready();
+  const art = await loadImg(CONFIG.NOTE_ART || 'img/note/art-book.png');
+  const W = 1240, H = 1754, M = 90, PAD = 44, CW = W - 2 * M, TW = CW - 2 * PAD, BOTTOM = H - 130;
+  const meas = document.createElement('canvas').getContext('2d');
+  const ops = []; const cards = []; let page = 0; let y = 0;
+  const newPage = () => { page++; y = M + 40; };
+  // עמוד ראשון: כותרת
+  page = 1; y = M;
+  ops.push({ page, t: 'head' });
+  y = M + 330;
+  const push = (h, op) => { ops.push({ page, y, ...op }); y += h; };
+  for (const sec of sections) {
+    const items = [];
+    meas.font = F(800, 44); items.push({ h: 70, op: { t: 'txt', s: sec.head, f: F(800, 44), c: C.plum } });
+    for (const [label, value] of sec.rows) {
+      meas.font = F(400, 34); const lines = wrapKeep(meas, value, TW);
+      items.push({ h: 46, op: { t: 'txt', s: label, f: F(700, 26), c: 'rgba(13,18,44,.55)' }, keep: true });
+      lines.forEach((ln, i) => items.push({ h: i === lines.length - 1 ? 64 : 50, op: { t: 'txt', s: ln, f: F(400, 34), c: C.navy } }));
+    }
+    // כרטיס שלא נכנס כולו ומתחיל בתחתית: עובר לעמוד חדש
+    const total = items.reduce((a, b) => a + b.h, 0) + 2 * PAD;
+    if (y + Math.min(total, 400) > BOTTOM) newPage();
+    let cardTop = y; y += PAD;
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i]; const nextH = it.keep && items[i + 1] ? items[i + 1].h : 0;
+      if (y + it.h + nextH > BOTTOM) { cards.push({ page, y0: cardTop, y1: y + PAD / 2 }); newPage(); cardTop = y; y += PAD; }
+      push(it.h, it.op);
+    }
+    y += PAD - 14; cards.push({ page, y0: cardTop, y1: y }); y += 28;
+  }
+  const pages = [];
+  for (let pg = 1; pg <= page; pg++) {
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const ctx = cv.getContext('2d');
+    ctx.fillStyle = C.cream; ctx.fillRect(0, 0, W, H);
+    ctx.direction = 'rtl'; ctx.textAlign = 'right'; ctx.textBaseline = 'alphabetic';
+    for (const c of cards.filter((x) => x.page === pg)) { ctx.fillStyle = '#fff'; round(ctx, M, c.y0, CW, c.y1 - c.y0, 28); ctx.fill(); }
+    for (const o of ops.filter((x) => x.page === pg)) {
+      if (o.t === 'head') {
+        if (logo) { const lw = 380, lh = lw * logo.height / logo.width; ctx.drawImage(logo, W - M - lw, M + 10, lw, lh); }
+        if (art) { const aw = 210, ah = aw * art.height / art.width; ctx.drawImage(art, M, M - 10, aw, ah); }
+        text(ctx, title, W - M, M + 220, F(800, 66), C.plum);
+        text(ctx, sub, W - M, M + 278, F(400, 32), 'rgba(13,18,44,.6)');
+      } else text(ctx, o.s, W - M - PAD, o.y + 38, o.f, o.c);
+    }
+    // נקודות המותג ושורת סיום
+    ctx.textAlign = 'center'; text(ctx, `${footer}${page > 1 ? ' · ' + pg + '/' + page : ''}`, W / 2, H - 60, F(600, 24), 'rgba(13,18,44,.5)');
+    [C.mag, C.plum, C.orange].forEach((col, i) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(W / 2 - 24 + i * 24, H - 100, 6, 0, Math.PI * 2); ctx.fill(); });
+    pages.push(cv);
+  }
+  return pages;
+}
+
 // שמירה או שיתוף
 export async function saveCanvas(cv, filename, share = false) {
   const blob = await new Promise((r) => cv.toBlob(r, 'image/png'));

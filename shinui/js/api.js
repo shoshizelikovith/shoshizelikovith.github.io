@@ -102,7 +102,7 @@ if (typeof window !== 'undefined') {
 // ===== מטמון מקומי =====
 let cache = LS.get(K.cache, null);
 const saveCache = () => LS.set(K.cache, cache);
-const emptyData = () => ({ profile: null, foundation: {}, days: {}, weeks: {}, settings: {} });
+const emptyData = () => ({ profile: null, foundation: {}, days: {}, weeks: {}, settings: {}, wfb: [] });
 
 const stripKeys = (o) => { const r = { ...o }; delete r.user_id; delete r.updated_at; return r; };
 
@@ -175,12 +175,13 @@ export const api = {
     const uid = session.user.id;
     try {
       await ensureFresh();
-      const [pr, fo, ds, ws, st] = await Promise.all([
+      const [pr, fo, ds, ws, st, fb] = await Promise.all([
         http(`/rest/v1/profiles?id=eq.${uid}&select=*`),
         http(`/rest/v1/foundation?user_id=eq.${uid}&select=*`),
         http(`/rest/v1/days?user_id=eq.${uid}&select=*&order=day.desc&limit=400`),
         http(`/rest/v1/weeks?user_id=eq.${uid}&select=*&order=week_start.desc&limit=60`),
         http(`/rest/v1/settings?select=*`),
+        http(`/rest/v1/weekly_feedback?user_id=eq.${uid}&select=*&order=week_start.desc&limit=20`).catch(() => []), // משוב שבועי (20.11)
       ]);
       const fresh = emptyData();
       fresh.profile = pr[0] || null;
@@ -188,6 +189,7 @@ export const api = {
       ds.forEach((d) => { fresh.days[d.day] = stripKeys(d); });
       ws.forEach((w) => { fresh.weeks[w.week_start] = stripKeys(w); });
       fresh.settings = st[0] || {};
+      fresh.wfb = fb || [];
       // מה שעוד מחכה בתור גובר על מה שבשרת
       queue.forEach((q) => {
         if (q.table === 'days') fresh.days[q.row.day] = { ...(fresh.days[q.row.day] || {}), ...q.row };
@@ -222,6 +224,17 @@ export const api = {
   saveWeek(ws, obj) {
     cache.weeks[ws] = { ...(cache.weeks[ws] || {}), ...obj, week_start: ws }; saveCache();
     if (LIVE) enqueue({ key: 'week:' + ws, kind: 'upsert', table: 'weeks', conflict: 'user_id,week_start', row: { ...(queue.find((q) => q.key === 'week:' + ws) || {}).row, ...obj, week_start: ws, user_id: session.user.id } });
+  },
+  // משוב שבועי (20.11): מסמנים שנקרא
+  seenWeeklyFb(ws) {
+    const f = (cache.wfb || []).find((x) => x.week_start === ws); if (!f || f.seen_at) return;
+    f.seen_at = new Date().toISOString(); saveCache();
+    if (LIVE) http(`/rest/v1/weekly_feedback?user_id=eq.${session.user.id}&week_start=eq.${ws}`, { method: 'PATCH', body: { seen_at: f.seen_at }, prefer: 'return=minimal' }).catch(() => {});
+  },
+  shareWeeklyFb(ws) {
+    const f = (cache.wfb || []).find((x) => x.week_start === ws); if (!f) return;
+    f.shared = true; saveCache();
+    if (LIVE) http(`/rest/v1/weekly_feedback?user_id=eq.${session.user.id}&week_start=eq.${ws}`, { method: 'PATCH', body: { shared: true }, prefer: 'return=minimal' }).catch(() => {});
   },
   feedbackState() { return LS.get('ls.fb', null); },          // null | 'sent' | 'later:<תאריך>'
   setFeedbackState(v) { LS.set('ls.fb', v); },

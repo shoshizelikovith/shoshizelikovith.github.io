@@ -377,3 +377,28 @@ details.qs ul li{margin-bottom:6px}
 .deepbox .dhead{margin:18px 0 6px;color:var(--plum,#A62F7D)}
 .deepbox>summary>span{display:grid;grid-template-columns:34px 1fr;column-gap:10px;align-items:center}
 .deepbox .dsub{grid-column:2;margin:2px 0 0}
+
+/* משוב שבועי (20.11) */
+.fbbody { line-height: 1.7; }
+.fbbody h3 { font-size: 18px; margin: 16px 0 6px; color: var(--plum, #A62F7D); }
+.fbbody h3:first-child { margin-top: 0; }
+.fbbody p { margin: 0 0 10px; }
+.fbbody ul, .fbbody ol { margin: 0 0 10px; padding-inline-start: 22px; }
+.fbbody li { margin-bottom: 6px; }
+
+/* סיכום שבוע ההתנסות להורדה (21.11) */
+.journal { background: #F7F1E8; border-radius: 22px; padding: 22px 18px 18px; margin: 8px 0 16px; color: var(--ink, #0D122C); }
+.journal .jhd { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.journal .jhd img { height: auto; }
+.journal .jhd img:first-child { width: 150px; }
+.journal .jart { width: 96px; }
+.journal h1 { font-size: 28px; font-weight: 800; color: var(--plum, #A62F7D); margin: 14px 0 2px; }
+.journal .jsub { color: #6b6470; margin: 0 0 14px; font-size: 16px; }
+.journal .jsec { background: #fff; border-radius: 16px; padding: 14px 16px; margin: 0 0 12px; break-inside: avoid-page; }
+.journal .jsec h2 { font-size: 19px; font-weight: 800; margin: 0 0 8px; color: var(--plum, #A62F7D); }
+.journal .jrow { margin: 0 0 8px; break-inside: avoid; }
+.journal .jl { display: block; font-size: 13px; font-weight: 700; color: #8a7f8c; margin-bottom: 1px; }
+.journal .jrow p { margin: 0; line-height: 1.6; font-size: 16px; }
+.journal .jft { text-align: center; color: #8a7f8c; font-size: 13px; margin-top: 14px; }
+.journal.jprint { width: 720px; border-radius: 0; }
+.journal.jprint .jday { break-before: auto; }

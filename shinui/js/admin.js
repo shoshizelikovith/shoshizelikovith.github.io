@@ -3,7 +3,7 @@
 const KIND = { graduate: 'בוגרת', club: 'מועדון', other: 'אחר' };
 const DAYS = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
 
-export async function renderAdmin({ root, api, esc, shell, toast }) {
+export async function renderAdmin({ root, api, esc, shell, toast, mdLite }) {
   shell(`<div class="adm-h"><h1>הדשבורד שלך</h1></div><p class="hint">טוען...</p>`, '', { wide: true });
   let rows;
   try { rows = await api.admin.overview(null); } catch (e) {
@@ -133,6 +133,7 @@ export async function renderAdmin({ root, api, esc, shell, toast }) {
         <div class="seg" id="mk"><button type="button" class="${r.member ? 'on' : ''}" data-v="1">מצטרפת</button><button type="button" class="${!r.member ? 'on' : ''}" data-v="0">עוד לא</button></div>
         <div class="seg" id="kd">${Object.entries(KIND).map(([k, v]) => `<button type="button" class="${r.kind === k ? 'on' : ''}" data-v="${k}">${v}</button>`).join('')}</div>
         ${r.self_kind && r.self_kind !== r.kind ? `<p class="hint">היא סימנה בכניסה: ${KIND[r.self_kind]}</p>` : ''}</section>
+      ${(u.feedback || []).length ? `<h3 style="margin:16px 0 8px">המשוב השבועי שלה</h3>${u.feedback.map((x) => `<section class="card flat"><p class="hint">השבוע של ${esc(x.week_start)}${x.seen_at ? ' · קראה' : ' · עוד לא קראה'}</p><div class="fbbody">${mdLite ? mdLite(x.body) : esc(x.body)}</div></section>`).join('')}` : ''}
       <h3 style="margin:16px 0 8px">היומן</h3>${journal}`;
     m.querySelector('#mk').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; try { await api.admin.update(id, { member: b.dataset.v === '1' }); r.member = b.dataset.v === '1'; m.querySelectorAll('#mk button').forEach((x) => x.classList.toggle('on', x === b)); toast('נשמר'); } catch (x) { toast(x.message); } });
     m.querySelector('#kd').addEventListener('click', async (e) => { const b = e.target.closest('button'); if (!b) return; try { await api.admin.update(id, { kind: b.dataset.v }); r.kind = b.dataset.v; m.querySelectorAll('#kd button').forEach((x) => x.classList.toggle('on', x === b)); toast('נשמר'); } catch (x) { toast(x.message); } });

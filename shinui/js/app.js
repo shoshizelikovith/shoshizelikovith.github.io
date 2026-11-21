@@ -18,7 +18,7 @@ function applyGender(g) {
   try { localStorage.setItem('ls-g', g); } catch {}
 }
 try { applyGender(localStorage.getItem('ls-g')); } catch {}
-import { morningNote, sticker, wallpaper, quoteCard, giftNote, saveCanvas } from './img.js';
+import { morningNote, sticker, wallpaper, quoteCard, giftNote, saveCanvas, journalPages } from './img.js';
 import { renderAdmin } from './admin.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -212,7 +212,9 @@ async function render() {
   const work = r1 === 'open' ? 'open' : r1 === 'close' ? 'close' : r1 === 'week' && r2 === 'open' ? 'weekOpen' : r1 === 'week' && r2 === 'close' ? 'debrief' : (r1 === 'today' || !r1) && !(D.days[today()] || {}).opened_at ? 'open' : null;
   if (work) { try { sessionStorage.setItem('ls-work', JSON.stringify([location.hash || '#/today', work])); } catch {} }
   // אחרי ההתנסות הגישה נסגרת: רק מסך ההצעה והגדרות (ליציאה)
-  if (offerActive() && r1 !== 'offer' && r1 !== 'settings') return go('#/offer');
+  if (offerActive() && r1 !== 'offer' && r1 !== 'settings' && r1 !== 'summary') return go('#/offer');
+  // מסך קופץ פעם ביום בזמן ההתנסות: כמה ימים נשארו ואיך ממשיכים (שושי 21.11)
+  if (!offerActive() && r1 !== 'summary') maybeTrialPop();
   switch (r1) {
     case 'week': return r2 === 'open' ? renderWeekOpen() : r2 === 'close' ? renderWeekClose() : renderWeek();
     case 'progress': return renderProgress();
@@ -225,8 +227,10 @@ async function render() {
     case 'refine': return renderRefine(r2 || 'open');
     case 'settings': return r2 === 'pin' ? renderPinSet() : renderSettings();
     case 'feedback': return renderFeedback();
+    case 'reflect': return WFB_ON ? renderWeeklyFb() : go('#/today');
     case 'offer': return renderOffer();
-    case 'admin': return P().is_admin ? renderAdmin({ root, api, T, esc, shell, toast, CONFIG }) : go('#/today');
+    case 'summary': return renderSummary();
+    case 'admin': return P().is_admin ? renderAdmin({ root, api, T, esc, shell, toast, CONFIG, mdLite }) : go('#/today');
     default: return renderToday();
   }
 }
@@ -354,6 +358,8 @@ function trialLeft() { const e = trialEndsMs(); if (e === null) return null; if 
 function offerActive() { const e = trialEndsMs(); return e !== null && Date.now() >= e; }
 function banners() {
   const out = []; const t = today();
+  // משוב שבועי (20.11): משוב חדש שלא נקרא, ושאלת ההסכמה למי שלא שיתפה יומן
+  if (WFB().some((f) => !f.seen_at)) out.push(`<a class="banner soft" href="#/reflect" style="display:block;text-decoration:none;color:inherit"><b>${T.fbBanner}</b></a>`);
   const left = trialLeft();
   if (left && left > 0) out.push(`<div class="banner soft">${T.trialBanner(left)}</div>`);
   // שאלת משוב ביום 5 או 6 של ההתנסות
@@ -374,6 +380,41 @@ function banners() {
 }
 
 // ===== היום =====
+// ===== משוב שבועי (שושי 20.11) =====
+// נכתב במוצאי שבת לכל מי שסגרה לפחות שני ימים, אלא אם כיבתה. שיתפה יומן: שושי רואה. לא שיתפה: רק היא, ויכולה לאשר לשושי סיכום מסוים (21.11).
+// שושי 21.11: ״המשוב השבועי כרגע מיותר״. כבוי עד שתחליט. הדלקה: WFB_ON = true
+const WFB_ON = false;
+const WFB = () => (WFB_ON && D && D.wfb) || [];
+const fbActive = () => P().weekly_fb !== 'off';
+// עיצוב קל לטקסט המשוב: ## כותרת, - נקודה, **מודגש**, *נטוי*. הכל עובר esc קודם.
+function mdLite(src) {
+  const inl = (s) => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*(.+?)\*/g, '<i>$1</i>');
+  const out = []; let para = []; let list = []; let ord = false;
+  const endPara = () => { if (para.length) out.push(`<p>${para.map(inl).join('<br>')}</p>`); para = []; };
+  const endList = () => { if (list.length) out.push(`<${ord ? 'ol' : 'ul'}>${list.map((x) => `<li>${inl(x)}</li>`).join('')}</${ord ? 'ol' : 'ul'}>`); list = []; };
+  String(src || '').split('\n').forEach((raw) => { const l = raw.trim();
+    if (!l) { endPara(); endList(); return; }
+    if (/^#{1,3} /.test(l)) { endPara(); endList(); out.push(`<h3>${inl(l.replace(/^#+ /, ''))}</h3>`); return; }
+    if (/^[-•] /.test(l)) { endPara(); if (ord) endList(); ord = false; list.push(l.slice(2)); return; }
+    if (/^\d+\. /.test(l)) { endPara(); if (!ord) endList(); ord = true; list.push(l.replace(/^\d+\. /, '')); return; }
+    endList(); para.push(l); });
+  endPara(); endList();
+  return out.join('');
+}
+const dm = (s) => { const d = parse(s); return `${d.getDate()}.${d.getMonth() + 1}`; };
+function renderWeeklyFb() {
+  const list = WFB();
+  let body = `${hd('', T.fbTitle, 'week')}<p class="hint">${T.fbSub}</p>`;
+  if (!list.length) body += card(`<p class="it">${esc(fbActive() ? T.fbEmpty : T.fbEmptyOff)}</p>`);
+  const priv = (f) => P().share_journal ? `<p class="hint">${T.fbPrivShared}</p>`
+    : f.shared ? `<p class="hint">${T.fbSharedNow}</p>`
+    : `<p class="hint">${T.fbPrivOnly}</p><button type="button" class="btn2" data-fbshare="${esc(f.week_start)}">${T.fbShareBtn}</button>`;
+  list.forEach((f) => { body += card(`<div class="ct">${esc(T.fbWeekOf(dm(f.week_start), dm(addDays(f.week_start, 6))))}</div><div class="fbbody">${mdLite(f.body)}</div>${priv(f)}`); });
+  shell(body, 'week');
+  list.forEach((f) => api.seenWeeklyFb(f.week_start));
+}
+root.addEventListener('click', (e) => { const b = e.target.closest('[data-fbshare]'); if (!b) return; api.shareWeeklyFb(b.dataset.fbshare); toast(T.saved); renderWeeklyFb(); });
+
 function renderToday() {
   const t = today(); const d = D.days[t] || {};
   if (!d.opened_at) return renderOpen(t, true);
@@ -662,6 +703,7 @@ function renderWeek() {
   } else {
     body += `<p class="hint">${T.weekOpenWhen}</p><a class="btn" href="#/week/open">${T.weekNoteCta}</a>`;
   }
+  if (WFB().length) body += `<a class="btn2" href="#/reflect">${T.fbNav}</a>`;
   shell(body, 'week');
 }
 
@@ -999,16 +1041,19 @@ function renderSettings() {
     ${card(`<label class="q" for="nm">${T.myName}</label><input id="nm" type="text" value="${esc(p.full_name)}">`)}
     ${card(`<div class="ct">${p.share_journal ? T.shareStatusOn : T.shareStatusOff}</div><button class="btn2" id="sh">${p.share_journal ? T.shareToggleOn : T.shareToggleOff}</button>`)}
     ${card(`<div class="ct">${T.levelSettingsTitle}</div>${seg('level', levelOf(), [['being', T.levelBeing], ['full', T.levelFull]])}<p class="hint" id="lvh">${levelOf() === 'full' ? T.levelFullSub : T.levelBeingSub}</p><p class="hint">${T.levelSettingsHint}</p>`)}
+    ${WFB_ON ? card(`<div class="ct">${T.fbSettingsTitle}</div><p class="hint">${fbActive() ? T.fbOnStatus : T.fbOffStatus}</p><div class="btnrow"><button class="btn2" id="wfb">${fbActive() ? T.fbTurnOff : T.fbTurnOn}</button>${WFB().length ? `<a class="btn2" href="#/reflect">${T.fbNav}</a>` : ''}</div>`) : ''}
     ${card(`<div class="ct">${T.genderTitle}</div>${seg('gender', p.gender === 'm' ? 'm' : 'f', [['f', T.genderF], ['m', T.genderM]])}`)}
     ${card(`<div class="ct">${T.pinTitle} ${tag(0)}</div><p class="hint">${p.pin_hash ? T.pinOnHint : T.pinOffHint}</p>
       <div class="btnrow"><a class="btn2" href="#/settings/pin">${p.pin_hash ? T.pinChange : T.pinSet}</a>${p.pin_hash ? `<button class="btn2" id="pinoff">${T.pinRemove}</button>` : ''}</div>`)}
     ${card(`<div class="ct">${T.installTitle}</div><p class="hint">${T.installIos}</p><p class="hint">${T.installAndroid}</p>`)}
+    <a class="btn2" href="#/summary">${T.journalPdf}</a>
     ${p.is_admin ? `<a class="btn dark" href="#/admin">${T.adminLink}</a>` : ''}
     <button class="btn2" id="out">${T.logout}</button>
     <p class="hint" style="text-align:center">${esc(p.email || '')}</p>`, '');
   let t; $('#nm').addEventListener('input', (e) => { clearTimeout(t); t = setTimeout(() => api.saveProfile({ full_name: e.target.value.trim() }), 700); });
   $('#sh').addEventListener('click', () => { api.saveProfile({ share_journal: !p.share_journal }); toast(T.saved); renderSettings(); });
   const lv = { level: levelOf(), gender: p.gender === 'm' ? 'm' : 'f' }; bindForm(lv, () => {});
+  $('#wfb')?.addEventListener('click', () => { api.saveProfile({ weekly_fb: fbActive() ? 'off' : 'on' }); toast(T.saved); renderSettings(); });
   $('[data-seg="gender"]').addEventListener('pick', (e) => { api.saveProfile({ gender: e.detail }); applyGender(e.detail); renderSettings(); toast(T.saved); });
   $('[data-seg="level"]').addEventListener('pick', (e) => { api.saveProfile({ level: e.detail }); $('#lvh').textContent = e.detail === 'full' ? T.levelFullSub : T.levelBeingSub; toast(T.saved); });
   $('#pinoff')?.addEventListener('click', () => { if (!confirm(T.pinRemoveQ)) return; api.saveProfile({ pin_hash: null }); toast(T.pinRemoved); renderSettings(); });
@@ -1034,13 +1079,97 @@ function renderFeedback() {
 // אחרי ההתנסות: הודעה עם קישור לדף ההצעה. בלי שעון אישי, התאריך למחיר המוזל אחד לכולן (CONFIG.OFFER_DEADLINE)
 function renderOffer() {
   sessionStorage.setItem('offerSeen', today());
-  const link = CONFIG.OFFER_LINK[kindOf()] || CONFIG.OFFER_LINK.graduate;
+  const link = offerLink();
   const dl = CONFIG.OFFER_DEADLINE && CONFIG.OFFER_DEADLINE >= today() ? `${T.dayNames[parse(CONFIG.OFFER_DEADLINE).getDay()]} ${shortDate(CONFIG.OFFER_DEADLINE)}` : '';
   shell(`${hd('', T.offerTitle, 'club')}
     ${card(`<p class="ins">${T.offerSub}</p>
       ${dl ? `<p class="q" style="margin-top:12px">${T.offerDeadline(dl)}</p>` : ''}
-      ${link ? `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">${T.offerCta}</a>` : ''}`)}
+      ${link ? `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">${T.offerCta}</a>` : ''}
+      ${offerPdfLink()}`)}
+    <a class="btn2" href="#/summary">${T.journalPdf}</a>
     ${offerActive() ? `<a class="btn2" href="#/settings">${T.settingsTitle}</a>` : `<a class="btn2" href="#/today">${T.backToday}</a>`}`, offerActive() ? 'locked' : '');
+}
+
+// ===== התנסות: מסך קופץ יומי, קובץ הדף, וסיכום מעוצב להורדה (שושי 21.11) =====
+const offerLink = () => CONFIG.OFFER_LINK[kindOf()] || CONFIG.OFFER_LINK.graduate;
+const offerPdfLink = () => { const f = (CONFIG.OFFER_PDF || {})[kindOf()] || (CONFIG.OFFER_PDF || {}).graduate; return f ? `<p class="hint" style="margin-top:10px;text-align:center"><a class="lnk" href="${esc(f)}" target="_blank" rel="noopener" download>${T.offerPdf}</a></p>` : ''; };
+function maybeTrialPop() {
+  const left = trialLeft(); if (!left || left < 1) return;
+  let seen = null; try { seen = localStorage.getItem('ls-pop'); } catch {}
+  if (seen === today() || document.querySelector('.modal.trialpop')) return;
+  try { localStorage.setItem('ls-pop', today()); } catch {}
+  const opener = document.activeElement;
+  const m = document.createElement('div'); m.className = 'modal trialpop';
+  m.innerHTML = `<div class="sheet help-card" role="dialog" aria-modal="true" aria-labelledby="tpt">
+    <button class="close" type="button" aria-label="${T.trialPopStay}">×</button>
+    <img src="${esc(CONFIG.MORNING_ART || 'img/note/art-morning-window.png')}" alt="" aria-hidden="true" style="display:block;width:120px;height:auto;margin:0 auto 8px">
+    <h2 id="tpt">${esc(T.trialPopTitle(left))}</h2>
+    <p>${esc(T.trialPopBody)}</p>
+    <a class="btn" href="${esc(offerLink())}" target="_blank" rel="noopener">${T.trialPopCta}</a>
+    ${offerPdfLink()}
+    <button class="btn2" type="button" id="tpstay">${T.trialPopStay}</button></div>`;
+  const close = () => { document.removeEventListener('keydown', onKey); m.remove(); opener?.focus?.({ preventScroll: true }); };
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', onKey);
+  m.addEventListener('click', (e) => { if (e.target === m || e.target.closest('.close') || e.target.id === 'tpstay') close(); });
+  document.body.appendChild(m); $('#tpstay', m).focus();
+}
+// סיכום מעוצב של כל מה שכתבה בשבוע ההתנסות, עם כפתור להורדה כ-PDF
+function journalData() {
+  const f = F(); const p = P();
+  const ks = Object.keys(D.days).sort().filter((k) => { const d = D.days[k]; return d.opened_at || d.closed_at; });
+  const st = { done: 'בוצע', partial: 'חלקית', no: 'לא הפעם' };
+  const rows = (list) => list.filter(([, v]) => filled(v)).map(([l, v]) => [l, String(v).trim()]);
+  const sections = [];
+  const base = rows([[T.convPick.future, f.future_general], ['בתחום שבחרתי', f.future_specific],
+    ['הישג המפתח', f.achievement ? f.achievement + (f.achievement_date ? ' · עד ' + shortDate(f.achievement_date) : '') : '']]);
+  if (base.length) sections.push({ head: T.baseTitle, rows: base });
+  ks.forEach((k) => { const d = D.days[k];
+    const r = rows([
+      ['ההוויה של היום', d.being ? d.being + ((d.sub_beings || []).filter(Boolean).length ? ' · ' + d.sub_beings.filter(Boolean).join(', ') : '') : ''],
+      ['למה זה חשוב לי היום', d.why_today],
+      ['הסימן שלי להוויה', d.being_sign ? d.being_sign + (d.sign_status ? ' · ' + (st[d.sign_status] || '') : '') : ''],
+      ['פעולת המפתח', d.key_action ? d.key_action + (d.key_status ? ' · ' + (st[d.key_status] || '') : '') : ''],
+      ['מה עלול להוציא אותי', d.may_derail], ['מה יעזור לי לחזור', d.recover],
+      ['רגע של שיחה', d.win_belief], ['איך עבר עליי היום', d.day_how],
+      ['איפה מצאתי את עצמי בהוויה', d.being_found],
+      ['מה הוציא אותי', [d.out_situation, d.out_inner, d.out_thought].filter(filled).join('\n')],
+      ['מה עזר לי לחזור', d.back_help], ['תודה', d.thanks],
+      ['גילוי', d.insight], ['גילוי להיות איתו', d.hug_find], ['חיזוק ללכת איתו', d.strength_find]]);
+    if (r.length) sections.push({ head: dayLabel(k), rows: r }); });
+  const sub = (p.full_name || '') + (ks.length ? ' · ' + shortDate(ks[0]) + ' - ' + shortDate(ks[ks.length - 1]) : '');
+  return { title: T.journalTitle, sub, sections, footer: (CONFIG.NOTE_APP_NAME || T.appName) + ' · עם ' + (CONFIG.NOTE_SIGNATURE || 'שושי זליקוביץ׳') };
+}
+function journalHtml() {
+  const j = journalData();
+  return `<div class="journal" id="journal">
+    <header class="jhd"><img src="${esc(CONFIG.NOTE_LOGO || 'img/aro-wide.png')}" alt="${esc(T.appName)}" width="260" height="70"><img class="jart" src="${esc(CONFIG.NOTE_ART || 'img/note/art-book.png')}" alt="" aria-hidden="true" width="150" height="150"></header>
+    <h1>${esc(j.title)}</h1><p class="jsub">${esc(j.sub)}</p>
+    ${j.sections.map((sec) => `<section class="jsec"><h2>${esc(sec.head)}</h2>${sec.rows.map(([l, v]) => `<div class="jrow"><span class="jl">${esc(l)}</span><p>${esc(v).replace(/\n/g, '<br>')}</p></div>`).join('')}</section>`).join('') || `<p class="hint">${esc(T.noDataYet)}</p>`}
+    <footer class="jft">${esc(j.footer)}</footer>
+  </div>`;
+}
+async function journalPdfBlob() {
+  if (!window.jspdf) await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+  const pages = await journalPages(journalData());
+  const pdf = new window.jspdf.jsPDF({ unit: 'px', format: [1240, 1754], hotfixes: ['px_scaling'] });
+  pages.forEach((cv, i) => { if (i) pdf.addPage([1240, 1754]); pdf.addImage(cv.toDataURL('image/jpeg', 0.9), 'JPEG', 0, 0, 1240, 1754); });
+  return pdf.output('blob');
+}
+function renderSummary() {
+  shell(`${journalHtml()}
+    <button class="btn" type="button" id="jpdf">${T.journalPdf}</button>
+    <a class="btn2" href="${offerActive() ? '#/offer' : '#/today'}">${offerActive() ? T.offerCta : T.backToday}</a>`, offerActive() ? 'locked' : '');
+  $('#jpdf').addEventListener('click', async (e) => {
+    const b = e.currentTarget; const label = b.textContent; b.disabled = true; b.textContent = T.journalSaving;
+    try {
+      const blob = await journalPdfBlob();
+      const file = new File([blob], 'שבוע-ההתנסות-שלי.pdf', { type: 'application/pdf' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file] }); } catch {} }
+      else { const u = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = u; a.download = file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000); }
+    } catch { toast(T.saveFailed || 'לא הצלחנו ליצור את הקובץ. נסי שוב בעוד רגע.'); }
+    b.disabled = false; b.textContent = label;
+  });
 }
 
 // ===== התקנה כאפליקציה =====
