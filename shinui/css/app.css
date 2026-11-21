@@ -402,3 +402,52 @@ details.qs ul li{margin-bottom:6px}
 .journal .jft { text-align: center; color: #8a7f8c; font-size: 13px; margin-top: 14px; }
 .journal.jprint { width: 720px; border-radius: 0; }
 .journal.jprint .jday { break-before: auto; }
+
+/* פתק המטרות המעוצב (21.11): כמו ביומן האימון המנטלי, כל חלק בצבע משלו */
+.gnote{position:relative;background:var(--paper);border-radius:22px;padding:0 0 14px;margin-bottom:14px;box-shadow:var(--sh);overflow:hidden}
+.gn-top{position:relative;background:var(--navy);color:var(--cream);padding:18px 18px 18px 104px;min-height:96px}
+.gn-top::after{content:"";position:absolute;left:10px;bottom:-6px;width:92px;height:86px;background:url(../img/note/art-key.png) center/contain no-repeat}
+.gn-top small{display:block;font-size:15px;font-weight:600;color:var(--orange);margin-bottom:2px}
+.gn-top h2{font-size:24px;line-height:1.2;font-weight:700}
+.gn-sec{margin:14px 14px 0;padding:2px 14px 4px 0;border-right:4px solid var(--c,var(--plum))}
+.gn-sec.c-mag{--c:var(--mag)}.gn-sec.c-plum{--c:var(--plum)}.gn-sec.c-orange{--c:var(--orange)}.gn-sec.c-navy{--c:var(--navy)}
+.gn-lab{display:block;font-size:14px;font-weight:700;letter-spacing:.2px;color:var(--c,var(--plum));margin-bottom:6px}
+.gn-big{font-size:21px;line-height:1.35;font-weight:700}
+.gn-it{padding:8px 0;border-top:1px dashed var(--line)}
+.gn-it:first-of-type{border-top:0;padding-top:0}
+.gn-it p{font-size:17px;font-weight:600;line-height:1.45}
+.gn-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.gn-chips i{font-style:normal;font-size:14px;font-weight:600;background:rgba(166,47,125,.10);color:var(--plum);border-radius:999px;padding:3px 10px}
+.gn-day{font-style:normal;display:inline-block;font-size:14px;font-weight:700;background:var(--orange);color:var(--navy);border-radius:8px;padding:1px 8px;margin-left:8px;vertical-align:1px}
+.gn-pills{display:flex;flex-wrap:wrap;gap:8px}
+.gn-pills span{background:var(--navy);color:var(--cream);border-radius:999px;padding:5px 14px;font-size:16px;font-weight:700}
+.gn-pill1{display:inline-block;background:var(--navy);color:var(--cream)!important;border-radius:999px;padding:3px 14px}
+.gn-belief{margin:16px 14px 0;background:var(--mag);color:var(--cream);border-radius:16px;padding:12px 16px}
+.gn-belief .gn-lab{color:var(--cream);opacity:.85}
+.gn-belief p{font-size:19px;line-height:1.4;font-weight:700}
+.gn-foot{margin:14px 18px 0;font-size:14px;color:rgba(13,18,44,.62);font-weight:600}
+/* במצב תחקיר: סימון ליד כל דבר */
+.gnote.dbm{box-shadow:none;border:1px solid var(--line)}
+.gnote.dbm .seg{margin:8px 0 2px}
+.gnote.dbm .seg button{min-height:40px;font-size:15px;padding:6px 10px;background:rgba(13,18,44,.06)}
+.gnote.dbm .seg button.on{background:var(--plum);color:var(--cream)}
+.gn-belief .seg button{background:rgba(242,238,227,.22)!important;color:var(--cream)}
+.gn-belief .seg button.on{background:var(--cream)!important;color:var(--mag)!important}
+.gn-ask{font-size:15px;font-weight:700;margin-top:8px}
+.card.flat .gnote.dbm{margin:6px 0 0;background:var(--paper)}
+/* התחקיר */
+.db-heart{background:var(--paper);border-radius:16px;padding:14px 16px;margin-bottom:14px;font-size:18px;font-weight:700;line-height:1.45;color:var(--plum);border-right:4px solid var(--mag)}
+.db-peek{background:var(--fld);border-radius:16px;padding:2px 14px 8px;margin-bottom:14px}
+.db-ach{font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px}
+.db-num{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.db-num span{font-weight:700}
+.db-num input{width:90px;flex:0 0 90px;text-align:center}
+/* הדרך להישג, בלי אחוזים */
+.apath{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
+.apath i{width:18px;height:18px;border-radius:50%;background:var(--fld2)}
+.apath i.f{background:var(--plum)}
+.db-what{margin-bottom:14px;border-radius:22px;border:2px solid transparent}
+.db-what .ct{padding:0 4px}.db-what>.hint{padding:0 4px}
+.db-what.miss .seg:has(.on){border-color:transparent!important}
+.miss .db-num input{border-color:transparent!important;border-width:2px!important}
+.db-ch{font-weight:600;line-height:1.45}.db-ch b{color:var(--plum);font-weight:700}

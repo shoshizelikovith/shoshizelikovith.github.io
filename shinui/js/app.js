@@ -685,21 +685,61 @@ async function renderSticker(day) {
 }
 
 // ===== שבוע =====
+// שבוע לפי ?YYYY-MM-DD בכתובת, אחרת השבוע הנוכחי
+const wsFromHash = () => { const q = (location.hash.split('?')[1] || ''); return /^\d{4}-\d\d-\d\d$/.test(q) ? q : weekStart(today()); };
+const noteItems = (w) => {
+  const out = [];
+  if (filled(w.result)) out.push({ id: 'r', kind: 'result', text: w.result });
+  (w.habits || []).forEach((h, i) => { if (filled(h.text)) out.push({ id: 'h' + i, kind: 'habit', text: h.text, chips: [h.amount, h.freq && h.freq + ' ' + T.times, h.days].filter(filled) }); });
+  (w.onetime || []).forEach((h, i) => { if (filled(h.text)) out.push({ id: 'o' + i, kind: 'once', text: h.text, day: h.day }); });
+  String(w.beings || '').split(/[,،·\n/]/).map((s) => s.trim()).filter(Boolean).forEach((b, i) => out.push({ id: 'b' + i, kind: 'being', text: b }));
+  if (filled(w.win_belief)) out.push({ id: 'wb', kind: 'belief', text: w.win_belief });
+  return out;
+};
+
+// פתק המטרות המעוצב (שושי 21.11): כותרת עם השם והתאריך, כל חלק בצבע משלו. במצב תחקיר: סימון ליד כל דבר
+function goalNote(w, ws, debrief = null) {
+  const items = noteItems(w);
+  const mark = (it) => {
+    if (!debrief) return '';
+    const opts = it.kind === 'being' ? T.chkBeing : it.kind === 'belief' ? T.chkBelief : T.chk;
+    return `${it.kind === 'belief' ? `<p class="gn-ask">${T.chkBeliefQ}</p>` : ''}${seg('checks.' + it.id, (debrief.checks || {})[it.id], Object.entries(opts))}`;
+  };
+  const by = (k) => items.filter((it) => it.kind === k);
+  const sec = (cls, label, inner) => inner ? `<div class="gn-sec ${cls}"><span class="gn-lab">${label}</span>${inner}</div>` : '';
+  const r = by('result')[0];
+  return `<article class="gnote${debrief ? ' dbm' : ''}">
+    <header class="gn-top"><small>${esc(T.gnFrom(shortDate(ws)))}</small><h2>${esc(T.gnTitle(firstName()))}</h2></header>
+    ${sec('c-mag', T.gnResult, r ? `<p class="gn-big">${esc(r.text)}</p>${mark(r)}` : '')}
+    ${sec('c-plum', T.gnHabits, by('habit').map((it) => `<div class="gn-it"><p>${esc(it.text)}</p>${it.chips.length ? `<div class="gn-chips">${it.chips.map((c) => `<i>${esc(c)}</i>`).join('')}</div>` : ''}${mark(it)}</div>`).join(''))}
+    ${sec('c-orange', T.gnOnce, by('once').map((it) => `<div class="gn-it"><p>${filled(it.day) ? `<i class="gn-day">${esc(it.day)}</i>` : ''}${esc(it.text)}</p>${mark(it)}</div>`).join(''))}
+    ${sec('c-navy', T.gnBeings, debrief
+      ? by('being').map((it) => `<div class="gn-it"><p class="gn-pill1">${esc(it.text)}</p>${mark(it)}</div>`).join('')
+      : by('being').length ? `<div class="gn-pills">${by('being').map((it) => `<span>${esc(it.text)}</span>`).join('')}</div>` : '')}
+    ${by('belief').length ? `<div class="gn-belief"><span class="gn-lab">${T.gnBelief}</span><p>״${esc(by('belief')[0].text)}״</p>${mark(by('belief')[0])}</div>` : ''}
+    ${debrief ? '' : `<p class="gn-foot">${T.gnFoot}</p>`}
+  </article>`;
+}
+
 function renderWeek() {
   const ws = weekStart(today()); const w = D.weeks[ws] || {};
   const prevWs = addDays(ws, -7); const pw = D.weeks[prevWs];
+  const nextWs = addDays(ws, 7); const nw = D.weeks[nextWs] || {};
   const dow = new Date().getDay();
   // סגירת השבוע הקודם, אם נפתח ולא נסגר
   const prevOpen = pw && pw.opened_at && !pw.closed_at;
   let body = `${hd(T.weekNum(weekNumber(ws)), w.opened_at ? T.weekOpened : T.weekOpenTitle, 'week')}`;
   if (!hasBase()) body += `<div class="banner">${T.needBaseWeek} <a class="lnk" href="#/base">${T.baseGo}</a></div>`;
   if (prevOpen) body += `<div class="banner soft"><b>${T.prevWeekOpen}</b><a class="lnk" href="#/week/close?${prevWs}">${T.weekCloseTitle}</a></div>`;
+  // הפתק לשבוע הבא, אם כבר נכתב אחרי התחקיר
+  if (nw.opened_at) body += `<p class="q">${T.nextNoteTitle}</p>${goalNote(nw, nextWs)}<a class="btn2" href="#/week/open?${nextWs}">${T.editWeek}</a>`;
   if (w.opened_at) {
-    body += card(weekPlanHtml(w));
+    if (nw.opened_at) body += `<p class="q">${T.thisNoteTitle}</p>`;
+    body += goalNote(w, ws);
     body += w.closed_at
-      ? `<div class="banner soft"><b>${T.weekClosed}</b></div><a class="btn2" href="#/week/close?${ws}">${T.weekCloseTitle}</a>`
+      ? `<div class="banner soft"><b>${T.weekClosed}</b></div>${nw.opened_at ? '' : `<a class="btn" href="#/week/open?${nextWs}">${T.nextNoteCta}</a>`}<a class="btn2" href="#/week/close?${ws}">${T.weekCloseTitle}</a>`
       : `${dow >= 4 ? `<a class="btn" href="#/week/close?${ws}">${T.weekCloseTitle}</a>` : `<p class="hint">${T.weekCloseWhen}</p><a class="btn2" href="#/week/close?${ws}">${T.weekCloseTitle}</a>`}`;
-    body += `<a class="btn2" href="#/week/open">${T.editWeek}</a>`;
+    body += `<a class="btn2" href="#/week/open?${ws}">${T.editWeek}</a>`;
   } else {
     body += `<p class="hint">${T.weekOpenWhen}</p><a class="btn" href="#/week/open">${T.weekNoteCta}</a>`;
   }
@@ -708,18 +748,24 @@ function renderWeek() {
 }
 
 function renderWeekOpen() {
-  const ws = weekStart(today());
+  const ws = wsFromHash();
+  const prev = D.weeks[addDays(ws, -7)] || {};
   const m = { habits: [], onetime: [], channels: {}, ...(D.weeks[ws] || {}) };
+  // פתק חדש לא נכתב מדף ריק: ההרגלים וההוויות של השבוע שעבר, ואז מתאימות (שיעור 13)
+  if (!m.opened_at && !m.habits.length && (prev.habits || []).some((h) => filled(h.text))) m.habits = prev.habits.filter((h) => filled(h.text)).map((h) => ({ ...h }));
+  if (!m.opened_at && !filled(m.beings) && filled(prev.beings)) m.beings = prev.beings;
   if (!m.habits.length) m.habits = (F().plan_habits || []).filter((h) => filled(h.text)).map((h) => ({ ...h })).slice(0, 3);
   if (!m.habits.length) m.habits = [{}];
   if (!m.onetime.length) m.onetime = [{}];
+  const lessons = [[T.dbKeep, prev.keep_it], [T.dbDrop, prev.drop_it], [T.dbAdd, prev.add_it], [T.dbChange, prev.change_it], [T.dbTry, prev.next_try]].filter(([, v]) => filled(v));
   const habitRow = (h, i) => `<div class="rowi">${i ? `<button type="button" class="x" data-del="habits.${i}" aria-label="להסיר">×</button>` : ''}
       ${inp(`habits.${i}.text`, h.text, T.habitText)}<div class="row3" style="margin-top:8px">${inp(`habits.${i}.amount`, h.amount, T.habitAmount)}${inp(`habits.${i}.freq`, h.freq, T.habitFreq, 'text', 'inputmode="numeric"')}${inp(`habits.${i}.days`, h.days, T.habitDays)}</div></div>`;
   const onceRow = (h, i) => `<div class="rowi">${i ? `<button type="button" class="x" data-del="onetime.${i}" aria-label="להסיר">×</button>` : ''}
       <div class="row3" style="grid-template-columns:2fr 1fr">${inp(`onetime.${i}.text`, h.text, T.onceText)}${inp(`onetime.${i}.day`, h.day, T.onceDay)}</div></div>`;
   const draw = () => {
-    shell(`${hd(T.weekNum(weekNumber(ws)), T.weekOpenTitle, 'week')}${helpRow('week_note')}
+    shell(`${hd(T.weekNum(weekNumber(ws)) + ' · ' + T.weekFrom(shortDate(ws)), T.gnTitle(firstName()), 'week')}${helpRow('week_note')}
       ${!hasBase() ? `<div class="banner">${T.needBaseWeek} <a class="lnk" href="#/base">${T.baseGo}</a></div>` : ''}
+      ${lessons.length ? card(`<div class="ct">${T.fromDebrief}</div>${lessons.map(([l, v]) => `<p class="it"><b>${l}</b> ${esc(v)}</p>`).join('')}`, 'flat') : ''}
       ${card(`<div class="ct">${T.weekResult} ${tag(1)}</div><p class="hint">${T.weekResultHint}</p>${ta('result', m.result, '', 2)}
         ${hasAchievement() ? `<p class="hint" style="margin-top:8px"><b>${T.achievementCard}:</b> ${esc(F().achievement)}</p>` : ''}`, '', 'result')}
       ${card(`<div class="ct">${T.weekHabits} ${tag(1)} <span class="hint" style="margin:0">${T.weekHabitsHint}</span></div>
@@ -750,14 +796,6 @@ function renderWeekOpen() {
   draw();
 }
 
-// פתק המטרות של השבוע (מוצג גם בשבוע וגם בראש התחקיר)
-function weekPlanHtml(w) {
-  return `<p class="q">${T.weekResult}</p><p class="ach">${esc(w.result || '')}</p>
-      ${(w.habits || []).filter((h) => filled(h.text)).length ? `<p class="q">${T.weekHabits}</p>${w.habits.filter((h) => filled(h.text)).map((h) => `<p class="it">${esc([h.text, h.amount, h.freq && h.freq + ' ' + T.times, h.days].filter(Boolean).join(' · '))}</p>`).join('')}` : ''}
-      ${(w.onetime || []).filter((h) => filled(h.text)).length ? `<p class="q">${T.weekOnce}</p>${w.onetime.filter((h) => filled(h.text)).map((h) => `<p class="it">${esc([h.day, h.text].filter(Boolean).join(' · '))}</p>`).join('')}` : ''}
-      ${filled(w.beings) ? `<p class="q">${T.weekBeings}</p><p class="it">${esc(w.beings)}</p>` : ''}
-      ${w.win_belief ? `<p class="hint" style="margin-top:8px">״${esc(w.win_belief)}״</p>` : ''}`;
-}
 // סיכום השבוע מתוך היומן היומי: כדי שהתחקיר יישען על נתונים ולא על הזיכרון (שושי 12.11)
 function weekSummaryHtml(ws) {
   const days = [0, 1, 2, 3, 4, 5, 6].map((i) => addDays(ws, i)).map((k) => ({ k, d: D.days[k] })).filter((x) => x.d && x.d.opened_at);
@@ -777,41 +815,55 @@ function weekSummaryHtml(ws) {
     ${ins.length ? `<p class="q">${T.sumInsights}</p>${ins.map((x) => `<p class="it">${lab(x.k)} · ${esc(insTx(x.d))}</p>`).join('')}` : ''}`;
 }
 
+// התחקיר של השבוע (שושי 21.11): כמו ביומן האימון המנטלי. מסמנות מול הפתק מה בוצע, ואז ארבע שאלות קצרות
 function renderWeekClose() {
-  const q = (location.hash.split('?')[1] || '');
-  const ws = /^\d{4}-\d\d-\d\d$/.test(q) ? q : weekStart(today());
-  const m = { ...(D.weeks[ws] || {}) };
-  shell(`${hd(T.weekNum(weekNumber(ws)), T.weekCloseTitle, 'debrief')}${helpRow('debrief')}
-    <p class="hint">${T.sumIntro}</p>
-    ${D.weeks[ws] && D.weeks[ws].opened_at ? card(`<div class="ct">${T.planTitle}</div>${weekPlanHtml(D.weeks[ws])}`, 'flat') : ''}
-    ${card(`<div class="ct"><img class="ct-ico" src="img/icons/data.png" width="34" height="34" alt="" aria-hidden="true">${T.sumTitle}</div>${weekSummaryHtml(ws)}`, 'flat')}
-    <p class="hint">${T.weekNoClose}</p>
+  const ws = wsFromHash();
+  const w = D.weeks[ws] || {};
+  const m = { checks: {}, gap_ch: {}, ...w };
+  if (!filled(m.progress_goal)) { const pk = Object.keys(D.weeks).filter((k) => k < ws && D.weeks[k].progress_goal != null).sort().pop(); if (pk) m.progress_goal = D.weeks[pk].progress_goal; }
+  const items = w.opened_at ? noteItems(w) : [];
+  shell(`${hd(T.weekNum(weekNumber(ws)) + ' · ' + T.weekFrom(shortDate(ws)), T.weekCloseTitle, 'debrief')}${helpRow('debrief')}
+    <p class="db-heart">${T.dbHeart}</p>
+    ${items.length
+      ? `<section class="db-what" data-req="checks"><div class="ct">${T.dbWhatTitle} ${tag(1)}</div><p class="hint">${T.dbWhatHint}</p>${goalNote(w, ws, m)}</section>`
+      : `<p class="hint">${T.dbNoNote}</p>`}
+    <details class="qs db-peek"><summary>${T.dbDaysPeek}</summary>${weekSummaryHtml(ws)}</details>
     ${card(`<div class="ct">${T.progressQ} ${tag(1)}</div>
-      ${hasAchievement() ? `<p class="hint">${esc(F().achievement)}</p>` : ''}
-      ${ta('progress', m.progress, T.progressPh, 2)}
-      <p class="q">${T.progressPct}</p>${inp('progress_pct', m.progress_pct, '0-100', 'number', 'min="0" max="100" inputmode="numeric"')}`, '', 'progress')}
+      ${hasAchievement() ? `<p class="db-ach">${esc(F().achievement)}</p>` : ''}
+      ${ta('progress', m.progress, T.dbProgressHint, 2)}
+      <p class="hint" style="margin-top:10px">${T.dbNumQ}</p>
+      <div class="db-num"><span>${T.dbNumAt}</span>${inp('progress_at', m.progress_at, '', 'text', 'inputmode="decimal"')}<span>${T.dbNumOf}</span>${inp('progress_goal', m.progress_goal, '', 'text', 'inputmode="decimal"')}</div>`, '', 'progress')}
+    ${card(`<div class="ct">${T.dbWorked} ${tag(1)}</div><p class="hint">${T.dbWorkedHint}</p>${ta('success', m.success, T.writeHere, 2)}`, '', 'worked')}
+    ${card(`<div class="ct">${T.dbGap} ${tag(1)}</div><p class="hint">${T.dbGapHint}</p>
+      ${Object.entries(T.dbGapCh).map(([k, c]) => `<p class="q db-ch"><b>${c.name}</b> ${c.q}</p>${ta('gap_ch.' + k, (m.gap_ch || {})[k], T.writeHere, 2)}`).join('')}`, '', 'gapq')}
     ${card(`<div class="ct">${T.noteTypeQ} ${tag(1)}</div>${seg('note_type', m.note_type, Object.entries(T.noteType))}
       <details class="qs"><summary>${T.noteTypeRemind}</summary><p class="hint">${T.noteTypeExplain}</p></details>`, '', 'note_type')}
-    ${card(`<div class="ct">${T.successGap} ${tag(1)}</div>${ta('success', m.success, T.successPh, 2)}<div style="height:8px"></div>${ta('gap', m.gap, T.gapPh, 2)}`, '', 'sg')}
-    ${card(`<div class="ct">${T.heart} ${tag(1)}</div><p class="hint">${T.heartHint}</p>${ta('heart', m.heart, T.writeHere, 3)}`, '', 'heart')}
-    ${card(`<div class="ct">${T.eyes} ${tag(1)}</div><p class="hint">${T.eyesHint}</p>${ta('eyes', m.eyes, T.writeHere, 3)}`, '', 'eyes')}
-    ${card(`<div class="ct">${T.hands} ${tag(1)}</div><p class="hint">${T.handsHint}</p>${ta('hands', m.hands, T.writeHere, 3)}`, '', 'hands')}
+    ${card(`<div class="ct">${T.dbNext} ${tag(1)}</div><p class="hint">${T.dbNextHint}</p>
+      <p class="q">${T.dbKeep}</p>${inp('keep_it', m.keep_it)}
+      <p class="q">${T.dbDrop}</p>${inp('drop_it', m.drop_it)}
+      <p class="q">${T.dbAdd}</p>${inp('add_it', m.add_it)}`, '', 'next')}
+    ${card(`<div class="ct">${T.dbLearn} ${tag(0)}</div><p class="hint">${T.dbLearnHint}</p>${ta('learn', m.learn, T.writeHere, 2)}`)}
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${m.closed_at ? T.saveBase : T.closeWeek}</button>`, 'week');
-  const save = (x) => api.saveWeek(ws, { progress: x.progress, progress_pct: filled(x.progress_pct) ? Math.max(0, Math.min(100, +x.progress_pct)) : null, note_type: x.note_type, success: x.success, gap: x.gap, heart: x.heart, eyes: x.eyes, hands: x.hands });
+  const num = (v) => { const n = parseFloat(String(v ?? '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
+  const save = (x) => api.saveWeek(ws, { checks: x.checks, progress: x.progress, progress_at: num(x.progress_at), progress_goal: num(x.progress_goal), success: x.success, gap_ch: x.gap_ch, gap: Object.keys(T.dbGapCh).map((k) => (x.gap_ch || {})[k]).filter(filled).join('\n') || null, learn: x.learn, keep_it: x.keep_it, drop_it: x.drop_it, add_it: x.add_it, note_type: x.note_type,
+    hands: [x.keep_it, x.drop_it, x.add_it].filter(filled).join(' · ') || null });
   const flushNow = bindForm(m, save);
   $('#done').addEventListener('click', () => {
     flushNow();
     const miss = [];
+    if (items.some((it) => !(m.checks || {})[it.id])) miss.push('checks');
     if (!filled(m.progress)) miss.push('progress');
+    if (!filled(m.success)) miss.push('worked');
+    if (!Object.values(m.gap_ch || {}).some(filled)) miss.push('gapq');
     if (!m.note_type) miss.push('note_type');
-    if (!filled(m.success) || !filled(m.gap)) miss.push('sg');
-    ['heart', 'eyes', 'hands'].forEach((k) => { if (!filled(m[k])) miss.push(k); });
+    if (![m.keep_it, m.drop_it, m.add_it].some(filled)) miss.push('next');
     if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
     api.saveWeek(ws, { closed_at: (D.weeks[ws] || {}).closed_at || new Date().toISOString() });
     celebrate('debrief', T.weekClosedToast);
-    // ״ומכאן לפתק החדש״: אם סגרה את השבוע הנוכחי בסופו, הפתק הבא נפתח ביום ראשון
-    go(ws === weekStart(today()) ? '#/week' : '#/week/open');
+    // ״ומכאן לפתק החדש״: פתק חדש עם תאריך לשבוע שאחרי, בלי לדרוס את הפתק שנסגר (שושי 21.11)
+    const nextWs = addDays(ws, 7);
+    go((D.weeks[nextWs] || {}).opened_at ? '#/week' : '#/week/open?' + nextWs);
   });
 }
 
@@ -886,10 +938,20 @@ function dataInsight(s) {
   if (s.streak >= 3) return T.insStreak(s.streak);
   return null;
 }
+// הדרך להישג: נקודות עד 20 צעדים, אחרת פס בלי אחוזים
+function achPath(at, goal) {
+  const a = Math.max(0, Math.min(+at, +goal)); const g = +goal;
+  const vis = g <= 20 && Number.isInteger(g)
+    ? `<div class="apath" aria-hidden="true">${Array.from({ length: g }, (_, i) => `<i class="${i < a ? 'f' : ''}"></i>`).join('')}</div>`
+    : `<div class="bar" aria-hidden="true"><i style="width:${Math.round((a / g) * 100)}%"></i></div>`;
+  return `<p class="kpi" style="margin-top:6px">${esc(String(+at))} <small>${esc(T.achOf(String(g)))}</small></p>${vis}`;
+}
 function renderProgress() {
   const s = stats(); const t = today();
-  const last = Object.keys(D.weeks).sort().reverse().find((k) => D.weeks[k].progress_pct != null);
-  const pct = last ? D.weeks[last].progress_pct : null;
+  // ההתקדמות להישג המפתח במילים שלה ובמספר שבחרה, בלי אחוזים (שושי 21.11)
+  const wk = Object.keys(D.weeks).sort().reverse();
+  const lastNum = wk.find((k) => D.weeks[k].progress_at != null && D.weeks[k].progress_goal);
+  const words = wk.filter((k) => filled(D.weeks[k].progress) && D.weeks[k].closed_at).slice(0, 3);
   const ad = F().achievement_date;
   const ins = dataInsight(s);
   shell(`${hd(T.weekNum(weekNumber(s.ws)), T.progressTitle, 'data')}
@@ -897,7 +959,9 @@ function renderProgress() {
       <div class="week" role="img" aria-label="${T.openedClosedWeek}: ${s.both}">${s.wk.map((x, i) => `<span class="${x.k === t ? 't' : ''}"><i class="${x.d.opened_at && x.d.closed_at ? 'f' : x.d.opened_at ? 'h' : ''}"></i>${T.days[i]}</span>`).join('')}</div>
       ${s.openOnly ? `<p class="hint">${T.openedNotClosed(T.dayNames[parse(s.openOnly.k).getDay()])} <a class="lnk" href="#/close/${s.openOnly.k}">${T.closeNow}</a></p>` : ''}`)}
     ${hasAchievement() ? card(`<div class="ct">${T.achievementCard}</div><p class="it">${esc(F().achievement)}</p>
-      ${pct != null ? `<div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div><p class="hint">${T.lastWeekPct(pct)}${ad ? ' · ' + T.daysLeft(daysBetween(t, ad)) : ''}</p>` : ad ? `<p class="hint">${T.daysLeft(daysBetween(t, ad))}</p>` : ''}`)
+      ${lastNum ? achPath(D.weeks[lastNum].progress_at, D.weeks[lastNum].progress_goal) : ''}
+      ${words.length ? `<p class="q">${T.achWordsTitle}</p>${words.map((k) => `<p class="it"><b>${esc(T.weekNum(weekNumber(k)))}:</b> ${esc(D.weeks[k].progress)}</p>`).join('')}` : ''}
+      ${ad ? `<p class="hint">${T.daysLeft(daysBetween(t, ad))}</p>` : ''}`)
       : `<div class="banner">${T.needBaseBanner} <a class="lnk" href="#/base">${T.baseGo}</a></div>`}
     <div class="cols">
       ${card(`<p class="mini">${s.keyTotal ? `${s.keyDone}/${s.keyTotal}` : '-'}</p><span class="lbl">${T.keyDoneLbl}</span>`)}
