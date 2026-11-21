@@ -540,6 +540,8 @@ export const T = {
   gnFoot: 'פתק מטרות אינו חוזה. הוא השערה שאת בודקת מול החיים.',
   chk: { done: 'בוצע', partial: 'חלקית', no: 'לא בוצע' },
   chkBeing: { done: 'הייתי בה', partial: 'חלקית', no: 'לא הפעם' },
+  chkResult: { done: 'הגעתי', partial: 'חלקית', no: 'לא הגעתי' },
+  chkResultNote: 'מה קרה בפועל? (רשות)',
   chkBeliefQ: 'המשפט הזה עזר לי?',
   chkBelief: { done: 'כן', partial: 'קצת', no: 'לא' },
   nextNoteTitle: 'הפתק לשבוע הבא',

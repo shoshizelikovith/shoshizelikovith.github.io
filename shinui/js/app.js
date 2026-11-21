@@ -702,8 +702,10 @@ function goalNote(w, ws, debrief = null) {
   const items = noteItems(w);
   const mark = (it) => {
     if (!debrief) return '';
-    const opts = it.kind === 'being' ? T.chkBeing : it.kind === 'belief' ? T.chkBelief : T.chk;
-    return `${it.kind === 'belief' ? `<p class="gn-ask">${T.chkBeliefQ}</p>` : ''}${seg('checks.' + it.id, (debrief.checks || {})[it.id], Object.entries(opts))}`;
+    const opts = it.kind === 'being' ? T.chkBeing : it.kind === 'belief' ? T.chkBelief : it.kind === 'result' ? T.chkResult : T.chk;
+    // בתוצאה: הגעתי / חלקית / לא הגעתי, ומקום לפרט מה קרה (שושי 21.11)
+    const note = it.kind === 'result' ? `<p class="gn-ask">${T.chkResultNote}</p>${inp('checks.r_note', (debrief.checks || {}).r_note)}` : '';
+    return `${it.kind === 'belief' ? `<p class="gn-ask">${T.chkBeliefQ}</p>` : ''}${seg('checks.' + it.id, (debrief.checks || {})[it.id], Object.entries(opts))}${note}`;
   };
   const by = (k) => items.filter((it) => it.kind === k);
   const sec = (cls, label, inner) => inner ? `<div class="gn-sec ${cls}"><span class="gn-lab">${label}</span>${inner}</div>` : '';

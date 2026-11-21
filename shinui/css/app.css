@@ -451,3 +451,4 @@ details.qs ul li{margin-bottom:6px}
 .db-what.miss .seg:has(.on){border-color:transparent!important}
 .miss .db-num input{border-color:transparent!important;border-width:2px!important}
 .db-ch{font-weight:600;line-height:1.45}.db-ch b{color:var(--plum);font-weight:700}
+.gnote.dbm .gn-sec input{margin-top:4px;background:rgba(13,18,44,.06)}
