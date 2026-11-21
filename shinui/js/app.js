@@ -822,7 +822,7 @@ function renderWeekClose() {
   const ws = wsFromHash();
   const w = D.weeks[ws] || {};
   const m = { checks: {}, gap_ch: {}, ...w };
-  if (!filled(m.progress_goal)) { const pk = Object.keys(D.weeks).filter((k) => k < ws && D.weeks[k].progress_goal != null).sort().pop(); if (pk) m.progress_goal = D.weeks[pk].progress_goal; }
+  if (!filled(m.progress_goal)) { const pk = Object.keys(D.weeks).filter((k) => k < ws && filled(D.weeks[k].progress_goal)).sort().pop(); if (pk) m.progress_goal = D.weeks[pk].progress_goal; }
   const items = w.opened_at ? noteItems(w) : [];
   shell(`${hd(T.weekNum(weekNumber(ws)) + ' · ' + T.weekFrom(shortDate(ws)), T.weekCloseTitle, 'debrief')}${helpRow('debrief')}
     <p class="db-heart">${T.dbHeart}</p>
@@ -834,7 +834,7 @@ function renderWeekClose() {
       ${filled(w.result) ? `<p class="db-ach">${esc(w.result)}</p><p class="q">${T.dbReachedQ}</p>${seg('checks.r', (m.checks || {}).r, Object.entries(T.chkResult))}` : ''}
       ${ta('progress', m.progress, T.dbProgressHint, 2)}
       ${hasAchievement() ? `<p class="hint" style="margin-top:12px">${esc(T.dbNumQ(F().achievement))}</p>
-      <div class="db-num"><span>${T.dbNumAt}</span>${inp('progress_at', m.progress_at, '', 'text', 'inputmode="decimal"')}<span>${T.dbNumOf}</span>${inp('progress_goal', m.progress_goal, '', 'text', 'inputmode="decimal"')}</div>` : ''}`, '', 'progress')}
+      <div class="db-num"><span>${T.dbNumAt}</span>${inp('progress_at', m.progress_at, T.dbNumAtPh)}</div><div class="db-num"><span>${T.dbNumOf}</span>${inp('progress_goal', m.progress_goal, T.dbNumOfPh)}</div>` : ''}`, '', 'progress')}
     ${card(`<div class="ct">${T.dbWorked} ${tag(1)}</div><p class="hint">${T.dbWorkedHint}</p>${ta('success', m.success, T.writeHere, 2)}`, '', 'worked')}
     ${card(`<div class="ct">${T.dbGap} ${tag(1)}</div><p class="hint">${T.dbGapHint}</p>
       ${Object.entries(T.dbGapCh).map(([k, c]) => `<p class="q db-ch"><b>${c.name}</b> ${c.q}</p>${ta('gap_ch.' + k, (m.gap_ch || {})[k], T.writeHere, 2)}`).join('')}`, '', 'gapq')}
@@ -847,8 +847,8 @@ function renderWeekClose() {
     ${card(`<div class="ct">${T.dbLearn} ${tag(0)}</div><p class="hint">${T.dbLearnHint}</p>${ta('learn', m.learn, T.writeHere, 2)}`)}
     <p class="err" id="er" role="alert" hidden></p>
     <button class="btn" id="done">${m.closed_at ? T.saveBase : T.closeWeek}</button>`, 'week');
-  const num = (v) => { const n = parseFloat(String(v ?? '').replace(',', '.')); return Number.isFinite(n) ? n : null; };
-  const save = (x) => api.saveWeek(ws, { checks: x.checks, progress: x.progress, progress_at: num(x.progress_at), progress_goal: num(x.progress_goal), success: x.success, gap_ch: x.gap_ch, gap: Object.keys(T.dbGapCh).map((k) => (x.gap_ch || {})[k]).filter(filled).join('\n') || null, learn: x.learn, keep_it: x.keep_it, drop_it: x.drop_it, add_it: x.add_it, note_type: x.note_type,
+  const txt = (v) => (filled(v) ? String(v).trim() : null);
+  const save = (x) => api.saveWeek(ws, { checks: x.checks, progress: x.progress, progress_at: txt(x.progress_at), progress_goal: txt(x.progress_goal), success: x.success, gap_ch: x.gap_ch, gap: Object.keys(T.dbGapCh).map((k) => (x.gap_ch || {})[k]).filter(filled).join('\n') || null, learn: x.learn, keep_it: x.keep_it, drop_it: x.drop_it, add_it: x.add_it, note_type: x.note_type,
     hands: [x.keep_it, x.drop_it, x.add_it].filter(filled).join(' · ') || null });
   const flushNow = bindForm(m, save);
   $('#done').addEventListener('click', () => {
@@ -940,19 +940,22 @@ function dataInsight(s) {
   if (s.streak >= 3) return T.insStreak(s.streak);
   return null;
 }
-// הדרך להישג: נקודות עד 20 צעדים, אחרת פס בלי אחוזים
+// הדרך להישג: אם כתבה מספרים, נקודות עד 20 צעדים או פס. אם כתבה במילים, מראים את המילים שלה (שושי 21.11)
 function achPath(at, goal) {
-  const a = Math.max(0, Math.min(+at, +goal)); const g = +goal;
+  const n = (v) => { const x = parseFloat(String(v ?? '').replace(',', '.')); return /^\s*\d+([.,]\d+)?\s*$/.test(String(v ?? '')) ? x : NaN; };
+  const a = n(at); const g = n(goal);
+  if (!Number.isFinite(a) || !Number.isFinite(g) || g <= 0) return `<p class="ach" style="margin-top:6px">${esc(T.achWords(String(at).trim(), filled(goal) ? String(goal).trim() : ''))}</p>`;
+  const f = Math.max(0, Math.min(a, g));
   const vis = g <= 20 && Number.isInteger(g)
-    ? `<div class="apath" aria-hidden="true">${Array.from({ length: g }, (_, i) => `<i class="${i < a ? 'f' : ''}"></i>`).join('')}</div>`
-    : `<div class="bar" aria-hidden="true"><i style="width:${Math.round((a / g) * 100)}%"></i></div>`;
-  return `<p class="kpi" style="margin-top:6px">${esc(String(+at))} <small>${esc(T.achOf(String(g)))}</small></p>${vis}`;
+    ? `<div class="apath" aria-hidden="true">${Array.from({ length: g }, (_, i) => `<i class="${i < f ? 'f' : ''}"></i>`).join('')}</div>`
+    : `<div class="bar" aria-hidden="true"><i style="width:${Math.round((f / g) * 100)}%"></i></div>`;
+  return `<p class="kpi" style="margin-top:6px">${esc(String(a))} <small>${esc(T.achOf(String(g)))}</small></p>${vis}`;
 }
 function renderProgress() {
   const s = stats(); const t = today();
   // ההתקדמות להישג המפתח במילים שלה ובמספר שבחרה, בלי אחוזים (שושי 21.11)
   const wk = Object.keys(D.weeks).sort().reverse();
-  const lastNum = wk.find((k) => D.weeks[k].progress_at != null && D.weeks[k].progress_goal);
+  const lastNum = wk.find((k) => filled(D.weeks[k].progress_at));
   const words = wk.filter((k) => filled(D.weeks[k].progress) && D.weeks[k].closed_at).slice(0, 3);
   const ad = F().achievement_date;
   const ins = dataInsight(s);

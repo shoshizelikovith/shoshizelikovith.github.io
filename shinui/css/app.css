@@ -441,7 +441,7 @@ details.qs ul li{margin-bottom:6px}
 .db-ach{font-size:17px;font-weight:700;color:var(--plum);margin-bottom:8px}
 .db-num{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .db-num span{font-weight:700}
-.db-num input{width:90px;flex:0 0 90px;text-align:center}
+.db-num{margin-bottom:8px}.db-num span{flex:0 0 74px;white-space:nowrap}.db-num input{flex:1 1 auto;width:auto}
 /* הדרך להישג, בלי אחוזים */
 .apath{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
 .apath i{width:18px;height:18px;border-radius:50%;background:var(--fld2)}
