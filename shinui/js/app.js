@@ -702,10 +702,10 @@ function goalNote(w, ws, debrief = null) {
   const items = noteItems(w);
   const mark = (it) => {
     if (!debrief) return '';
-    const opts = it.kind === 'being' ? T.chkBeing : it.kind === 'belief' ? T.chkBelief : it.kind === 'result' ? T.chkResult : T.chk;
-    // בתוצאה: הגעתי / חלקית / לא הגעתי, ומקום לפרט מה קרה (שושי 21.11)
-    const note = it.kind === 'result' ? `<p class="gn-ask">${T.chkResultNote}</p>${inp('checks.r_note', (debrief.checks || {}).r_note)}` : '';
-    return `${it.kind === 'belief' ? `<p class="gn-ask">${T.chkBeliefQ}</p>` : ''}${seg('checks.' + it.id, (debrief.checks || {})[it.id], Object.entries(opts))}${note}`;
+    // התוצאה של השבוע נבדקת בשאלה ״כמה התקדמתי להישג השבועי״ שמתחת לפתק (שושי 21.11)
+    if (it.kind === 'result') return '';
+    const opts = it.kind === 'being' ? T.chkBeing : it.kind === 'belief' ? T.chkBelief : T.chk;
+    return `${it.kind === 'belief' ? `<p class="gn-ask">${T.chkBeliefQ}</p>` : ''}${seg('checks.' + it.id, (debrief.checks || {})[it.id], Object.entries(opts))}`;
   };
   const by = (k) => items.filter((it) => it.kind === k);
   const sec = (cls, label, inner) => inner ? `<div class="gn-sec ${cls}"><span class="gn-lab">${label}</span>${inner}</div>` : '';
@@ -831,10 +831,10 @@ function renderWeekClose() {
       : `<p class="hint">${T.dbNoNote}</p>`}
     <details class="qs db-peek"><summary>${T.dbDaysPeek}</summary>${weekSummaryHtml(ws)}</details>
     ${card(`<div class="ct">${T.progressQ} ${tag(1)}</div>
-      ${hasAchievement() ? `<p class="db-ach">${esc(F().achievement)}</p>` : ''}
+      ${filled(w.result) ? `<p class="db-ach">${esc(w.result)}</p><p class="q">${T.dbReachedQ}</p>${seg('checks.r', (m.checks || {}).r, Object.entries(T.chkResult))}` : ''}
       ${ta('progress', m.progress, T.dbProgressHint, 2)}
-      <p class="hint" style="margin-top:10px">${T.dbNumQ}</p>
-      <div class="db-num"><span>${T.dbNumAt}</span>${inp('progress_at', m.progress_at, '', 'text', 'inputmode="decimal"')}<span>${T.dbNumOf}</span>${inp('progress_goal', m.progress_goal, '', 'text', 'inputmode="decimal"')}</div>`, '', 'progress')}
+      ${hasAchievement() ? `<p class="hint" style="margin-top:12px">${esc(T.dbNumQ(F().achievement))}</p>
+      <div class="db-num"><span>${T.dbNumAt}</span>${inp('progress_at', m.progress_at, '', 'text', 'inputmode="decimal"')}<span>${T.dbNumOf}</span>${inp('progress_goal', m.progress_goal, '', 'text', 'inputmode="decimal"')}</div>` : ''}`, '', 'progress')}
     ${card(`<div class="ct">${T.dbWorked} ${tag(1)}</div><p class="hint">${T.dbWorkedHint}</p>${ta('success', m.success, T.writeHere, 2)}`, '', 'worked')}
     ${card(`<div class="ct">${T.dbGap} ${tag(1)}</div><p class="hint">${T.dbGapHint}</p>
       ${Object.entries(T.dbGapCh).map(([k, c]) => `<p class="q db-ch"><b>${c.name}</b> ${c.q}</p>${ta('gap_ch.' + k, (m.gap_ch || {})[k], T.writeHere, 2)}`).join('')}`, '', 'gapq')}
@@ -854,8 +854,8 @@ function renderWeekClose() {
   $('#done').addEventListener('click', () => {
     flushNow();
     const miss = [];
-    if (items.some((it) => !(m.checks || {})[it.id])) miss.push('checks');
-    if (!filled(m.progress)) miss.push('progress');
+    if (items.some((it) => it.kind !== 'result' && !(m.checks || {})[it.id])) miss.push('checks');
+    if (!filled(m.progress) || (filled(w.result) && !(m.checks || {}).r)) miss.push('progress');
     if (!filled(m.success)) miss.push('worked');
     if (!Object.values(m.gap_ch || {}).some(filled)) miss.push('gapq');
     if (!m.note_type) miss.push('note_type');
