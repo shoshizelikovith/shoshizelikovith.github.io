@@ -453,3 +453,32 @@ details.qs ul li{margin-bottom:6px}
 .db-ch{font-weight:600;line-height:1.45}.db-ch b{color:var(--plum);font-weight:700}
 .gnote.dbm .gn-sec input{margin-top:4px;background:rgba(13,18,44,.06)}
 [data-req="progress"].miss textarea:not(:placeholder-shown),[data-req="progress"].miss .seg:has(.on){border-color:transparent!important;border-width:2px!important}
+
+/* השבוע שלך במספרים (שושי 22.11) */
+.mr-hero{background:var(--navy);color:var(--cream);border-radius:22px;padding:20px 20px 18px;margin:6px 0 14px;box-shadow:var(--sh)}
+.mr-hero small{display:block;font-size:15px;opacity:.8;font-weight:600}
+.mr-hero h2{font-size:26px;line-height:1.2;margin:2px 0 10px}
+.mr-hero p{font-size:17px;line-height:1.55}
+.mr-hero b{color:#FFB98A}
+.mr-trend{display:inline-flex;align-items:center;gap:4px;font-size:15px;font-weight:700;border-radius:999px;padding:2px 10px;margin-inline-start:8px;vertical-align:middle}
+.mr-trend.up{background:rgba(223,23,103,.10);color:var(--mag)}
+.mr-trend.down{background:var(--fld2);color:var(--navy)}
+.mr-vs{font-size:15px;color:rgba(13,18,44,.65);margin-top:6px}
+.cols .card .mr-vs{font-size:14px}
+.mr-dots{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.mr-dots i{width:26px;height:26px;border-radius:50%;background:var(--fld2);display:block}
+.mr-dots i.on{background:var(--mag)}
+.mr-dots i.half{background:linear-gradient(90deg,var(--mag) 50%,var(--fld2) 50%)}
+.mr-stack{display:flex;height:16px;border-radius:999px;overflow:hidden;margin:12px 0 8px;background:var(--fld2)}
+.mr-stack span{display:block;height:100%}
+.mr-leg{display:flex;gap:14px;flex-wrap:wrap;font-size:15px;font-weight:600}
+.mr-leg i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-inline-end:5px;vertical-align:-1px}
+.mr-subs{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin-top:10px;font-size:16px}
+.mr-subs .v{font-weight:700;color:var(--plum)}
+.mr-subs .lo{color:var(--orange)}
+.mr-items{margin-top:8px;font-size:16px}
+.mr-items div{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid var(--line)}
+.mr-items div:last-child{border:0}
+.mr-st{font-weight:700;white-space:nowrap}
+.mr-st.s-done{color:var(--mag)} .mr-st.s-partial{color:var(--plum)} .mr-st.s-no{color:var(--orange)}
+.mr-tag{display:inline-block;background:var(--fld);border-radius:8px;padding:2px 8px;font-size:14px;font-weight:700;margin-top:4px}

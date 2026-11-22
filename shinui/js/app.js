@@ -216,7 +216,7 @@ async function render() {
   // מסך קופץ פעם ביום בזמן ההתנסות: כמה ימים נשארו ואיך ממשיכים (שושי 21.11)
   if (!offerActive() && r1 !== 'summary') maybeTrialPop();
   switch (r1) {
-    case 'week': return r2 === 'open' ? renderWeekOpen() : r2 === 'close' ? renderWeekClose() : renderWeek();
+    case 'week': return r2 === 'open' ? renderWeekOpen() : r2 === 'close' ? renderWeekClose() : r2 === 'mirror' ? renderMirror() : renderWeek();
     case 'progress': return renderProgress();
     case 'collection': return renderCollection(T.collectionFilters[r2] ? r2 : 'all');
     case 'base': return r2 ? renderBasePart(r2) : renderBase();
@@ -745,6 +745,9 @@ function renderWeek() {
   } else {
     body += `<p class="hint">${T.weekOpenWhen}</p><a class="btn" href="#/week/open">${T.weekNoteCta}</a>`;
   }
+  // השבוע שלך במספרים: של השבוע הזה אם כבר פתחה בו יום, אחרת של השבוע שעבר (שושי 22.11)
+  const mws = [ws, prevWs].find((k) => [0, 1, 2, 3, 4, 5, 6].some((i) => (D.days[addDays(k, i)] || {}).opened_at));
+  if (mws) body += mirrorLink(mws);
   if (WFB().length) body += `<a class="btn2" href="#/reflect">${T.fbNav}</a>`;
   shell(body, 'week');
 }
@@ -863,9 +866,8 @@ function renderWeekClose() {
     if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
     api.saveWeek(ws, { closed_at: (D.weeks[ws] || {}).closed_at || new Date().toISOString() });
     celebrate('debrief', T.weekClosedToast);
-    // ״ומכאן לפתק החדש״: פתק חדש עם תאריך לשבוע שאחרי, בלי לדרוס את הפתק שנסגר (שושי 21.11)
-    const nextWs = addDays(ws, 7);
-    go((D.weeks[nextWs] || {}).opened_at ? '#/week' : '#/week/open?' + nextWs);
+    // אחרי התחקיר: השבוע שלך במספרים, ומשם לפתק החדש (שושי 21.11, 22.11)
+    go('#/week/mirror?' + ws);
   });
 }
 
@@ -963,6 +965,7 @@ function renderProgress() {
     ${card(`<div class="ct">${T.openedClosedWeek}</div><p class="kpi">${s.both} <small>${T.ofDays(s.both).replace(/^\d+ /, '')}</small></p>
       <div class="week" role="img" aria-label="${T.openedClosedWeek}: ${s.both}">${s.wk.map((x, i) => `<span class="${x.k === t ? 't' : ''}"><i class="${x.d.opened_at && x.d.closed_at ? 'f' : x.d.opened_at ? 'h' : ''}"></i>${T.days[i]}</span>`).join('')}</div>
       ${s.openOnly ? `<p class="hint">${T.openedNotClosed(T.dayNames[parse(s.openOnly.k).getDay()])} <a class="lnk" href="#/close/${s.openOnly.k}">${T.closeNow}</a></p>` : ''}`)}
+    ${s.wk.some((x) => x.d.opened_at) ? mirrorLink(s.ws) : ''}
     ${hasAchievement() ? card(`<div class="ct">${T.achievementCard}</div><p class="it">${esc(F().achievement)}</p>
       ${lastNum ? achPath(D.weeks[lastNum].progress_at, D.weeks[lastNum].progress_goal) : ''}
       ${words.length ? `<p class="q">${T.achWordsTitle}</p>${words.map((k) => `<p class="it"><b>${esc(T.weekNum(weekNumber(k)))}:</b> ${esc(D.weeks[k].progress)}</p>`).join('')}` : ''}
@@ -987,6 +990,109 @@ function renderProgress() {
       <div class="lessons">${CONFIG.ZOOM_LINK ? `<a class="clip" href="${esc(CONFIG.ZOOM_LINK)}" target="_blank" rel="noopener"><i></i>${T.toZoom}</a>` : ''}
       ${CONFIG.RECORDINGS_LINK ? `<a class="clip" href="${esc(CONFIG.RECORDINGS_LINK)}" target="_blank" rel="noopener"><i></i>${T.recordings}</a>` : ''}</div>`)}`, 'progress');
 }
+
+// ===== השבוע שלך במספרים (שושי 22.11): שיקוף של שבוע אחד, אחרי התחקיר ובסיכום. הכל מחושב מהיומן, בלי בינה מלאכותית =====
+const avgOf = (a) => (a.length ? a.reduce((p, q) => p + q, 0) / a.length : null);
+const rnd1 = (v) => (v == null ? null : Math.round(v * 10) / 10);
+const f1 = (v) => (v == null ? '-' : Number(v).toFixed(1));
+function weekNums(ws) {
+  const ds = [0, 1, 2, 3, 4, 5, 6].map((i) => { const k = addDays(ws, i); return { k, d: D.days[k] || {} }; });
+  const opened = ds.filter((x) => x.d.opened_at);
+  const both = ds.filter((x) => x.d.opened_at && x.d.closed_at);
+  let run = 0, best = 0; ds.forEach((x) => { run = x.d.opened_at && x.d.closed_at ? run + 1 : 0; best = Math.max(best, run); });
+  // נוכחות בהוויה: ממוצע תתי ההוויות של היום, ואם אין, הציון של ההוויה עצמה
+  const pres = both.map((x) => { const sp = (x.d.sub_presence || []).filter((v) => v != null); return sp.length ? avgOf(sp) : x.d.presence; }).filter((v) => v != null);
+  const subs = {};
+  both.forEach((x) => (x.d.sub_beings || []).forEach((s, i) => { const v = (x.d.sub_presence || [])[i]; if (filled(s) && v != null) (subs[s.trim()] = subs[s.trim()] || []).push(v); }));
+  const ranked = Object.entries(subs).filter(([, v]) => v.length >= 2).map(([k, v]) => [k, rnd1(avgOf(v))]);
+  let strong = null, weak = null;
+  if (ranked.length >= 2) {
+    const hi = Math.max(...ranked.map((r) => r[1])); const lo = Math.min(...ranked.map((r) => r[1]));
+    if (hi > lo) { strong = { names: ranked.filter((r) => r[1] === hi).map((r) => r[0]), v: hi }; weak = { names: ranked.filter((r) => r[1] === lo).map((r) => r[0]), v: lo }; }
+  }
+  const w = D.weeks[ws] || {}; const ch = w.checks || {};
+  const goals = w.opened_at ? noteItems(w).filter((it) => it.kind !== 'result').map((it) => ({ ...it, st: ch[it.id] || null })) : [];
+  return {
+    ws, ds, opened: opened.length, both: both.length, best, presence: rnd1(avgOf(pres)), strong, weak,
+    sign: opened.filter((x) => x.d.sign_status === 'done' || x.d.sign_status === 'partial').length,
+    keyDone: opened.filter((x) => x.d.key_status === 'done').length, keyPart: opened.filter((x) => x.d.key_status === 'partial').length,
+    back: opened.filter((x) => filled(x.d.back_help)).length,
+    late: both.filter((x) => closedLate({ ...x.d, day: x.k })).length,
+    w, goals, result: filled(w.result) ? String(w.result).trim() : null, resultSt: ch.r || null,
+  };
+}
+// משפט השיקוף: כותרת ושלושה משפטים קצרים, לפי המספרים
+function mirrorHero(n, p) {
+  const M = T.mr; const hasP = p && p.opened > 0;
+  const trend = hasP && n.presence != null && p.presence != null ? Math.sign(n.presence - p.presence) : 0;
+  const title = (n.best >= 3 ? M.heroStreak(n.best) : M.heroDays(n.both)) + (trend > 0 ? M.heroUp : trend < 0 ? M.heroDown : '');
+  const body = [hasP ? M.bodyDays(n.both, p.both) : M.bodyDaysNew(n.both)];
+  if (n.presence != null) body.push(hasP && p.presence != null ? M.bodyPres(f1(n.presence), f1(p.presence)) : M.bodyPresNew(f1(n.presence)));
+  if (n.opened >= 2) body.push(n.sign * 2 < n.opened ? M.bodySignLow(n.sign, n.opened) : M.bodySignHigh(n.sign, n.opened));
+  return { title, body };
+}
+const MR_C = { done: 'var(--mag)', partial: 'var(--plum)', no: 'var(--orange)' };
+// שורות פתק המטרות: הוויות עם אותו סימון בשורה אחת
+function mirrorGoalRows(n) {
+  const rows = []; const beings = {};
+  n.goals.forEach((it) => {
+    if (!it.st) return;
+    if (it.kind === 'being') { (beings[it.st] = beings[it.st] || []).push(it.text); return; }
+    const text = it.kind === 'belief' ? T.mr.belief : it.kind === 'habit' && filled((it.chips || [])[1]) ? `${it.text}, ${it.chips[1]}` : it.text;
+    rows.push({ text, st: it.st, lab: (it.kind === 'belief' ? T.chkBelief : T.chk)[it.st] });
+  });
+  ['done', 'partial', 'no'].filter((st) => beings[st]).reverse().forEach((st) => rows.unshift({ text: T.mr.beings(beings[st]), st, lab: T.chk[st] }));
+  return rows;
+}
+function mirrorHtml(ws) {
+  const n = weekNums(ws); const p = weekNums(addDays(ws, -7)); const M = T.mr; const hasP = p.opened > 0;
+  if (!n.opened) return `<p class="hint">${M.empty}</p>`;
+  const h = mirrorHero(n, p);
+  const tr = (a, b, fmt = (x) => x) => (hasP && a != null && b != null && a !== b ? `<span class="mr-trend ${a > b ? 'up' : 'down'}">${a > b ? '▲' : '▼'} ${fmt(rnd1(Math.abs(a - b)))}</span>` : '');
+  const counted = n.goals.filter((g) => g.st); const cnt = (st) => counted.filter((g) => g.st === st).length;
+  const pct = (st) => (counted.length ? (100 * cnt(st)) / counted.length : 0);
+  const res = Object.keys(D.weeks).filter((k) => k <= ws && (D.weeks[k].checks || {}).r).sort();
+  return `<div class="mr-hero"><small>${M.heroSmall}</small><h2>${esc(h.title)}</h2><p>${h.body.map(esc).join(' ')}</p></div>
+    ${card(`<div class="ct">${M.opened}</div><p class="kpi">${n.both} <small>${M.ofDays}</small>${tr(n.both, p.both)}</p>
+      <div class="week" aria-hidden="true">${n.ds.map((x, i) => `<span><i class="${x.d.opened_at && x.d.closed_at ? 'f' : x.d.opened_at ? 'h' : ''}"></i>${T.days[i]}</span>`).join('')}</div>
+      <p class="mr-vs">${[hasP ? M.prev(p.both) : '', n.best >= 2 ? M.longest(n.best) : ''].filter(Boolean).join(' · ')}</p>`)}
+    ${n.presence != null ? card(`<div class="ct">${M.presence}</div><p class="kpi">${f1(n.presence)} <small>${M.of5}</small>${tr(n.presence, p.presence, f1)}</p>
+      ${hasP && p.presence != null ? `<p class="mr-vs">${M.prev(f1(p.presence))}</p>` : ''}
+      ${n.strong ? `<div class="mr-subs"><span>${esc(M.strong(n.strong.names))}</span><span class="v">${f1(n.strong.v)}</span><span>${esc(M.weak(n.weak.names))}</span><span class="v lo">${f1(n.weak.v)}</span></div>` : ''}`) : ''}
+    <div class="cols">
+      ${card(`<p class="mini">${n.sign}/${n.opened}</p><span class="lbl">${M.sign}</span>${hasP ? `<p class="mr-vs">${M.prevShort(`${p.sign}/${p.opened}`)}</p>` : ''}`)}
+      ${card(`<p class="mini">${n.keyDone + n.keyPart}/${n.opened}</p><span class="lbl">${M.key}</span><p class="mr-vs">${M.keyCounts(n.keyDone, n.keyPart)}</p>`)}
+      ${card(`<p class="mini">${n.back}</p><span class="lbl">${M.back}</span>`)}
+      ${card(`<p class="mini">${n.late}</p><span class="lbl">${M.late}</span>`)}
+    </div>
+    ${counted.length ? card(`<div class="ct">${M.goals}</div><p class="kpi">${cnt('done')} <small>${M.goalsOf(counted.length)}</small></p>
+      <div class="mr-stack" aria-hidden="true">${['done', 'partial', 'no'].map((st) => (cnt(st) ? `<span style="width:${pct(st)}%;background:${MR_C[st]}"></span>` : '')).join('')}</div>
+      <div class="mr-leg">${['done', 'partial', 'no'].filter((st) => cnt(st)).map((st) => `<span><i style="background:${MR_C[st]}"></i>${T.chk[st]} ${cnt(st)}</span>`).join('')}</div>
+      <div class="mr-items">${mirrorGoalRows(n).map((r) => `<div><span>${esc(r.text)}</span><span class="mr-st s-${r.st}">${esc(r.lab)}</span></div>`).join('')}</div>`) : ''}
+    ${n.result && n.resultSt ? card(`<div class="ct">${M.result}</div><p class="it">${esc(n.result)}</p><span class="mr-tag">${esc(M.resultNow(M.resultSt[n.resultSt]))}</span>
+      <div class="mr-dots" aria-hidden="true">${res.map((k) => { const v = D.weeks[k].checks.r; return `<i class="${v === 'done' ? 'on' : v === 'partial' ? 'half' : ''}"></i>`; }).join('')}</div>
+      <p class="mr-vs">${M.dotsHint}${n.w.note_type ? ' ' + esc(M.noteType(T.noteType[n.w.note_type])) : ''}</p>`) : ''}`;
+}
+// אותו שיקוף כשורות טקסט, לסיכום שמורידים
+function mirrorRows(ws) {
+  const n = weekNums(ws); const p = weekNums(addDays(ws, -7)); const M = T.mr;
+  if (!n.opened) return null;
+  const h = mirrorHero(n, p);
+  const rows = [[M.heroSmall, h.title + '. ' + h.body.join(' ')], [M.opened, `${n.both} ${M.ofDays}`]];
+  if (n.presence != null) rows.push([M.presence, `${f1(n.presence)} ${M.of5}` + (n.strong ? `\n${M.strong(n.strong.names)} ${f1(n.strong.v)}\n${M.weak(n.weak.names)} ${f1(n.weak.v)}` : '')]);
+  rows.push([M.sign, `${n.sign}/${n.opened}`], [M.key, `${n.keyDone + n.keyPart}/${n.opened} · ${M.keyCounts(n.keyDone, n.keyPart)}`], [M.back, String(n.back)], [M.late, String(n.late)]);
+  const gr = mirrorGoalRows(n); if (gr.length) rows.push([M.goals, gr.map((r) => `${r.text} · ${r.lab}`).join('\n')]);
+  if (n.result && n.resultSt) rows.push([M.result, `${n.result} · ${M.resultSt[n.resultSt]}`]);
+  return { head: `${T.mr.title} · ${T.weekNum(weekNumber(ws))} · ${shortDate(ws)} - ${shortDate(addDays(ws, 6))}`, rows };
+}
+function renderMirror() {
+  const ws = wsFromHash(); const nextWs = addDays(ws, 7);
+  const cta = (D.weeks[ws] || {}).closed_at && !(D.weeks[nextWs] || {}).opened_at && ws < today()
+    ? `<a class="btn" href="#/week/open?${nextWs}">${T.nextNoteCta}</a>` : '';
+  shell(`${hd(`${T.weekNum(weekNumber(ws))} · ${shortDate(ws)} - ${shortDate(addDays(ws, 6))}`, T.mr.title, 'data')}
+    ${mirrorHtml(ws)}${cta}<a class="btn2" href="#/week">${T.mr.back2week}</a>`, 'week');
+}
+const mirrorLink = (ws) => `<a class="btn2" href="#/week/mirror?${ws}">${T.mr.link}</a>`;
 
 // ===== אוסף =====
 // מה עזר לי לחזור להוויה: מה שתכננה בבוקר (recover) ומה שעזר בפועל בערב (back_help). שושי 18.11
@@ -1193,6 +1299,8 @@ function journalData() {
   const base = rows([[T.convPick.future, f.future_general], ['בתחום שבחרתי', f.future_specific],
     ['הישג המפתח', f.achievement ? f.achievement + (f.achievement_date ? ' · עד ' + shortDate(f.achievement_date) : '') : '']]);
   if (base.length) sections.push({ head: T.baseTitle, rows: base });
+  // השבוע שלך במספרים, לכל שבוע שבו נפתח לפחות יום (שושי 22.11)
+  [...new Set(ks.filter((k) => D.days[k].opened_at).map(weekStart))].forEach((ws) => { const m = mirrorRows(ws); if (m) sections.push(m); });
   ks.forEach((k) => { const d = D.days[k];
     const r = rows([
       ['ההוויה של היום', d.being ? d.being + ((d.sub_beings || []).filter(Boolean).length ? ' · ' + d.sub_beings.filter(Boolean).join(', ') : '') : ''],
