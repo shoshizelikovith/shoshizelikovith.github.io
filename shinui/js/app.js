@@ -439,7 +439,11 @@ function renderToday() {
 
 // ===== פתיחת יום =====
 // כפתורי הוויות: כל הרשימה מהיומן, ובסוף הוויות שהיא כתבה בעצמה
-const allBeings = () => [...new Set([...T.beingsAll, ...((D.settings || {}).shared_beings || []).map((b) => (T.beingsMasc || {})[b] || b), ...(P().beings || [])].filter(Boolean))].sort((a, b) => a.localeCompare(b, 'he')); // לפי א-ב (שושי 15.11, תוקן 17.11). כולל כל הוויה ששושי הוסיפה (settings.shared_beings, 16.11)
+// הוויה ששושי הוסיפה (בנקבה) מוצגת לגברים בזכר: קודם מהמילון beingsMasc, ואם אין שם - המרה לפי הסיומת (23.11, נבדק: 46 מ-48 ההוויות הקיימות נכונות, השתיים האחרות כבר במילון)
+const MASC_FIN = { 'מ': 'ם', 'נ': 'ן', 'צ': 'ץ', 'פ': 'ף', 'כ': 'ך' };
+const mascWord = (w) => { if (w.length < 3 || w.endsWith('אה')) return w; if (w.endsWith('ית') || w.endsWith('יה')) return w.slice(0, -1); if (/[הת]$/.test(w)) { const s = w.slice(0, -1); return s.slice(0, -1) + (MASC_FIN[s.slice(-1)] || s.slice(-1)); } return w; };
+const sharedBeing = (b) => { if (!T.beingsMasc) return b; if (T.beingsMasc[b]) return T.beingsMasc[b]; const ws = b.trim().split(/\s+/); ws[0] = mascWord(ws[0]); return ws.join(' '); };
+const allBeings = () => [...new Set([...T.beingsAll, ...((D.settings || {}).shared_beings || []).map(sharedBeing),...(P().beings || [])].filter(Boolean))].sort((a, b) => a.localeCompare(b, 'he')); // לפי א-ב (שושי 15.11, תוקן 17.11). כולל כל הוויה ששושי הוסיפה (settings.shared_beings, 16.11)
 const beingChips = (id, isOn) => `<div class="chips bgrid" id="${id}">${allBeings().map((b) => `<button type="button" aria-pressed="${isOn(b)}" class="${isOn(b) ? 'on' : ''}" data-b="${esc(b)}">${esc(b)}</button>`).join('')}</div>`;
 function renderOpen(day, isToday = false) {
   const prev = Object.keys(D.days).filter((k) => k < day && D.days[k].being).sort().pop();
