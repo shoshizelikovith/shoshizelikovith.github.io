@@ -1265,8 +1265,29 @@ function renderOffer() {
       ${dl ? `<p class="q" style="margin-top:12px">${T.offerDeadline(dl)}</p>` : ''}
       ${link ? `<a class="btn" href="${esc(link)}" target="_blank" rel="noopener">${T.offerCta}</a>` : ''}
       ${offerPdfLink()}`)}
+    ${offerActive() ? card(`<p class="q">${T.offerPaidQ}</p><p class="hint">${esc(T.offerPaidHint(P().email || ''))}</p>
+      <button class="btn2" id="paidChk" type="button">${T.offerPaidBtn}</button><p class="hint" id="paidMsg" role="status" aria-live="polite"></p>`) : ''}
     <a class="btn2" href="#/summary">${T.journalPdf}</a>
     ${offerActive() ? `<a class="btn2" href="#/settings">${T.settingsTitle}</a>` : `<a class="btn2" href="#/today">${T.backToday}</a>`}`, offerActive() ? 'locked' : '');
+  if (!offerActive()) return;
+  // מי ששילמה: בודקים מול השרת אם הגישה כבר נפתחה - בלחיצה, וגם לבד כל דקה כל עוד המסך פתוח (23.11)
+  const b = $('#paidChk');
+  if (b) b.addEventListener('click', () => offerCheck(true));
+  clearInterval(offerTimer);
+  offerTimer = setInterval(() => {
+    if (!(location.hash || '').startsWith('#/offer')) return clearInterval(offerTimer);
+    if (!document.hidden) offerCheck(false);
+  }, 60e3);
+}
+let offerTimer = 0, offerBusy = false;
+async function offerCheck(manual) {
+  if (offerBusy) return; offerBusy = true;
+  const b = $('#paidChk'), m = $('#paidMsg');
+  if (manual && b) { b.disabled = true; b.textContent = T.offerPaidChecking; }
+  try { D = await api.load(); } catch {}
+  offerBusy = false;
+  if (!offerActive()) { clearInterval(offerTimer); toast(T.offerPaidOpen); return go('#/today'); }
+  if (manual && b) { b.disabled = false; b.textContent = T.offerPaidBtn; if (m) m.textContent = T.offerPaidNotYet; }
 }
 
 // ===== התנסות: מסך קופץ יומי, קובץ הדף, וסיכום מעוצב להורדה (שושי 21.11) =====
