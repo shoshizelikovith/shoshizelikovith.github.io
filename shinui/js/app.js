@@ -367,7 +367,7 @@ function banners() {
   if (P().trial_start && left !== null && left > 0 && daysBetween(P().trial_start, t) >= 4 && st !== 'sent' && st !== 'later:' + t)
     out.push(`<div class="banner soft"><b>${T.feedbackTitle}</b><a class="lnk" href="#/feedback">${T.feedbackOpen}</a></div>`);
   const y = addDays(t, -1); const yd = D.days[y];
-  if (yd && yd.opened_at && !yd.closed_at && canStillClose(y)) { const yn = T.dayNames[parse(y).getDay()];
+  if (startedDay(yd) && !yd.closed_at && canStillClose(y)) { const yn = T.dayNames[parse(y).getDay()];
     out.push(`<div class="banner">${T.closeYesterday(yn)} <a class="lnk" href="#/close/${y}">${T.closeYesterdayCta(yn)}</a></div>`); }
   if (hasAchievement() && F().achievement_date && F().achievement_date < t) out.push(`<div class="banner">${T.achievementPassedBanner} <a class="lnk" href="#/base/achievement">${T.achievementPassedCta}</a></div>`);
   if (levelOf() === 'being') { if (hasBase()) out.push(`<div class="banner soft">${T.levelUpBanner} <a class="lnk" href="#/settings">${T.levelUpCta}</a></div>`); }
@@ -445,6 +445,21 @@ const mascWord = (w) => { if (w.length < 3 || w.endsWith('אה')) return w; if (
 const sharedBeing = (b) => { if (!T.beingsMasc) return b; if (T.beingsMasc[b]) return T.beingsMasc[b]; const ws = b.trim().split(/\s+/); ws[0] = mascWord(ws[0]); return ws.join(' '); };
 const allBeings = () => [...new Set([...T.beingsAll, ...((D.settings || {}).shared_beings || []).map(sharedBeing),...(P().beings || [])].filter(Boolean))].sort((a, b) => a.localeCompare(b, 'he')); // לפי א-ב (שושי 15.11, תוקן 17.11). כולל כל הוויה ששושי הוסיפה (settings.shared_beings, 16.11)
 const beingChips = (id, isOn) => `<div class="chips bgrid" id="${id}">${allBeings().map((b) => `<button type="button" aria-pressed="${isOn(b)}" class="${isOn(b) ? 'on' : ''}" data-b="${esc(b)}">${esc(b)}</button>`).join('')}</div>`;
+// שדות החובה של פתיחת יום - משותף לכפתור ״פתחתי את היום״ ולסגירה (24.11)
+function openMissing(m) {
+  const miss = [];
+  if (fullMode() && !filled(m.key_action)) miss.push('key');
+  if (!filled(m.being)) miss.push('being');
+  if ((m.sub_beings || []).filter(filled).length < 4) miss.push('sub');
+  if (!filled(m.why_today)) miss.push('why'); // חובה, שורה אחת (שושי 18.11)
+  if (!filled(m.being_sign)) miss.push('sign'); // הסימן חובה (שושי 18.11)
+  if (!filled(m.may_derail)) miss.push('derail'); // חובה (שושי 18.11)
+  if (!filled(m.recover)) miss.push('recover');
+  if (!filled(m.close_plan)) miss.push('closeplan'); // נכנס לעמידה במילה
+  return miss;
+}
+// יום שהתחילה לפתוח (מילאה הוויה) אבל לא לחצה ״פתחתי את היום״ - גם הוא יום שאפשר לחזור אליו ולסגור (24.11, פנינה)
+const startedDay = (d) => !!d && (!!d.opened_at || filled(d.being));
 function renderOpen(day, isToday = false) {
   const prev = Object.keys(D.days).filter((k) => k < day && D.days[k].being).sort().pop();
   const pd = prev ? D.days[prev] : {};
@@ -509,15 +524,7 @@ function renderOpen(day, isToday = false) {
     $('[data-seg="voice"]').addEventListener('pick', (e) => { const g = e.detail === 'god'; $('#cg').textContent = g ? T.convGuideGod : T.convGuideFuture; $('#cf').textContent = g ? T.convFieldGod : T.convFieldFuture; });
     $('#done').addEventListener('click', () => {
       flushNow();
-      const miss = [];
-      if (base && !filled(m.key_action)) miss.push('key');
-      if (!filled(m.being)) miss.push('being');
-      if (m.sub_beings.filter(filled).length < 4) miss.push('sub');
-      if (!filled(m.why_today)) miss.push('why'); // חובה, שורה אחת (שושי 18.11)
-      if (!filled(m.being_sign)) miss.push('sign'); // הסימן חובה (שושי 18.11)
-      if (!filled(m.may_derail)) miss.push('derail'); // חובה (שושי 18.11)
-      if (!filled(m.recover)) miss.push('recover');
-      if (!filled(m.close_plan)) miss.push('closeplan'); // נכנס לעמידה במילה
+      const miss = openMissing(m);
       if (miss.length) { const er = $('#er'); er.textContent = T.missingRequired + ' ' + miss.map((k) => T.reqNames[k]).join(', '); er.hidden = false; return markMissing(miss); }
       const first = !D.days[day].opened_at;
       api.saveDay(day, { opened_at: D.days[day].opened_at || new Date().toISOString() });
@@ -534,8 +541,11 @@ function renderOpen(day, isToday = false) {
 // ===== סגירת יום =====
 function renderClose(day) {
   const d = D.days[day] || {};
-  if (!d.opened_at) { toast(T.openFirst); return go('#/open/' + day); }
   if (!d.closed_at && !canStillClose(day)) { toast(T.closeTooLate); return go('#/today'); }
+  if (!d.opened_at) {
+    if (openMissing(d).length) { toast(T.openFirst); return go('#/open/' + day); }
+    api.saveDay(day, { opened_at: new Date().toISOString() }); // מילאה את כל הפתיחה ולא לחצה ״פתחתי״ - נחשב פתוח
+  }
   if (!d.closed_at && (!d.close_started_at || Date.now() - Date.parse(d.close_started_at) > 3 * 3600e3)) api.saveDay(day, { close_started_at: new Date().toISOString() }); // מודדים מהכניסה הראשונה בישיבה
   const subs = (d.sub_beings || []).map((s) => s || '');
   const m = { sub_presence: [], ...d, deep: { ...(d.deep || {}) }, steps: (d.steps || []).map((x) => ({ ...x })) };
