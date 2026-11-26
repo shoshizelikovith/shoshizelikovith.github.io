@@ -8,7 +8,7 @@
  *   MAIL_TO           - למי שולחים התראות (ברירת מחדל: הבעלים)
  */
 
-var CODE_BUILD = 'CODE-1126-1228';    // מתעדכן לבד ב-bot code
+var CODE_BUILD = 'CODE-1126-1242';    // מתעדכן לבד ב-bot code
 var PER_PART = 297;          // כמה קטעי ידע יושבים בכל קובץ ידע*.js
 var PRICE = {light: 0.022, normal: 0.173, deep: 0.248};   // גיבוי בלבד, אם המדידה נכשלה
 // המחירון של המודל, דולר למיליון טוקנים. קריאה מהמטמון זולה פי עשרה מקלט רגיל.
@@ -1098,9 +1098,17 @@ function ask(req) {
     }
 
     // באיזה שבוע היא
+    // רשומה בממגנטת שכתבה שבוע 5-16: למדה את ״להיות אשה״ הישן (היום יודעת), ולכן ממשיכים איתה
+    // על החומר של יודעת בשבוע הזה. לא חוסמים ולא שואלים (שושי, 26.11.2026, רבקי היימליך).
+    var rawN = Number((question.match(/שבוע\s*(\d{1,3})/) || [])[1] || 0);
+    if (rec.course === 'magnetit' && rawN > 4 && rawN <= 16 && question.indexOf('ממגנטת') < 0 && question.indexOf('מגנטית') < 0) {
+      rec.course = 'yodaat'; rec.label = 'יודעת'; rec.has_yodaat = true; rec.no_yodaat = false;
+      rec.pkg_done = true; rec.done_magnetit = true; rec.week_skip = false;
+      stageWeeks = 16;
+    }
     var v = weekOf_(question, rec.course);
     if (v && question.indexOf('ממגנטת') < 0 && question.indexOf('מגנטית') < 0) {
-      lesson = v; rec.lesson = v; rec.done_all = false; rec.practice_only = false; row = putRec_(mail, rec, row);
+      lesson = v; rec.lesson = v; rec.week_skip = false; rec.done_all = false; rec.practice_only = false; row = putRec_(mail, rec, row);
       // השאלה שחיכתה לתשובה על השבוע - עונים עליה עכשיו
       if (rec.pending_q && /(?:שבוע|שיעור)\s*\d/.test(rec.pending_q) && rec.pending_q.replace(/[^\u0590-\u05FF]/g, '').length < 25) {
         rec.pending_q = '';   // שארית של הודעת שבוע ולא שאלה אמיתית
@@ -1111,24 +1119,25 @@ function ask(req) {
       }
     }
 
-    // כתבה מספר שבוע שמחוץ לטווח של הקורס (למשל ״שבוע 12״ בממגנטת, שיש בה 4 שבועות).
-    // בלי זה הבוטית שאלה שוב ושוב את אותה שאלה בלי להסביר (תקלה 26.11.2026).
-    if (!lesson && !rec.done_all) {
+    // מספר שבוע שלא קיים בשום קורס (מעל 16): שואלים פעם אחת בהסבר קצר, ואם שוב לא מובן - ממשיכים בלי שבוע.
+    // בלי זה הבוטית שאלה שוב ושוב בלי להסביר (תקלה 26.11.2026).
+    if (!lesson && !rec.done_all && !rec.week_skip) {
       var rawW = question.match(/(?:שבוע|שיעור)\s*(\d{1,3})/);
-      if (rawW && Number(rawW[1]) > stageWeeks) {
-        // הודעה שהיא רק מספר שבוע לא נשמרת כשאלה. שאלה אמיתית כן.
-        if (question.replace(/[^\u0590-\u05FF]/g, '').length >= 25) rec.pending_q = question.slice(0, 1500);
-        putRec_(mail, rec, row);
-        return {a: 'תודה שכתבת. ' + (rec.label ? 'ב' + rec.label : 'בקורס הזה') + ' יש ' + stageWeeks + ' שבועות, ' +
-                   'ולכן שבוע ' + rawW[1] + ' לא קיים כאן.\n\n' +
-                   'בחרי למטה את השבוע שבו את נמצאת בצפייה, מ-1 עד ' + stageWeeks + '.' +
-                   (rec.course === 'magnetit' ? ' ואם את כבר בקורס יודעת, כתבי לי ״לעבור ליודעת״.' : ''),
-                lesson: null, stage: 'week', weeks: stageWeeks};
+      if (rawW && Number(rawW[1]) > 16) {
+        if (!rec.week_asked) {
+          rec.week_asked = true;
+          if (question.replace(/[^\u0590-\u05FF]/g, '').length >= 25) rec.pending_q = question.slice(0, 1500);
+          putRec_(mail, rec, row);
+          return {a: 'תודה שכתבת. בחומר יש עד 16 שבועות, ולכן שבוע ' + rawW[1] + ' לא קיים. ' +
+                     'בחרי למטה את השבוע שבו את נמצאת, ואם את לא בטוחה, פשוט ספרי לי מה עולה בך ונמשיך משם.',
+                  lesson: null, stage: 'week', weeks: stageWeeks};
+        }
+        rec.week_skip = true;
       }
     }
 
     // שאלת חובה: לא עונים לפני שיודעים עד איזה שבוע צפתה (או שהיא בוגרת שבחרה רק לתרגל).
-    if (!lesson && !rec.done_all) {
+    if (!lesson && !rec.done_all && !rec.week_skip) {
       if (rec.pending_q && /(?:שבוע|שיעור)\s*\d/.test(question) && question.replace(/[^\u0590-\u05FF]/g, '').length < 25) {
         /* הודעה שהיא רק מספר שבוע לא דורסת את השאלה שחיכתה */
       } else rec.pending_q = question.slice(0, 1500);
